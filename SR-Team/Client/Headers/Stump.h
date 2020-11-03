@@ -13,6 +13,8 @@ class CStump final : public CGameObject
 	{
 		STUMP_BASE,
 		STUMP_BODY,
+		STUMP_LSHD,
+		STUMP_RSHD,
 		STUMP_LH,
 		STUMP_RH,
 		STUMP_LEG1,

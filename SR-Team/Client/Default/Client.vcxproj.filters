@@ -244,6 +244,9 @@
     <Filter Include="02.GameObject\06.Projectile\01.Monster\01.Acorn">
       <UniqueIdentifier>{5fda5631-38aa-42f9-93b1-e3f58eacdefd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster\02.AcornExplosion">
+      <UniqueIdentifier>{05ecf2ef-ab35-4c74-ba1a-3c90faaa5ebd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -444,6 +447,9 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Acorn.h">
+      <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -628,6 +634,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Acorn.cpp">
+      <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

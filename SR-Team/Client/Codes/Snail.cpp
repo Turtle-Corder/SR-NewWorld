@@ -39,6 +39,9 @@ HRESULT CSnail::Setup_GameObject(void* pArg)
 
 int CSnail::Update_GameObject(_float _fDeltaTime)
 {
+	if (m_bDead)
+		return GAMEOBJECT::DEAD;
+
 	if(FAILED(Update_State()))
 		return GAMEOBJECT::ERR;
 
@@ -350,7 +353,7 @@ HRESULT CSnail::Attack(_float _fDeltaTime)
 
 	if (0.1f <= m_fLength && !m_bCrash)
 	{
-		m_vPos += m_vDir * (_fDeltaTime * 4.f);
+		m_vPos += m_vDir * (_fDeltaTime * 8.f);
 		m_pTransformCom[SNAIL_BODY]->Set_Position(m_vPos);
 		m_bInstanceCreate = false;
 	}
@@ -408,7 +411,7 @@ HRESULT CSnail::Spawn_InstantImpact(const wstring & LayerTag)
 	_vec3 BodyPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
 	tImpact.vPosition = BodyPos;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag , &m_pInstantImpact)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag , &tImpact)))
 		return E_FAIL;
 
 	return S_OK;
@@ -473,8 +476,14 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 	if (m_bTakeCheckOnece)
 	{
 		// 내가 맞았을 때 이니깐 변수설정해서 OnOff
-		m_bCrash = true;
-		//PRINT_LOG(L"아얏", LOG::CLIENT);
+		m_bCrash = true;	//PRINT_LOG(L"아얏", LOG::CLIENT);
+	}
+
+	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+
+	if (0 >= m_pStatusCom->Get_Status().iHp)
+	{
+		m_bDead = true;
 	}
 	return S_OK;
 }
