@@ -15,7 +15,7 @@ CDataManager::CDataManager(LPDIRECT3DDEVICE9 _pDevice)
 		m_pTextureCom[i] = nullptr;
 		m_pStatCom[i] = nullptr;
 	}
-	for (_uint i = 0; i < 9; i++)
+	for (_uint i = 0; i < 11; i++)
 		m_pTextureSkillIcon[i] = nullptr;
 }
 
@@ -476,7 +476,7 @@ HRESULT CDataManager::Add_Component_Item()
 
 HRESULT CDataManager::Add_Component_SkillIcon()
 {
-	for (_uint i = 0; i < 9; ++i)
+	for (_uint i = 0; i < 11; ++i)
 	{
 		// 3. Texture--------------------------------------------------------------
 		TCHAR szTexture[MAX_PATH] = L"";
@@ -508,6 +508,12 @@ HRESULT CDataManager::Add_Component_SkillIcon()
 		else if (i == 8)
 			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_SkillIcon_ManaDrift");
+		else if (i == 9)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_SkillIcon_ThunderStorm");
+		else if (i == 10)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_SkillIcon_Blind");
 
 		StringCchPrintf(szTexture, _countof(szTextureName),
 			L"Com_SkillIconTexture%d", i);
@@ -546,7 +552,7 @@ HRESULT CDataManager::Add_Component_SkillIcon()
 		}
 		if (i == 4)
 		{
-			pItem->eActiveID = ACTIVE_ICE_STRIKE;
+			pItem->eActiveID = ACTIVE_ICE_BLAST;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
 				L"%s", L"IceStrike");
 		}
@@ -571,6 +577,18 @@ HRESULT CDataManager::Add_Component_SkillIcon()
 			pItem->eActiveID = ACTIVE_MANA_DRIFT;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
 				L"%s", L"ManaDrift");
+		}
+		if (i == 9)
+		{
+			pItem->eActiveID = ACTIVE_THUNDER_STORM;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"ThunderStorm");
+		}
+		if (i == 10)
+		{
+			pItem->eActiveID = ACTIVE_BLIND;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"Blind");
 		}
 		m_vSkillIconList.emplace_back(pItem);
 	}
@@ -618,7 +636,7 @@ void CDataManager::Free()
 	}
 	m_vItemList.clear();
 
-	for (_uint i = 0; i < 9; i++)
+	for (_uint i = 0; i < 11; i++)
 	{
 		Safe_Release(m_pTextureSkillIcon[i]);
 	}

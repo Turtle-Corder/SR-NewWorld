@@ -19,7 +19,7 @@ CSkillSlot * CSkillSlotManager::Get_PlayerSkill(eActiveSkill_ID eSkillID)
 {
 	switch (eSkillID)
 	{
-	case ACTIVE_ICE_STRIKE:
+	case ACTIVE_ICE_BLAST:
 		return m_pIceCrystalSkill;
 		break;
 	case ACTIVE_MANA_DRIFT:
@@ -31,6 +31,10 @@ CSkillSlot * CSkillSlotManager::Get_PlayerSkill(eActiveSkill_ID eSkillID)
 	case ACTIVE_ICE_SPEAR:
 		return m_pLaserSkill;
 	case ACTIVE_MAGIC_ARMOR:
+		break;
+	case ACTIVE_THUNDER_STORM:
+		break;
+	case ACTIVE_BLIND:
 		break;
 	case ACTIVE_SKILL_END:
 		break;

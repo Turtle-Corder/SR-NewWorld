@@ -247,6 +247,9 @@
     <Filter Include="02.GameObject\99.LoadingScreen">
       <UniqueIdentifier>{ec1687e2-39cd-473e-abeb-be50f7d62b55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster\01.Acorn">
+      <UniqueIdentifier>{5fda5631-38aa-42f9-93b1-e3f58eacdefd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

@@ -119,6 +119,7 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 #pragma endregion
 
+// 0번 마을
 
 	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"))))
 		return E_FAIL;
@@ -130,6 +131,7 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 HRESULT CPreLoader::Load_Resources_Stage1()
 {
 	// TODO : 추가하시오
+	//숲
 	return S_OK;
 }
 
@@ -140,6 +142,8 @@ HRESULT CPreLoader::Load_Resources_Stage2()
 
 HRESULT CPreLoader::Load_Resources_Stage3()
 {
+
+
 	return E_NOTIMPL;
 }
 

@@ -101,14 +101,17 @@ HRESULT CEquip::Setup_GameObject(void * _pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	// 변경
 	m_vPos = { 500.f, 400.f, 0.f };
 
+	// 변경
 	m_pTransformCom[EQUIP_WND]->Set_Position(m_vPos);
 	m_pTransformCom[EQUIP_EQUIPMENT]->Set_Position(
 		_vec3(m_vPos.x - 285.f, m_vPos.y, 0.f));
 	m_pTransformCom[EQUIP_INFO]->Set_Position(
 		_vec3(m_vPos.x - 180.f, m_vPos.y - 265.f, 0.f));
 
+	// 변경
 	for (_uint i = 0; i < 6; ++i)
 	{
 		_vec3 vPos = {};
@@ -118,6 +121,7 @@ HRESULT CEquip::Setup_GameObject(void * _pArg)
 		m_pTransformItem[i]->Set_Position(vPos);
 	}
 
+	// 변경
 	for (_uint i = 6, j = 0; i < ITEMSORT_END; ++i, ++j)
 	{
 		_vec3 vPos = {};
@@ -233,7 +237,8 @@ HRESULT CEquip::Render_EquipItem()
 			D3DXMATRIX matTrans, matScale, matWorld;
 			_vec3 vPos = m_pTransformItem[i]->Get_Desc().vPosition;
 
-			D3DXMatrixScaling(&matScale, 0.7f, 0.7f, 0.f);
+			// 변경
+			D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.f);
 			D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, vPos.z);
 			matWorld = matScale * matTrans;
 
@@ -449,8 +454,8 @@ HRESULT CEquip::Add_Component()
 	CStatus::STAT	tStat;
 	tStat.iMaxHp = 100;
 	tStat.iMaxMp = 100;
-	tStat.iHp = 100;
-	tStat.iMp = 30;
+	tStat.iHp = 10;
+	tStat.iMp = 10;
 	tStat.iLevel = 1;
 
 	if (FAILED(CGameObject::Add_Component(
