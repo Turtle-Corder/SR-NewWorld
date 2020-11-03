@@ -450,9 +450,6 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Scene_Stage1.h">
-      <Filter>01.Scene\02.Scene_Stage1</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Scene_Loading.h">
       <Filter>01.Scene\99.Scene_Loading</Filter>
     </ClInclude>
@@ -641,9 +638,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Scene_Stage1.cpp">
-      <Filter>01.Scene\02.Scene_Stage1</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Scene_Loading.cpp">
       <Filter>01.Scene\99.Scene_Loading</Filter>

@@ -38,7 +38,7 @@ private:
 	CVIBuffer*	m_pVIBufferCom = nullptr;
 	CTransform*	m_pTransformCom = nullptr;
 	CTexture*	m_pTextureCom = nullptr;
-	CCollider*  m_pCollider = nullptr;
+	CCollider*  m_pColliderCom = nullptr;
 	CBoxCollider* m_pBoxCollider = nullptr;
 };
 

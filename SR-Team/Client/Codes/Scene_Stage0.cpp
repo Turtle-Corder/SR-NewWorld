@@ -455,7 +455,7 @@ HRESULT CScene_Stage0::Setup_Layer_CubeTerrain(const wstring & LayerTag)
 
 			if (true == bOnOff)
 			{
-				if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_CubeTerrain", SCENE_STAGE0, LayerTag, &Temp_Info)))
+				if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_CubeTerrain", SCENE_STAGE0, LayerTag, &Temp_Info)))
 					return E_FAIL;
 
 			}

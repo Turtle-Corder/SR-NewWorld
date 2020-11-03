@@ -23,6 +23,7 @@ HRESULT CEventTrigger::Setup_GameObject(void * _pArg)
 {
 	vector<void*> GetVector;
 	_vec3 vPos;
+	_uint EventNumber;
 
 	if (_pArg)
 	{
@@ -94,18 +95,30 @@ HRESULT CEventTrigger::Add_Component(_vec3 _vPos)
 	tTransformDesc.vPosition = vPositon_Body;
 
 
+
+	//--------------------------------------------------
+	// Collider
+	//--------------------------------------------------
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = m_pTransformCom->Get_Desc().vPosition;
+	tColDesc.fRadius = 1.f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
+
+	//VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 
 	//For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Monster", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Translucent_Cube", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
+
 
 	// For.Com_Transform
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
-
 
 
 

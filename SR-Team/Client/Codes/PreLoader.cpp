@@ -237,7 +237,7 @@ void CPreLoader::Free()
 
 
 
-HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag)
+HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uint& StageNumber)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -245,7 +245,14 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag)
 
 	//로딩파츠
 
+	//스테이지 넘버는 해당 경로를 참조할것
+
+
 	wifstream fin;
+
+	TCHAR szFilePath[MID_STR] = _T("");
+
+
 	wstring wstrFilePath = _T("../DataPath/MapSource/마을.txt");
 	fin.open(wstrFilePath.c_str());
 	if (!fin.fail())
@@ -319,7 +326,7 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag)
 
 			if (true == bOnOff)
 			{
-				if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_CubeTerrain", m_eNextSceneID, LayerTag, &Temp_Info)))
+				if (FAILED(pManagement->Add_GameObject_InLayer(m_eNextSceneID, L"GameObject_CubeTerrain", m_eNextSceneID, LayerTag, &Temp_Info)))
 					return E_FAIL;
 
 			}

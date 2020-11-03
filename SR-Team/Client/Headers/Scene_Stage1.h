@@ -42,5 +42,6 @@ private:
 	CPreLoader* m_pPreLoader = nullptr;
 };
 
+END
 
 #endif // DEBUG

@@ -163,7 +163,6 @@
     <ClInclude Include="..\Headers\Bomb.h" />
     <ClInclude Include="..\Headers\LoadingScreen.h" />
     <ClInclude Include="..\Headers\Scene_Loading.h" />
-    <ClInclude Include="..\Headers\Scene_Stage1.h" />
     <ClInclude Include="..\Headers\SkillSlot_EnergyExlposion.h" />
     <ClInclude Include="..\Headers\Crack.h" />
     <ClInclude Include="..\Headers\EnergyBolt.h" />
@@ -233,7 +232,6 @@
     <ClCompile Include="..\Codes\Bomb.cpp" />
     <ClCompile Include="..\Codes\LoadingScreen.cpp" />
     <ClCompile Include="..\Codes\Scene_Loading.cpp" />
-    <ClCompile Include="..\Codes\Scene_Stage1.cpp" />
     <ClCompile Include="..\Codes\SkillSlot_EnergyExlposion.cpp" />
     <ClCompile Include="..\Codes\Crack.cpp" />
     <ClCompile Include="..\Codes\EnergyBolt.cpp" />
