@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "..\Headers\Snail.h"
-#include "Status.h"
 #include "DamageInfo.h"
 
 USING(Client)
@@ -42,7 +41,10 @@ int CSnail::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
-	if(FAILED(Update_State()))
+	if (GetAsyncKeyState(VK_NUMPAD0) & 0x8000)
+		m_eCurState = CSnail::IDLE;
+
+	if (FAILED(Update_State()))
 		return GAMEOBJECT::ERR;
 
 	if (FAILED(Movement(_fDeltaTime)))
@@ -214,11 +216,14 @@ HRESULT CSnail::Movement(_float _fDeltaTime)
 		return E_FAIL;
 
 	if (FAILED(LookAtPlayer(_fDeltaTime)))
-			return E_FAIL;
+		return E_FAIL;
+
+	if (FAILED(Compare_PlayerPosition()))
+		return E_FAIL;
 
 	if (FAILED(Move(_fDeltaTime)))
 		return E_FAIL;
-	
+
 	if (FAILED(Attack(_fDeltaTime)))
 		return E_FAIL;
 
@@ -336,8 +341,8 @@ HRESULT CSnail::LookAtPlayer(_float _fDeltaTime)
 
 HRESULT CSnail::Compare_PlayerPosition()
 {
-	if(m_eCurState != CSnail::IDLE)
-	return S_OK;
+	if (m_eCurState != CSnail::IDLE)
+		return S_OK;
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -350,7 +355,7 @@ HRESULT CSnail::Compare_PlayerPosition()
 
 	_vec3 vPlayerPosition = pPlayerTransform->Get_Desc().vPosition;
 	_vec3 vMyPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
-	_vec3 vDirection = _vec3(vPlayerPosition.x , 0.f , vPlayerPosition.z) - _vec3(vMyPos.x , 0.f , vMyPos.z);
+	_vec3 vDirection = _vec3(vPlayerPosition.x, 0.f, vPlayerPosition.z) - _vec3(vMyPos.x, 0.f, vMyPos.z);
 	_float fLength = D3DXVec3Length(&vDirection);
 
 	if (fLength < m_fCopareLength)
@@ -360,100 +365,41 @@ HRESULT CSnail::Compare_PlayerPosition()
 
 HRESULT CSnail::Attack(_float _fDeltaTime)
 {
-	if (m_eCurState != CSnail::ATTACK_START || m_eCurState != CSnail::ATTACK_END)
-		return S_OK;
-
-	if (m_eCurState == CSnail::ATTACK_START)
+	if (m_eCurState == CSnail::ATTACK_START || m_eCurState == CSnail::ATTACK_END)
 	{
+
 		_vec3 vMyPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
-		_vec3 vDirection = _vec3(m_vPrePos.x , 0.f , m_vPrePos.z) - _vec3(vMyPos.x , 0.f , vMyPos.z);
+		_vec3 vDirection = _vec3(m_vPrePos.x, 0.f, m_vPrePos.z) - _vec3(vMyPos.x, 0.f, vMyPos.z);
 		_float vLength = D3DXVec3Length(&vDirection);
 		D3DXVec3Normalize(&vDirection, &vDirection);
 
-		if (vLength >= 0.5f)
+		if (m_eCurState == CSnail::ATTACK_START)
 		{
-			vMyPos += vDirection * (_fDeltaTime * 3.f);
-			m_pTransformCom[SNAIL_BODY]->Set_Position(vMyPos);
-		}
-		else if (vLength <= 0.5f)
-		{
-			if (vLength > 2.5f)
+			if (vLength >= 0.2f)
+			{
+				vMyPos += vDirection * (_fDeltaTime * 6.f);
+				m_pTransformCom[SNAIL_BODY]->Set_Position(vMyPos);
+			}
+			else if (vLength <= 0.2f)
+			{
 				m_eCurState = ATTACK_END;
 
+			}
+			//if (vLength > 2.5f)
+		}
+		else if (m_eCurState == ATTACK_END)
+		{
 			vMyPos -= vDirection * (_fDeltaTime);
 			m_pTransformCom[SNAIL_BODY]->Set_Position(vMyPos);
+
+			if (vLength > 2.5f)
+			{
+				m_eCurState = CSnail::MOVE;
+			}
 		}
 	}
-
-
-
-
-
-
-
-
-	if (m_eCurState == CSnail::ATTACK_END)
-	{
-		m_eCurState = CSnail::IDLE;
-	}
-	//if (!m_bCheck)
-	//{
-	//	m_vPrePos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
-	//	m_bCheck = true;
-	//}
-
-	//CManagement* pManagement = CManagement::Get_Instance();
-	//if (nullptr == pManagement)
-	//	return E_FAIL;
-
-	//CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
-	//if (nullptr == pPlayerTransform)
-	//	return E_FAIL;
-
-	//_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
-	//_vec3 m_vPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
-	//m_vDir = vPlayerPos - m_vPos;
-	//_float m_fLength = D3DXVec3Length(&m_vDir);
-	//D3DXVec3Normalize(&m_vDir, &m_vDir);
-
-	//if (0.1f <= m_fLength && !m_bCrash)
-	//{
-	//	m_vPos += m_vDir * (_fDeltaTime * 8.f);
-	//	m_pTransformCom[SNAIL_BODY]->Set_Position(m_vPos);
-	//	m_bInstanceCreate = false;
-	//}
-	//else if (m_bCrash)
-	//{
-	//	if (!m_bInstanceCreate)
-	//	{
-	//		if (FAILED(Spawn_InstantImpact(L"Layer_Snail_Impact")))
-	//			return E_FAIL;
-
-	//		m_bInstanceCreate = true;
-	//	}
-
-	//	if (m_fLength <= 3.f)
-	//	{
-	//		m_vDir = m_vPos - vPlayerPos;
-	//		_float m_fLength = D3DXVec3Length(&m_vDir);
-	//		D3DXVec3Normalize(&m_vDir, &m_vDir);
-	//		m_vPos += m_vDir * _fDeltaTime * 2.f;
-	//		m_pTransformCom[SNAIL_BODY]->Set_Position(m_vPos);
-	//	}
-	//	else
-	//	{
-	//		m_eCurState = CSnail::MOVE;
-	//		m_bCrash = false;
-	//		m_bCheck = false;
-	//		return S_OK;
-	//	}
-	//}
-	//else
-	//{
-	//	m_eCurState = CSnail::MOVE;
-	//	m_bCheck = false;
-	//}
+	else
+		return S_OK;
 
 	return S_OK;
 }
@@ -477,7 +423,7 @@ HRESULT CSnail::Spawn_InstantImpact(const wstring & LayerTag)
 	_vec3 BodyPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
 	tImpact.vPosition = BodyPos;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag , &tImpact)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
 		return E_FAIL;
 
 	return S_OK;
@@ -547,4 +493,3 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 	}
 	return S_OK;
 }
-

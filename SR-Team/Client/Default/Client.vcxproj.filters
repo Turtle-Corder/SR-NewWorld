@@ -454,6 +454,9 @@
       <Filter>01.Scene\99.Scene_Loading</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\LoadingScreen.h" />
+    <ClInclude Include="..\Headers\Acorn.h">
+      <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -643,6 +646,9 @@
       <Filter>01.Scene\99.Scene_Loading</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\LoadingScreen.cpp" />
+    <ClCompile Include="..\Codes\Acorn.cpp">
+      <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

@@ -6,6 +6,7 @@
 
 USING(Engine)
 BEGIN(Client)
+class CDamageInfo;
 
 class CStump final : public CGameObject
 {
@@ -47,25 +48,22 @@ private:
 	HRESULT LookAtPlayer(_float _fDeltaTime);
 	HRESULT Attack(_float _fDeltaTime);
 	HRESULT Setting_Part();
-	HRESULT Spawn_InstantImpact(const wstring& LayerTag);
+	HRESULT Spawn_Acorn(const wstring& LayerTag, _uint _iCount);
 private:
-	CVIBuffer*		m_pVIBufferCom[STUMP_END] = {};
-	CTransform*		m_pTransformCom[STUMP_END] = {};
-	CTexture*		m_pTextureCom[STUMP_END] = {};
-
+	CVIBuffer*			m_pVIBufferCom[STUMP_END] = {};
+	CTransform*			m_pTransformCom[STUMP_END] = {};
+	CTexture*			m_pTextureCom[STUMP_END] = {};
+	CSphereCollider*	m_pColliderCom = nullptr;
+	CStatus*			m_pStatusCom = nullptr;
+	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
 private:
-	_vec3		m_vStartPos = {};
-	_bool		m_bAttack = false;
-	_vec3		m_vDir = {};
-	INSTANTIMPACT*	m_pInstantImpact = nullptr;
-	STATE		m_ePreState;
-	STATE		m_eCurState;
-	_bool		m_bHit = false;
-	_vec3		m_vLook = {};
-	_bool		m_bCheck = false;
-	_bool		m_bCrash = false;
-	_vec3		m_vPrePos = {};
+	_vec3				m_vStartPos = {};
+	_vec3				m_vDir = {};
+	_vec3				m_vLook = {};
+	STATE				m_ePreState = IDLE;
+	STATE				m_eCurState = IDLE;
+	_bool				m_bAcorn_CreateOne_Check = false;
 };
 
 END
