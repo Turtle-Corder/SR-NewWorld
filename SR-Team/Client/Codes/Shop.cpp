@@ -57,11 +57,13 @@ HRESULT CShop::Setup_GameObject(void * pArg)
 	if (FAILED(Add_Component_ShopItem()))
 		return E_FAIL;
 
+	// 변경
 	m_pTransformCom[SHOP_WND]->Set_Position(_vec3(400.f, 400.f, 0.f));
 	m_pTransformCom[SHOP_SCROLLBAR]->Set_Position(_vec3(810.f, 230.f, 0.f));
 
 	// 아이템 텍스처, 이름, 가격 위치 설정
 	_uint iIndex = 0;
+	// 변경
 	for (_uint j = 0; j < 3; ++j)
 	{
 		for (_uint i = 0; i < 4; ++i)
@@ -71,7 +73,7 @@ HRESULT CShop::Setup_GameObject(void * pArg)
 			m_vItemTexturePos[j][i].y = (j * 213.f) + 156.f;
 			m_vItemTexturePos[j][i].z = 0.f;
 
-			if (iIndex < 15)
+			if (iIndex < 16)
 			{
 				m_pItemTransformCom[iIndex]->Set_Position(m_vItemTexturePos[j][i]);
 			}
@@ -80,6 +82,7 @@ HRESULT CShop::Setup_GameObject(void * pArg)
 	}
 
 	// 아이템 이미지 충돌 렉트
+	// 변경
 	for (_uint j = 0; j < 3; ++j)
 	{
 		for (_uint i = 0; i < 4; ++i)
@@ -228,20 +231,27 @@ HRESULT CShop::Move_ScrollBar()
 		{
 			vScrollBarPos.y = (_float)pMouse->Get_Point().y;
 
-			if (vScrollBarPos.y >= 470.f)
+
+			if (vScrollBarPos.y >= 580.f)
 			{
-				vScrollBarPos.y = 460.f;
-				m_iStartIndex = 2;
+				vScrollBarPos.y = 580.f;
+				m_iStartIndex = 5;
 			}
-			else if (vScrollBarPos.y >= 360.f)
+			else if (vScrollBarPos.y >= 520.f)
+				m_iStartIndex = 5;
+			else if (vScrollBarPos.y >= 460.f)
+				m_iStartIndex = 4;
+			else if (vScrollBarPos.y >= 400.f)
+				m_iStartIndex = 3;
+			else if (vScrollBarPos.y >= 340.f)
 				m_iStartIndex = 2;
-			else if (vScrollBarPos.y >= 260.f)
+			else if (vScrollBarPos.y >= 280.f)
 				m_iStartIndex = 1;
-			else if (vScrollBarPos.y > 160.f)
+			else if (vScrollBarPos.y > 220.f)
 				m_iStartIndex = 0;
-			else if (vScrollBarPos.y <= 160.f)
+			else if (vScrollBarPos.y <= 220.f)
 			{
-				vScrollBarPos.y = 165.f;
+				vScrollBarPos.y = 220.f;
 				m_iStartIndex = 0;
 			}
 		}

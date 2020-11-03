@@ -391,6 +391,7 @@ HRESULT CMainApp::Setup_EB()
 #pragma endregion
 
 #pragma region GameObject_Item 
+
 	// DataManager
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Item", CDataManager::Create(m_pDevice))))
 		return E_FAIL;
@@ -446,12 +447,12 @@ HRESULT CMainApp::Setup_EB()
 
 	// slot_left
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainUI_QuickSlot_Left", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_MainUI/QuickSlot_Right%d.png"))))
+		L"../Resources/Sprite/Layer_MainUI/QuickSlot_LeftFont%d.png"))))
 		return E_FAIL;
 
 	// slot_left
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainUI_QuickSlot_Right", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_MainUI/QuickSlot_Right%d.png"))))
+		L"../Resources/Sprite/Layer_MainUI/QuickSlot_RightFont%d.png"))))
 		return E_FAIL;
 
 #pragma endregion
@@ -500,7 +501,7 @@ HRESULT CMainApp::Setup_EB()
 
 #pragma region Component_Texture_Skill
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Skill_ActiveWnd", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/2DResource/Skill/active%d.png"))))
+		L"../Resources/2DResource/Skill/new_active%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Skill_PassiveWnd", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/2DResource/Skill/passive%d.png"))))
@@ -545,6 +546,14 @@ HRESULT CMainApp::Setup_EB()
 		L"Component_Texture_SkillIcon_ManaDrift", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/2DResource/Skill_Icon/mana_drift%d.png"))))
 		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_SkillIcon_ThunderStorm", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/2DResource/Skill_Icon/thunder_storm%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_SkillIcon_Blind", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/2DResource/Skill_Icon/blind%d.png"))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_SkillInfo
@@ -571,6 +580,19 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_SkillInfo_ManaDrift", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_MainUI/mana_drift%d.png"))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_SkillInfo_ThunderStorm", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_MainUI/thunder_storm%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_SkillInfo_Blind", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_MainUI/blind%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_SkillInfo_IceBlast", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_MainUI/ice_blast%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

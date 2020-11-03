@@ -64,6 +64,14 @@ private:
 	// 퀵슬롯에 있는 아이템을 그리는 함수
 	HRESULT Render_QuickSlot_Item();
 
+
+private:
+	// 퀵슬롯 내에서 스킬 아이콘의 위치를 바꾸는 함수
+	HRESULT Change_SkillIconPos();
+	// 퀵슬롯 내에서 아이템의 위치를 바꾸는 함수
+	HRESULT Change_ItemPos();
+
+
 private:
 	HRESULT Add_Component();
 
@@ -119,6 +127,14 @@ private:
 	// 퀵슬롯이 가지고 있는 아이템 정보
 	INVEN_ITEM*		m_pLeftSlotItem[8];
 	INVEN_ITEM*		m_pRightSlotItem[8];
+
+	// 퀵슬롯 내에서 스킬 아이콘/아이템을 옮기고 있는지
+	// 옮기고 있으면 true, 아니면 false
+	_bool			m_bChange_SkillIconPos = false;
+	_bool			m_bChange_ItemPos = false;
+	// 퀵슬롯 내에서 스킬 아이콘/아이템을 옮기기 전 인덱스
+	_int			m_iBefore_SkillIconIndex = -1;
+	_int			m_iBefore_ItemIndex = -1;
 };
 END
 
