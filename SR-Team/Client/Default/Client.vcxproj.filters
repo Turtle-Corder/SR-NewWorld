@@ -25,15 +25,6 @@
     <Filter Include="01.Scene\06.Scene_Stage5">
       <UniqueIdentifier>{60fbce97-ae77-446a-a86e-098f9246c8fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Scene\01.Scene_Stage0">
-      <UniqueIdentifier>{f35f7334-3924-40e9-bdf0-78628c9e44c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Scene\02.Scene_Stage1">
-      <UniqueIdentifier>{b2f2832c-e576-4509-92b6-830441d24407}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Scene\03.Scene_Stage2">
-      <UniqueIdentifier>{ad62fa16-de07-4b33-a53a-b20ec81f9562}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Scene\04.Scene_Stage3">
       <UniqueIdentifier>{c2e98aba-ee11-42ae-b3b5-373b0b03ec9d}</UniqueIdentifier>
     </Filter>
@@ -244,6 +235,21 @@
     <Filter Include="02.GameObject\06.Projectile\01.Monster\01.Acorn">
       <UniqueIdentifier>{5fda5631-38aa-42f9-93b1-e3f58eacdefd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\02.Scene_Stage0">
+      <UniqueIdentifier>{f35f7334-3924-40e9-bdf0-78628c9e44c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\03.Scene_Stage1">
+      <UniqueIdentifier>{b2f2832c-e576-4509-92b6-830441d24407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\04.Scene_Stage2">
+      <UniqueIdentifier>{ad62fa16-de07-4b33-a53a-b20ec81f9562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\01.Scene_Room">
+      <UniqueIdentifier>{c0b5436f-5295-4290-be8b-81b5a34f9772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\00.Terrain\99.Dummy">
+      <UniqueIdentifier>{3646a843-fdb0-444e-8f26-9f21e0547b79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -277,7 +283,7 @@
       <Filter>01.Scene\99.PreLoader</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Scene_Stage0.h">
-      <Filter>01.Scene\01.Scene_Stage0</Filter>
+      <Filter>01.Scene\02.Scene_Stage0</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Player.h">
       <Filter>02.GameObject\04.Player</Filter>
@@ -444,6 +450,18 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Stage1.h">
+      <Filter>01.Scene\03.Scene_Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Stage2.h">
+      <Filter>01.Scene\04.Scene_Stage2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Room.h">
+      <Filter>01.Scene\01.Scene_Room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DummyTerrain.h">
+      <Filter>02.GameObject\00.Terrain\99.Dummy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -462,7 +480,7 @@
       <Filter>01.Scene\99.PreLoader</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Scene_Stage0.cpp">
-      <Filter>01.Scene\01.Scene_Stage0</Filter>
+      <Filter>01.Scene\02.Scene_Stage0</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Player.cpp">
       <Filter>02.GameObject\04.Player</Filter>
@@ -628,6 +646,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Stage1.cpp">
+      <Filter>01.Scene\03.Scene_Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Stage2.cpp">
+      <Filter>01.Scene\04.Scene_Stage2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Room.cpp">
+      <Filter>01.Scene\01.Scene_Room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DummyTerrain.cpp">
+      <Filter>02.GameObject\00.Terrain\99.Dummy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

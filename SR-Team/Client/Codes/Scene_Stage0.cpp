@@ -2,6 +2,7 @@
 #include "PreLoader.h"
 #include "Player.h"
 #include "TerrainBundle.h"
+#include "Scene_Stage1.h"
 #include "..\Headers\Scene_Stage0.h"
 
 USING(Client)
@@ -31,26 +32,9 @@ HRESULT CScene_Stage0::Setup_Scene()
 	if (FAILED(Setup_Layer_Environment(L"Layer_Environment")))
 		return E_FAIL;
 
-	//--------------------------------------------------
-	// 몬스터 & 공격
-	//--------------------------------------------------
-	if (FAILED(Setup_Layer_Monster(L"Layer_Monster")))
-		return E_FAIL;
-
-	if (FAILED(Setup_Layer_Monster_Attack(L"Layer_MonsterAtk")))
-		return E_FAIL;
-
-	if (FAILED(Setup_Layer_Player_Attack(L"Layer_PlayerAtk")))
-		return E_FAIL;
-
 
 	eSCENE_ID ePreLoadScene = SCENE_STAGE1;
 
-	//--------------------------------------------------
-	// 변수에 따라서 레이어 생성 여부 결정
-	// 다시 생성 -> 현재 클리어 정보를 가져와서 다음 씬을 preload
-	// 처음 생성 -> 필수 레이어들 셋팅
-	//--------------------------------------------------
 	if (m_bReload)
 	{
 		CManagement* pManagement = CManagement::Get_Instance();
@@ -62,48 +46,40 @@ HRESULT CScene_Stage0::Setup_Scene()
 		// 다 끝나고 마을로 돌아오면 안됨!
 		ePreLoadScene = (eSCENE_ID)pPlayer->Get_ClearInfo();
 	}
-	else
-	{
-		//--------------------------------------------------
-		// 필수 오브젝트
-		//--------------------------------------------------
-		if (FAILED(Setup_Layer_Mouse(L"Layer_Mouse")))
-			return E_FAIL;
-
-		if (FAILED(Setup_Layer_Camera(L"Layer_Camera")))
-			return E_FAIL;
-
-		if (FAILED(Setup_Layer_Player(L"Layer_Player")))
-			return E_FAIL;
-
-		//--------------------------------------------------
-		// UI
-		//--------------------------------------------------
-		if (FAILED(SetUp_Layer_Item(L"Layer_Item")))
-			return E_FAIL;
-
-		if (FAILED(Setup_Layer_UI(L"Layer_MainUI")))
-			return E_FAIL;
-
-		if (FAILED(SetUp_Layer_Inventory(L"Layer_Inventory")))
-			return E_FAIL;
-
-		if (FAILED(SetUp_Layer_Shop(L"Layer_Shop")))
-			return E_FAIL;
-	}
-
-	// "Layer_Effect"
 
 	m_pPreLoader = CPreLoader::Create(m_pDevice, ePreLoadScene);
+	if (nullptr == m_pPreLoader)
+	{
+		PRINT_LOG(L"Failed To PreLoader Create in CScene_Stage0", LOG::CLIENT);
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
 
 _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 {
-	//--------------------------------------------------
-	// TODO : 스테이지 클리어 조건
-	//--------------------------------------------------
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return -1;
+
+	if (pManagement->Key_Down(VK_F2) && m_pPreLoader->IsFinished())
+	{
+		if (FAILED(pManagement->Change_CurrentScene(SCENE_STAGE1, CScene_Stage1::Create(m_pDevice))))
+		{
+			PRINT_LOG(L"Failed To Setup CScene_Stage1", LOG::CLIENT);
+			return -1;
+		}
+
+		// UNDONE : 일단 정리되게
+		if (FAILED(pManagement->ClearScene_All(SCENE_STAGE1)))
+		{
+			PRINT_LOG(L"Failed To Clear CScene_Room", LOG::CLIENT);
+			return -1;
+		}
+
+		return 1;
+	}
 
 	return 0;
 }
@@ -118,8 +94,8 @@ _int CScene_Stage0::LateUpdate_Scene(_float _fDeltaTime)
 	//if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_MonsterAtk", L"Layer_Player", L"Com_Collider", L"Com_DmgInfo")))
 	//	return -1;
 
-	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
-		return -1;
+	//if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
+	//	return -1;
 
 	//if (FAILED(pManagement->CollisionSphere_Impulse_Layers(SCENE_STAGE0, L"Layer_PlayerAtk", L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
 	//	return -1;
@@ -233,152 +209,7 @@ HRESULT CScene_Stage0::Setup_Layer_Terrain(const wstring & LayerTag)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Terrain", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::Setup_Layer_Camera(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CCamera::CAMERA_DESC tCameraDesc;
-	ZeroMemory(&tCameraDesc, sizeof(CCamera::CAMERA_DESC));
-	D3DXMatrixIdentity(&tCameraDesc.matView);
-	tCameraDesc.vUp = _vec3(0.f, 1.f, 0.f);
-
-	D3DXMatrixIdentity(&tCameraDesc.matProj);
-	tCameraDesc.fFovY = D3DXToRadian(60.f);
-	tCameraDesc.fAspect = (float)WINCX / WINCY;
-	tCameraDesc.fNear = 1.f;
-	tCameraDesc.fFar = 100.f;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MainCamera", SCENE_STAGE0, LayerTag, &tCameraDesc)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::Setup_Layer_Player(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-	
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Player", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::Setup_Layer_Monster(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Snail", SCENE_STAGE0, LayerTag , &_vec3(10.f , 0.f , 5.f))))/*여기 StartPos*/
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Stump", SCENE_STAGE0, LayerTag, &_vec3(10.f, 0.f, 10.f))))/*여기 StartPos*/
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::Setup_Layer_Monster_Attack(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	// 레이어 사전예약
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Snail_Impact", SCENE_STAGE0, LayerTag , nullptr)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::Setup_Layer_Player_Attack(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	// 레이어 사전예약
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Meteor", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::Setup_Layer_UI(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MainUI", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Equip", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Skill", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillInven", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ItemInven", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::SetUp_Layer_Inventory(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Inven", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::SetUp_Layer_Shop(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Shop", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CScene_Stage0::SetUp_Layer_Item(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Item", SCENE_STAGE0, LayerTag)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-
-HRESULT CScene_Stage0::Setup_Layer_Mouse(const wstring & LayerTag)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Mouse", SCENE_STAGE0, LayerTag)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DummyTerrain", SCENE_STAGE0, LayerTag)))
 		return E_FAIL;
 
 	return S_OK;
@@ -386,19 +217,19 @@ HRESULT CScene_Stage0::Setup_Layer_Mouse(const wstring & LayerTag)
 
 HRESULT CScene_Stage0::Setup_Layer_Environment(const wstring & LayerTag)
 {
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
+	//CManagement* pManagement = CManagement::Get_Instance();
+	//if (nullptr == pManagement)
+	//	return E_FAIL;
 
-	vector<void*> Test;
+	//vector<void*> Test;
 
 
-	_vec3 Pos = { 20.f, 0.f, 20.f };
-	Test.emplace_back(&Pos);	
-	Pos = { 35.f, 0.f, 35.f };
+	//_vec3 Pos = { 20.f, 0.f, 20.f };
+	//Test.emplace_back(&Pos);	
+	//Pos = { 35.f, 0.f, 35.f };
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Flower", SCENE_STAGE0, LayerTag, &Test)))
-		return E_FAIL;
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Flower", SCENE_STAGE0, LayerTag, &Test)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

@@ -1,0 +1,281 @@
+#include "stdafx.h"
+#include "PreLoader.h"
+#include "Scene_Stage0.h"
+#include "..\Headers\Scene_Room.h"
+
+USING(Client)
+
+CScene_Room::CScene_Room(LPDIRECT3DDEVICE9 _pDevice)
+	: CScene(_pDevice)
+{
+}
+
+HRESULT CScene_Room::Setup_Scene()
+{
+	SetWindowText(g_hWnd, L"Csene_Room");
+
+
+	//--------------------------------------------------
+	// 환경
+	//--------------------------------------------------
+	//if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
+	//	return E_FAIL;
+
+	if (FAILED(Setup_Layer_Terrain(L"Layer_Terrain")))
+		return E_FAIL;
+
+	//if (FAILED(Setup_Layer_CubeTerrain(L"Layer_CubeTerrain")))
+	//	return E_FAIL;
+
+	if (FAILED(Setup_Layer_Environment(L"Layer_Environment")))
+		return E_FAIL;
+
+	//--------------------------------------------------
+	// 필수 오브젝트
+	//--------------------------------------------------
+	if (FAILED(Setup_Layer_Mouse(L"Layer_Mouse")))
+		return E_FAIL;
+
+	if (FAILED(Setup_Layer_Camera(L"Layer_Camera")))
+		return E_FAIL;
+
+	if (FAILED(Setup_Layer_Player(L"Layer_Player")))
+		return E_FAIL;
+
+	//--------------------------------------------------
+	// UI
+	//--------------------------------------------------
+	if (FAILED(SetUp_Layer_Item(L"Layer_Item")))
+		return E_FAIL;
+
+	if (FAILED(Setup_Layer_UI(L"Layer_MainUI")))
+		return E_FAIL;
+
+	if (FAILED(SetUp_Layer_Inventory(L"Layer_Inventory")))
+		return E_FAIL;
+
+	if (FAILED(SetUp_Layer_Shop(L"Layer_Shop")))
+		return E_FAIL;
+
+	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_STAGE0);
+	if (nullptr == m_pPreLoader)
+	{
+		PRINT_LOG(L"Failed To PreLoader Create in CScene_Logo", LOG::CLIENT);
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+_int CScene_Room::Update_Scene(_float _fDeltaTime)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return -1;
+
+	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
+	{
+		if (FAILED(pManagement->Change_CurrentScene(SCENE_STAGE0, CScene_Stage0::Create(m_pDevice))))
+		{
+			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);
+			return -1;
+		}
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Mouse")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Camera")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Player")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Item")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainUI")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Inventory")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Shop")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Wand")))
+			return -1;
+
+		if (FAILED(pManagement->Clear_Except(SCENE_ROOM, SCENE_STAGE0)))
+		{
+			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
+			return -1;
+		}
+
+		return 1;
+	}
+
+	return GAMEOBJECT::NOEVENT;
+}
+
+_int CScene_Room::LateUpdate_Scene(_float _fDeltaTime)
+{
+	return GAMEOBJECT::NOEVENT;
+}
+
+CScene_Room * CScene_Room::Create(LPDIRECT3DDEVICE9 _pDevice)
+{
+	if (nullptr == _pDevice)
+		return nullptr;
+
+	CScene_Room* pInstance = new CScene_Room(_pDevice);
+	if (FAILED(pInstance->Setup_Scene()))
+	{
+		PRINT_LOG(L"Failed To Create CScene_Room", LOG::CLIENT);
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CScene_Room::Free()
+{
+	Safe_Release(m_pPreLoader);
+
+	CScene::Free();
+}
+
+HRESULT CScene_Room::Setup_Layer_AllObject()
+{
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_Skybox(const wstring & LayerTag)
+{
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_Terrain(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DummyTerrain", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_CubeTerrain(const wstring & LayerTag)
+{
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_Environment(const wstring & LayerTag)
+{
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_Camera(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera::CAMERA_DESC tCameraDesc;
+	ZeroMemory(&tCameraDesc, sizeof(CCamera::CAMERA_DESC));
+	D3DXMatrixIdentity(&tCameraDesc.matView);
+	tCameraDesc.vUp = _vec3(0.f, 1.f, 0.f);
+
+	D3DXMatrixIdentity(&tCameraDesc.matProj);
+	tCameraDesc.fFovY = D3DXToRadian(60.f);
+	tCameraDesc.fAspect = (float)WINCX / WINCY;
+	tCameraDesc.fNear = 1.f;
+	tCameraDesc.fFar = 100.f;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MainCamera", SCENE_ROOM, LayerTag, &tCameraDesc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_UI(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MainUI", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Equip", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Skill", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillInven", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ItemInven", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::SetUp_Layer_Inventory(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Inven", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::SetUp_Layer_Shop(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Shop", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::SetUp_Layer_Item(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Item", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+
+HRESULT CScene_Room::Setup_Layer_Mouse(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Mouse", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_Player(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Player", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}

@@ -54,6 +54,33 @@ HRESULT CPreLoader::Setup_PreLoader(eSCENE_ID _eNextSceneID)
 	return S_OK;
 }
 
+HRESULT CPreLoader::Load_Resources_Room()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+#pragma region GameObject_Skybox
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ROOM, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Skybox
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ROOM, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Monster%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_CubeTerrain
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ROOM, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 99)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CPreLoader::Load_Resources_Stage0()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -63,28 +90,24 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 	//----------------------------------------------------------------------------------------------------
 	// GameObject
 	//----------------------------------------------------------------------------------------------------
-#pragma region GameObject_Terrain
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Terrain", CTerrain::Create(m_pDevice))))
-		return E_FAIL;
-#pragma endregion
 
 #pragma region GameObject_Skybox
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Snail
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Snail", CSnail::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_Snail", CSnail::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Snail_Impact
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Stump
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Stump", CStump::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_Stump", CStump::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
@@ -94,12 +117,12 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 //#pragma endregion
 
 #pragma region Component_Texture_Stump_Head
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_Stump_Part
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -108,42 +131,32 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 	//----------------------------------------------------------------------------------------------------
 
 	// terrain
-#pragma region Component_VIBuffer_TerrainTexture
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_VIBuffer_TerrainTexture", CVIBuffer_TerrainTexture::Create(m_pDevice, 129, 129))))
-		return E_FAIL;
-#pragma endregion
 
 #pragma region GameObject_CubeTerrain
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
-
-#pragma region Component_Texture_Terrain
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Terrain", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/Terrain/Terrain%d.png"))))
-		return E_FAIL;
-#pragma endregion
-
 
 	// skybox
 #pragma region Component_Texture_Skybox
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Monster%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Monster%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 	// snail
 #pragma region Component_Texture_SnailBody
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_SnailHead
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 // 0번 마을
 
-	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"),m_eNextSceneID)))
+	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 0)))
 		return E_FAIL;
 
 
@@ -160,22 +173,22 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 #pragma region Snail
 
 #pragma region GameObject_Snail
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Snail", CSnail::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Snail", CSnail::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Snail_Impact
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_SnailBody
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_SnailHead
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -184,17 +197,17 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 #pragma region Slime
 
 #pragma region GameObject_Slime
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Slime", CSlime::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Slime", CSlime::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Slime_Impact
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Slime_Impact", CSlime_Impact::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Slime_Impact", CSlime_Impact::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_Translucent_Cube
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Translucent_Cube", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/TranslucentCube%d.dds", 2))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Translucent_Cube", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/TranslucentCube%d.dds", 2))))
 		return E_FAIL;
 #pragma endregion
 
@@ -204,7 +217,7 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 #pragma region Stump
 
 #pragma region GameObject_Stump
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Stump", CStump::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Stump", CStump::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
@@ -214,12 +227,12 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 //#pragma endregion
 
 #pragma region Component_Texture_Stump_Head
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_Stump_Part
-	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -234,6 +247,14 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 //#pragma endregion
 
 #pragma endregion
+
+#pragma region GameObject_CubeTerrain
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 1)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -275,6 +296,10 @@ _uint CPreLoader::ThreadMain(void * _pParam)
 		break;
 
 	case eSCENE_ID::SCENE_LOGO:
+		break;
+
+	case eSCENE_ID::SCENE_ROOM:
+		hr = pInstance->Load_Resources_Room();
 		break;
 
 	case eSCENE_ID::SCENE_STAGE0:
@@ -346,20 +371,20 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uin
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	//로딩파츠
-
-	//스테이지 넘버는 해당 경로를 참조할것
-
-
 	wifstream fin;
-
 	TCHAR szFilePath[MID_STR] = _T("");
+
+	_int iToScene = 0;
+
 	TCHAR szFilePathReady[MID_STR] = _T("../DataPath/MapSource/Stage%d.txt");
+	StringCchPrintf(szFilePath, _countof(szFilePath), szFilePathReady, StageNumber); //상수로 때려박아야 함
 
+	if (99 == StageNumber)
+		iToScene = (_int)SCENE_ROOM;
+	else
+		iToScene = (_int)(StageNumber + 3);
 
-	StringCchPrintf(szFilePath, _countof(szFilePath), szFilePathReady, StageNumber - 2);//로고, 스태틱 두칸 도로 밀어줌
-
-	wstring wstrFilePath = _T("../DataPath/MapSource/마을.txt");
+	
 	fin.open(szFilePath);
 	if (!fin.fail())
 	{
@@ -383,7 +408,7 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uin
 
 		int iFloorMax = XNumber*ZNumber;
 
-		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_TerrainBundle", m_eNextSceneID, _T("Layer_TerrainBundle"), &iFloorMax)))
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_TerrainBundle", iToScene, _T("Layer_TerrainBundle"), &iFloorMax)))
 			return E_FAIL;
 
 		while (true)
@@ -427,12 +452,12 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uin
 				break;
 
 
-			((CTerrainBundle*)pManagement->Get_GameObject(m_eNextSceneID, _T("Layer_TerrainBundle")))->Set_TerrainInfo(iIndex, iFloor, Temp_Info);
+			((CTerrainBundle*)pManagement->Get_GameObject(iToScene, _T("Layer_TerrainBundle")))->Set_TerrainInfo(iIndex, iFloor, Temp_Info);
 
 
 			if (true == bOnOff)
 			{
-				if (FAILED(pManagement->Add_GameObject_InLayer(m_eNextSceneID, L"GameObject_CubeTerrain", m_eNextSceneID, LayerTag, &Temp_Info)))
+				if (FAILED(pManagement->Add_GameObject_InLayer(iToScene, L"GameObject_CubeTerrain", iToScene, LayerTag, &Temp_Info)))
 					return E_FAIL;
 
 			}

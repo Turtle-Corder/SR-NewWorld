@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "PreLoader.h"
-#include "Scene_Stage0.h"
+#include "Scene_Room.h"
 #include "..\Headers\Scene_Logo.h"
 
 USING(Client)
@@ -14,7 +14,7 @@ HRESULT CScene_Logo::Setup_Scene()
 {
 	SetWindowText(g_hWnd, L"Logo Scene");
 
-	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_STAGE0);
+	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_ROOM);
 	if (nullptr == m_pPreLoader)
 	{
 		PRINT_LOG(L"Failed To PreLoader Create in CScene_Logo", LOG::CLIENT);
@@ -32,15 +32,15 @@ _int CScene_Logo::Update_Scene(_float _fDeltaTime)
 
 	if (pManagement->Key_Down(VK_RETURN) && m_pPreLoader->IsFinished())
 	{
-		if (FAILED(pManagement->Change_CurrentScene(SCENE_STAGE0, CScene_Stage0::Create(m_pDevice))))
+		if (FAILED(pManagement->Change_CurrentScene(SCENE_ROOM, CScene_Room::Create(m_pDevice))))
 		{
-			PRINT_LOG(L"Failed To Setup CScene_Stage0", LOG::CLIENT);
+			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);
 			return -1;
 		}
 
 		if (FAILED(pManagement->ClearScene_All(SCENE_LOGO)))
 		{
-			PRINT_LOG(L"Failed To Clear CScene_Logo", LOG::CLIENT);
+			PRINT_LOG(L"Failed To Clear CScene_Room", LOG::CLIENT);
 			return -1;
 		}
 

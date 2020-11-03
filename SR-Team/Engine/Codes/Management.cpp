@@ -254,12 +254,12 @@ HRESULT CManagement::ClearScene_Except_RegisterTag(_uint _iSceneID, const wstrin
 	return m_pObject_Manager->Register_ExceptTag(_iSceneID, _strLayerTag);
 }
 
-HRESULT CManagement::Clear_Except(_uint _iSceneID)
+HRESULT CManagement::Clear_Except(_uint _iFromSceneID, _uint _iToSceneID)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
 
-	return m_pObject_Manager->Clear_Except(_iSceneID);
+	return m_pObject_Manager->Clear_Except(_iFromSceneID, _iToSceneID);
 }
 
 LPDIRECT3DDEVICE9 CManagement::Get_Device(void) const

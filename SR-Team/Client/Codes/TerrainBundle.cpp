@@ -109,15 +109,6 @@ CTerrainBundle * CTerrainBundle::Create(LPDIRECT3DDEVICE9 _pDevice)
 		return nullptr;
 
 
-
-
-
-
-
-
-
-
-
 	CTerrainBundle* pInstance = new CTerrainBundle(_pDevice);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{

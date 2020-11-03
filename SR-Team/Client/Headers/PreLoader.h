@@ -20,12 +20,14 @@ public:
 	HRESULT Setup_PreLoader(eSCENE_ID _eNextSceneID);
 
 private:
+	HRESULT Load_Resources_Room();
 	HRESULT Load_Resources_Stage0();
 	HRESULT Load_Resources_Stage1();
 	HRESULT Load_Resources_Stage2();
 	HRESULT Load_Resources_Stage3();
 	HRESULT Load_Resources_Stage4();
 	HRESULT Load_Resources_Stage5();
+
 	HRESULT Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uint & StageNumber);
 
 

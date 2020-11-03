@@ -356,6 +356,7 @@ HRESULT CSnail::Compare_PlayerPosition()
 	if (fLength < m_fCopareLength)
 		m_eCurState = CSnail::MOVE;
 
+	return S_OK;
 }
 
 HRESULT CSnail::Attack(_float _fDeltaTime)

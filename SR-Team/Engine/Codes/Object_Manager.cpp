@@ -139,14 +139,14 @@ HRESULT CObject_Manager::Register_ExceptTag(_int _iCurSceneID, const wstring& _s
 	return S_OK;
 }
 
-HRESULT CObject_Manager::Clear_Except(_int _iSceneID)
+HRESULT CObject_Manager::Clear_Except(_int _iFromSceneID, _int _iToSceneID)
 {
 	_bool bDelete = true;
 
-	if (0 > _iSceneID || m_iSceneCount <= _iSceneID)
+	if (0 > _iFromSceneID || m_iSceneCount <= _iFromSceneID)
 		return E_FAIL;
 
-	if (_iSceneID + 1 >= m_iSceneCount)
+	if (0 > _iToSceneID || _iToSceneID >= m_iSceneCount)
 		return E_FAIL;
 
 	if (nullptr == m_pGameObjects || nullptr == m_pLayers)
@@ -155,16 +155,16 @@ HRESULT CObject_Manager::Clear_Except(_int _iSceneID)
 	//--------------------------------------------------
 	// object는 그냥 지우고 있다.. 보존해야 할 Prototype은 STATIC에 놔둬야 함!
 	//--------------------------------------------------
-	for (auto& Pair : m_pGameObjects[_iSceneID])
+	for (auto& Pair : m_pGameObjects[_iFromSceneID])
 		Safe_Release(Pair.second);
 
-	m_pGameObjects[_iSceneID].clear();
+	m_pGameObjects[_iFromSceneID].clear();
 
 
 	//--------------------------------------------------
 	// 해당 레이어를 돌면서 보존해야 할 Layer는 건너뛰면서 해제
 	//--------------------------------------------------
-	for(auto& Pair : m_pLayers[_iSceneID])
+	for(auto& Pair : m_pLayers[_iFromSceneID])
 	{
 		bDelete = true;
 
@@ -183,7 +183,7 @@ HRESULT CObject_Manager::Clear_Except(_int _iSceneID)
 			Safe_Release(Pair.second);
 	}
 
-	m_pLayers[_iSceneID].clear();
+	m_pLayers[_iFromSceneID].clear();
 
 
 	//--------------------------------------------------
@@ -192,7 +192,7 @@ HRESULT CObject_Manager::Clear_Except(_int _iSceneID)
 	auto iter = m_PreseveLayers.begin();
 	auto iter_end = m_PreseveLayers.end();
 	for (; iter != iter_end; ++iter)
-		Add_Layer(_iSceneID + 1, iter->first, iter->second);
+		Add_Layer(_iToSceneID, iter->first, iter->second);
 
 	m_PreseveLayers.clear();
 	return S_OK;

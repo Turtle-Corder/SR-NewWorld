@@ -296,7 +296,7 @@ HRESULT CShop::Add_Component_ShopItem()
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (pManagement == nullptr)
 		return E_FAIL;
-	CDataManager* pOrigin = (CDataManager*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Item");
+	CDataManager* pOrigin = (CDataManager*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_Item");
 	if (pOrigin == nullptr)
 		return E_FAIL;
 

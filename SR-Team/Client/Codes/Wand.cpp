@@ -111,7 +111,7 @@ HRESULT CWand::Add_Component()
 
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, iCnt);
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, szPartName, szCombine, (CComponent**)&m_pTextureCom[iCnt]))) ////积己 肮荐
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szPartName, szCombine, (CComponent**)&m_pTextureCom[iCnt]))) ////积己 肮荐
 			return E_FAIL;
 
 		if (iCnt == WAND_BASE)

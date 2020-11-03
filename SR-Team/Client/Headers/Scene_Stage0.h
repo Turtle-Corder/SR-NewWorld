@@ -32,20 +32,8 @@ private:
 	HRESULT Setup_Layer_CubeTerrain(const wstring& LayerTag);
 	HRESULT Setup_Layer_Environment(const wstring& LayerTag);
 
-	HRESULT Setup_Layer_Mouse(const wstring& LayerTag);
-	HRESULT Setup_Layer_Camera(const wstring& LayerTag);
-	HRESULT Setup_Layer_Player(const wstring& LayerTag);
 
-	HRESULT Setup_Layer_Monster(const wstring& LayerTag);
-	HRESULT Setup_Layer_Player_Attack(const wstring& LayerTag);
-	HRESULT Setup_Layer_Monster_Attack(const wstring& LayerTag);
 	
-	HRESULT Setup_Layer_UI(const wstring& LayerTag);
-	HRESULT SetUp_Layer_Inventory(const wstring& LayerTag);
-	HRESULT SetUp_Layer_Shop(const wstring& LayerTag);
-	HRESULT SetUp_Layer_Item(const wstring& LayerTag);
-	
-
 private:
 	CPreLoader*		m_pPreLoader = nullptr;
 	_bool			m_bReload = false;

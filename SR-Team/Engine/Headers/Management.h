@@ -54,7 +54,7 @@ public:
 	// 레이어 태그를 등록해두면 해당 레이어는 다음 씬으로 살려서 이동시킨다.
 	HRESULT ClearScene_Except_RegisterTag(_uint _iSceneID, const wstring& _strLayerTag);
 
-	HRESULT Clear_Except(_uint _iSceneID);
+	HRESULT Clear_Except(_uint _iFromSceneID, _uint _iToSceneID);
 
 
 	//--------------------------------------------------

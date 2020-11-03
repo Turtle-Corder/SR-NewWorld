@@ -396,7 +396,7 @@ HRESULT CPlayer::Add_Wand(const wstring & LayerTag)
 
 	_vec3 vPlayer_RightHand_Pos = m_pTransformCom[PART_HAND_RIGHT]->Get_Desc().vPosition;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Wand", SCENE_STAGE0, LayerTag, &vPlayer_RightHand_Pos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Wand", SCENE_ROOM, LayerTag, &vPlayer_RightHand_Pos)))
 		return E_FAIL;
 
 	return S_OK;

@@ -27,6 +27,9 @@
 #include "SkillSlot_Meteor.h"
 #include "EnergyBolt.h"
 #include "Meteor.h"
+#include "DummyTerrain.h"
+#include "Terrain.h"
+#include "VIBuffer_TerrainTexture.h"
 
 #include "SkillSlot_IceStrike.h"
 #include "ItemInventory.h"
@@ -273,6 +276,12 @@ HRESULT CMainApp::Setup_HK()
 #pragma endregion
 
 
+#pragma region GameObject_UICamera
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_DummyTerrain", CDummyTerrain::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+
 	//----------------------------------------------------------------------------------------------------
 	// Component
 	//----------------------------------------------------------------------------------------------------
@@ -313,6 +322,33 @@ HRESULT CMainApp::Setup_HK()
 
 #pragma region Component_DamageInfo
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_DamageInfo", CDamageInfo::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+
+	// wand¿ë
+#pragma region Component_Texture_SnailBody
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_SnailHead
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Terrain
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Terrain", CTerrain::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_VIBuffer_TerrainTexture
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_VIBuffer_TerrainTexture", CVIBuffer_TerrainTexture::Create(m_pDevice, 129, 129))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Terrain
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Terrain", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/Terrain/Terrain%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -716,6 +752,8 @@ HRESULT CMainApp::Setup_EB()
 		L"../Resources/3D/Layer_Player/player_foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
+
+
 
 	return S_OK;
 }
