@@ -208,6 +208,11 @@ void CPlayer::Buff_Off(ACTIVE_BUFF _eType)
 	m_bBuffActive[_eType] = false;
 }
 
+_int CPlayer::Get_ClearInfo()
+{
+	return m_iClearInfo;
+}
+
 
 
 //----------------------------------------------------------------------------------------------------

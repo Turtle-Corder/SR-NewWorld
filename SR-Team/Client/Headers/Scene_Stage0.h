@@ -11,7 +11,7 @@ class CPreLoader;
 class CScene_Stage0 final : public CScene
 {
 private:
-	explicit CScene_Stage0(LPDIRECT3DDEVICE9 _pDevice);
+	explicit CScene_Stage0(LPDIRECT3DDEVICE9 _pDevice, _bool _bReload);
 	virtual ~CScene_Stage0() = default;
 
 public:
@@ -20,7 +20,7 @@ public:
 	virtual _int LateUpdate_Scene(_float _fDeltaTime) override;
 
 public:
-	static CScene_Stage0* Create(LPDIRECT3DDEVICE9 _pDevice);
+	static CScene_Stage0* Create(LPDIRECT3DDEVICE9 _pDevice, _bool _bReload = false);
 	virtual void Free() override;
 
 private:
@@ -48,6 +48,7 @@ private:
 
 private:
 	CPreLoader*		m_pPreLoader = nullptr;
+	_bool			m_bReload = false;
 };
 
 END

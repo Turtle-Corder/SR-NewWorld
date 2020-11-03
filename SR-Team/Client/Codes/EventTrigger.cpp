@@ -23,7 +23,6 @@ HRESULT CEventTrigger::Setup_GameObject(void * _pArg)
 {
 	vector<void*> GetVector;
 	_vec3 vPos;
-	_uint EventNumber;
 
 	if (_pArg)
 	{

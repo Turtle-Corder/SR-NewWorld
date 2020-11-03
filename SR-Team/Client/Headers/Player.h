@@ -93,6 +93,7 @@ public:
 	void Buff_On(ACTIVE_BUFF _eType);
 	void Buff_Off(ACTIVE_BUFF _eType);
 
+	_int Get_ClearInfo();
 
 
 private:
@@ -263,6 +264,8 @@ private:
 	// 공격체 생성시 셋팅할 구조체
 	//--------------------------------------------------
 	INSTANTIMPACT		m_tImpact = {};
+
+	_int				m_iClearInfo = 0;
 };
 
 END

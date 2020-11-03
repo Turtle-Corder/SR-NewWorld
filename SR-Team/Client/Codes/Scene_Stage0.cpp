@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "PreLoader.h"
+#include "Player.h"
 #include "TerrainBundle.h"
 #include "..\Headers\Scene_Stage0.h"
 
 USING(Client)
 
-CScene_Stage0::CScene_Stage0(LPDIRECT3DDEVICE9 _pDevice)
+CScene_Stage0::CScene_Stage0(LPDIRECT3DDEVICE9 _pDevice, _bool _bReload)
 	: CScene(_pDevice)
+	, m_bReload(_bReload)
 {
 }
 
@@ -29,20 +31,6 @@ HRESULT CScene_Stage0::Setup_Scene()
 	if (FAILED(Setup_Layer_Environment(L"Layer_Environment")))
 		return E_FAIL;
 
-
-	//--------------------------------------------------
-	// 필수 오브젝트
-	//--------------------------------------------------
-	if (FAILED(Setup_Layer_Mouse(L"Layer_Mouse")))
-		return E_FAIL;
-
-	if (FAILED(Setup_Layer_Camera(L"Layer_Camera")))
-		return E_FAIL;
-
-	if (FAILED(Setup_Layer_Player(L"Layer_Player")))
-		return E_FAIL;
-
-
 	//--------------------------------------------------
 	// 몬스터 & 공격
 	//--------------------------------------------------
@@ -56,22 +44,57 @@ HRESULT CScene_Stage0::Setup_Scene()
 		return E_FAIL;
 
 
+	eSCENE_ID ePreLoadScene = SCENE_STAGE1;
+
 	//--------------------------------------------------
-	// UI
+	// 변수에 따라서 레이어 생성 여부 결정
+	// 다시 생성 -> 현재 클리어 정보를 가져와서 다음 씬을 preload
+	// 처음 생성 -> 필수 레이어들 셋팅
 	//--------------------------------------------------
-	if (FAILED(SetUp_Layer_Item(L"Layer_Item")))
-		return E_FAIL;
+	if (m_bReload)
+	{
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
+			return E_FAIL;
 
-	if (FAILED(Setup_Layer_UI(L"Layer_MainUI")))
-		return E_FAIL;
+		CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Player");
 
-	if (FAILED(SetUp_Layer_Inventory(L"Layer_Inventory")))
-		return E_FAIL;
+		// 다 끝나고 마을로 돌아오면 안됨!
+		ePreLoadScene = (eSCENE_ID)pPlayer->Get_ClearInfo();
+	}
+	else
+	{
+		//--------------------------------------------------
+		// 필수 오브젝트
+		//--------------------------------------------------
+		if (FAILED(Setup_Layer_Mouse(L"Layer_Mouse")))
+			return E_FAIL;
 
-	if (FAILED(SetUp_Layer_Shop(L"Layer_Shop")))
-		return E_FAIL;
+		if (FAILED(Setup_Layer_Camera(L"Layer_Camera")))
+			return E_FAIL;
+
+		if (FAILED(Setup_Layer_Player(L"Layer_Player")))
+			return E_FAIL;
+
+		//--------------------------------------------------
+		// UI
+		//--------------------------------------------------
+		if (FAILED(SetUp_Layer_Item(L"Layer_Item")))
+			return E_FAIL;
+
+		if (FAILED(Setup_Layer_UI(L"Layer_MainUI")))
+			return E_FAIL;
+
+		if (FAILED(SetUp_Layer_Inventory(L"Layer_Inventory")))
+			return E_FAIL;
+
+		if (FAILED(SetUp_Layer_Shop(L"Layer_Shop")))
+			return E_FAIL;
+	}
 
 	// "Layer_Effect"
+
+	m_pPreLoader = CPreLoader::Create(m_pDevice, ePreLoadScene);
 
 	return S_OK;
 }
@@ -109,12 +132,12 @@ _int CScene_Stage0::LateUpdate_Scene(_float _fDeltaTime)
 	return 0;
 }
 
-CScene_Stage0 * CScene_Stage0::Create(LPDIRECT3DDEVICE9 _pDevice)
+CScene_Stage0 * CScene_Stage0::Create(LPDIRECT3DDEVICE9 _pDevice, _bool _bReload)
 {
 	if (nullptr == _pDevice)
 		return nullptr;
 
-	CScene_Stage0* pInstance = new CScene_Stage0(_pDevice);
+	CScene_Stage0* pInstance = new CScene_Stage0(_pDevice, _bReload);
 	if (FAILED(pInstance->Setup_Scene()))
 	{
 		PRINT_LOG(L"Failed To Create CScene_Stage0", LOG::CLIENT);
