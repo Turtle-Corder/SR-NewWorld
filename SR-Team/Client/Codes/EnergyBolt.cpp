@@ -39,11 +39,12 @@ _int CEnergyBolt::Update_GameObject(_float _fDeltaTime)
 	if (FAILED(Movement(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
+	if (FAILED(m_pTransformCom->Update_Transform()))
+		return GAMEOBJECT::WARN;
+
 	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
 		return GAMEOBJECT::WARN;
 
-	if (FAILED(m_pTransformCom->Update_Transform()))
-		return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -92,7 +93,7 @@ HRESULT CEnergyBolt::Add_Component()
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
-	tCollDesc.fRadius = 0.3f;
+	tCollDesc.fRadius = 0.5f;
 
 	CStatus::STAT tStat;
 	tStat.iCriticalHit = 0; tStat.iCriticalRate = 0;
@@ -160,24 +161,6 @@ HRESULT CEnergyBolt::Movement(_float _fDeltaTime)
 
 HRESULT CEnergyBolt::Move(_float _fDeltaTime)
 {
-	/*if (!m_bOnece)
-	{
-		CManagement* pManagement = CManagement::Get_Instance();
-		if (nullptr == pManagement)
-			return E_FAIL;
-
-		CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Player", L"Com_Transform0");
-
-		if (nullptr == pPlayerTransform)
-		{
-			m_bDead = true;
-			return E_FAIL;
-		}
-
-		memcpy_s(&m_vPlayerLook, sizeof(_vec3), &pPlayerTransform->Get_Desc().matWorld._31, sizeof(_vec3));
-		D3DXVec3Normalize(&m_vPlayerLook, &m_vPlayerLook);
-		m_bOnece = true;
-	}*/
 
 	m_vMyPos = m_pTransformCom->Get_Desc().vPosition;
 	m_vMyPos += m_tInstant.vDirection * (_fDeltaTime * 3.f);

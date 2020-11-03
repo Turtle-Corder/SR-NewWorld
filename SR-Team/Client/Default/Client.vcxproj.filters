@@ -241,6 +241,9 @@
     <Filter Include="02.GameObject\13. PlayerSkill\01. Meteor">
       <UniqueIdentifier>{9da80b4c-8ee5-4ced-a1c2-54cefff23de2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster\01.Acorn">
+      <UniqueIdentifier>{5fda5631-38aa-42f9-93b1-e3f58eacdefd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

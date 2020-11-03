@@ -79,6 +79,7 @@ HRESULT CSnail_Impact::Add_Component()
 
 	CDamageInfo::DAMAGE_DESC tDmgInfo;
 	tDmgInfo.pOwner = m_tInstant.pAttacker;
+
 	if (m_tInstant.pStatusComp)
 	{
 		CStatus* pOnwerStatusComp = (CStatus*)m_tInstant.pStatusComp;
