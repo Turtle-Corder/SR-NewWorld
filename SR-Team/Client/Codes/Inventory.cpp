@@ -188,19 +188,18 @@ HRESULT CInventory::Setup_GameObject(void * pArg)
 		return E_FAIL;
 
 	m_pTransformCom[INVEN_WND]->Set_Position(vWndPos);
-	m_pTransformCom[INVEN_SELL_BUTTON]->Set_Position(_vec3(vWndPos.x + 110.f, vWndPos.y + 180.f, 0.f));
+	m_pTransformCom[INVEN_SELL_BUTTON]->Set_Position(_vec3(vWndPos.x + 120.f, vWndPos.y + 250.f, 0.f));
 	m_pTransformCom[INVEN_GOLD]->Set_Position(_vec3(vWndPos.x + 25.f, vWndPos.y + 115.f, 0.f));
 
 	_int iIndex = 0;
+
 	for (_uint i = 0; i < 6; ++i)
 	{
 		for (_uint j = 0; j < 6; ++j)
 		{
 			iIndex = i * 6 + j;
-			//m_vItemPos[i][j].x = (j * 45.f) + 380.f;
-			//m_vItemPos[i][j].y = (i * 30.f) + 85.f;
-			m_vItemPos[i][j].x = (j * 92.f) + (vWndPos.x - 243.f);
-			m_vItemPos[i][j].y = (i * 92.f) + (vWndPos.y - 237.f);
+			m_vItemPos[i][j].x = (j * 60.f) + (vWndPos.x - 167.f);
+			m_vItemPos[i][j].y = (i * 60.f) + (vWndPos.y - 170.f);
 			m_vItemPos[i][j].z = 0.f;
 			m_pTransformItem[iIndex]->Set_Position(m_vItemPos[i][j]);
 		}
@@ -316,7 +315,7 @@ HRESULT CInventory::Render_UI()
 				StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"%d", m_iGold);
 				
 				D3DXMatrixScaling(&matScale, 1.5f, 1.5f, 0.f);
-				D3DXMatrixTranslation(&matTrans, vWndPos.x + 50.f, vWndPos.y + 135.f, 0.f);
+				D3DXMatrixTranslation(&matTrans, vWndPos.x + 50.f, vWndPos.y + 190.f, 0.f);
 				matWorld = matScale * matTrans;
 
 				//m_pSprite->SetTransform(&(matScale * m_pTransformCom[i]->Get_Desc().matWorld));
@@ -674,6 +673,7 @@ HRESULT CInventory::Change_PotionCnt()
 
 HRESULT CInventory::Render_Item()
 {
+	D3DXMATRIX matScale, matTrans, matWorld;
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
@@ -686,7 +686,7 @@ HRESULT CInventory::Render_Item()
 			_bool bRenderCnt = true;
 			_int iIndex = i * 6 + j;
 
-			
+
 			// 정렬할 때 삭제한 벡터만큼 새로 생성해줘야 함
 			// -> 근데 아직 구현안해서 그냥 막아놓음
 			if (iIndex >= (_int)iSize)
@@ -709,13 +709,13 @@ HRESULT CInventory::Render_Item()
 				if (m_bSelectedSell[iIndex])
 				{
 					bRenderCnt = true;
-					D3DXMATRIX matScale, matTrans, matWorld;
 					// 선택되었다는 표시를 그리고
 					const D3DXIMAGE_INFO* pTexInfo = m_pTextureSell->Get_TexInfo(0);
 					_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
 					_vec3 vPos = m_pTransformItem[iIndex]->Get_Desc().vPosition;
 
-					D3DXMatrixScaling(&matScale, 2.7f, 2.7f, 0.f);
+					// 변경
+					D3DXMatrixScaling(&matScale, 2.5f, 2.5f, 0.f);
 					D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, 0.f);
 					matWorld = matScale * matTrans;
 
@@ -727,8 +727,14 @@ HRESULT CInventory::Render_Item()
 				// 아이템을 그린다
 				const D3DXIMAGE_INFO* pTexInfo = m_pTextureItem[iIndex]->Get_TexInfo(0);
 				_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+				_vec3 vPos = m_pTransformItem[iIndex]->Get_Desc().vPosition;
 
-				m_pSprite->SetTransform(&m_pTransformItem[iIndex]->Get_Desc().matWorld);
+				// 변경
+				D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.f);
+				D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, 0.f);
+				matWorld = matScale * matTrans;
+
+				m_pSprite->SetTransform(&/*m_pTransformItem[iIndex]->Get_Desc().*/matWorld);
 				m_pSprite->Draw(
 					(LPDIRECT3DTEXTURE9)m_pTextureItem[iIndex]->GetTexture(0),
 					nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
@@ -754,13 +760,20 @@ HRESULT CInventory::Render_Item()
 				// 판매 아이템으로 선택되지 않은 아이템들은 그대로 그린다
 				else
 				{
-					m_pSprite->SetTransform(&m_pTransformItem[iIndex]->Get_Desc().matWorld);
+					_vec3 vPos = m_pTransformItem[iIndex]->Get_Desc().vPosition;
+
+					// 변경
+					D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.f);
+					D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, 0.f);
+					matWorld = matScale * matTrans;
+
+					m_pSprite->SetTransform(&/*m_pTransformItem[iIndex]->Get_Desc().*/matWorld);
 					m_pSprite->Draw(
 						(LPDIRECT3DTEXTURE9)m_pTextureItem[iIndex]->GetTexture(0),
 						nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 				}
-			//===========================================================================================================================
+				//===========================================================================================================================
 			}
 
 			// 아이템 개수
@@ -771,6 +784,7 @@ HRESULT CInventory::Render_Item()
 				D3DXMatrixIdentity(&matWorld);
 				StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"%d", m_pInvenList[iIndex]->iCnt);
 
+				// 변경
 				D3DXMatrixTranslation(&matTrans, vPos.x + 20.f, vPos.y + 20.f, 0.f);
 				D3DXMatrixScaling(&matScale, 2.f, 2.f, 0.f);
 				matWorld = matScale * matTrans;

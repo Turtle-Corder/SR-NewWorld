@@ -123,30 +123,27 @@ HRESULT CMainUI::Setup_GameObject(void * pArg)
 
 	m_pTransformCom[MAINUI_MAIN]->Set_Position(m_vMainPos);
 
-	//m_vPos[MAINUI_HP] = _vec3(371.f, 490.f, 0.f);
-	vPos = { m_vMainPos.x - 55.f, m_vMainPos.y - 20.f, 0.f };
+	// 변경
+	vPos = { m_vMainPos.x - 45.f, m_vMainPos.y - 15.f, 0.f };
 	m_pTransformCom[MAINUI_HP]->Set_Position(vPos);
 
-	//m_vPos[MAINUI_MP] = _vec3(429.f, 490.f, 0.f);
-	vPos = { m_vMainPos.x + 55.f, m_vMainPos.y - 20.f, 0.f };
+	vPos = { m_vMainPos.x + 45.f, m_vMainPos.y - 15.f, 0.f };
 	m_pTransformCom[MAINUI_MP]->Set_Position(vPos);
 
-	//m_vPos[MAINUI_QUICKSLOT_LFFT] = _vec3(170.f, 500.f, 0.f);
 	vPos = { m_vMainPos.x - 500.f, m_vMainPos.y, 0.f };
 	m_vLeftSlotPos = vPos;
 	m_pTransformCom[MAINUI_QUICKSLOT_LFFT]->Set_Position(vPos);
 
-	//m_vPos[MAINUI_QUICKSLOT_RIGHT] = _vec3(660.f, 500.f, 0.f);
 	vPos = { m_vMainPos.x + 500.f, m_vMainPos.y, 0.f };
 	m_vRightSlotPos = vPos;
 	m_pTransformCom[MAINUI_QUICKSLOT_RIGHT]->Set_Position(vPos);
 
-	
+
 	// 왼쪽 퀵슬롯 충돌 렉트
+	// 변경
 	for (_uint i = 0; i < 4; ++i)
 	{
 		_vec3 vPos = {};
-		//vPos.x = (i * 39.f) + 97.f;
 		vPos.x = (i * 78.f) + (m_vLeftSlotPos.x - 155.f);
 		vPos.y = 710.f;
 		vPos.z = 0.f;
@@ -158,10 +155,10 @@ HRESULT CMainUI::Setup_GameObject(void * pArg)
 		m_tLeftSlotCollRt[i].top = (LONG)(vPos.y - 35.f);
 		m_tLeftSlotCollRt[i].bottom = (LONG)(vPos.y + 35.f);
 	}
+	// 변경
 	for (_uint i = 4, j = 0; i < 8; ++i, ++j)
 	{
 		_vec3 vPos = {};
-		//vPos.x = (j * 39.f) + 110.f;
 		vPos.x = (j * 78.f) + (m_vLeftSlotPos.x - 130.f);
 		vPos.y = 790.f;
 		vPos.z = 0.f;
@@ -175,10 +172,10 @@ HRESULT CMainUI::Setup_GameObject(void * pArg)
 	}
 
 	// 오른쪽 퀵슬롯 위치
+	// 변경
 	for (_uint i = 0; i < 4; ++i)
 	{
 		_vec3 vPos = {};
-		//vPos.x = (i * 39.f) + 97.f;
 		vPos.x = (i * 78.f) + (m_vRightSlotPos.x - 155.f);
 		vPos.y = 710.f;
 		vPos.z = 0.f;
@@ -190,10 +187,10 @@ HRESULT CMainUI::Setup_GameObject(void * pArg)
 		m_tRightSlotCollRt[i].top = (LONG)(vPos.y - 32.f);
 		m_tRightSlotCollRt[i].bottom = (LONG)(vPos.y + 32.f);
 	}
+	// 변경
 	for (_uint i = 4, j = 0; i < 8; ++i, ++j)
 	{
 		_vec3 vPos = {};
-		//vPos.x = (j * 39.f) + 110.f;
 		vPos.x = (j * 78.f) + (m_vRightSlotPos.x - 130.f);
 		vPos.y = 790.f;
 		vPos.z = 0.f;
@@ -218,6 +215,11 @@ int CMainUI::Update_GameObject(float DeltaTime)
 	CMouse* pMouse = (CMouse*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Mouse");
 	if (nullptr == pMouse)
 		return GAMEOBJECT::NOEVENT;
+
+	if (FAILED(Change_SkillIconPos()))
+		return GAMEOBJECT::WARN;
+	if (FAILED(Change_ItemPos()))
+		return GAMEOBJECT::WARN;
 
 	if (m_bRender_GoingItem)
 	{
@@ -261,6 +263,19 @@ int CMainUI::Update_GameObject(float DeltaTime)
 	{
 		m_pTransformLeftSlot[i]->Update_Transform();
 		m_pTransformRightSlot[i]->Update_Transform();
+
+		_vec3 vLeftPos = m_pTransformLeftSlot[i]->Get_Desc().vPosition;
+		_vec3 vRightPos = m_pTransformRightSlot[i]->Get_Desc().vPosition;
+
+		m_tLeftSlotCollRt[i].left = (LONG)(vLeftPos.x - 35.f);
+		m_tLeftSlotCollRt[i].right = (LONG)(vLeftPos.x + 35.f);
+		m_tLeftSlotCollRt[i].top = (LONG)(vLeftPos.y - 35.f);
+		m_tLeftSlotCollRt[i].bottom = (LONG)(vLeftPos.y + 35.f);
+
+		m_tRightSlotCollRt[i].left = (LONG)(vRightPos.x - 35.f);
+		m_tRightSlotCollRt[i].right = (LONG)(vRightPos.x + 35.f);
+		m_tRightSlotCollRt[i].top = (LONG)(vRightPos.y - 35.f);
+		m_tRightSlotCollRt[i].bottom = (LONG)(vRightPos.y + 35.f);
 	}
 #pragma endregion
 
@@ -281,6 +296,7 @@ int CMainUI::LateUpdate_GameObject(float DeltaTime)
 
 HRESULT CMainUI::Render_UI()
 {
+	_matrix matScale, matTrans, matWorld;
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
@@ -296,6 +312,7 @@ HRESULT CMainUI::Render_UI()
 	{
 		const D3DXIMAGE_INFO* pTexInfo = m_pTextureCom[i]->Get_TexInfo(0);
 		_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+		_vec3 vUIPose = m_pTransformCom[i]->Get_Desc().vPosition;
 
 		// - HP/MP 지연 감소
 		// HP/MP 감소에 따른 RECT 변경 나중에 하기
@@ -309,7 +326,11 @@ HRESULT CMainUI::Render_UI()
 			_vec3 vPos = { 0.f, 0.f, 0.f };
 			vPos.y = (_float)(iMaxHp - iHp);
 
-			m_pSprite->SetTransform(&m_pTransformCom[i]->Get_Desc().matWorld);
+			D3DXMatrixScaling(&matScale, 0.9f, 0.9f, 0.f);
+			D3DXMatrixTranslation(&matTrans, vUIPose.x, vUIPose.y, 0.f);
+			matWorld = matScale * matTrans;
+
+			m_pSprite->SetTransform(&matWorld);
 			m_pSprite->Draw(
 				(LPDIRECT3DTEXTURE9)m_pTextureCom[i]->GetTexture(0),
 				&m_tCollRt[i], &vCenter, &vPos, D3DCOLOR_ARGB(255, 255, 255, 255));
@@ -324,7 +345,11 @@ HRESULT CMainUI::Render_UI()
 			_vec3 vPos = { 0.f, 0.f, 0.f };
 			vPos.y = (_float)(iMaxMp - iMp);
 
-			m_pSprite->SetTransform(&m_pTransformCom[i]->Get_Desc().matWorld);
+			D3DXMatrixScaling(&matScale, 0.9f, 0.9f, 0.f);
+			D3DXMatrixTranslation(&matTrans, vUIPose.x, vUIPose.y, 0.f);
+			matWorld = matScale * matTrans;
+
+			m_pSprite->SetTransform(&matWorld);
 			m_pSprite->Draw(
 				(LPDIRECT3DTEXTURE9)m_pTextureCom[i]->GetTexture(0),
 				&m_tCollRt[i], &vCenter, &vPos, D3DCOLOR_ARGB(255, 255, 255, 255));
@@ -397,30 +422,62 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 				// 스킬 전용 슬롯
 				if (m_pMovingItem->eSort == SKILL_ICON)
 				{
-					if (Check_Item_In_Slot())
+					if (!m_bChange_SkillIconPos)
+					{
+						if (Check_Item_In_Slot())
+						{
+							// 초기화
+							m_bRender_GoingItem = false;
+
+							if (m_pTextureLeftQuickSlot[i])
+								m_pTextureLeftQuickSlot[i] = nullptr;
+							m_pTextureLeftQuickSlot[i] = m_pTexture_GoingItem;
+							m_pTexture_GoingItem = nullptr;
+
+							if (m_pLeftSlotItem[i])
+								m_pLeftSlotItem[i] = nullptr;
+							m_pLeftSlotItem[i] = m_pMovingItem;
+
+							if (FAILED(pSkillInven->Set_SkillIndex(i, m_pMovingItem->eActiveID)))
+								return E_FAIL;
+
+							m_pMovingItem = nullptr;
+						}
+					}
+					// 스킬 퀵슬롯 내 위치 이동
+					else if (m_bChange_SkillIconPos)
 					{
 						// 초기화
 						m_bRender_GoingItem = false;
+						m_bChange_SkillIconPos = false;
 
-						if (m_pTextureLeftQuickSlot[i])
-							m_pTextureLeftQuickSlot[i] = nullptr;
+						// 바꾸려는 자리가 nullptr이 아니면
+						if (m_pTextureLeftQuickSlot[i] != nullptr)
+							m_pTextureLeftQuickSlot[m_iBefore_SkillIconIndex] = m_pTextureLeftQuickSlot[i];
+						else
+							m_pTextureLeftQuickSlot[m_iBefore_SkillIconIndex] = nullptr;
+
 						m_pTextureLeftQuickSlot[i] = m_pTexture_GoingItem;
 						m_pTexture_GoingItem = nullptr;
 
-						if (m_pLeftSlotItem[i])
-							m_pLeftSlotItem[i] = nullptr;
+						if (m_pLeftSlotItem[i] != nullptr)
+							m_pLeftSlotItem[m_iBefore_SkillIconIndex] = m_pLeftSlotItem[i];
+						else
+							m_pLeftSlotItem[m_iBefore_SkillIconIndex] = nullptr;
+
 						m_pLeftSlotItem[i] = m_pMovingItem;
 
 						if (FAILED(pSkillInven->Set_SkillIndex(i, m_pMovingItem->eActiveID)))
 							return E_FAIL;
 
 						m_pMovingItem = nullptr;
-					}
-					else
-					{
-						m_bRender_GoingItem = false;
-						m_pMovingItem = nullptr;
-						m_pTexture_GoingItem = nullptr;
+
+						// 이전에 있던 위치에는 모두 비워주기
+						//if (m_pTextureLeftQuickSlot[m_iBefore_SkillIconIndex])
+						//	m_pTextureLeftQuickSlot[m_iBefore_SkillIconIndex] = nullptr;
+						//if (m_pLeftSlotItem[m_iBefore_SkillIconIndex])
+						//	m_pLeftSlotItem[m_iBefore_SkillIconIndex] = nullptr;
+						m_iBefore_SkillIconIndex = -1;
 					}
 				}
 				else
@@ -457,32 +514,63 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 				// 스킬 전용 슬롯
 				if (m_pMovingItem->eSort == POTION)
 				{
-					if (Check_Item_In_Slot())
+					if (!m_bChange_ItemPos)
+					{
+						if (Check_Item_In_Slot())
+						{
+							// 초기화
+							m_bRender_GoingItem = false;
+
+							if (m_pTextureRightQuickSlot[i])
+								m_pTextureRightQuickSlot[i] = nullptr;
+							m_pTextureRightQuickSlot[i] = m_pTexture_GoingItem;
+							m_pTexture_GoingItem = nullptr;
+
+							if (m_pRightSlotItem[i])
+								m_pRightSlotItem[i] = nullptr;
+							m_pRightSlotItem[i] = m_pMovingItem;
+
+							if (m_pMovingItem->ePotionID != POTION_END && i <= 3)
+								if (FAILED(pItemInven->Set_ItemIndex(i, m_pMovingItem->ePotionID)))
+									return E_FAIL;
+							m_pMovingItem = nullptr;
+						}
+					}
+					// 스킬 퀵슬롯 내 위치 이동
+					else if (m_bChange_ItemPos)
 					{
 						// 초기화
 						m_bRender_GoingItem = false;
+						m_bChange_ItemPos = false;
 
-						if (m_pTextureRightQuickSlot[i])
-							m_pTextureRightQuickSlot[i] = nullptr;
+						// 바꾸려는 자리가 nullptr이 아니면
+						if (m_pTextureRightQuickSlot[i] != nullptr)
+							m_pTextureRightQuickSlot[m_iBefore_ItemIndex] = m_pTextureRightQuickSlot[i];
+						else
+							m_pTextureRightQuickSlot[m_iBefore_ItemIndex] = nullptr;
+
 						m_pTextureRightQuickSlot[i] = m_pTexture_GoingItem;
 						m_pTexture_GoingItem = nullptr;
 
-						if (m_pRightSlotItem[i])
-							m_pRightSlotItem[i] = nullptr;
+						if (m_pRightSlotItem[i] != nullptr)
+							m_pRightSlotItem[m_iBefore_ItemIndex] = m_pRightSlotItem[i];
+						else
+							m_pRightSlotItem[m_iBefore_ItemIndex] = nullptr;
+
 						m_pRightSlotItem[i] = m_pMovingItem;
 
-						// 아이템 인벤에 추가
 						if (m_pMovingItem->ePotionID != POTION_END && i <= 3)
 							if (FAILED(pItemInven->Set_ItemIndex(i, m_pMovingItem->ePotionID)))
 								return E_FAIL;
 
 						m_pMovingItem = nullptr;
-					}
-					else
-					{
-						m_bRender_GoingItem = false;
-						m_pMovingItem = nullptr;
-						m_pTexture_GoingItem = nullptr;
+
+						// 이전에 있던 위치에는 모두 비워주기
+						//if (m_pTextureLeftQuickSlot[m_iBefore_SkillIconIndex])
+						//	m_pTextureLeftQuickSlot[m_iBefore_SkillIconIndex] = nullptr;
+						//if (m_pLeftSlotItem[m_iBefore_SkillIconIndex])
+						//	m_pLeftSlotItem[m_iBefore_SkillIconIndex] = nullptr;
+						m_iBefore_ItemIndex = -1;
 					}
 				}
 				else
@@ -585,7 +673,7 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 	_int k = 0;
 	_vec3 vCenter = { 0.f, 0.f, 0.f };
 	_vec3 vPos = { 0.f, 0.f, 0.f };
-	D3DXMATRIX matTrans, matWorld;
+	D3DXMATRIX matTrans, matWorld, matScale;
 
 
 	for (_uint i = 0; i < 8; ++i)
@@ -602,8 +690,9 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 			m_tGoingItem_CollRt.top = (LONG)(vPos.y - vCenter.y);
 			m_tGoingItem_CollRt.bottom = (LONG)(vPos.y + vCenter.y);
 
-			D3DXMatrixTranslation(&matTrans, vPos.x + 7.f, vPos.y + 10.f, 0.f);
-			matWorld = matTrans;
+			D3DXMatrixScaling(&matScale, 2.f, 2.f, 0.f);
+			D3DXMatrixTranslation(&matTrans, vPos.x + 25.f, vPos.y + 25.f, 0.f);
+			matWorld = matScale * matTrans;
 
 			if (m_pLeftSlotItem[i]->eActiveID == ACTIVE_ENERGY_EXPLOTIATION)
 				bCheck = pPlayer->IsOnBuff(CPlayer::ACTIVE_BUFF::BUFF_ATTACK);
@@ -640,8 +729,9 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 			m_tGoingItem_CollRt.top = (LONG)(vPos.y - vCenter.y);
 			m_tGoingItem_CollRt.bottom = (LONG)(vPos.y + vCenter.y);
 
-			D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, 0.f);
-			matWorld = matTrans;
+			D3DXMatrixScaling(&matScale, 0.7f, 0.7f, 0.f);
+			D3DXMatrixTranslation(&matTrans, vPos.x + 25.f, vPos.y + 25.f, 0.f);
+			matWorld = matScale * matTrans;
 
 			m_pSprite->SetTransform(&matWorld);
 			m_pSprite->Draw(
@@ -654,13 +744,93 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 			D3DXMatrixIdentity(&matWorld);
 			StringCchPrintf(szBuff, _countof(szBuff), L"%d", m_pRightSlotItem[i]->iCnt);
 
-			D3DXMatrixTranslation(&matTrans2, vPos.x + 10.f, vPos.y + 10.f, 0.f);
+			D3DXMatrixTranslation(&matTrans2, vPos.x + 40.f, vPos.y + 40.f, 0.f);
 			D3DXMatrixScaling(&matScale2, 1.5f, 1.5f, 0.f);
 			matWorld2 = matScale2 * matTrans2;
 
 			m_pSprite->SetTransform(&matWorld2);
 			m_pFont->DrawTextW(m_pSprite, szBuff, lstrlen(szBuff),
 				nullptr, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+		}
+	}
+
+	// 마우스 위치
+	TCHAR		szBuff[MAX_PATH] = L"";
+	D3DXMATRIX	matScale2, matTrans2, matWorld2;
+	StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"%d, %d",
+		pMouse->Get_Point().x, pMouse->Get_Point().y);
+
+	D3DXMatrixScaling(&matScale2, 3.f, 3.f, 0.f);
+	D3DXMatrixTranslation(&matTrans2, 100.f, 1000.f, 0.f);
+	matWorld2 = matScale2 * matTrans2;
+
+	m_pSprite->SetTransform(&matWorld2);
+	m_pFont->DrawTextW(m_pSprite, szBuff, lstrlen(szBuff),
+		nullptr, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+
+	return S_OK;
+}
+
+HRESULT CMainUI::Change_SkillIconPos()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (pManagement == nullptr)
+		return E_FAIL;
+	CMouse* pMouse = (CMouse*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Mouse");
+	if (pMouse == nullptr)
+		return E_FAIL;
+
+	RECT rc = {};
+
+	for (_uint i = 0; i < 8; i++)
+	{
+		// 왼쪽
+		if (PtInRect(&m_tLeftSlotCollRt[i], pMouse->Get_Point()) && !m_bChange_SkillIconPos)
+		{
+			if (pManagement->Key_Pressing(VK_LBUTTON))
+			{
+				if (m_pLeftSlotItem[i] != nullptr && m_pTextureLeftQuickSlot[i] != nullptr)
+				{
+					m_bChange_SkillIconPos = true;
+					m_bRender_GoingItem = true;
+					m_pMovingItem = m_pLeftSlotItem[i];
+					m_pTexture_GoingItem = m_pTextureLeftQuickSlot[i];
+					m_iBefore_SkillIconIndex = i;
+				}
+			}
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CMainUI::Change_ItemPos()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (pManagement == nullptr)
+		return E_FAIL;
+	CMouse* pMouse = (CMouse*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Mouse");
+	if (pMouse == nullptr)
+		return E_FAIL;
+
+	RECT rc = {};
+
+	for (_uint i = 0; i < 8; i++)
+	{
+		// 오른쪽
+		if (PtInRect(&m_tRightSlotCollRt[i], pMouse->Get_Point()) && !m_bChange_ItemPos)
+		{
+			if (pManagement->Key_Pressing(VK_LBUTTON))
+			{
+				if (m_pRightSlotItem[i] != nullptr && m_pTextureRightQuickSlot[i] != nullptr)
+				{
+					m_bChange_ItemPos = true;
+					m_bRender_GoingItem = true;
+					m_pMovingItem = m_pRightSlotItem[i];
+					m_pTexture_GoingItem = m_pTextureRightQuickSlot[i];
+					m_iBefore_ItemIndex = i;
+				}
+			}
 		}
 	}
 

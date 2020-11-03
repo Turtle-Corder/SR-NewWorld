@@ -74,7 +74,7 @@ private:
 
 	// 스킬 아이콘
 private:
-	CTexture*				m_pTextureSkillIcon[9];
+	CTexture*				m_pTextureSkillIcon[11];
 	vector<INVEN_ITEM*>		m_vSkillIconList;
 
 };	

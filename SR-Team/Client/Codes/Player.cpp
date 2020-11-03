@@ -1184,14 +1184,14 @@ void CPlayer::Update_Anim_Skill(_float _fDeltaTime)
 	// 일단 하나로 통일
 	switch ((eActiveSkill_ID)m_iInputIdx_Anim)
 	{
-	case ACTIVE_ICE_STRIKE:
+	case ACTIVE_ICE_BLAST:
 	case ACTIVE_MANA_DRIFT:
 	case ACTIVE_ENERGY_EXPLOTIATION:
 	case ACTIVE_FLAME_WAVE:
 	case ACTIVE_ICE_SPEAR:
 	case ACTIVE_MAGIC_ARMOR:
-	case ACTIVE_NORMAL_ATTACK:
-	case ACTIVE_SKILL:
+	case ACTIVE_THUNDER_STORM:
+	case ACTIVE_BLIND:
 		Update_Anim_Skill_Common(_fDeltaTime);
 		break;
 	default:

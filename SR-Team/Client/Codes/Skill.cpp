@@ -15,7 +15,7 @@ CSkill::CSkill(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pF
 		m_pTextureWnd[i] = nullptr;
 	}
 
-	for (_uint i = 0; i < 6; i++)
+	for (_uint i = 0; i < ACTIVE_SKILL_END; i++)
 	{
 		m_pTextureSkillInfo[i] = nullptr;
 	}
@@ -37,6 +37,8 @@ HRESULT CSkill::Setup_GameObject(void * _pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	m_vCenterPos = { 500.f, 370.f, 0.f };
+
 	m_pTransformWnd[SKILL_ACTIVE_WND]->Set_Position(m_vCenterPos);
 	m_pTransformWnd[SKILL_PASSIVE_WND]->Set_Position(
 		_vec3(m_vCenterPos.x, m_vCenterPos.y - 100.f, 0.f));
@@ -54,12 +56,15 @@ HRESULT CSkill::Setup_GameObject(void * _pArg)
 	m_tSkillSortCollRt[PASSIVE].top = (LONG)(vPassiveCenterPos.y - 30.f);
 	m_tSkillSortCollRt[PASSIVE].bottom = (LONG)(vPassiveCenterPos.y + 30.f);
 
-	for (_uint i = 0; i < 6; i++)
+	for (_uint i = 0; i < ACTIVE_SKILL_END; i++)
 	{
 		_vec3 vPos = { 0.f, 0.f, 0.f };
 		_vec3 vSize = { 8.f, 8.f, 0.f };
 		vPos.x = m_vCenterPos.x - 95.f;
-		vPos.y = (i * 73.f) + (m_vCenterPos.y - 140.f);
+		//vPos.y = (i * 73.f) + (m_vCenterPos.y - 140.f);
+		vPos.y = (i * 70.f) + (m_vCenterPos.y - 210.f);
+
+		m_pTransformSkillInfo[i]->Set_Position(vPos);
 
 		m_tActiveCollRt[i].left = (LONG)(vPos.x - vSize.x);
 		m_tActiveCollRt[i].right = (LONG)(vPos.x + vSize.x);
@@ -90,6 +95,8 @@ _int CSkill::Update_GameObject(_float _fDeltaTime)
 			
 		for (_uint i = 0; i < SKILL_END; ++i)
 			m_pTransformWnd[i]->Update_Transform();
+		for (_uint i = 0; i < ACTIVE_SKILL_END; i++)
+			m_pTransformSkillInfo[i]->Update_Transform();
 	}
 
 	return GAMEOBJECT::NOEVENT;
@@ -111,6 +118,8 @@ HRESULT CSkill::Render_UI()
 {
 	if (m_bRender)
 	{
+		_matrix matTrans, matWorld;
+		_vec3 vPos = { 0.f, 0.f, 0.f };
 		CManagement* pManagement = CManagement::Get_Instance();
 		if (nullptr == pManagement)
 			return E_FAIL;
@@ -120,7 +129,7 @@ HRESULT CSkill::Render_UI()
 		{
 			const D3DXIMAGE_INFO* pTexInfo = m_pTextureWnd[i]->Get_TexInfo(0);
 			_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
-			_vec3 vPos = m_pTransformWnd[i]->Get_Desc().vPosition;
+			vPos = m_pTransformWnd[i]->Get_Desc().vPosition;
 
 			m_tWndCollRt[i].left = (LONG)(vPos.x - vCenter.x);
 			m_tWndCollRt[i].right = (LONG)(vPos.x + vCenter.x);
@@ -155,6 +164,25 @@ HRESULT CSkill::Render_UI()
 				(LPDIRECT3DTEXTURE9)m_pTextureSkillInfo[m_iSkillInfoIndex]->GetTexture(0),
 				nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
+
+		// 스킬 아이콘 출력
+		// -> 스킬 아이콘 충돌 렉트 알아보려고
+		for (_uint i = 0; i < ACTIVE_SKILL_END; i++)
+		{
+			const D3DXIMAGE_INFO* pTexInfo = m_pTextureSkillIcon[i]->Get_TexInfo(0);
+			_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+			vPos = m_pTransformSkillInfo[i]->Get_Desc().vPosition;
+
+			m_tActiveCollRt[i].left = (LONG)(vPos.x - vCenter.x);
+			m_tActiveCollRt[i].right = (LONG)(vPos.x + vCenter.x);
+			m_tActiveCollRt[i].top = (LONG)(vPos.y - vCenter.y);
+			m_tActiveCollRt[i].bottom = (LONG)(vPos.y + vCenter.y);
+
+			m_pSprite->SetTransform(&m_pTransformSkillInfo[i]->Get_Desc().matWorld);
+			m_pSprite->Draw(
+				(LPDIRECT3DTEXTURE9)m_pTextureSkillIcon[i]->GetTexture(0),
+				&m_tActiveCollRt[i], &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
 	}
 
 	return S_OK;
@@ -188,7 +216,7 @@ HRESULT CSkill::Show_ActiveSkill_Info()
 
 	CMouse* pMouse = (CMouse*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Mouse");
 
-	for (_uint i = 0; i < 6; i++)
+	for (_uint i = 0; i < ACTIVE_SKILL_END; i++)
 	{
 		if (PtInRect(&m_tActiveCollRt[i], pMouse->Get_Point()))
 		{
@@ -217,7 +245,7 @@ HRESULT CSkill::Move_To_QuickSlot()
 	if (nullptr == pMouse)
 		return E_FAIL;
 
-	for (_uint i = 0; i < 6; i++)
+	for (_uint i = 0; i < ACTIVE_SKILL_END; i++)
 	{
 		if (pManagement->Key_Pressing(VK_LBUTTON))
 		{
@@ -272,22 +300,52 @@ HRESULT CSkill::Add_Component()
 			return E_FAIL;
 	}
 
+	// 변경(추가)
 	TCHAR szTextureName[][MIN_STR] =
 	{
-		L"Component_Texture_SkillInfo_IceStrike",
+		L"Component_Texture_SkillInfo_IceBlast",
 		L"Component_Texture_SkillInfo_ManaDrift",
 		L"Component_Texture_SkillInfo_EnergyExploitiation",
 		L"Component_Texture_SkillInfo_FlameWave",
 		L"Component_Texture_SkillInfo_IceSpear",
-		L"Component_Texture_SkillInfo_MagicArmor"
+		L"Component_Texture_SkillInfo_MagicArmor",
+		L"Component_Texture_SkillInfo_ThunderStorm",
+		L"Component_Texture_SkillInfo_Blind"
 	};
 	TCHAR szTexture[MIN_STR] = L"Com_SkillInfoTexture%d";
 	TCHAR szCombine[MIN_STR] = L"";
 
-	for (_uint i = 0; i < 6; i++)
+	TCHAR szTransform[MIN_STR] = L"";
+
+	TCHAR szTextureIconName[][MIN_STR] =
+	{
+		L"Component_Texture_SkillIcon_IceStrike",
+		L"Component_Texture_SkillIcon_ManaDrift",
+		L"Component_Texture_SkillIcon_EnergyExplotiation",
+		L"Component_Texture_SkillIcon_FlameWave",
+		L"Component_Texture_SkillIcon_IceSpear",
+		L"Component_Texture_SkillIcon_MagicArmor",
+		L"Component_Texture_SkillIcon_ThunderStorm",
+		L"Component_Texture_SkillIcon_Blind"
+	};
+	TCHAR szTextureIcon[MIN_STR] = L"Com_SkillIcon%d";
+	TCHAR szTextureIconCombine[MIN_STR] = L"";
+
+	// 변경(추가)
+	for (_uint i = 0; i < ACTIVE_SKILL_END; i++)
 	{
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, i);
 		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szTextureName[i], szCombine, (CComponent**)&m_pTextureSkillInfo[i])))
+			return E_FAIL;
+
+		StringCchPrintf(szTextureIconCombine, _countof(szTextureIconCombine), szTextureIcon, i);
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szTextureIconName[i], szTextureIconCombine, (CComponent**)&m_pTextureSkillIcon[i])))
+			return E_FAIL;
+
+		StringCchPrintf(szTransform, _countof(szTransform),
+			L"Com_SkillInfoTransform%d", i);
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC,
+			L"Component_Transform", szTransform, (CComponent**)&m_pTransformSkillInfo[i])))
 			return E_FAIL;
 	}
 
@@ -329,9 +387,11 @@ void CSkill::Free()
 		Safe_Release(m_pTextureWnd[i]);
 	}
 
-	for (_uint i = 0; i < 6; i++)
+	for (_uint i = 0; i < ACTIVE_SKILL_END; i++)
 	{
 		Safe_Release(m_pTextureSkillInfo[i]);
+		Safe_Release(m_pTransformSkillInfo[i]);
+		Safe_Release(m_pTextureSkillIcon[i]);
 	}
 
 	CUIObject::Free();

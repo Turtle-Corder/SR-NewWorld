@@ -59,7 +59,7 @@ private:
 // 스킬 윈도우
 private:
 	// 스킬 윈도우 중심 위치
-	_vec3					m_vCenterPos = { 500.f, 300.f, 0.f };
+	_vec3					m_vCenterPos = { 500.f, 370.f, 0.f };
 	CTransform*				m_pTransformWnd[SKILL_END];
 	CTexture*				m_pTextureWnd[SKILL_END];
 	RECT					m_tWndCollRt[SKILL_END];
@@ -70,10 +70,12 @@ private:
 	RECT					m_tSkillSortCollRt[2];	// 액티브/패시브 버튼 충돌 렉트
 
 private:
-	RECT					m_tActiveCollRt[6];
+	RECT					m_tActiveCollRt[ACTIVE_SKILL_END];
 
 private:
-	CTexture*				m_pTextureSkillInfo[6] = { nullptr, };
+	CTexture*				m_pTextureSkillInfo[ACTIVE_SKILL_END] = { nullptr, };
+	CTransform*				m_pTransformSkillInfo[ACTIVE_SKILL_END] = { nullptr, };
+	CTexture*				m_pTextureSkillIcon[ACTIVE_SKILL_END] = { nullptr, };
 	_int					m_iSkillInfoIndex = -1;
 	_bool					m_bRenderSkillInfo = false;
 	_vec3					m_vSkillInfoPos = { 0.f, 0.f, 0.f };
