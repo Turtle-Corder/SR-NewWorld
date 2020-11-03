@@ -71,6 +71,7 @@ HRESULT CScene_Stage0::Setup_Scene()
 	if (FAILED(SetUp_Layer_Shop(L"Layer_Shop")))
 		return E_FAIL;
 
+	// "Layer_Effect"
 
 	//--------------------------------------------------
 	// QUEST
@@ -95,15 +96,20 @@ _int CScene_Stage0::LateUpdate_Scene(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
-		return -1;
+		return GAMEOBJECT::ERR;
 
 	// Src가 공격자 Dst가 피격자
 	//if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_MonsterAtk", L"Layer_Player", L"Com_Collider", L"Com_DmgInfo")))
 	//	return -1;
 
-	//if (FAILED(pManagement->CollisionSphere_Detection_Layers(SCENE_STAGE0, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
-	//	return -1;
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
+		return -1;
 
+	//if(FAILED(pManagement->CollisionSphere_Impulse_Layers(SCENE_STAGE0, L"Layer_Monster", L"Layer_Monster", L"Com_Collider", L"")))
+		//몬스터들의 Base를 Transform이름을 통일하게 수작업할것
+
+	//pManagement->CollisionBox_Detection_Layers(Src , Dst) Src -> Dst를 공격
+	//pManagement->CollisionBox_Detection_Layers_Both() // 서로공격
 	return 0;
 }
 

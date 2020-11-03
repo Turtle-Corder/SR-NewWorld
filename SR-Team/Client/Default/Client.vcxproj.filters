@@ -244,6 +244,15 @@
     <Filter Include="02.GameObject\07.UI\06. FlowerQuest">
       <UniqueIdentifier>{45304715-7732-4691-b9d3-560c93f9ded7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\99.Scene_Loading">
+      <UniqueIdentifier>{f1ee382d-3e20-4570-ab18-80027b09b1b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\99.LoadingScreen">
+      <UniqueIdentifier>{ec1687e2-39cd-473e-abeb-be50f7d62b55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster\01.Acorn">
+      <UniqueIdentifier>{5fda5631-38aa-42f9-93b1-e3f58eacdefd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -447,6 +456,14 @@
     <ClInclude Include="..\Headers\FlowerQuest.h">
       <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Stage1.h">
+      <Filter>01.Scene\02.Scene_Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Loading.h">
+      <Filter>01.Scene\99.Scene_Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LoadingScreen.h" />
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -634,6 +651,14 @@
     </ClCompile>
     <ClCompile Include="..\Codes\FlowerQuest.cpp">
       <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Stage1.cpp">
+      <Filter>01.Scene\02.Scene_Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Loading.cpp">
+      <Filter>01.Scene\99.Scene_Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LoadingScreen.cpp" />
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

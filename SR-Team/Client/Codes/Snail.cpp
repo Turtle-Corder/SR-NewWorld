@@ -169,7 +169,7 @@ HRESULT CSnail::Add_Component()
 
 	CSphereCollider::COLLIDER_DESC tColDesc;
 	tColDesc.vPosition = tTransformDesc[SNAIL_BODY].vPosition;
-	tColDesc.fRadius = 0.5f ; /* * Scale*/
+	tColDesc.fRadius = 0.5f; /* * Scale*/
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
 		return E_FAIL;
@@ -199,8 +199,6 @@ HRESULT CSnail::Update_State()
 		case STATE::MOVE:
 			break;
 		case STATE::ATTACK:
-			break;
-		case STATE::STATE_DEAD:
 			break;
 		}
 		m_ePreState = m_eCurState;
@@ -352,7 +350,7 @@ HRESULT CSnail::Attack(_float _fDeltaTime)
 
 	if (0.1f <= m_fLength && !m_bCrash)
 	{
-		m_vPos += m_vDir * (_fDeltaTime * 8.f);
+		m_vPos += m_vDir * (_fDeltaTime * 4.f);
 		m_pTransformCom[SNAIL_BODY]->Set_Position(m_vPos);
 		m_bInstanceCreate = false;
 	}
@@ -407,11 +405,10 @@ HRESULT CSnail::Spawn_InstantImpact(const wstring & LayerTag)
 	INSTANTIMPACT tImpact;
 	tImpact.pAttacker = this;
 	tImpact.pStatusComp = m_pStatusCom;
-	_vec3 BodyPos = {};
-	memcpy_s(&BodyPos, sizeof(_vec3), &m_pTransformCom[SNAIL_BODY]->Get_Desc().matWorld._41, sizeof(_vec3));
+	_vec3 BodyPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
 	tImpact.vPosition = BodyPos;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Instant_Impact", pManagement->Get_CurrentSceneID(), LayerTag , m_pInstantImpact)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag , &m_pInstantImpact)))
 		return E_FAIL;
 
 	return S_OK;
@@ -467,9 +464,18 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 	if (!_pDamageComp)
 		return S_OK;
 
-	m_bCrash = true;
-	//PRINT_LOG(L"아얏", LOG::CLIENT);
+	if (!m_bTakeCheckOnece)
+	{
+		m_bTakeCheckOnece = true;
+		m_eCurState = CSnail::MOVE;
+	}
 
+	if (m_bTakeCheckOnece)
+	{
+		// 내가 맞았을 때 이니깐 변수설정해서 OnOff
+		m_bCrash = true;
+		//PRINT_LOG(L"아얏", LOG::CLIENT);
+	}
 	return S_OK;
 }
 
