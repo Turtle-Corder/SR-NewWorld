@@ -144,7 +144,7 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 
 // 0¹ø ¸¶À»
 
-	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"))))
+	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"),0)))
 		return E_FAIL;
 
 
