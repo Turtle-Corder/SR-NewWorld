@@ -462,6 +462,9 @@
     <ClInclude Include="..\Headers\DummyTerrain.h">
       <Filter>02.GameObject\00.Terrain\99.Dummy</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Acorn.h">
+      <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -658,6 +661,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DummyTerrain.cpp">
       <Filter>02.GameObject\00.Terrain\99.Dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Acorn.cpp">
+      <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

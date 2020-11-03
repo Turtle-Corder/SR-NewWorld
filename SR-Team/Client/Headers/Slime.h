@@ -7,7 +7,8 @@
 USING(Engine)
 BEGIN(Client)
 
-class CStatus;
+class CDamageInfo;
+
 class CSlime final : public CGameObject
 {
 	enum SLIME
@@ -17,51 +18,51 @@ class CSlime final : public CGameObject
 		SLIME_JELLY = SLIME_BASE,
 		SLIME_END
 	};
-	enum STATE { STATE_IDLE , STATE_MOVE , STATE_ATTACK , STATE_DEAD };
+	enum STATE { IDLE , MOVE , ATTACK};
 private:
-	explicit CSlime(LPDIRECT3DDEVICE9 pDevice);
-	explicit CSlime(const CSlime& other);
+	explicit CSlime(LPDIRECT3DDEVICE9 _pDevice);
+	explicit CSlime(const CSlime& _rOther);
 	virtual ~CSlime() = default;
 
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
-	virtual HRESULT Setup_GameObject(void * pArg) override;
+	virtual HRESULT Setup_GameObject(void * _pArg) override;
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_BlendAlpha() override;
 	virtual HRESULT Render_NoneAlpha() override;
-
+	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(float _fDeltaTime);
 	//----------------------------------
 	HRESULT IsOnTerrain();
-	void	Jumping(float _fDeltaTime);
-	HRESULT LookAtPlayer(float _fDeltaTime);
+	HRESULT	Jumping(_float _fDeltaTime);
+	HRESULT LookAtPlayer(_float _fDeltaTime);
 	//----------------------------------
-
+	HRESULT Compare_PlayerPosition();
 	HRESULT Divide_Cube(const wstring& LayerTag);
-public:
-	static CSlime* Create(LPDIRECT3DDEVICE9 pDevice);
-	virtual CGameObject* Clone_GameObject(void * pArg) override;
-	virtual void Free() override;
 	HRESULT Spawn_Item(const wstring& LayerTag);
 	HRESULT Spawn_Crack(const wstring& LayerTag);
+	HRESULT Spawn_InstantImpact(const wstring& LayerTag);
 	HRESULT Setting_SlimeBody();
 	HRESULT Setting_SlimeJelly();
-	//----------------------------------
-	HRESULT Move(_float _fDeltaTime);
-	//----------------------------------
-	void    Update_State();
-	//----------------------------------
-	HRESULT	Stop_Move(_float _fDeltaTime);
-	//----------------------------------
 	HRESULT Attack(_float _fDeltaTime);
+	HRESULT Update_State();
+	HRESULT Move(_float _fDeltaTime);
+public:
+	static CSlime* Create(LPDIRECT3DDEVICE9 pDevice);
+	virtual CGameObject* Clone_GameObject(void * _pArg) override;
+	virtual void Free() override;
+	//----------------------------------
 	//----------------------------------
 private:
-	CVIBuffer*	m_pVIBufferCom[SLIME_END] = {};
-	CTransform*	m_pTransformCom[SLIME_END] = {};
-	CTexture*	m_pTextureCom = nullptr;
+	CVIBuffer*			m_pVIBufferCom[SLIME_END] = {};
+	CTransform*			m_pTransformCom[SLIME_END] = {};
+	CTexture*			m_pTextureCom = nullptr;
+	CSphereCollider*	m_pColliderCom = nullptr;
+	CStatus*			m_pStatusCom = nullptr;
+	CDamageInfo*		m_pDmgInfoCom = nullptr;
 	
 	//	CStatus*	m_pStatCom = nullptr;
 
@@ -77,6 +78,7 @@ private:
 	_float		m_fDistance = 0.f;
 	_float		m_fStartTime = 0.f;
 	_bool		m_bAttackJump = false;
+	SLIMEINFO   m_tSlimeInfo = {};
 };
 
 END

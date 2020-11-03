@@ -54,24 +54,15 @@ private:
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
 private:
-	_vec3		m_vStartPos = {};
-	_bool		m_bAttack = false;
-	_vec3		m_vDir = {};
-	INSTANTIMPACT*	m_pInstantImpact = nullptr;
-	STATE		m_ePreState = SLEEP;
-	STATE		m_eCurState = SLEEP;
-	_bool		m_bHit = false;
-	_vec3		m_vLook = {};
-	_bool		m_bCheck = false;
-	_bool		m_bCrash = false;
-	_vec3		m_vPrePos = {};
-
-	_bool		m_bInstanceCreate = false;
-	_bool		m_bTakeCheckOnece = false;
-
-
-
-	_float		m_fCopareLength = 4.f;
+	_vec3			m_vStartPos = {};
+	_vec3			m_vDir = {};
+	STATE			m_ePreState = SLEEP;
+	STATE			m_eCurState = SLEEP;
+	_vec3			m_vLook = {};
+	_vec3			m_vPrePos = {};
+	_bool			m_bInstanceCreate = false;
+	_bool			m_bTakeCheckOnece = false;
+	_float			m_fCopareLength = 4.f;
 };
 
 END
