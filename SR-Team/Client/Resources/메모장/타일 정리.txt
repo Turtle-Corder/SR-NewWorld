@@ -1,0 +1,22 @@
+0.Dirt
+1.Gray-Stone
+2.Block
+3.slice Red-tone grey Stone
+4.Normal Grey-Blue Stone
+5.Yellow-Grey Stone
+6.Marble(대리석)
+7.Half-Grass
+8.모래사장
+9.Grass on Stone 
+10.Grass
+11.Tree
+12.Grass on Stone 
+13.Grass on Stone
+14.Fall Grass on Stone(Green-Tone)
+15.Fall Grass on Stone(Darken)
+16.Little Grass on Stone(Brown)
+17.Wooden Floor
+18.Woodne Block
+19.Gray Stone-Dirt
+20.Fallen Leaves
+21.Old SeaSide

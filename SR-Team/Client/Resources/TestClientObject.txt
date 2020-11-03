@@ -1,0 +1,8 @@
+GameObject_Snail|Layer_Monster|0|15.44|9.2|
+GameObject_Snail|Layer_Monster|0|9.84|12.76|
+GameObject_Tree|Layer_Static|0|9.04|4.24|
+GameObject_Tree|Layer_Static|0|4.16|7.72|
+GameObject_Slime|Layer_Monster|0|6.4|10.24|
+GameObject_Slime|Layer_Monster|0|14.92|5.88|
+GameObject_Yeti|Layer_Monster|0|6.52|17.32|
+GameObject_Yeti|Layer_Monster|0|10.72|17.72|

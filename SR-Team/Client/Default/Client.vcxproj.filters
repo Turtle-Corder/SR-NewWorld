@@ -1,0 +1,648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="00.MainApp">
+      <UniqueIdentifier>{a83c7314-cf80-4ba8-b1d4-de03fa492972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene">
+      <UniqueIdentifier>{66d39f61-da41-4641-9746-c40b6a45ec40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject">
+      <UniqueIdentifier>{6fca74d2-a8af-4d65-8add-af5a7e60ea49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Headers">
+      <UniqueIdentifier>{0fad7ca4-4d58-4639-8e2c-984b361b760f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Default">
+      <UniqueIdentifier>{590c2eb6-b5a6-461c-90be-19443bc0f66e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\00.Scene_Logo">
+      <UniqueIdentifier>{f1896763-2235-4803-b325-228fe81e8c59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\99.PreLoader">
+      <UniqueIdentifier>{572fc3b8-5f43-4a20-b162-f212e0c81994}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\06.Scene_Stage5">
+      <UniqueIdentifier>{60fbce97-ae77-446a-a86e-098f9246c8fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\01.Scene_Stage0">
+      <UniqueIdentifier>{f35f7334-3924-40e9-bdf0-78628c9e44c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Scene_Stage1">
+      <UniqueIdentifier>{b2f2832c-e576-4509-92b6-830441d24407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\03.Scene_Stage2">
+      <UniqueIdentifier>{ad62fa16-de07-4b33-a53a-b20ec81f9562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\04.Scene_Stage3">
+      <UniqueIdentifier>{c2e98aba-ee11-42ae-b3b5-373b0b03ec9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\05.Scene_Stage4">
+      <UniqueIdentifier>{e051c352-e510-4e63-83cb-dfb944743683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\00.Terrain">
+      <UniqueIdentifier>{ab993916-14ba-401e-8c3b-84e3f524be5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Camera">
+      <UniqueIdentifier>{a69d0c94-302a-469c-9f37-46e579fd3a62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Skybox">
+      <UniqueIdentifier>{1a5effb4-6ce9-4520-841b-13ba87f51aba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Player">
+      <UniqueIdentifier>{f71d6c9a-97d6-43a2-8656-3ecaf7f1d345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster">
+      <UniqueIdentifier>{3520b15f-e9da-4318-8426-495d6229e6cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Component">
+      <UniqueIdentifier>{18a992fb-0383-413a-b6f8-3adc6641b6fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Camera\01.UICamera">
+      <UniqueIdentifier>{45a02113-e78d-4e99-ad3b-1ebbddf7fa8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Camera\00.MainCamera">
+      <UniqueIdentifier>{a4d0b1f0-3b51-4a84-b99e-5e4ce49c6a91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Manager">
+      <UniqueIdentifier>{65b1e6b3-5070-48fe-a08c-4d1ff7a771b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Manager\01.ItemManager">
+      <UniqueIdentifier>{57c1bb8e-a4af-4d56-a388-64674d238658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\01.Slime">
+      <UniqueIdentifier>{c38c4a31-68a1-4112-b18e-3c5693b3f836}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\00.Snail">
+      <UniqueIdentifier>{1fe11aa7-70b7-4513-bc49-c85f2eb3078d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\02.Yeti">
+      <UniqueIdentifier>{c9d09d85-6332-4247-8481-ef3cc4a7c178}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI">
+      <UniqueIdentifier>{0682afbd-f9b5-450c-bc18-f4ab7d378f93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\01.Inventory">
+      <UniqueIdentifier>{0ca63b7c-6042-4e66-9b3c-828f1c04e9df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\00.MainUI">
+      <UniqueIdentifier>{9aa13d11-e41b-4357-bc2b-14ca87faab08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\02.Shop">
+      <UniqueIdentifier>{afbe2cc3-79fc-4204-9037-527a26e9c9a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile">
+      <UniqueIdentifier>{c9a2f922-6c40-4e2c-aecc-1dc36f3980c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.DropItem">
+      <UniqueIdentifier>{a6069dc8-8a02-4b8c-bcb7-0171dc2e9d7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Component\00.VIBuffer">
+      <UniqueIdentifier>{7758a89a-964f-4ce4-8522-5252a105c458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Component\01.Status">
+      <UniqueIdentifier>{b120a9d6-477c-4d24-9f09-90422e1412f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Component\00.VIBuffer\01.TreeHead">
+      <UniqueIdentifier>{33f6527c-a952-4145-8569-0ec78e2c0785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Component\00.VIBuffer\02.Flower">
+      <UniqueIdentifier>{ef9f428c-1a8c-4cb0-a040-91b7ef1a4143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\10.StaticObject">
+      <UniqueIdentifier>{761ffb23-6a0c-4866-bdb1-7814916ace72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\10.StaticObject\00.Tree">
+      <UniqueIdentifier>{a925dd15-03c9-4914-b13d-21bed8f3780a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\00.Terrain\00.BaseTerrain">
+      <UniqueIdentifier>{cde04d76-cc10-4b69-b800-d15b9da41804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\00.Terrain\01.CubeTerrain">
+      <UniqueIdentifier>{8afd8849-1553-4ee4-bbe0-17864408260a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Component\02.Damage">
+      <UniqueIdentifier>{32ce0397-da44-4304-9e3b-4769c073b0e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29">
+      <UniqueIdentifier>{6b4e3748-638b-41fb-8bf6-712b3dc1c690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\10.StaticObject\01.Flower">
+      <UniqueIdentifier>{26dbb951-d526-4ff3-9e1f-a7d6ed1abbdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\03. Equip">
+      <UniqueIdentifier>{0a78c48d-e55e-425c-a65b-960514166361}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\00.Bomb">
+      <UniqueIdentifier>{e73e157c-24ba-44b5-9438-c4728b8064a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\01.MonSub">
+      <UniqueIdentifier>{e9e2c834-d279-4828-8b70-9fb9898e3ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Component\00.VIBuffer\03.Pyramid">
+      <UniqueIdentifier>{bb22c851-55c5-41c8-94b4-8494f5c5b615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\00.Terrain\99.TerrainBundle">
+      <UniqueIdentifier>{1c343f57-81c6-4993-9853-91c5861cc28c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\04. Skill">
+      <UniqueIdentifier>{2972e127-b047-429d-a9ac-6eaef2882535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. PlayerSkill">
+      <UniqueIdentifier>{e9a43fa0-b414-4dac-8bcd-cef58af142c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\12. SkillInventory">
+      <UniqueIdentifier>{da8eeec8-b224-45e6-80ce-0a6bf67c4ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Manager\02. SkillManager">
+      <UniqueIdentifier>{81c88648-7211-46b1-a895-0c25f4db764f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\14. PlayerItem">
+      <UniqueIdentifier>{d64ea46b-9ce2-4c21-ae5a-4c6cf09487eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\14. PlayerItem\00. RedPotion">
+      <UniqueIdentifier>{79d73647-27f9-44bf-a055-6a3e673c20e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\14. PlayerItem\01. BluePotion">
+      <UniqueIdentifier>{f74fb169-5a85-4b24-ab1c-1dee21bc4f93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\15. ItemInventory">
+      <UniqueIdentifier>{b7f6ed01-4dc7-4de3-8ad3-9f5a43effd44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\11.Instant_Impact">
+      <UniqueIdentifier>{b3ed9e18-8920-43db-b876-047dc6c8b215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\11.Instant_Impact\00.Golem_Impact">
+      <UniqueIdentifier>{5550b8ca-6566-4391-924b-59ae319f4274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\11.Instant_Impact\01.Slime_Impact">
+      <UniqueIdentifier>{de864e84-c52f-401d-b7dc-c19f176d8c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\14.Mouse">
+      <UniqueIdentifier>{93cb23d9-10f3-4818-b680-9a43b6ff7a82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\11.Instant_Impact\02.Snail_Impact">
+      <UniqueIdentifier>{8f8feba1-5b6e-4b40-8795-83ca4fa74a36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\15.ActiveObject">
+      <UniqueIdentifier>{c5c8283b-71e9-4826-b340-f4397d7a75ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\15.ActiveObject\00.EventTrigger">
+      <UniqueIdentifier>{eb7ff482-11ce-43d1-b8a3-4e97ce4f97a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\14. PlayerItem\02. RedElixir">
+      <UniqueIdentifier>{9b69d7c4-ea42-482f-95b4-eeef6909b35a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\14. PlayerItem\03. BlueElixir">
+      <UniqueIdentifier>{5d669d84-2c8c-4a02-9aca-637bba1407e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. PlayerSkill\03. ManaDirft">
+      <UniqueIdentifier>{d4508580-6c5e-4cd4-924c-7803e8320082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. PlayerSkill\04. EnergyExploitation">
+      <UniqueIdentifier>{746da5d1-79bd-419c-b91b-7349a130b680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\05.Stump">
+      <UniqueIdentifier>{f8917998-c959-4eff-8fc5-7b94bbc43e94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. PlayerSkill\05.IceStrike">
+      <UniqueIdentifier>{8e088724-e126-45d3-881b-75a961e9f7f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\06.Wolf">
+      <UniqueIdentifier>{08c6e807-e236-4013-99b1-0401255fa85f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player">
+      <UniqueIdentifier>{ef43c7f5-3e95-491f-8e2d-2a8861789dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\00.EnergyBolt">
+      <UniqueIdentifier>{974fd06f-931e-4781-917e-200b1ba94ca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\01.Meteor">
+      <UniqueIdentifier>{075b6e39-11be-4393-96f1-bb64bc362d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster">
+      <UniqueIdentifier>{e434fadd-c399-44a2-aaed-268db4381a03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster\05.Crack">
+      <UniqueIdentifier>{6c0b2378-27a4-4201-a52e-4372862b8bb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster\00.Snow">
+      <UniqueIdentifier>{f62a80ab-2cc2-46bc-b22f-fa974e98bf11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Player\00.Wand">
+      <UniqueIdentifier>{149baf85-c5c6-4663-82ea-218486cb2f67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\05.Quest1">
+      <UniqueIdentifier>{ca64a5aa-16d1-4e2f-a212-cf3d0426d15a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Manager\00.DataManager">
+      <UniqueIdentifier>{285b4fc2-e219-440b-b43d-6d5f4941fd6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. PlayerSkill\01. Meteor">
+      <UniqueIdentifier>{9da80b4c-8ee5-4ced-a1c2-54cefff23de2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h">
+      <Filter>99.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>99.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainApp.h">
+      <Filter>00.MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>98.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>98.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Client_Define.h">
+      <Filter>99.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Client_Enum.h">
+      <Filter>99.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Client_Struct.h">
+      <Filter>99.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Logo.h">
+      <Filter>01.Scene\00.Scene_Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\PreLoader.h">
+      <Filter>01.Scene\99.PreLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Stage0.h">
+      <Filter>01.Scene\01.Scene_Stage0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Player.h">
+      <Filter>02.GameObject\04.Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Skybox.h">
+      <Filter>02.GameObject\02.Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Status.h">
+      <Filter>03.Component\01.Status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Inventory.h">
+      <Filter>02.GameObject\07.UI\01.Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera.h">
+      <Filter>02.GameObject\01.Camera\00.MainCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UICamera.h">
+      <Filter>02.GameObject\01.Camera\01.UICamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainUI.h">
+      <Filter>02.GameObject\07.UI\00.MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shop.h">
+      <Filter>02.GameObject\07.UI\02.Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Snail.h">
+      <Filter>02.GameObject\05.Monster\00.Snail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Snow.h">
+      <Filter>02.GameObject\06.Projectile\01.Monster\00.Snow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Meteor.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropItem.h">
+      <Filter>02.GameObject\09.DropItem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\VIBuffer_TreeHead.h">
+      <Filter>03.Component\00.VIBuffer\01.TreeHead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\VIBuffer_Flower.h">
+      <Filter>03.Component\00.VIBuffer\02.Flower</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Terrain.h">
+      <Filter>02.GameObject\00.Terrain\00.BaseTerrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\CubeTerrain.h">
+      <Filter>02.GameObject\00.Terrain\01.CubeTerrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Tree.h">
+      <Filter>02.GameObject\10.StaticObject\00.Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DamageInfo.h">
+      <Filter>03.Component\02.Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Golem.h">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Flower.h">
+      <Filter>02.GameObject\10.StaticObject\01.Flower</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bomb.h">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\00.Bomb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MonSub.h">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\01.MonSub</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Equip.h">
+      <Filter>02.GameObject\07.UI\03. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\VIBuffer_Pyramid.h">
+      <Filter>03.Component\00.VIBuffer\03.Pyramid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TerrainBundle.h">
+      <Filter>02.GameObject\00.Terrain\99.TerrainBundle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Skill.h">
+      <Filter>02.GameObject\07.UI\04. Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Yeti.h">
+      <Filter>02.GameObject\05.Monster\02.Yeti</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Slime.h">
+      <Filter>02.GameObject\05.Monster\01.Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillInven.h">
+      <Filter>02.GameObject\12. SkillInventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemInventory.h">
+      <Filter>02.GameObject\15. ItemInventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\EnergyBolt.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\00.EnergyBolt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Golem_Impact.h">
+      <Filter>02.GameObject\11.Instant_Impact\00.Golem_Impact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Slime_Impact.h">
+      <Filter>02.GameObject\11.Instant_Impact\01.Slime_Impact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Mouse.h">
+      <Filter>02.GameObject\14.Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Snail_Impact.h">
+      <Filter>02.GameObject\11.Instant_Impact\02.Snail_Impact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Wand.h">
+      <Filter>02.GameObject\04.Player\00.Wand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crack.h">
+      <Filter>02.GameObject\06.Projectile\01.Monster\05.Crack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\EventTrigger.h">
+      <Filter>02.GameObject\15.ActiveObject\00.EventTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stump.h">
+      <Filter>02.GameObject\05.Monster\05.Stump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Wolf.h">
+      <Filter>02.GameObject\05.Monster\06.Wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemSlotManager.h">
+      <Filter>04.Manager\01.ItemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlotManager.h">
+      <Filter>04.Manager\02. SkillManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DataManager.h">
+      <Filter>04.Manager\00.DataManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Quest1.h">
+      <Filter>02.GameObject\07.UI\05.Quest1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Golem_Impact.h">
+      <Filter>02.GameObject\11.Instant_Impact\00.Golem_Impact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot.h">
+      <Filter>02.GameObject\13. PlayerSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_Meteor.h">
+      <Filter>02.GameObject\13. PlayerSkill\01. Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_ManaDrift.h">
+      <Filter>02.GameObject\13. PlayerSkill\03. ManaDirft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_EnergyExlposion.h">
+      <Filter>02.GameObject\13. PlayerSkill\04. EnergyExploitation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_IceStrike.h">
+      <Filter>02.GameObject\13. PlayerSkill\05.IceStrike</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemSlot.h">
+      <Filter>02.GameObject\14. PlayerItem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemSlot_RedPotion.h">
+      <Filter>02.GameObject\14. PlayerItem\00. RedPotion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemSlot_BluePotion.h">
+      <Filter>02.GameObject\14. PlayerItem\01. BluePotion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemSlot_RedElixir.h">
+      <Filter>02.GameObject\14. PlayerItem\02. RedElixir</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h">
+      <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>98.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>98.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainApp.cpp">
+      <Filter>00.MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Logo.cpp">
+      <Filter>01.Scene\00.Scene_Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PreLoader.cpp">
+      <Filter>01.Scene\99.PreLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Stage0.cpp">
+      <Filter>01.Scene\01.Scene_Stage0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player.cpp">
+      <Filter>02.GameObject\04.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Skybox.cpp">
+      <Filter>02.GameObject\02.Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Status.cpp">
+      <Filter>03.Component\01.Status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Inventory.cpp">
+      <Filter>02.GameObject\07.UI\01.Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera.cpp">
+      <Filter>02.GameObject\01.Camera\00.MainCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UICamera.cpp">
+      <Filter>02.GameObject\01.Camera\01.UICamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainUI.cpp">
+      <Filter>02.GameObject\07.UI\00.MainUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shop.cpp">
+      <Filter>02.GameObject\07.UI\02.Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Slime.cpp">
+      <Filter>02.GameObject\05.Monster\01.Slime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Snail.cpp">
+      <Filter>02.GameObject\05.Monster\00.Snail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Snow.cpp">
+      <Filter>02.GameObject\06.Projectile\01.Monster\00.Snow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Meteor.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropItem.cpp">
+      <Filter>02.GameObject\09.DropItem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\VIBuffer_TreeHead.cpp">
+      <Filter>03.Component\00.VIBuffer\01.TreeHead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\VIBuffer_Flower.cpp">
+      <Filter>03.Component\00.VIBuffer\02.Flower</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Terrain.cpp">
+      <Filter>02.GameObject\00.Terrain\00.BaseTerrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CubeTerrain.cpp">
+      <Filter>02.GameObject\00.Terrain\01.CubeTerrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Tree.cpp">
+      <Filter>02.GameObject\10.StaticObject\00.Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DamageInfo.cpp">
+      <Filter>03.Component\02.Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Golem.cpp">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Flower.cpp">
+      <Filter>02.GameObject\10.StaticObject\01.Flower</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bomb.cpp">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\00.Bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MonSub.cpp">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\01.MonSub</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Equip.cpp">
+      <Filter>02.GameObject\07.UI\03. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\VIBuffer_Pyramid.cpp">
+      <Filter>03.Component\00.VIBuffer\03.Pyramid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TerrainBundle.cpp">
+      <Filter>02.GameObject\00.Terrain\99.TerrainBundle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Skill.cpp">
+      <Filter>02.GameObject\07.UI\04. Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Yeti.cpp">
+      <Filter>02.GameObject\05.Monster\02.Yeti</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillInven.cpp">
+      <Filter>02.GameObject\12. SkillInventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemInventory.cpp">
+      <Filter>02.GameObject\15. ItemInventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EnergyBolt.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\00.EnergyBolt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Golem_Impact.cpp">
+      <Filter>02.GameObject\11.Instant_Impact\00.Golem_Impact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Slime_Impact.cpp">
+      <Filter>02.GameObject\11.Instant_Impact\01.Slime_Impact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Mouse.cpp">
+      <Filter>02.GameObject\14.Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Snail_Impact.cpp">
+      <Filter>02.GameObject\11.Instant_Impact\02.Snail_Impact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Wand.cpp">
+      <Filter>02.GameObject\04.Player\00.Wand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crack.cpp">
+      <Filter>02.GameObject\06.Projectile\01.Monster\05.Crack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EventTrigger.cpp">
+      <Filter>02.GameObject\15.ActiveObject\00.EventTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stump.cpp">
+      <Filter>02.GameObject\05.Monster\05.Stump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Wolf.cpp">
+      <Filter>02.GameObject\05.Monster\06.Wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemSlotManager.cpp">
+      <Filter>04.Manager\01.ItemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlotManager.cpp">
+      <Filter>04.Manager\02. SkillManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DataManager.cpp">
+      <Filter>04.Manager\00.DataManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Quest1.cpp">
+      <Filter>02.GameObject\07.UI\05.Quest1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Golem_Impact.cpp">
+      <Filter>02.GameObject\11.Instant_Impact\00.Golem_Impact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot.cpp">
+      <Filter>02.GameObject\13. PlayerSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_Meteor.cpp">
+      <Filter>02.GameObject\13. PlayerSkill\01. Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_ManaDrift.cpp">
+      <Filter>02.GameObject\13. PlayerSkill\03. ManaDirft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_EnergyExlposion.cpp">
+      <Filter>02.GameObject\13. PlayerSkill\04. EnergyExploitation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_IceStrike.cpp">
+      <Filter>02.GameObject\13. PlayerSkill\05.IceStrike</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemSlot.cpp">
+      <Filter>02.GameObject\14. PlayerItem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemSlot_RedPotion.cpp">
+      <Filter>02.GameObject\14. PlayerItem\00. RedPotion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemSlot_BluePotion.cpp">
+      <Filter>02.GameObject\14. PlayerItem\01. BluePotion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemSlot_RedElixir.cpp">
+      <Filter>02.GameObject\14. PlayerItem\02. RedElixir</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp">
+      <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Client.ico">
+      <Filter>98.Default</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>98.Default</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>98.Default</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>98.Default</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
