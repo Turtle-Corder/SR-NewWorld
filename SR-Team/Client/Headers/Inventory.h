@@ -50,6 +50,11 @@ public:
 	// const wstring& strItemName : 삭제할 아이템의 이름
 	// ------------------------------------------------------------------
 	HRESULT Delete_Item(const wstring& strItemName);
+	// ------------------------------------------------------------------
+	// 퀘스트 보상으로 받은 아이템을 인벤에 추가하는 함수
+	// const wstring& strItemName : 추가할 아이템의 이름
+	// ------------------------------------------------------------------
+	HRESULT Get_RewardItem(const wstring& strItemName);
 
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;

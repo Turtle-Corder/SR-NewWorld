@@ -171,7 +171,7 @@ HRESULT CQuest1::Render_UI()
 HRESULT CQuest1::Render_HelpWnd()
 {
 	TCHAR		szBuff[MAX_PATH] = L"";
-	D3DXMATRIX	matScale2, matTrans2, matWorld2;
+	_matrix	matScale2, matTrans2, matWorld2;
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;

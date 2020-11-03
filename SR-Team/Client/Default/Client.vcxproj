@@ -158,7 +158,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Headers\Acorn.h" />
+    <ClInclude Include="..\Headers\FlowerQuest.h" />
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
     <ClInclude Include="..\Headers\ItemSlot_BluePotion.h" />
     <ClInclude Include="..\Headers\Bomb.h" />
@@ -229,7 +229,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Codes\Acorn.cpp" />
+    <ClCompile Include="..\Codes\FlowerQuest.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BluePotion.cpp" />
     <ClCompile Include="..\Codes\Bomb.cpp" />

@@ -241,6 +241,9 @@
     <Filter Include="02.GameObject\13. PlayerSkill\01. Meteor">
       <UniqueIdentifier>{9da80b4c-8ee5-4ced-a1c2-54cefff23de2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.UI\06. FlowerQuest">
+      <UniqueIdentifier>{45304715-7732-4691-b9d3-560c93f9ded7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01.Scene\99.Scene_Loading">
       <UniqueIdentifier>{f1ee382d-3e20-4570-ab18-80027b09b1b2}</UniqueIdentifier>
     </Filter>
@@ -249,9 +252,6 @@
     </Filter>
     <Filter Include="02.GameObject\06.Projectile\01.Monster\01.Acorn">
       <UniqueIdentifier>{5fda5631-38aa-42f9-93b1-e3f58eacdefd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\06.Projectile\01.Monster\02.AcornExplosion">
-      <UniqueIdentifier>{05ecf2ef-ab35-4c74-ba1a-3c90faaa5ebd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -453,11 +453,9 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="..\Headers\Acorn.h">
-      <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
+    <ClInclude Include="..\Headers\FlowerQuest.h">
+      <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClInclude>
-=======
     <ClInclude Include="..\Headers\Scene_Stage1.h">
       <Filter>01.Scene\02.Scene_Stage1</Filter>
     </ClInclude>
@@ -465,7 +463,7 @@
       <Filter>01.Scene\99.Scene_Loading</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\LoadingScreen.h" />
->>>>>>> 290bb9c9e20b81ba124ef1bf5e6caaffeceb3102
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -651,11 +649,9 @@
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="..\Codes\Acorn.cpp">
-      <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
+    <ClCompile Include="..\Codes\FlowerQuest.cpp">
+      <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClCompile>
-=======
     <ClCompile Include="..\Codes\Scene_Stage1.cpp">
       <Filter>01.Scene\02.Scene_Stage1</Filter>
     </ClCompile>
@@ -663,7 +659,7 @@
       <Filter>01.Scene\99.Scene_Loading</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\LoadingScreen.cpp" />
->>>>>>> 290bb9c9e20b81ba124ef1bf5e6caaffeceb3102
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

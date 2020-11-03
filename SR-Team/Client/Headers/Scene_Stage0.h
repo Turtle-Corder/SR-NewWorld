@@ -45,6 +45,8 @@ private:
 	HRESULT SetUp_Layer_Shop(const wstring& LayerTag);
 	HRESULT SetUp_Layer_Item(const wstring& LayerTag);
 	
+	HRESULT SetUp_Layer_FlowerQuest(const wstring& LayerTag);
+	
 
 private:
 	CPreLoader*		m_pPreLoader = nullptr;
