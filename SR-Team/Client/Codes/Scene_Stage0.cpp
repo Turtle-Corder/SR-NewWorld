@@ -72,6 +72,13 @@ HRESULT CScene_Stage0::Setup_Scene()
 		return E_FAIL;
 
 
+	//--------------------------------------------------
+	// QUEST
+	//--------------------------------------------------
+	if (FAILED(SetUp_Layer_FlowerQuest(L"Layer_FlowerQuest")))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -331,6 +338,18 @@ HRESULT CScene_Stage0::SetUp_Layer_Item(const wstring & LayerTag)
 		return E_FAIL;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Item", SCENE_STAGE0, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Stage0::SetUp_Layer_FlowerQuest(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_FlowerQuest", SCENE_STAGE0, LayerTag)))
 		return E_FAIL;
 
 	return S_OK;

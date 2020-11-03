@@ -159,7 +159,7 @@ enum eITEM_SORT
 	CAP, NECKLACE1, TOP, PANTS, SUIT, STAFF1, 
 	EARRING, CLOAK, GLOVES, NECKLACE2, SHOES, STAFF2,
 	ITEMSORT_END, 
-	POTION, SKILL_ICON, QUEST1
+	POTION, SKILL_ICON, QUEST1, FLOWER_QUEST
 };
 
 
@@ -189,5 +189,25 @@ enum eQuest1_ID
 	QUEST1_CLEARWAIT,
 	QUEST1_FINISH
 };
+
+
+//--------------------------------------------------
+// 두 번째 퀘스트(꽃) 상황
+//--------------------------------------------------
+enum eFlowerQuest_ID
+{
+	FLOWER_GREETINGS,
+	FLOWER_QUESTION, FLOWER_ANSWER, FLOWER_QUEST_START, 
+	FLOWER_QUEST_CLEAR, FLOWER_REWARD, 
+	FLOWER_EXTRA_QUESTION, 
+	FLOWER_QUEST_NOCLEAR,
+	FLOWER_QUEST_END, 
+
+	// 진행중
+	FLOWER_ON_THE_QUEST, 
+	// 퀘스트 완전 끝남
+	FLOWER_FINISH
+};
+
 
 #endif

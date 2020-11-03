@@ -241,6 +241,9 @@
     <Filter Include="02.GameObject\13. PlayerSkill\01. Meteor">
       <UniqueIdentifier>{9da80b4c-8ee5-4ced-a1c2-54cefff23de2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.UI\06. FlowerQuest">
+      <UniqueIdentifier>{45304715-7732-4691-b9d3-560c93f9ded7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -441,6 +444,9 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\FlowerQuest.h">
+      <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -625,6 +631,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp">
       <Filter>02.GameObject\14. PlayerItem\03. BlueElixir</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FlowerQuest.cpp">
+      <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

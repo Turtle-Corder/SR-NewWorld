@@ -111,7 +111,7 @@ _int CInventory::Get_ItemCount(const wstring & strItemName)
 		++iIndex;
 	}
 
-	return -1;
+	return 0;
 }
 
 HRESULT CInventory::Delete_Item(const wstring & strItemName)
@@ -128,6 +128,7 @@ HRESULT CInventory::Delete_Item(const wstring & strItemName)
 			bDeletIndex[iIndex] = true;
 			Safe_Delete(*iter);
 			iter = m_pInvenList.erase(iter);
+			--m_iInsertOrder;
 		}
 		else
 			++iter;
@@ -168,6 +169,46 @@ HRESULT CInventory::Delete_Item(const wstring & strItemName)
 			return E_FAIL;
 		++m_iNewInsertOrder;
 	}
+
+	return S_OK;
+}
+
+HRESULT CInventory::Get_RewardItem(const wstring & strItemName)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CDataManager* pItem = (CDataManager*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Item");
+	if (nullptr == pItem)
+		return E_FAIL;
+
+	for (auto& pItem : m_pInvenList)
+	{
+		if (pItem->szItemTag == strItemName)
+		{
+			++pItem->iCnt;
+			return S_OK;
+		}
+	}
+	
+	// 아이템 클래스에서 strItemName(아이템의 이름)으로 구매한 아이템의 텍스처를 가져와서 저장
+	if (m_pTextureItem[m_iInsertOrder])
+		Safe_Release(m_pTextureItem[m_iInsertOrder]);
+	m_pTextureItem[m_iInsertOrder] = pItem->Get_ItemInfo_Texture(strItemName);
+
+	// 아이템 정보 저장
+	INVEN_ITEM* pInvenItem = new INVEN_ITEM;
+	pItem->Get_ItemInfo(strItemName, *pInvenItem);
+	pInvenItem->iInvneInsertOrder = m_iInsertOrder;
+
+	m_pInvenList.emplace_back(pInvenItem);
+
+	// 이 칸에는 아이템이 있다고 변경  
+	m_bIsItemHere[m_iInsertOrder] = true;
+	++m_pInvenList[m_iInsertOrder]->iCnt;
+	++m_iInsertOrder;
+	
 
 	return S_OK;
 }
