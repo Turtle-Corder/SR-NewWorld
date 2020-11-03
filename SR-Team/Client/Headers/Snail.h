@@ -13,7 +13,7 @@ class CDamageInfo;
 class CSnail final : public CGameObject
 {
 	enum SNAIL { SNAIL_HEAD, SNAIL_BODY, SNAIL_END };
-	enum STATE {IDLE , MOVE , ATTACK};
+	enum STATE {SLEEP , IDLE , MOVE , ATTACK_START , ATTACK_END};
 private:
 	explicit CSnail(LPDIRECT3DDEVICE9 _pDevice);
 	explicit CSnail(const CSnail& _rOther);
@@ -31,9 +31,10 @@ private:
 	HRESULT Add_Component();
 	HRESULT Update_State();
 	HRESULT Movement(_float _fDeltaTime);
-	HRESULT IsOnTerrain();
-	HRESULT	Move(_float _fDeltaTime);
+	HRESULT IsOnTerrain(); 
 	HRESULT LookAtPlayer(_float _fDeltaTime);
+	HRESULT Compare_PlayerPosition();
+	HRESULT	Move(_float _fDeltaTime);
 	HRESULT Attack(_float _fDeltaTime);
 	HRESULT Setting_Part();
 	HRESULT Spawn_InstantImpact(const wstring& LayerTag);
@@ -57,8 +58,8 @@ private:
 	_bool		m_bAttack = false;
 	_vec3		m_vDir = {};
 	INSTANTIMPACT*	m_pInstantImpact = nullptr;
-	STATE		m_ePreState = IDLE;
-	STATE		m_eCurState = IDLE;
+	STATE		m_ePreState = SLEEP;
+	STATE		m_eCurState = SLEEP;
 	_bool		m_bHit = false;
 	_vec3		m_vLook = {};
 	_bool		m_bCheck = false;
@@ -67,6 +68,10 @@ private:
 
 	_bool		m_bInstanceCreate = false;
 	_bool		m_bTakeCheckOnece = false;
+
+
+
+	_float		m_fCopareLength = 4.f;
 };
 
 END

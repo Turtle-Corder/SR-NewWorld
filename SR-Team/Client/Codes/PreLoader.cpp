@@ -7,7 +7,6 @@
 #include "Slime.h"
 #include "Snail.h"
 #include "Stump.h"
-#include "Acorn.h"
 #include "Yeti.h"
 #include "Snow.h"
 #include "Meteor.h"
@@ -89,10 +88,10 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region GameObject_Acorn
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
-		return E_FAIL;
-#pragma endregion
+//#pragma region GameObject_Acorn
+//	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
+//		return E_FAIL;
+//#pragma endregion
 
 #pragma region Component_Texture_Stump_Head
 	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
@@ -144,7 +143,7 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 
 // 0¹ø ¸¶À»
 
-	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"))))
+	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"),0)))
 		return E_FAIL;
 
 
@@ -209,10 +208,10 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region GameObject_Acorn
-	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
-		return E_FAIL;
-#pragma endregion
+//#pragma region GameObject_Acorn
+//	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
+//		return E_FAIL;
+//#pragma endregion
 
 #pragma region Component_Texture_Stump_Head
 	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
