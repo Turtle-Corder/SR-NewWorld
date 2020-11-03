@@ -1253,7 +1253,7 @@ HRESULT CPlayer::Spawn_EnergyBolt()
 
 	tImpact.vPosition = vWandPos;
 	tImpact.vDirection = vPlayerLook;
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_EnergyBolt", pManagement->Get_CurrentSceneID(), L"Player_Attack", &tImpact)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_EnergyBolt", pManagement->Get_CurrentSceneID(), L"Player_Attack", &tImpact)))
 		return E_FAIL;
 
 	return S_OK;
