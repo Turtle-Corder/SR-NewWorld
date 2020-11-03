@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\Stump.h"
-
+#include "DamageInfo.h"
 USING(Client)
 
 CStump::CStump(LPDIRECT3DDEVICE9 _pDevice)
@@ -33,6 +33,15 @@ HRESULT CStump::Setup_GameObject(void * _pArg)
 
 _int CStump::Update_GameObject(_float _fDeltaTime)
 {
+	if (m_bDead)
+		return GAMEOBJECT::DEAD;
+
+	if (FAILED(Update_State()))
+		return GAMEOBJECT::WARN;
+
+	if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000)
+		m_eCurState = CStump::ATTACK;
+
 	if (FAILED(Movement(_fDeltaTime)))
 		return E_FAIL;
 
@@ -103,6 +112,9 @@ void CStump::Free()
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
 
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pStatusCom);
+	Safe_Release(m_pDmgInfoCom);
 
 	CGameObject::Free();
 }
@@ -157,7 +169,7 @@ HRESULT CStump::Add_Component()
 		else
 			StringCchPrintf(szVIBuff, _countof(szVIBuff), L"Component_VIBuffer_CubeTexture");
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szVIBuff , szCombine, (CComponent**)&m_pVIBufferCom[iCnt]))) //积己 肮荐
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szVIBuff, szCombine, (CComponent**)&m_pVIBufferCom[iCnt]))) //积己 肮荐
 			return E_FAIL;
 
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, iCnt);
@@ -196,14 +208,14 @@ HRESULT CStump::Add_Component()
 			tTransformDesc[STUMP_LH].vPosition = { -3.2f , -0.3f, 0.f };
 			tTransformDesc[STUMP_LH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LH].vScale = { 2.f, 4.f, 1.5f };
+			tTransformDesc[STUMP_LH].vScale = { 1.5f, 4.f, 1.5f };
 		}
 		else if (iCnt == STUMP_RH)
 		{
 			tTransformDesc[STUMP_RH].vPosition = { 3.2f , -0.3f, 0.f };
 			tTransformDesc[STUMP_RH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_RH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_RH].vScale = { 2.f, 4.f, 1.5f };
+			tTransformDesc[STUMP_RH].vScale = { 1.5f, 4.f, 1.5f };
 		}
 
 		else if (iCnt == STUMP_LEG1)
@@ -240,13 +252,52 @@ HRESULT CStump::Add_Component()
 			return E_FAIL;
 
 	}
-	//m_pTransformCom[STUMP_RH]->Turn(CTransform::AXIS_X , -10);
-	//m_pTransformCom[STUMP_LH]->Turn(CTransform::AXIS_X, -10);
+
+	CStatus::STAT tStat;
+	tStat.iCriticalRate = 20;	tStat.iCriticalHit = 10;
+	tStat.iDef = 50;
+	tStat.iHp = 100;			tStat.iMp = 100;
+	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
+		return E_FAIL;
+
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = tTransformDesc[STUMP_BASE].vPosition;
+	tColDesc.fRadius = 0.5f * 4.f; /* * Scale*/
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
+
+	CDamageInfo::DAMAGE_DESC tDmgInfo;
+	tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMinAtt;
+	tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+	tDmgInfo.iCriticalHit = m_pStatusCom->Get_Status().iCriticalHit;
+	tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
+	tDmgInfo.pOwner = this;
+	tDmgInfo.eType = eELEMENTAL_TYPE::NONE;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CStump::Update_State()
 {
+	if (m_ePreState != m_eCurState)
+	{
+		switch (m_eCurState)
+		{
+		case STATE::IDLE:
+			break;
+		case STATE::MOVE:
+			break;
+		case STATE::ATTACK:
+			break;
+		}
+		m_ePreState = m_eCurState;
+	}
 	return S_OK;
 }
 
@@ -261,6 +312,8 @@ HRESULT CStump::Movement(_float _fDeltaTime)
 	if (FAILED(Move(_fDeltaTime)))
 		return E_FAIL;
 
+	if (FAILED(Attack(_fDeltaTime)))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -371,11 +424,6 @@ HRESULT CStump::Attack(_float _fDeltaTime)
 	if (m_eCurState != CStump::ATTACK)
 		return S_OK;
 
-	if (!m_bCheck)
-	{
-		m_vPrePos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
-		m_bCheck = true;
-	}
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -386,41 +434,17 @@ HRESULT CStump::Attack(_float _fDeltaTime)
 	if (nullptr == pPlayerTransform)
 		return E_FAIL;
 
-	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
-	_vec3 m_vPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
-	m_vDir = vPlayerPos - m_vPos;
-	_float m_fLength = D3DXVec3Length(&m_vDir);
-	D3DXVec3Normalize(&m_vDir, &m_vDir);
 
-	if (0.1f <= m_fLength && !m_bCrash)
-	{
-		m_vPos += m_vDir * (_fDeltaTime * 8.f);
-		m_pTransformCom[STUMP_BASE]->Set_Position(m_vPos);
-	}
-	else if (m_bCrash)
-	{
-		if (m_fLength <= 3.f)
-		{
-			m_vDir = m_vPos - vPlayerPos;
-			_float m_fLength = D3DXVec3Length(&m_vDir);
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-			m_vPos += m_vDir * _fDeltaTime * 2.f;
-			m_pTransformCom[STUMP_BASE]->Set_Position(m_vPos);
-		}
-		else
-		{
-			m_eCurState = CStump::MOVE;
-			m_bCrash = false;
-			m_bCheck = false;
-			return S_OK;
-		}
-	}
-	else
-	{
-		m_eCurState = CStump::MOVE;
-		m_bCheck = false;
-	}
 
+	if (!m_bAcorn_CreateOne_Check)
+	{
+		for (_uint iCnt = 0; iCnt < 4; ++iCnt)
+		{
+			if (FAILED(Spawn_Acorn(L"Layer_Acorn", iCnt)))
+				return E_FAIL;
+		}
+		m_bAcorn_CreateOne_Check = true;
+	}
 	return S_OK;
 }
 
@@ -435,17 +459,27 @@ HRESULT CStump::Setting_Part()
 	return S_OK;
 }
 
-HRESULT CStump::Spawn_InstantImpact(const wstring & LayerTag)
+HRESULT CStump::Spawn_Acorn(const wstring & LayerTag, _uint _iCount)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	m_pInstantImpact->vPosition = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
-	m_pInstantImpact->pAttacker = this;
+	INSTANTIMPACT tImpact;
+	tImpact.pAttacker = this;
+	tImpact.pStatusComp = m_pStatusCom;
+	_vec3 BodyPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
 
+	if (_iCount == 0)
+		tImpact.vPosition = BodyPos + _vec3(-5.f, BodyPos.y, -5.f);
+	else if (_iCount == 1)
+		tImpact.vPosition = BodyPos + _vec3(5.f, BodyPos.y, -5.f);
+	else if (_iCount == 2)
+		tImpact.vPosition = BodyPos + _vec3(-5.f, BodyPos.y, 5.f);
+	else if (_iCount == 3)
+		tImpact.vPosition = BodyPos + _vec3(5.f, BodyPos.y, 5.f);
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Instant_Impact", pManagement->Get_CurrentSceneID(), LayerTag, m_pInstantImpact)))/*咯扁 StartPos*/
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
 		return E_FAIL;
 
 	return S_OK;

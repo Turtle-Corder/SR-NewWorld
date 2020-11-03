@@ -67,7 +67,11 @@ typedef struct tagInitializeInfo
 
 }INITIALINFO;
 
-
+typedef struct tagSlime
+{
+	_vec3	vPos = {};
+	_uint	iCurCount = 0;
+}SLIMEINFO;
 
 //----------------------------
 // 
