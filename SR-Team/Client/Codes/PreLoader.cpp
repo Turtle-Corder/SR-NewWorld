@@ -143,7 +143,7 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 
 // 0번 마을
 
-	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"),0)))
+	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"),m_eNextSceneID)))
 		return E_FAIL;
 
 
@@ -354,10 +354,13 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uin
 	wifstream fin;
 
 	TCHAR szFilePath[MID_STR] = _T("");
+	TCHAR szFilePathReady[MID_STR] = _T("../DataPath/MapSource/Stage%d.txt");
 
+
+	StringCchPrintf(szFilePath, _countof(szFilePath), szFilePathReady, StageNumber - 2);//로고, 스태틱 두칸 도로 밀어줌
 
 	wstring wstrFilePath = _T("../DataPath/MapSource/마을.txt");
-	fin.open(wstrFilePath.c_str());
+	fin.open(szFilePath);
 	if (!fin.fail())
 	{
 		//변수
