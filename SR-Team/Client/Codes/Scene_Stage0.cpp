@@ -88,7 +88,7 @@ _int CScene_Stage0::LateUpdate_Scene(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
-		return -1;
+		return GAMEOBJECT::ERR;
 
 	// Src가 공격자 Dst가 피격자
 	//if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_MonsterAtk", L"Layer_Player", L"Com_Collider", L"Com_DmgInfo")))

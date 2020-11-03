@@ -246,7 +246,7 @@ HRESULT CManagement::ClearScene_Object_All(_uint _iSceneID)
 	return S_OK;
 }
 
-HRESULT CManagement::ClearScene_Object_RegisterTag(_uint _iSceneID, const wstring & _strLayerTag)
+HRESULT CManagement::ClearScene_Except_RegisterTag(_uint _iSceneID, const wstring & _strLayerTag)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
