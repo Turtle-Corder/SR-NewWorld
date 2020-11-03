@@ -134,12 +134,14 @@ HRESULT CStump::Add_Component()
 		L"Component_Texture_Stump_Part",
 		L"Component_Texture_Stump_Part",
 		L"Component_Texture_Stump_Part",
+		L"Component_Texture_Stump_Part",
+		L"Component_Texture_Stump_Part",
 		L"Component_Texture_Stump_Part"
 	};
 
 	TCHAR szTexture[MIN_STR] = L"Com_Texture%d";
 	TCHAR szCombine[MIN_STR] = L"";
-
+	TCHAR szVIBuff[MIN_STR] = L"";
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
@@ -148,11 +150,18 @@ HRESULT CStump::Add_Component()
 	{
 		StringCchPrintf(szCombine, _countof(szCombine), L"Com_VIBuffer%d", iCnt);
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", szCombine, (CComponent**)&m_pVIBufferCom[iCnt]))) //积己 肮荐
+		if (iCnt == STUMP_LH)
+			StringCchPrintf(szVIBuff, _countof(szVIBuff), L"Component_VIBuffer_Pyramid");
+		else if (iCnt == STUMP_RH)
+			StringCchPrintf(szVIBuff, _countof(szVIBuff), L"Component_VIBuffer_Pyramid");
+		else
+			StringCchPrintf(szVIBuff, _countof(szVIBuff), L"Component_VIBuffer_CubeTexture");
+
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szVIBuff , szCombine, (CComponent**)&m_pVIBufferCom[iCnt]))) //积己 肮荐
 			return E_FAIL;
 
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, iCnt);
-		if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
+		if (FAILED(CGameObject::Add_Component(SCENE_STAGE0/*pManagement->Get_CurrentSceneID()*/, szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
 			return E_FAIL;
 
 		if (iCnt == STUMP_BASE)
@@ -163,51 +172,67 @@ HRESULT CStump::Add_Component()
 		}
 		else if (iCnt == STUMP_BODY)
 		{
-			tTransformDesc[STUMP_BODY].vPosition = { 0.f , 0.3f, 0.f };
+			tTransformDesc[STUMP_BODY].vPosition = { 0.f , 2.f, 0.f };
 			tTransformDesc[STUMP_BODY].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_BODY].fRotatePerSecond = D3DXToRadian(90.f);
+			tTransformDesc[STUMP_BODY].vScale = { 4.0f , 4.f , 4.0f };
+		}
+		else if (iCnt == STUMP_LSHD)
+		{
+			tTransformDesc[STUMP_LSHD].vPosition = { -2.5f , 2.8f, 0.f };
+			tTransformDesc[STUMP_LSHD].fSpeedPerSecond = 10.f;
+			tTransformDesc[STUMP_LSHD].fRotatePerSecond = D3DXToRadian(90.f);
+			tTransformDesc[STUMP_LSHD].vScale = { 1.5f , 1.5f , 1.f };
+		}
+		else if (iCnt == STUMP_RSHD)
+		{
+			tTransformDesc[STUMP_RSHD].vPosition = { 2.5f , 2.8f, 0.f };
+			tTransformDesc[STUMP_RSHD].fSpeedPerSecond = 10.f;
+			tTransformDesc[STUMP_RSHD].fRotatePerSecond = D3DXToRadian(90.f);
+			tTransformDesc[STUMP_RSHD].vScale = { 1.5f , 1.5f , 1.f };
 		}
 		else if (iCnt == STUMP_LH)
 		{
-			tTransformDesc[STUMP_LH].vPosition = { -0.6f , 0.3f, 0.f };
+			tTransformDesc[STUMP_LH].vPosition = { -3.2f , -0.3f, 0.f };
 			tTransformDesc[STUMP_LH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LH].vScale = { 0.3f , 0.5f , 0.3f };
+			tTransformDesc[STUMP_LH].vScale = { 2.f, 4.f, 1.5f };
 		}
 		else if (iCnt == STUMP_RH)
 		{
-			tTransformDesc[STUMP_RH].vPosition = { 0.6f , 0.3f, 0.f };
+			tTransformDesc[STUMP_RH].vPosition = { 3.2f , -0.3f, 0.f };
 			tTransformDesc[STUMP_RH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_RH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_RH].vScale = { 0.3f , 0.5f , 0.3f };
+			tTransformDesc[STUMP_RH].vScale = { 2.f, 4.f, 1.5f };
 		}
+
 		else if (iCnt == STUMP_LEG1)
 		{
-			tTransformDesc[STUMP_LEG1].vPosition = { -0.3f , -0.3f , -0.3f };
+			tTransformDesc[STUMP_LEG1].vPosition = { -1.4f , -0.3f , -1.4f };
 			tTransformDesc[STUMP_LEG1].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LEG1].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LEG1].vScale = { 0.3f , 0.3f , 0.3f };
+			tTransformDesc[STUMP_LEG1].vScale = { 1.f , 0.7f , 1.f };
 		}
 		else if (iCnt == STUMP_LEG2)
 		{
-			tTransformDesc[STUMP_LEG2].vPosition = { 0.3f, -0.3f, -0.3f };
+			tTransformDesc[STUMP_LEG2].vPosition = { 1.4f, -0.3f, -1.4f };
 			tTransformDesc[STUMP_LEG2].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LEG2].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LEG2].vScale = { 0.3f , 0.3f , 0.3f };
+			tTransformDesc[STUMP_LEG2].vScale = { 1.f , 0.7f , 1.f };
 		}
 		else if (iCnt == STUMP_LEG3)
 		{
-			tTransformDesc[STUMP_LEG3].vPosition = { 0.3f, -0.3f, 0.3f };
+			tTransformDesc[STUMP_LEG3].vPosition = { 1.4f, -0.3f, 1.4f };
 			tTransformDesc[STUMP_LEG3].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LEG3].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LEG3].vScale = { 0.3f , 0.3f , 0.3f };
+			tTransformDesc[STUMP_LEG3].vScale = { 1.f , 0.7f , 1.f };
 		}
 		else if (iCnt == STUMP_LEG4)
 		{
-			tTransformDesc[STUMP_LEG4].vPosition = { -0.3f, -0.3f, 0.3f };
+			tTransformDesc[STUMP_LEG4].vPosition = { -1.4f, -0.3f, 1.4f };
 			tTransformDesc[STUMP_LEG4].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LEG4].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LEG4].vScale = { 0.3f , 0.3f , 0.3f };
+			tTransformDesc[STUMP_LEG4].vScale = { 1.f , 0.7f , 1.f };
 		}
 
 		StringCchPrintf(szCombine, _countof(szCombine), L"Com_Transform%d", iCnt);
@@ -215,8 +240,8 @@ HRESULT CStump::Add_Component()
 			return E_FAIL;
 
 	}
-
-
+	//m_pTransformCom[STUMP_RH]->Turn(CTransform::AXIS_X , -10);
+	//m_pTransformCom[STUMP_LH]->Turn(CTransform::AXIS_X, -10);
 	return S_OK;
 }
 

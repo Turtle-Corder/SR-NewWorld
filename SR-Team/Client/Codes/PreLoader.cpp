@@ -6,6 +6,8 @@
 #include "Skybox.h"
 #include "Slime.h"
 #include "Snail.h"
+#include "Stump.h"
+#include "Acorn.h"
 #include "Yeti.h"
 #include "Snow.h"
 #include "Meteor.h"
@@ -21,6 +23,7 @@
 #include "Crack.h"
 #include "TerrainBundle.h"
 #include "Snail_Impact.h"
+#include "Slime_Impact.h"
 #include "Wand.h"
 #pragma endregion
 
@@ -81,6 +84,26 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Stump
+	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Stump", CStump::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Acorn
+	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Stump_Head
+	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Stump_Part
+	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
 	//----------------------------------------------------------------------------------------------------
 	// Component
 	//----------------------------------------------------------------------------------------------------
@@ -132,6 +155,87 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 {
 	// TODO : 추가하시오
 	//숲
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+#pragma region Snail
+
+#pragma region GameObject_Snail
+	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Snail", CSnail::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Snail_Impact
+	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_SnailBody
+	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_SnailHead
+	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma endregion
+
+#pragma region Slime
+
+#pragma region GameObject_Slime
+	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Slime", CSlime::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Slime_Impact
+	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Slime_Impact", CSlime_Impact::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Translucent_Cube
+	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Translucent_Cube", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/TranslucentCube%d.dds", 2))))
+		return E_FAIL;
+#pragma endregion
+
+
+#pragma endregion
+
+#pragma region Stump
+
+#pragma region GameObject_Stump
+	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Stump", CStump::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Acorn
+	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Stump_Head
+	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Stump_Part
+	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+//#pragma region Component_Texture_Acorn
+//	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Acorn", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+//		return E_FAIL;
+//#pragma endregion
+
+//#pragma region Component_Texture_AcornExplosion
+//	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_AcornExplosion", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+//		return E_FAIL;
+//#pragma endregion
+
+#pragma endregion
+
 	return S_OK;
 }
 

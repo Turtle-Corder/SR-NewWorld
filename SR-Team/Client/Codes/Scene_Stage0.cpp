@@ -98,6 +98,9 @@ _int CScene_Stage0::LateUpdate_Scene(_float _fDeltaTime)
 	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
 		return -1;
 
+	//if (FAILED(pManagement->CollisionSphere_Impulse_Layers(SCENE_STAGE0, L"Layer_PlayerAtk", L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
+	//	return -1;
+
 	//if(FAILED(pManagement->CollisionSphere_Impulse_Layers(SCENE_STAGE0, L"Layer_Monster", L"Layer_Monster", L"Com_Collider", L"")))
 		//몬스터들의 Base를 Transform이름을 통일하게 수작업할것
 
@@ -257,6 +260,9 @@ HRESULT CScene_Stage0::Setup_Layer_Monster(const wstring & LayerTag)
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Snail", SCENE_STAGE0, LayerTag , &_vec3(10.f , 0.f , 5.f))))/*여기 StartPos*/
 		return E_FAIL;
 
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Stump", SCENE_STAGE0, LayerTag, &_vec3(10.f, 0.f, 10.f))))/*여기 StartPos*/
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -267,7 +273,7 @@ HRESULT CScene_Stage0::Setup_Layer_Monster_Attack(const wstring & LayerTag)
 		return E_FAIL;
 
 	// 레이어 사전예약
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Snail_Impact", SCENE_STAGE0, LayerTag)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Snail_Impact", SCENE_STAGE0, LayerTag , nullptr)))
 		return E_FAIL;
 
 	return S_OK;
