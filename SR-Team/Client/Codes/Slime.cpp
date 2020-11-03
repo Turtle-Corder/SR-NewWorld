@@ -385,6 +385,8 @@ HRESULT CSlime::Compare_PlayerPosition()
 
 	if (fLength < 4.f)
 		m_eCurState = CSlime::MOVE;
+
+	return S_OK;
 }
 
 HRESULT CSlime::Divide_Cube(const wstring & LayerTag)

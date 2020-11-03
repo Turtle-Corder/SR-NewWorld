@@ -148,24 +148,23 @@ HRESULT CEventTrigger::Collision_Check()
 
 
 	case Client::CEventTrigger::TWODIMENVIEW:
-
-
+	{
 		CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 		if (nullptr == pCamera)
 			return E_FAIL;
 
 		pCamera->Set_Camera_Mode(CMainCamera::CAMERA_VIEWMODE::CAMERA_2D_X);
-
+	}
 		break;
 
 	case Client::CEventTrigger::THREEDIMENVIEW:
-
+	{
 		CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 		if (nullptr == pCamera)
 			return E_FAIL;
 
 		pCamera->Set_Camera_Mode(CMainCamera::CAMERA_VIEWMODE::CAMERA_3D);
-
+	}
 		break;
 
 	default:
