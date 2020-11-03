@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "MainCamera.h"
 #include "..\Headers\EventTrigger.h"
 
 
@@ -23,16 +24,20 @@ HRESULT CEventTrigger::Setup_GameObject(void * _pArg)
 {
 	vector<void*> GetVector;
 	_vec3 vPos;
-	_uint EventNumber;
 
 	if (_pArg)
 	{
 		GetVector = (*(vector<void*>*)(_pArg));
 		vPos = (*(_vec3*)GetVector[0]);
+		m_eEventName = (*(EVENT_NUM*)GetVector[1]);
+
+		if (m_eEventName >= EVENT_NUM::EVENT_END)
+			return E_FAIL;
 	}
 
 	if (FAILED(Add_Component(vPos)))
 		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -42,7 +47,8 @@ int CEventTrigger::Update_GameObject(float DeltaTime)
 	if (FAILED(m_pTransformCom->Update_Transform()))
 		return GAMEOBJECT::WARN;
 
-
+	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
+		return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -121,6 +127,50 @@ HRESULT CEventTrigger::Add_Component(_vec3 _vPos)
 		return E_FAIL;
 
 
+
+	return S_OK;
+}
+
+HRESULT CEventTrigger::Collision_Check()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	switch (m_eEventName)
+	{
+	case Client::CEventTrigger::PORTAL:
+
+
+		//대충 이런식으로 여기에 씬이동시키는 함수를 소환
+		break;
+
+
+	case Client::CEventTrigger::TWODIMENVIEW:
+
+
+		CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+		if (nullptr == pCamera)
+			return E_FAIL;
+
+		pCamera->Set_Camera_Mode(CMainCamera::CAMERA_VIEWMODE::CAMERA_2D_X);
+
+		break;
+
+	case Client::CEventTrigger::THREEDIMENVIEW:
+
+		CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+		if (nullptr == pCamera)
+			return E_FAIL;
+
+		pCamera->Set_Camera_Mode(CMainCamera::CAMERA_VIEWMODE::CAMERA_3D);
+
+		break;
+
+	default:
+		break;
+	}
 
 	return S_OK;
 }
