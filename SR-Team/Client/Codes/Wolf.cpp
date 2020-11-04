@@ -30,25 +30,28 @@ HRESULT CWolf::Setup_GameObject(void * _pArg)
 
 	m_pTransformCom[WOLF_BASE]->Set_Position(vInitPosition);
 
+	m_tImpact.pAttacker = this;
+	m_tImpact.pStatusComp = m_pStatusCom;
+
 	return S_OK;
 }
 
 _int CWolf::Update_GameObject(_float _fDeltaTime)
 {
 
-	//--------------------------------------------------
+	Update_AI();						// 1. 뭘 할지 결정만 한다
 
-	// 1. 행동(입력) 결정
-	
-	// 2. 좌표 설정
+	Update_Move(_fDeltaTime);			// 2. 실제 이동 시킨다
 
-	// 3. 상태 변경
+	IsOnTerrain();						// 3. y축(높이)를 보정 시킨다.
 
-	// 4. 애니메이션 재생
+	Update_State(_fDeltaTime);			// 4. 상태 변화에 따른 값 변경 (현재 Anim쪽만..)
 
-	// 5. Transfrom Update
+	Update_Anim(_fDeltaTime);			// 5. 애니메이션 재생
 
-	//--------------------------------------------------
+	Update_Transform(_fDeltaTime);		// 6. 행렬변환
+
+	m_pColliderCom->Update_Collider(m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition);	// 7. 충돌체 이동
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -260,6 +263,29 @@ HRESULT CWolf::Add_Component_Extends()
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
 		return E_FAIL;
 
+
+	CStatus::STAT tStat;
+	ZeroMemory(&tStat, sizeof(CStatus::STAT));
+	// TODO : Stat 셋팅
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWolf::Update_Transform(_float _fDeltaTime)
+{
+	m_pTransformCom[WOLF_BASE]->Update_Transform();
+
+	for (_uint iCnt = WOLF_UPDATEA_START; iCnt < WOLF_END; ++iCnt)
+	{
+		if (FAILED(m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld)))
+		{
+			PRINT_LOG(L"Failed To 멋있음", LOG::DEBUG);
+			return E_FAIL;
+		}
+	}
+
 	return S_OK;
 }
 
@@ -348,35 +374,117 @@ HRESULT CWolf::Update_Anim(_float _fDeltaTime)
 	return S_OK;
 }
 
+HRESULT CWolf::Update_Anim_Move(_float _fDeltaTime)
+{
+	return S_OK;
+}
 
-HRESULT CWolf::Update_Move(_float _fDeltaTime)
+HRESULT CWolf::Update_Anim_Attack1(_float _fDeltaTime)
+{
+	return S_OK;
+}
+
+HRESULT CWolf::Update_Anim_Attack2(_float _fDeltaTime)
+{
+	return S_OK;
+}
+
+
+HRESULT CWolf::Update_AI()
 {
 	if (IDLE == m_eCurState || MOVE == m_eCurState)
 	{
-		// 1. 타겟이 탐색 범위 안에 있는지 확인
-
-		// 2-1. 탐색범위 안, 공격범위 밖 이면 추적한다.
-		m_eCurState = MOVE;
-		LookAtPlayer(_fDeltaTime);
-
-		// 2-2. 공격범위 안이면 상태 바꿔준다.
-		m_eCurState = ATTACK;
-	}
-
-	if (MOVE == m_eCurState)
-	{
-		if (FAILED(IsOnTerrain()))
-		{
-			PRINT_LOG(L"Failed To 서핑 터레인", LOG::CLIENT);
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
 			return E_FAIL;
+
+		CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+		if (nullptr == pPlayerTransform)
+			return E_FAIL;
+
+		_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
+		_vec3 vMonsterPos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
+		m_vMoveDirection = { vPlayerPos.x - vMonsterPos.x, 0.f, vPlayerPos.z - vMonsterPos.z };
+
+
+		//--------------------------------------------------
+		// 추적 가능한 거리보다 멀리 있으면 가만히 있는다.
+		//--------------------------------------------------
+		_float fDistance = D3DXVec3Length(&m_vMoveDirection);
+		if (fDistance > m_fFollowDistance)
+		{
+			m_eCurState = IDLE;
+			return S_OK;
 		}
+
+		//--------------------------------------------------
+		// 공격 범위 밖에 있으므로 쫓아 간다.
+		//--------------------------------------------------
+		if (fDistance > m_fAttackDistance)
+		{
+			m_eCurState = MOVE;
+			return S_OK;
+		}
+
+
+		//--------------------------------------------------
+		// 공격 범위 안에 있으므로 공격 한다.
+		//--------------------------------------------------
+		m_eCurState = ATTACK;
+		return S_OK;
 	}
+
+	return S_OK;
+}
+
+HRESULT CWolf::Update_Move(_float _fDeltaTime)
+{
+	if (MOVE != m_eCurState)
+		return S_OK;
+
+
+	//--------------------------------------------------
+	// 추적 가능한 거리보다 가까이는 있는 경우 이므로 
+	//  추적(MOVE)을 하던 공격(ATTACK)을 하던 방향을 회전시킨다.
+	//--------------------------------------------------
+	_vec3 vLook = m_pTransformCom[WOLF_BASE]->Get_Look();
+	D3DXVec3Normalize(&vLook, &vLook);
+	D3DXVec3Normalize(&m_vMoveDirection, &m_vMoveDirection);
+
+	_float fDot = D3DXVec3Dot(&vLook, &m_vMoveDirection);
+	_float fRad = (_float)acos(fDot);
+
+	_vec3 vMonLeft = {};
+	D3DXVec3Cross(&vMonLeft, &vLook, &_vec3(0.f, 1.f, 0.f));
+
+
+	//--------------------------------------------------
+	// 회전
+	//--------------------------------------------------
+	_float fLimit = D3DXVec3Dot(&vMonLeft, &m_vMoveDirection);
+	if (fabsf(fLimit) > 0.2f)
+	{
+		if (fLimit > 0)
+			m_pTransformCom[WOLF_BASE]->Turn(CTransform::AXIS_Y, -_fDeltaTime * fRad);
+		else
+			m_pTransformCom[WOLF_BASE]->Turn(CTransform::AXIS_Y, _fDeltaTime * fRad);
+	}
+
+
+	//--------------------------------------------------
+	// 이동
+	//--------------------------------------------------
+	_vec3 vAddPos = m_vMoveDirection * m_pTransformCom[WOLF_BASE]->Get_Desc().fSpeedPerSecond;
+	m_pTransformCom[WOLF_BASE]->Set_Position(m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition + vAddPos);
 
 	return S_OK;
 }
 
 HRESULT CWolf::IsOnTerrain()
 {
+	if (MOVE != m_eCurState)
+		return S_OK;
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
@@ -414,69 +522,6 @@ HRESULT CWolf::IsOnTerrain()
 //	return S_OK;
 //}
 
-HRESULT CWolf::LookAtPlayer(_float _fDeltaTime)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-	if (nullptr == pPlayerTransform)
-		return E_FAIL;
-	//--------------------------------------------------
-	// 플레이어와 this => Pos
-	//-------------------------------------------------- 
-	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
-	_vec3 vMonPos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
-	////--------------------------------------------------
-	//// Look 과 목적지 - 출발지를 내적
-	////--------------------------------------------------
-
-	_vec3 vLook = m_pTransformCom[WOLF_BASE]->Get_Look();
-	_vec3 vMonToPlayer = { vPlayerPos.x - vMonPos.x, 0.f, vPlayerPos.z - vMonPos.z };
-
-	D3DXVec3Normalize(&vLook, &vLook);
-	D3DXVec3Normalize(&vMonToPlayer, &vMonToPlayer);
-
-	_float fDot = 0.f;
-	_float fRad = 0.f;
-
-	fDot = D3DXVec3Dot(&vLook, &vMonToPlayer);
-	fRad = (_float)acos(fDot);
-
-	_vec3 vMonRight = {};
-	D3DXVec3Cross(&vMonRight, &vLook, &_vec3(0.f, 1.f, 0.f));
-
-	D3DXVec3Dot(&vMonRight, &vMonToPlayer);
-
-	_float fLimit = D3DXVec3Dot(&vMonRight, &vMonToPlayer);
-
-	if (fabsf(fLimit) < 0.2f)
-		return S_OK;
-
-	if (fLimit > 0)
-		m_pTransformCom[WOLF_BASE]->Turn(CTransform::AXIS_Y, -_fDeltaTime * fRad);
-	else
-		m_pTransformCom[WOLF_BASE]->Turn(CTransform::AXIS_Y, _fDeltaTime * fRad);
-
-	return S_OK;
-}
-
-HRESULT CWolf::Update_Part(_float _fDeltaTime)
-{
-	m_pTransformCom[WOLF_BASE]->Update_Transform();
-
-	for (_uint iCnt = WOLF_UPDATEA_START; iCnt < WOLF_END; ++iCnt)
-	{
-		if (FAILED(m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld)))
-		{
-			PRINT_LOG(L"Failed To 멋있음", LOG::DEBUG);
-			return E_FAIL;
-		}
-	}
-
-	return S_OK;
-}
 
 /*
 HRESULT CWolf::Attack(_float _fDeltaTime)
@@ -648,11 +693,9 @@ HRESULT CWolf::Spawn_InstantImpact(const wstring & LayerTag)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	m_pInstantImpact->vPosition = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
-	m_pInstantImpact->pAttacker = this;
+	m_tImpact.vPosition = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
 
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Instant_Impact", pManagement->Get_CurrentSceneID(), LayerTag, m_pInstantImpact)))/*여기 StartPos*/
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Instant_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &m_tImpact)))/*여기 StartPos*/
 		return E_FAIL;
 
 	return S_OK;
