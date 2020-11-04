@@ -181,7 +181,6 @@ HRESULT CFlowerQuest_NPC::Add_Component_Texture()
 
 	WCHAR szTextureName[PART_END][MAX_PATH] =
 	{
-		// UNDONE : 텍스처 변경해야 함
 		L"Component_Texture_FlowerQuestNPCHead",
 
 		L"Component_Texture_FlowerQuestNPCBody",
@@ -243,6 +242,8 @@ void CFlowerQuest_NPC::Free()
 		Safe_Release(m_pTransformCom[i]);
 		Safe_Release(m_pVIBufferCom[i]);
 	}
+
+	Safe_Release(m_pRaycastCom);
 
 	CGameObject::Free();
 }

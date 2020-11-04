@@ -36,6 +36,7 @@ private:
 	CVIBuffer*			m_pVIBufferCom[PART_END];
 	CTransform*			m_pTransformCom[PART_END];
 	CTexture*			m_pTextureCom[PART_END];
+	CRaycast*			m_pRaycastCom = nullptr;
 };
 
 END

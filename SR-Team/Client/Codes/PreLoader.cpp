@@ -112,7 +112,6 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 #pragma endregion
 
-<<<<<<< HEAD
 #pragma region GameObject_FlowerQuestNPC
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_FlowerQuestNPC", CFlowerQuest_NPC::Create(m_pDevice))))
 		return E_FAIL;

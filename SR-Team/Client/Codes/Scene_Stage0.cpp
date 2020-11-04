@@ -49,8 +49,6 @@ HRESULT CScene_Stage0::Setup_Scene()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	eSCENE_ID ePreLoadScene = SCENE_STAGE1;
-
 	CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_Player");
 	_int iNextScene = pPlayer->Get_ClearInfo() + 1;					// 다 끝나고 마을로 돌아오면 안됨!
 	if (0 > iNextScene || iNextScene >= (_int)SCENE_END)
