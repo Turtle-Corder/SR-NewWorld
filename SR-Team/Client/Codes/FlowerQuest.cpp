@@ -119,6 +119,8 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 	case FLOWER_QUEST_END:
 		if (pManagement->Key_Pressing('G'))
 			m_eSituation = FLOWER_GREETINGS;
+		if (m_bStartQuest)
+			m_eSituation = FLOWER_GREETINGS;
 		break;
 
 		// 퀘스트 하는중
