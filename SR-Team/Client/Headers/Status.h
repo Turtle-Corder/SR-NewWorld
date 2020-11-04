@@ -59,6 +59,9 @@ public:
 	void Clear_FireStack();
 	void Clear_IceStack();
 
+	// 착용하고 있는 장비의 스탯으로 설정한다
+	void Set_EquipStat(const CStatus::STAT& tStat);
+
 
 public:
 	virtual HRESULT Setup_Component_Prototype() override;

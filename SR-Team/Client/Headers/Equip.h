@@ -92,6 +92,9 @@ private:
 	_bool					m_bEquip[ITEMSORT_END] = { false, };
 	// 현재 착용하고 있는 아이템Tag
 	TCHAR					szEquipItemTag[ITEMSORT_END][MAX_PATH] = { L"", };
+
+	// 스탯을 적용했는지
+	_bool					m_bCountStat = false;
 };
 
 

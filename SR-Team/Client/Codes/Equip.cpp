@@ -3,6 +3,7 @@
 #include "..\Headers\Equip.h"
 
 #include "DataManager.h"
+#include "Player.h"
 USING(Client)
 
 
@@ -140,6 +141,13 @@ _int CEquip::Update_GameObject(_float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
+	CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Player");
+	if (pPlayer == nullptr)
+		return E_FAIL;
+	CStatus* pPlayerStat = (CStatus*)pManagement->Get_Component(
+		pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Stat");
+	if (pPlayerStat == nullptr)
+		return GAMEOBJECT::WARN;
 
 	if (pManagement->Key_Down('U'))
 		m_bRender = !m_bRender;
@@ -152,8 +160,8 @@ _int CEquip::Update_GameObject(_float _fDeltaTime)
 	// 치트
 	if (pManagement->Key_Down(VK_RETURN))
 	{
-		m_pStatCom->Change_Hp(100);
-		m_pStatCom->Change_Mp(100);
+		pPlayerStat->Change_Hp(100);
+		pPlayerStat->Change_Mp(100);
 	}
 
 	for (_uint i = 0; i < EQUIP_END; ++i)
@@ -259,6 +267,18 @@ HRESULT CEquip::Render_EquipItem()
 
 HRESULT CEquip::Render_Stat()
 {
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Player");
+	if (pPlayer == nullptr)
+		return E_FAIL;
+	CStatus* pPlayerStat = (CStatus*)pManagement->Get_Component(
+		pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Stat");
+	if (pPlayerStat == nullptr)
+		return GAMEOBJECT::WARN;
+
 	// 공격력
 	TCHAR szBuff2[MAX_PATH] = L"";
 	_matrix matScale, matTrans, matWorld;
@@ -266,7 +286,7 @@ HRESULT CEquip::Render_Stat()
 	D3DXMatrixIdentity(&matWorld);
 
 	StringCchPrintf(szBuff2, _countof(szBuff2), L"%d ~ %d", 
-		m_pStatCom->Get_Status().iMinAtt, m_pStatCom->Get_Status().iMaxAtt);
+		pPlayerStat->Get_Status().iMinAtt, pPlayerStat->Get_Status().iMaxAtt);
 
 	D3DXMatrixScaling(&matScale, 1.2f, 1.7f, 0.f);
 	D3DXMatrixTranslation(&matTrans, vPos.x + 300.f, vPos.y - 160.f, 0.f);
@@ -278,7 +298,7 @@ HRESULT CEquip::Render_Stat()
 
 	// 방어력
 	StringCchPrintf(szBuff2, _countof(szBuff2), L"%d",
-		m_pStatCom->Get_Status().iDef);
+		pPlayerStat->Get_Status().iDef);
 
 	D3DXMatrixScaling(&matScale, 1.2f, 1.7f, 0.f);
 	D3DXMatrixTranslation(&matTrans, vPos.x + 300.f, vPos.y - 90.f, 0.f);
@@ -290,7 +310,7 @@ HRESULT CEquip::Render_Stat()
 
 	// 치명 확률
 	StringCchPrintf(szBuff2, _countof(szBuff2), L"%d",
-		m_pStatCom->Get_Status().iCriticalRate);
+		pPlayerStat->Get_Status().iCriticalRate);
 
 	D3DXMatrixScaling(&matScale, 1.2f, 1.7f, 0.f);
 	D3DXMatrixTranslation(&matTrans, vPos.x + 300.f, vPos.y - 20.f, 0.f);
@@ -302,7 +322,7 @@ HRESULT CEquip::Render_Stat()
 
 	// 치명 피해
 	StringCchPrintf(szBuff2, _countof(szBuff2), L"%d",
-		m_pStatCom->Get_Status().iCriticalRate);
+		pPlayerStat->Get_Status().iCriticalRate);
 
 	D3DXMatrixScaling(&matScale, 1.2f, 1.7f, 0.f);
 	D3DXMatrixTranslation(&matTrans, vPos.x + 300.f, vPos.y + 50.f, 0.f);
@@ -314,7 +334,7 @@ HRESULT CEquip::Render_Stat()
 
 	// HP
 	StringCchPrintf(szBuff2, _countof(szBuff2), L"%d / %d",
-		m_pStatCom->Get_Status().iHp, m_pStatCom->Get_Status().iMaxHp);
+		pPlayerStat->Get_Status().iHp, pPlayerStat->Get_Status().iMaxHp);
 
 	D3DXMatrixScaling(&matScale, 1.2f, 1.7f, 0.f);
 	D3DXMatrixTranslation(&matTrans, vPos.x + 250.f, vPos.y + 110.f, 0.f);
@@ -326,7 +346,7 @@ HRESULT CEquip::Render_Stat()
 
 	// MP
 	StringCchPrintf(szBuff2, _countof(szBuff2), L"%d / %d",
-		m_pStatCom->Get_Status().iMp, m_pStatCom->Get_Status().iMaxMp);
+		pPlayerStat->Get_Status().iMp, pPlayerStat->Get_Status().iMaxMp);
 
 	D3DXMatrixScaling(&matScale, 1.2f, 1.7f, 0.f);
 	D3DXMatrixTranslation(&matTrans, vPos.x + 250.f, vPos.y + 175.f, 0.f);
@@ -354,6 +374,18 @@ HRESULT CEquip::Render_Stat()
 HRESULT CEquip::Count_Stat()
 {
 	_int iMinAtt = 0, iMaxAtt = 0, iDef = 0, iCirRate = 0, iCriHit = 0;
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Player");
+	if (pPlayer == nullptr)
+		return E_FAIL;
+	CStatus* pPlayerStat = (CStatus*)pManagement->Get_Component(
+		pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Stat");
+	if (pPlayerStat == nullptr)
+		return GAMEOBJECT::WARN;
+
 	for (_uint i = 0; i < ITEMSORT_END; ++i)
 	{
 		if (m_bEquip[i])
@@ -378,6 +410,8 @@ HRESULT CEquip::Count_Stat()
 	tStat.iMaxHp = m_pStatCom->Get_Status().iMaxHp;
 	tStat.iMaxMp = m_pStatCom->Get_Status().iMaxMp;
 
+	// 플레이어 스탯 변경
+	pPlayerStat->Set_EquipStat(tStat);
 	m_pStatCom->Set_Status(tStat);
 
 	return S_OK;
@@ -452,8 +486,8 @@ HRESULT CEquip::Add_Component()
 	}
 
 	CStatus::STAT	tStat;
-	tStat.iMaxHp = 100;
-	tStat.iMaxMp = 100;
+	tStat.iMaxHp = 200;
+	tStat.iMaxMp = 200;
 	tStat.iHp = 10;
 	tStat.iMp = 10;
 	tStat.iLevel = 1;

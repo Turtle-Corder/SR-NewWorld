@@ -358,7 +358,7 @@ HRESULT CPlayer::Add_Component_Extends()
 	CStatus::STAT tStat;
 	tStat.iCriticalRate = 20;	tStat.iCriticalHit = 10;
 	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
+	tStat.iHp = 50;			tStat.iMp = 50;
 	tStat.iMaxHp = 100;			tStat.iMaxMp = 100;
 	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
 	tStat.iMaxFireStack = 3;
