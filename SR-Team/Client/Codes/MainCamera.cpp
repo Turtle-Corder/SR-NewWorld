@@ -135,11 +135,11 @@ HRESULT CMainCamera::ZoomInOut(_float _fDeltaTime)
 
 	if (GetAsyncKeyState(VK_NUMPAD2) & 0x8000)
 	{
-		m_fHeight -= m_fUpDownSpeedPerSecond * _fDeltaTime * m_fStartHeight;
+		m_fHeight -= m_fUpDownSpeedPerSecond * _fDeltaTime * m_fStartHeight* 50.f;
 	}
 	if (GetAsyncKeyState(VK_NUMPAD8) & 0x8000)
 	{
-		m_fHeight += m_fUpDownSpeedPerSecond * _fDeltaTime* m_fStartHeight;
+		m_fHeight += m_fUpDownSpeedPerSecond * _fDeltaTime* m_fStartHeight * 50.f;
 	}
 
 	return S_OK;

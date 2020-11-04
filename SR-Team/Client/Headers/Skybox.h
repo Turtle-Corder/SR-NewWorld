@@ -22,7 +22,7 @@ public:
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 
 	virtual HRESULT Render_Priority() override;
-
+	virtual HRESULT Render_NoneAlpha() override;
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(_float _fDeltaTime);

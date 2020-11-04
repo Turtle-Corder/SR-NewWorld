@@ -139,12 +139,6 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 #pragma endregion
 
-	// skybox
-#pragma region Component_Texture_Skybox
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, 
-		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds"))))
-		return E_FAIL;
-#pragma endregion
 
 	// FlowerQuest_NPC
 #pragma region Component_Texture_FlowerQuestNPC

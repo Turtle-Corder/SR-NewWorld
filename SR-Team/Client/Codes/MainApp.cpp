@@ -191,6 +191,7 @@ HRESULT CMainApp::Setup_DefaultSetting()
 {
 	srand(unsigned(time(NULL)));
 
+
 	if (FAILED(m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
 	{
 		PRINT_LOG(L"Failed To Light Off", LOG::CLIENT);
@@ -855,6 +856,12 @@ HRESULT CMainApp::Setup_DS()
 
 #pragma region GameObject_TerrainBundle
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_TerrainBundle", CTerrainBundle::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Skybox
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 

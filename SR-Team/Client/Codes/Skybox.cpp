@@ -49,6 +49,7 @@ _int CSkybox::LateUpdate_GameObject(_float _fDeltaTime)
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_PRIORITY, this)))
 		return GAMEOBJECT::WARN;
 
+
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -63,6 +64,9 @@ HRESULT CSkybox::Render_Priority()
 		return E_FAIL;
 
 	
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE)))
+		return E_FAIL;
+
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
 
@@ -77,20 +81,63 @@ HRESULT CSkybox::Render_Priority()
 
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW)))
+		return E_FAIL;
+
+
+	return S_OK;
+}
+
+HRESULT CSkybox::Render_NoneAlpha()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+
+
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE)))
+		return E_FAIL;
+
+
+	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+
+
+	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->SetTexture(m_iTextureID)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
+		return E_FAIL;
+
+	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+
+
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW)))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
 HRESULT CSkybox::Add_Component()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
-
+	if (pManagement == nullptr)
+		return E_FAIL;
 
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Stump_Part", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Skybox", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	CTransform::TRANSFORM_DESC tTransformDesc;
