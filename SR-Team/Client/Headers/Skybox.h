@@ -38,6 +38,8 @@ private:
 	CVIBuffer*	m_pVIBufferCom	= nullptr;
 	CTransform* m_pTransformCom = nullptr;
 	CTexture*	m_pTextureCom	= nullptr;
+
+	_uint m_iTextureID = 0;
 };
 
 END
