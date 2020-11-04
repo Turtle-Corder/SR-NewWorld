@@ -6,6 +6,7 @@
 
 USING(Engine)
 BEGIN(Client)
+
 class CDamageInfo;
 
 class CStump final : public CGameObject
@@ -24,7 +25,7 @@ class CStump final : public CGameObject
 		STUMP_LEG4,
 		STUMP_END
 	};
-	enum STATE { IDLE, MOVE, ATTACK, STATE_DEAD };
+	enum STATE { IDLE, MOVE, ATTACK };
 private:
 	explicit CStump(LPDIRECT3DDEVICE9 _pDevice);
 	explicit CStump(const CStump& _rOther);
@@ -43,6 +44,7 @@ private:
 	HRESULT Add_Component();
 	HRESULT Update_State();
 	HRESULT Movement(_float _fDeltaTime);
+	HRESULT Compare_PlayerPosition();
 	HRESULT IsOnTerrain();
 	HRESULT	Move(_float _fDeltaTime);
 	HRESULT LookAtPlayer(_float _fDeltaTime);
@@ -61,9 +63,10 @@ private:
 	_vec3				m_vStartPos = {};
 	_vec3				m_vDir = {};
 	_vec3				m_vLook = {};
+	_vec3				m_vPrePos = {};
+	_bool				m_bAcorn_CreateOne_Check = false;
 	STATE				m_ePreState = IDLE;
 	STATE				m_eCurState = IDLE;
-	_bool				m_bAcorn_CreateOne_Check = false;
 };
 
 END

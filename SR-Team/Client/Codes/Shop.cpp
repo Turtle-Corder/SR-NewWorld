@@ -407,8 +407,8 @@ HRESULT CShop::Add_Component_ShopItem()
 		else if (i == 15)
 		{
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"Goguma");
-			wsprintf(szItemTextureName, L"Component_Texture_Quest1_Goguma");
+				L"%s", L"flower");
+			wsprintf(szItemTextureName, L"Component_Texture_FlowerQuest_Flower");
 		}
 		pOrigin->Get_ItemInfo(pItem->szItemTag, *pItem);
 		//m_pItemTextureCom[i] = pOrigin->Get_ItemInfo_Texture(pItem->szItemTag);

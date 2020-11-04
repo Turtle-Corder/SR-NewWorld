@@ -63,6 +63,15 @@ void CStatus::Clear_IceStack()
 	m_tStat.iCurIceStack = 0;
 }
 
+void CStatus::Set_EquipStat(const CStatus::STAT & tStat)
+{
+	m_tStat.iMinAtt = tStat.iMinAtt + 10;
+	m_tStat.iMaxAtt = tStat.iMaxAtt + 50;
+	m_tStat.iDef = tStat.iDef + 50;
+	m_tStat.iCriticalRate = tStat.iCriticalRate + 20;
+	m_tStat.iCriticalHit = tStat.iCriticalHit + 10;
+}
+
 HRESULT CStatus::Setup_Component_Prototype()
 {
 	return S_OK;

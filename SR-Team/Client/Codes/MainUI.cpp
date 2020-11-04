@@ -124,10 +124,10 @@ HRESULT CMainUI::Setup_GameObject(void * pArg)
 	m_pTransformCom[MAINUI_MAIN]->Set_Position(m_vMainPos);
 
 	// º¯°æ
-	vPos = { m_vMainPos.x - 45.f, m_vMainPos.y - 15.f, 0.f };
+	vPos = { m_vMainPos.x - 41.f, m_vMainPos.y - 15.f, 0.f };
 	m_pTransformCom[MAINUI_HP]->Set_Position(vPos);
 
-	vPos = { m_vMainPos.x + 45.f, m_vMainPos.y - 15.f, 0.f };
+	vPos = { m_vMainPos.x + 42.f, m_vMainPos.y - 15.f, 0.f };
 	m_pTransformCom[MAINUI_MP]->Set_Position(vPos);
 
 	vPos = { m_vMainPos.x - 500.f, m_vMainPos.y, 0.f };
@@ -300,13 +300,11 @@ HRESULT CMainUI::Render_UI()
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
-	CEquip* pEquip = (CEquip*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 1);
+	CPlayer* pEquip = (CPlayer*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Player");
 	if (pEquip == nullptr)
 		return E_FAIL;
-	_int iHp = pEquip->Get_PlayerStat().iHp;
-	_int iMaxHp = pEquip->Get_PlayerStat().iMaxHp;
-	_int iMp = pEquip->Get_PlayerStat().iMp;
-	_int iMaxMp = pEquip->Get_PlayerStat().iMaxMp;
+	CStatus* pPlayerStat = (CStatus*)pManagement->Get_Component(
+		pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Stat");
 
 	for (_uint i = 0; i < MAINUI_END; ++i)
 	{
@@ -320,13 +318,13 @@ HRESULT CMainUI::Render_UI()
 		{
 			m_tCollRt[i].left = 0;
 			m_tCollRt[i].right = (LONG)(pTexInfo->Width);
-			m_tCollRt[i].top = (LONG)((iMaxHp - iHp));
+			m_tCollRt[i].top = (LONG)((pTexInfo->Height - pPlayerStat->Get_Status().iHp * 2.2f));
 			m_tCollRt[i].bottom = (LONG)(pTexInfo->Height);
 
 			_vec3 vPos = { 0.f, 0.f, 0.f };
-			vPos.y = (_float)(iMaxHp - iHp);
+			vPos.y = (_float)(pTexInfo->Height - pPlayerStat->Get_Status().iHp * 2.2f);
 
-			D3DXMatrixScaling(&matScale, 0.9f, 0.9f, 0.f);
+			D3DXMatrixScaling(&matScale, 0.8f, 0.8f, 0.f);
 			D3DXMatrixTranslation(&matTrans, vUIPose.x, vUIPose.y, 0.f);
 			matWorld = matScale * matTrans;
 
@@ -339,13 +337,13 @@ HRESULT CMainUI::Render_UI()
 		{
 			m_tCollRt[i].left = 0;
 			m_tCollRt[i].right = (LONG)(pTexInfo->Width);
-			m_tCollRt[i].top = (LONG)((iMaxMp - iMp));
+			m_tCollRt[i].top = (LONG)((pTexInfo->Height - pPlayerStat->Get_Status().iMp * 2.2f));
 			m_tCollRt[i].bottom = (LONG)(pTexInfo->Height);
 			
 			_vec3 vPos = { 0.f, 0.f, 0.f };
-			vPos.y = (_float)(iMaxMp - iMp);
+			vPos.y = (_float)(pTexInfo->Height - pPlayerStat->Get_Status().iMp * 2.2f);
 
-			D3DXMatrixScaling(&matScale, 0.9f, 0.9f, 0.f);
+			D3DXMatrixScaling(&matScale, 0.8f, 0.8f, 0.f);
 			D3DXMatrixTranslation(&matTrans, vUIPose.x, vUIPose.y, 0.f);
 			matWorld = matScale * matTrans;
 

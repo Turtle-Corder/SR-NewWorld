@@ -202,4 +202,22 @@ enum eQuest1_ID
 	QUEST1_FINISH
 };
 
+
+//--------------------------------------------------
+// ²É Äù½ºÆ® »óÈ²
+//--------------------------------------------------
+enum eFlowerQuest_ID
+{
+	FLOWER_GREETINGS,
+	FLOWER_QUESTION, FLOWER_ANSWER, FLOWER_QUEST_START,
+	FLOWER_QUEST_CLEAR, FLOWER_REWARD,
+	FLOWER_EXTRA_QUESTION,
+	FLOWER_QUEST_NOCLEAR,
+	FLOWER_QUEST_END,
+
+	FLOWER_ON_THE_QUEST,
+	FLOWER_FINISH
+};
+
+
 #endif
