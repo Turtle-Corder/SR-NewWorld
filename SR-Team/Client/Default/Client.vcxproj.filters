@@ -250,6 +250,24 @@
     <Filter Include="02.GameObject\00.Terrain\99.Dummy">
       <UniqueIdentifier>{3646a843-fdb0-444e-8f26-9f21e0547b79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\02.MpDrift">
+      <UniqueIdentifier>{6f26a8c4-ecad-4a30-92f5-eac561821b8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\03.Shield">
+      <UniqueIdentifier>{5799d202-a36b-44d2-9a03-ccaf734b938e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder">
+      <UniqueIdentifier>{fd12a845-80f2-4ab3-a450-f43b2428029c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\00.ThunderBox">
+      <UniqueIdentifier>{a0054e46-d1cc-40be-86bd-ee98393440aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm">
+      <UniqueIdentifier>{a6720cf7-b6ab-418f-89c4-57fe13c8f9aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\05.">
+      <UniqueIdentifier>{bc0185db-a08e-4ba6-a585-c089cf14341d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -465,6 +483,18 @@
     <ClInclude Include="..\Headers\Acorn.h">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MpDrift.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\02.MpDrift</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\03.Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ThunderBox.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\00.ThunderBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ThunderStorm.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -664,6 +694,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Acorn.cpp">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MpDrift.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\02.MpDrift</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\03.Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ThunderBox.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\00.ThunderBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ThunderStorm.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
