@@ -35,6 +35,7 @@ HRESULT CSlime::Setup_GameObject(void * pArg)
 
 _int CSlime::Update_GameObject(_float _fDeltaTime)
 {
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -50,7 +51,7 @@ _int CSlime::Update_GameObject(_float _fDeltaTime)
 
 			for (int i = 0; i < m_iCurCount; ++i)
 			{
-				if (FAILED(Divide_Cube(L"Layer_Translucent_Cube")))
+				if (FAILED(Divide_Cube(L"Layer_Monster")))
 					return GAMEOBJECT::WARN;
 			}
 		}
@@ -83,7 +84,8 @@ _int CSlime::Update_GameObject(_float _fDeltaTime)
 	if (FAILED(Setting_SlimeBody()))
 		return GAMEOBJECT::WARN;
 
-
+	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom[SLIME_BASE]->Get_Desc().vPosition)))
+		return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -109,7 +111,7 @@ HRESULT CSlime::Render_BlendAlpha()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
@@ -131,7 +133,7 @@ HRESULT CSlime::Render_NoneAlpha()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
@@ -152,12 +154,12 @@ HRESULT CSlime::Take_Damage(const CComponent * _pDamageComp)
 	if (!_pDamageComp)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	//m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
 
-	if (0 >= m_pStatusCom->Get_Status().iHp)
-	{
+	//if (0 >= m_pStatusCom->Get_Status().iHp)
+	//{
 		m_bDead = true;
-	}
+	//}
 
 	return S_OK;
 }
@@ -165,6 +167,9 @@ HRESULT CSlime::Take_Damage(const CComponent * _pDamageComp)
 HRESULT CSlime::Add_Component()
 {
 	m_iCurCount = m_tSlimeInfo.iCurCount;
+
+
+
 
 	CTransform::TRANSFORM_DESC tTransformDesc[SLIME_END];
 
@@ -177,6 +182,11 @@ HRESULT CSlime::Add_Component()
 	tTransformDesc[SLIME_JELLY].fSpeedPerSecond = 10.f;
 	tTransformDesc[SLIME_JELLY].fRotatePerSecond = D3DXToRadian(90.f);
 	tTransformDesc[SLIME_JELLY].vScale = { 1.4f / (float)m_iCurCount , 1.4f / (float)m_iCurCount , 1.4f / (float)m_iCurCount };
+
+	CSphereCollider::COLLIDER_DESC tCollDesc;
+	tCollDesc.vPosition = tTransformDesc[SLIME_BASE].vPosition;
+	tCollDesc.fRadius = 0.5f/(_float)m_iCurCount;
+
 
 	//--------------------------------------------------
 	// Body Component
@@ -209,7 +219,7 @@ HRESULT CSlime::Add_Component()
 	//--------------------------------------------------
 	// Texture Component
 	//--------------------------------------------------
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Slime", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STAGE1, L"Component_Texture_Slime", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	m_ePreState = CSlime::IDLE;
@@ -225,6 +235,10 @@ HRESULT CSlime::Add_Component()
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tCollDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -257,7 +271,7 @@ HRESULT CSlime::IsOnTerrain()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Terrain", L"Com_VIBuffer");
+	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Terrain", L"Com_VIBuffer");
 	if (nullptr == pTerrainBuffer)
 		return E_FAIL;
 
@@ -305,7 +319,7 @@ HRESULT CSlime::LookAtPlayer(float _fDeltaTime)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Player", L"Com_Transform0");
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
 
 	if (nullptr == pPlayerTransform)
 		return E_FAIL;
@@ -397,9 +411,9 @@ HRESULT CSlime::Divide_Cube(const wstring & LayerTag)
 
 	_vec3 vMyPos = m_pTransformCom[SLIME_JELLY]->Get_Desc().vPosition;
 	SLIMEINFO tInfo;
-	tInfo.vPos = vMyPos + _vec3{ (_float)m_iCurCount , 0.f , (_float)m_iCurCount };
+	tInfo.vPos = vMyPos + _vec3{ (_float)m_iCurCount *(rand()%4), 0.f , (_float)m_iCurCount *(rand()%4) };
 	tInfo.iCurCount = m_iCurCount;
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Slime", SCENE_STAGE0, LayerTag, &tInfo)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Slime", pManagement->Get_CurrentSceneID(), LayerTag, &tInfo)))
 		return E_FAIL;
 
 	return S_OK;
@@ -458,7 +472,7 @@ HRESULT CSlime::Spawn_Item(const wstring & LayerTag)
 
 	_vec3 vPos = m_pTransformCom[SLIME_BASE]->Get_Desc().vPosition;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_DropItem", SCENE_STAGE0, LayerTag, &vPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), LayerTag, &vPos)))
 		return E_FAIL;
 
 	return S_OK;
@@ -472,7 +486,7 @@ HRESULT CSlime::Spawn_Crack(const wstring & LayerTag)
 
 	_vec3 vPos = m_pTransformCom[SLIME_BASE]->Get_Desc().vPosition;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Crack", SCENE_STAGE0, LayerTag, &vPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Crack", pManagement->Get_CurrentSceneID(), LayerTag, &vPos)))
 		return E_FAIL;
 
 	return S_OK;
@@ -491,7 +505,7 @@ HRESULT CSlime::Spawn_InstantImpact(const wstring & LayerTag)
 	memcpy_s(&BodyPos, sizeof(_vec3), &m_pTransformCom[SLIME_BASE]->Get_Desc().matWorld._41, sizeof(_vec3));
 	tImpact.vPosition = BodyPos;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Slime_Impact", SCENE_STAGE0, LayerTag, &tImpact)))/*여기 StartPos*/
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Slime_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))/*여기 StartPos*/
 		return E_FAIL;
 
 	return S_OK;
@@ -524,7 +538,7 @@ HRESULT CSlime::Move(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Player", L"Com_Transform0");
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
 
 	if (nullptr == pPlayerTransform)
 		return E_FAIL;
@@ -594,10 +608,10 @@ HRESULT CSlime::Attack(_float _fDeltaTime)
 					m_fJumpTime = 0.f;
 					m_fStartTime = 0.f;
 
-					if (FAILED(Spawn_Crack(L"Layer_Crack")))
+					if (FAILED(Spawn_Crack(L"Layer_Effect")))
 						return E_FAIL;
 
-					if (FAILED(Spawn_InstantImpact(L"Layer_Instant_Slime")))
+					if (FAILED(Spawn_InstantImpact(L"Layer_MonsterAtk")))
 						return E_FAIL;
 
 					m_eCurState = CSlime::MOVE;

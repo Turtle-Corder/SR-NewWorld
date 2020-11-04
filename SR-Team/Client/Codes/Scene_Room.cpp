@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "PreLoader.h"
+#include "CubeTerrain.h"
 #include "Scene_Stage0.h"
 #include "..\Headers\Scene_Room.h"
 
@@ -109,6 +110,15 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 		{
 			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
 			return -1;
+		}
+
+		_int iCnt = 0;
+		while (true)
+		{
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_CubeTerrain", iCnt++);
+			if (nullptr == pCubeTerrain)	break;
+
+			pCubeTerrain->SetActive();
 		}
 
 		return 1;

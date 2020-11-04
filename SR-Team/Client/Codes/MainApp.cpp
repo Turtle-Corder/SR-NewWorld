@@ -65,10 +65,19 @@ CMainApp::CMainApp()
 
 HRESULT CMainApp::Setup_MainApp()
 {
+	/*RECT rcClient = {};
+	GetClientRect(g_hWnd, &rcClient);
+
+	TCHAR test[128] = L"";
+	swprintf_s(test, L"right: %d, bottom: %d", rcClient.right, rcClient.bottom);
+
+	PRINT_LOG(test, LOG::CLIENT);*/
+
+
 	if (nullptr == m_pManagement)
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Setup_Engine(g_hWnd, FRAME_PER_SEC, WINCX, WINCY, CDevice_Manager::DISPLAY_WINDOW, SCENE_END, MAINAPP_TIMER)))
+	if (FAILED(m_pManagement->Setup_Engine(g_hWnd, FRAME_PER_SEC, WINCX, WINCY, CDevice_Manager::DISPLAY_FULL, SCENE_END, MAINAPP_TIMER)))
 	{
 		PRINT_LOG(L"Failed To Setup Engine", LOG::CLIENT);
 		return E_FAIL;

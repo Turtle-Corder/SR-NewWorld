@@ -54,9 +54,10 @@ private:
 	HRESULT AttackMotion(_float _fDeltaTime);
 	HRESULT Spawn_InstantImpact(const wstring& LayerTag);
 private:
-	CVIBuffer*		m_pVIBufferCom[WOLF_END] = {};
-	CTransform*		m_pTransformCom[WOLF_END] = {};
-	CTexture*		m_pTextureCom[WOLF_END] = {};
+	CVIBuffer*			m_pVIBufferCom[WOLF_END] = {};
+	CTransform*			m_pTransformCom[WOLF_END] = {};
+	CTexture*			m_pTextureCom[WOLF_END] = {};
+	CSphereCollider*	m_pColliderCom = nullptr;
 
 
 private:

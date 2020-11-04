@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "TerrainBundle.h"
 #include "Scene_Stage1.h"
+#include "CubeTerrain.h"
 #include "..\Headers\Scene_Stage0.h"
 
 USING(Client)
@@ -71,11 +72,43 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 			return -1;
 		}
 
-		// UNDONE : 일단 정리되게
-		if (FAILED(pManagement->ClearScene_All(SCENE_STAGE1)))
-		{
-			PRINT_LOG(L"Failed To Clear CScene_Room", LOG::CLIENT);
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Mouse")))
 			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Camera")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Player")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Item")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_MainUI")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Inventory")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Shop")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Wand")))
+			return -1;
+
+		if (FAILED(pManagement->Clear_Except(SCENE_STAGE0, SCENE_STAGE1)))
+		{
+			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
+			return -1;
+		}
+
+		_int iCnt = 0;
+		while (true)
+		{
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_STAGE1, L"Layer_CubeTerrain", iCnt++);
+			if (nullptr == pCubeTerrain)	break;
+
+			pCubeTerrain->SetActive();
 		}
 
 		return 1;

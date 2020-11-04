@@ -35,6 +35,9 @@ HRESULT CCubeTerrain::Setup_GameObject(void * _pArg)
 
 _int CCubeTerrain::Update_GameObject(_float _fDeltaTime)
 {
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
 	if (FAILED(m_pTransformCom->Update_Transform()))
 		return GAMEOBJECT::WARN;
 
@@ -44,6 +47,9 @@ _int CCubeTerrain::Update_GameObject(_float _fDeltaTime)
 
 _int CCubeTerrain::LateUpdate_GameObject(_float _fDeltaTime)
 {
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -81,6 +87,11 @@ HRESULT CCubeTerrain::Render_NoneAlpha()
 			return E_FAIL;
 	}
 	return S_OK;
+}
+
+void CCubeTerrain::SetActive()
+{
+	m_bActive = true;
 }
 
 HRESULT CCubeTerrain::Add_Component()

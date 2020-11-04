@@ -73,7 +73,7 @@ HRESULT CSlime_Impact::Add_Component()
 	tStat.iCriticalRate = 0;	tStat.iCriticalHit = 0;
 	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
 
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"", L"", (CComponent**)&m_pStatusCom, &tStat)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
 
 	CDamageInfo::DAMAGE_DESC tDmgInfo;

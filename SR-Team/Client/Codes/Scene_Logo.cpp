@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PreLoader.h"
 #include "Scene_Room.h"
+#include "CubeTerrain.h"
 #include "..\Headers\Scene_Logo.h"
 
 USING(Client)
@@ -42,6 +43,15 @@ _int CScene_Logo::Update_Scene(_float _fDeltaTime)
 		{
 			PRINT_LOG(L"Failed To Clear CScene_Room", LOG::CLIENT);
 			return -1;
+		}
+
+		_int iCnt = 0;
+		while (true)
+		{
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_CubeTerrain", iCnt++);
+			if (nullptr == pCubeTerrain)	break;
+
+			pCubeTerrain->SetActive();
 		}
 
 		return 1;

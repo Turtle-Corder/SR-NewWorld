@@ -220,6 +220,12 @@ HRESULT CWolf::Add_Component()
 
 	}
 
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = tTransformDesc[WOLF_BASE].vPosition;
+	tColDesc.fRadius = 1.5f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

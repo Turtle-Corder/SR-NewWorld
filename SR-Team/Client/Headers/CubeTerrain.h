@@ -20,6 +20,9 @@ public:
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_NoneAlpha() override;
 
+public:
+	void SetActive();
+
 private:
 	HRESULT Add_Component();
 
@@ -37,6 +40,8 @@ private:
 
 	//TerrainCube ÀÎÆ÷
 	TERRAININFO m_tInfo;
+
+	_bool		m_bActive = false;
 };
 
 END
