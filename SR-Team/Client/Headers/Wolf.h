@@ -9,10 +9,12 @@ BEGIN(Client)
 
 class CWolf final : public CGameObject
 {
-	enum WOLF
+	enum WOLF_PART
 	{
 		WOLF_BASE,
-		WOLF_BODY,
+
+		WOLF_UPDATEA_START,
+		WOLF_BODY = WOLF_UPDATEA_START,
 		WOLF_NECK,
 		WOLF_HEAD,
 		WOLF_MOUTH,
@@ -24,35 +26,78 @@ class CWolf final : public CGameObject
 		WOLF_LEG4,
 		WOLF_END
 	};
-	enum STATE { IDLE, MOVE, ATTACK, STATE_DEAD };
-	enum CHANGE { CHANGE_LEFT, CHANGE_RIGHT, CHANGE_END };
-	enum SHAKE { SHAKE_LHEAD, SHAKE_RHEAD, SHAKE_END };
+
+	enum STATE { IDLE, MOVE, ATTACK, DEAD };
+
+
 private:
 	explicit CWolf(LPDIRECT3DDEVICE9 _pDevice);
 	explicit CWolf(const CWolf& _rOther);
 	virtual ~CWolf() = default;
+
+	//----------------------------------------------------------------------------------------------------
+	// Common
+	//----------------------------------------------------------------------------------------------------
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void * _pArg) override;
+
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
-	virtual CGameObject * Clone_GameObject(void * _pArg) override;
+
 	virtual HRESULT Render_NoneAlpha() override;
-public:
+
 	virtual void Free() override;
 	static  CWolf* Create(LPDIRECT3DDEVICE9 _pDevice);
+	virtual CGameObject * Clone_GameObject(void * _pArg) override;
+
+
 private:
+	//--------------------------------------------------
+	// Add Component
+	//--------------------------------------------------
 	HRESULT Add_Component();
-	HRESULT Update_State();
-	HRESULT Movement(_float _fDeltaTime);
+	
+	HRESULT Add_Component_VIBuffer();
+	HRESULT Add_Component_Transform();
+	HRESULT Add_Component_Texture();
+	HRESULT Add_Component_Extends();
+
+
+	//--------------------------------------------------
+	// Transformation 변경
+	//--------------------------------------------------
+	HRESULT Update_Move(_float _fDeltaTime);
 	HRESULT IsOnTerrain();
-	HRESULT	Move(_float _fDeltaTime);
 	HRESULT LookAtPlayer(_float _fDeltaTime);
-	HRESULT Attack(_float _fDeltaTime);
-	HRESULT Setting_Part();
-	HRESULT MoveMotion(_float _fDeltaTime);
-	HRESULT AttackMotion(_float _fDeltaTime);
+	HRESULT Update_Part(_float _fDeltaTime);
+
+
+	//--------------------------------------------------
+	// 상태 변경
+	//--------------------------------------------------
+	HRESULT Update_State(_float _fDeltaTime);
+
+	HRESULT Update_AtkDelay(_float _fDeltaTime);
+	HRESULT Update_HurtDelay(_float _fDeltaTime);
+
+
+	// 애니메이션
+	HRESULT Update_Anim(_float _fDeltaTime);
+	HRESULT Update_Anim_Move(_float _fDeltaTime);
+	HRESULT Update_Anim_Attack1(_float _fDeltaTime);
+	HRESULT Update_Anim_Attack2(_float _fDeltaTime);
+
+	// 공격체
 	HRESULT Spawn_InstantImpact(const wstring& LayerTag);
+
+
+
+
+
+	//----------------------------------------------------------------------------------------------------
+	// Variable (변수)
+	//----------------------------------------------------------------------------------------------------
 private:
 	CVIBuffer*			m_pVIBufferCom[WOLF_END] = {};
 	CTransform*			m_pTransformCom[WOLF_END] = {};
@@ -60,23 +105,37 @@ private:
 	CSphereCollider*	m_pColliderCom = nullptr;
 
 
-private:
-	_vec3		m_vStartPos = {};
-	_bool		m_bAttack = false;
-	_vec3		m_vDir = {};
-	INSTANTIMPACT*	m_pInstantImpact = nullptr;
-	STATE		m_ePreState;
-	STATE		m_eCurState;
-	_bool		m_bHit = false;
-	_vec3		m_vLook = {};
-	_bool		m_bCheck = false;
-	_bool		m_bCrash = false;
-	_vec3		m_vPrePos = {};
+	//--------------------------------------------------
+	// 상태
+	//--------------------------------------------------
+	STATE		m_ePreState = IDLE;
+	STATE		m_eCurState = IDLE;
 
-	_float		m_fMoveTime = 0.f;
-	CHANGE		m_eMove = CHANGE_LEFT;
-	_float		m_fHeadShakeTime = 0.f;
-	SHAKE		m_eHead = SHAKE_LHEAD;
+
+	//--------------------------------------------------
+	// 공격
+	//--------------------------------------------------
+	_bool		m_bAttack = true;			// 공격 가능 or 불가능
+	_float		m_fAttackDelay = 0.f;		// 공격 가능한 딜레이
+	_float		m_fAttackTimer = 0.f;		// 공격 쿨타임 시간 재는용
+
+	INSTANTIMPACT*	m_pInstantImpact = nullptr;
+
+
+	//--------------------------------------------------
+	// 피격
+	//--------------------------------------------------
+	_bool		m_bHurt = true;
+	_float		m_fHurtDelay = 0.f;
+	_float		m_fHurtTimer = 0.f;
+
+
+	//--------------------------------------------------
+	// 애니메이션
+	//--------------------------------------------------
+	_int		m_iAnimStep  = 0;
+	_float		m_fAnimTimer = 0.f;
+
 };
 
 END

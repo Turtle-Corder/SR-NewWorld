@@ -20,30 +20,35 @@ HRESULT CWolf::Setup_GameObject_Prototype()
 
 HRESULT CWolf::Setup_GameObject(void * _pArg)
 {
+	_vec3 vInitPosition = {};
+
 	if (_pArg)
-	{
-		m_vStartPos = *(_vec3*)_pArg;
-	}
+		vInitPosition = *(_vec3*)_pArg;
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
+
+	m_pTransformCom[WOLF_BASE]->Set_Position(vInitPosition);
+
 	return S_OK;
 }
 
 _int CWolf::Update_GameObject(_float _fDeltaTime)
 {
-	if (FAILED(Update_State()))
-		return GAMEOBJECT::ERR;
 
-	if (FAILED(Movement(_fDeltaTime)))
-		return E_FAIL;
+	//--------------------------------------------------
 
+	// 1. 행동(입력) 결정
+	
+	// 2. 좌표 설정
 
-	if (FAILED(m_pTransformCom[WOLF_BASE]->Update_Transform()))
-		return 0;
+	// 3. 상태 변경
 
-	if (FAILED(Setting_Part()))
-		return E_FAIL;
+	// 4. 애니메이션 재생
+
+	// 5. Transfrom Update
+
+	//--------------------------------------------------
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -54,10 +59,41 @@ _int CWolf::LateUpdate_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return 0;
 
+	if (FAILED(Update_AtkDelay(_fDeltaTime)))
+		return GAMEOBJECT::WARN;
+	
+	if (FAILED(Update_HurtDelay(_fDeltaTime)))
+		return GAMEOBJECT::WARN;
+
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
 
 	return GAMEOBJECT::NOEVENT;
+}
+
+HRESULT CWolf::Render_NoneAlpha()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_int iCnt = WOLF_BODY; iCnt < WOLF_END; ++iCnt)
+	{
+		if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pTextureCom[iCnt]->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
 }
 
 CGameObject * CWolf::Clone_GameObject(void * _pArg)
@@ -102,7 +138,87 @@ CWolf * CWolf::Create(LPDIRECT3DDEVICE9 _pDevice)
 
 HRESULT CWolf::Add_Component()
 {
-	CTransform::TRANSFORM_DESC tTransformDesc[WOLF_END] = {};
+	if (FAILED(Add_Component_VIBuffer()))
+		return E_FAIL;
+	
+	if (FAILED(Add_Component_Transform()))
+		return E_FAIL;
+
+	if (FAILED(Add_Component_Texture()))
+		return E_FAIL;
+
+	if (FAILED(Add_Component_Extends()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWolf::Add_Component_VIBuffer()
+{
+	TCHAR szCombine[MIN_STR] = L"";
+
+	for (_uint iCnt = 0; iCnt < WOLF_END; ++iCnt)
+	{
+		StringCchPrintf(szCombine, _countof(szCombine), L"Com_VIBuffer%d", iCnt);
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", szCombine, (CComponent**)&m_pVIBufferCom[iCnt]))) //생성 갯수
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CWolf::Add_Component_Transform()
+{
+	_float fSPS = 10.f;
+	_float fRotPS = D3DXToRadian(90.f);
+
+	CTransform::TRANSFORM_DESC tTransformDesc[WOLF_END];
+	tTransformDesc[WOLF_BASE].vPosition = {};
+	tTransformDesc[WOLF_BASE].vScale = {};
+
+	tTransformDesc[WOLF_BASE].vPosition = { 0.f , 0.9f, -0.6f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.7f , 0.9f , 1.5f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { 0.f , 0.9f, 0.5f };
+	tTransformDesc[WOLF_BASE].vScale = { 1.f , 1.f , 0.7f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { 0.f , 0.9f, 1.f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.7f , 0.7f , 0.5f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { 0.f , 0.75f, 1.3f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.4f , 0.3f , 0.3f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { 0.2f , 1.3f, 1.1f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.2f , 0.2f , 0.2f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { -0.2f , 1.3f, 1.1f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.2f , 0.2f , 0.2f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { -0.2f , -0.3f , -1.f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.3f , 1.6f ,0.3f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { 0.2f, -0.3f, -1.f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.3f , 1.6f ,0.3f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { 0.2f, -0.3f, 0.3f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.3f , 1.5f ,0.3f };
+
+	tTransformDesc[WOLF_BASE].vPosition = { -0.2f, -0.3f, 0.3f };
+	tTransformDesc[WOLF_BASE].vScale = { 0.3f , 1.5f ,0.3f };
+
+	TCHAR szCombine[MIN_STR] = L"";
+	for (_uint iCnt = 0; iCnt < WOLF_END; ++iCnt)
+	{
+		StringCchPrintf(szCombine, _countof(szCombine), L"Com_Transform%d", iCnt);
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", szCombine, (CComponent**)&m_pTransformCom[iCnt], &tTransformDesc[iCnt])))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CWolf::Add_Component_Texture()
+{
 	TCHAR szComponentTag[][MIN_STR] =
 	{
 		L"Component_Texture_Stump_Part",
@@ -127,101 +243,18 @@ HRESULT CWolf::Add_Component()
 
 	for (_uint iCnt = 0; iCnt < WOLF_END; ++iCnt)
 	{
-		StringCchPrintf(szCombine, _countof(szCombine), L"Com_VIBuffer%d", iCnt);
-
-		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", szCombine, (CComponent**)&m_pVIBufferCom[iCnt]))) //생성 갯수
-			return E_FAIL;
-
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, iCnt);
 		if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
 			return E_FAIL;
-
-		if (iCnt == WOLF_BASE)
-		{
-			tTransformDesc[WOLF_BASE].vPosition = { m_vStartPos.x , 0.f, m_vStartPos.z };
-			tTransformDesc[WOLF_BASE].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_BASE].fRotatePerSecond = D3DXToRadian(90.f);
-		}
-		else if (iCnt == WOLF_BODY)
-		{
-			tTransformDesc[WOLF_BODY].vPosition = { 0.f , 0.9f, -0.6f };
-			tTransformDesc[WOLF_BODY].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_BODY].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_BODY].vScale = { 0.7f , 0.9f , 1.5f };
-		}
-		else if (iCnt == WOLF_NECK)
-		{
-			tTransformDesc[WOLF_NECK].vPosition = { 0.f , 0.9f, 0.5f };
-			tTransformDesc[WOLF_NECK].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_NECK].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_NECK].vScale = { 1.f , 1.f , 0.7f };
-		}
-		else if (iCnt == WOLF_HEAD)
-		{
-			tTransformDesc[WOLF_HEAD].vPosition = { 0.f , 0.9f, 1.f };
-			tTransformDesc[WOLF_HEAD].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_HEAD].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_HEAD].vScale = { 0.7f , 0.7f , 0.5f };
-		}
-		else if (iCnt == WOLF_MOUTH)
-		{
-			tTransformDesc[WOLF_MOUTH].vPosition = { 0.f , 0.75f, 1.3f };
-			tTransformDesc[WOLF_MOUTH].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_MOUTH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_MOUTH].vScale = { 0.4f , 0.3f , 0.3f };
-		}
-		else if (iCnt == WOLF_EAR1)
-		{
-			tTransformDesc[WOLF_EAR1].vPosition = { 0.2f , 1.3f, 1.1f };
-			tTransformDesc[WOLF_EAR1].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_EAR1].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_EAR1].vScale = { 0.2f , 0.2f , 0.2f };
-		}
-		else if (iCnt == WOLF_EAR2)
-		{
-			tTransformDesc[WOLF_EAR2].vPosition = { -0.2f , 1.3f, 1.1f };
-			tTransformDesc[WOLF_EAR2].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_EAR2].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_EAR2].vScale = { 0.2f , 0.2f , 0.2f };
-		}
-		else if (iCnt == WOLF_LEG1)
-		{
-			tTransformDesc[WOLF_LEG1].vPosition = { -0.2f , -0.3f , -1.f };
-			tTransformDesc[WOLF_LEG1].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_LEG1].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_LEG1].vScale = { 0.3f , 1.6f ,0.3f };
-		}
-		else if (iCnt == WOLF_LEG2)
-		{
-			tTransformDesc[WOLF_LEG2].vPosition = { 0.2f, -0.3f, -1.f };
-			tTransformDesc[WOLF_LEG2].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_LEG2].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_LEG2].vScale = { 0.3f , 1.6f ,0.3f };
-		}
-		else if (iCnt == WOLF_LEG3)
-		{
-			tTransformDesc[WOLF_LEG3].vPosition = { 0.2f, -0.3f, 0.3f };
-			tTransformDesc[WOLF_LEG3].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_LEG3].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_LEG3].vScale = { 0.3f , 1.5f ,0.3f };
-		}
-		else if (iCnt == WOLF_LEG4)
-		{
-			tTransformDesc[WOLF_LEG4].vPosition = { -0.2f, -0.3f, 0.3f };
-			tTransformDesc[WOLF_LEG4].fSpeedPerSecond = 10.f;
-			tTransformDesc[WOLF_LEG4].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[WOLF_LEG4].vScale = { 0.3f , 1.5f ,0.3f };
-		}
-
-		StringCchPrintf(szCombine, _countof(szCombine), L"Com_Transform%d", iCnt);
-		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", szCombine, (CComponent**)&m_pTransformCom[iCnt], &tTransformDesc[iCnt])))
-			return E_FAIL;
-
-
 	}
 
+	return S_OK;
+}
+
+HRESULT CWolf::Add_Component_Extends()
+{
 	CSphereCollider::COLLIDER_DESC tColDesc;
-	tColDesc.vPosition = tTransformDesc[WOLF_BASE].vPosition;
+	tColDesc.vPosition = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
 	tColDesc.fRadius = 1.5f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
@@ -230,36 +263,117 @@ HRESULT CWolf::Add_Component()
 	return S_OK;
 }
 
-HRESULT CWolf::Render_NoneAlpha()
+
+HRESULT CWolf::Update_State(_float _fDeltaTime)
 {
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
-	if (nullptr == pCamera)
-		return E_FAIL;
-
-	for (_int iAll = WOLF_BODY; iAll < WOLF_END; ++iAll)
+	if (m_ePreState != m_eCurState)
 	{
-		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
-			return E_FAIL;
+		switch (m_eCurState)
+		{
+		case Client::CWolf::IDLE:
+			break;
+		
+		case Client::CWolf::MOVE:
+			break;
+	
+		case Client::CWolf::ATTACK:
+			break;
 
-		if (FAILED(m_pTextureCom[iAll]->SetTexture(0)))
-			return E_FAIL;
+		case Client::CWolf::DEAD:
+			break;
+		}
 
-		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
-			return E_FAIL;
+		m_iAnimStep = 0;
+		m_fHurtTimer = 0.f;
+		m_ePreState = m_eCurState;
 	}
 
 	return S_OK;
 }
 
-HRESULT CWolf::Update_State()
+HRESULT CWolf::Update_AtkDelay(_float _fDeltaTime)
 {
+	if (!m_bAttack)
+	{
+		m_fAttackTimer += _fDeltaTime;
+		if (m_fAttackTimer >= m_fAttackDelay)
+		{
+			m_fAttackTimer = 0.f;
+			m_bAttack = true;
+		}
+	}
+
 	return S_OK;
 }
 
+HRESULT CWolf::Update_HurtDelay(_float _fDeltaTime)
+{
+	if (!m_bHurt)
+	{
+		m_fHurtTimer += _fDeltaTime;
+		if (m_fHurtTimer >= m_fHurtDelay)
+		{
+			m_fHurtTimer = 0.f;
+			m_bHurt = true;
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CWolf::Update_Anim(_float _fDeltaTime)
+{
+	switch (m_eCurState)
+	{
+
+	case Client::CWolf::MOVE:
+		Update_Anim_Move(_fDeltaTime);
+		break;
+
+
+	case Client::CWolf::ATTACK:
+	{
+		if (rand() % 2)
+			Update_Anim_Attack1(_fDeltaTime);
+		else
+			Update_Anim_Attack2(_fDeltaTime);
+	}
+		break;
+
+
+	default:
+		break;
+	}
+
+	return S_OK;
+}
+
+
+HRESULT CWolf::Update_Move(_float _fDeltaTime)
+{
+	if (IDLE == m_eCurState || MOVE == m_eCurState)
+	{
+		// 1. 타겟이 탐색 범위 안에 있는지 확인
+
+		// 2-1. 탐색범위 안, 공격범위 밖 이면 추적한다.
+		m_eCurState = MOVE;
+		LookAtPlayer(_fDeltaTime);
+
+		// 2-2. 공격범위 안이면 상태 바꿔준다.
+		m_eCurState = ATTACK;
+	}
+
+	if (MOVE == m_eCurState)
+	{
+		if (FAILED(IsOnTerrain()))
+		{
+			PRINT_LOG(L"Failed To 서핑 터레인", LOG::CLIENT);
+			return E_FAIL;
+		}
+	}
+
+	return S_OK;
+}
 
 HRESULT CWolf::IsOnTerrain()
 {
@@ -281,70 +395,32 @@ HRESULT CWolf::IsOnTerrain()
 	return S_OK;
 }
 
-HRESULT CWolf::Movement(_float _fDeltaTime)
-{
-	if (FAILED(IsOnTerrain()))
-		return E_FAIL;
-
-	if (FAILED(LookAtPlayer(_fDeltaTime)))
-		return E_FAIL;
-
-	if (FAILED(Move(_fDeltaTime)))
-		return E_FAIL;
-
-	if (FAILED(MoveMotion(_fDeltaTime)))
-		return E_FAIL;
-
-	if (FAILED(Attack(_fDeltaTime)))
-		return E_FAIL;
-
-	if (FAILED(AttackMotion(_fDeltaTime)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-
-HRESULT CWolf::Move(_float _fDeltaTime)
-{
-	if (m_eCurState != CWolf::MOVE)
-		return S_OK;
-
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
-	if (nullptr == pPlayerTransform)
-		return E_FAIL;
-
-	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
-	_vec3 m_vPos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
-	m_vDir = vPlayerPos - m_vPos;
-	_float m_fLength = D3DXVec3Length(&m_vDir);
-	D3DXVec3Normalize(&m_vDir, &m_vDir);
-
-	if (3.f <= m_fLength)
-	{
-		m_vPos += m_vDir * _fDeltaTime;
-		m_pTransformCom[WOLF_BASE]->Set_Position(m_vPos);
-	}
-	else
-		m_eCurState = CWolf::ATTACK;
-
-	return S_OK;
-}
+//HRESULT CWolf::Move(_float _fDeltaTime)
+//{
+//	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
+//	_vec3 m_vPos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
+//	m_vDir = vPlayerPos - m_vPos;
+//	_float m_fLength = D3DXVec3Length(&m_vDir);
+//	D3DXVec3Normalize(&m_vDir, &m_vDir);
+//
+//	if (3.f <= m_fLength)
+//	{
+//		m_vPos += m_vDir * _fDeltaTime;
+//		m_pTransformCom[WOLF_BASE]->Set_Position(m_vPos);
+//	}
+//	else
+//		m_eCurState = CWolf::ATTACK;
+//
+//	return S_OK;
+//}
 
 HRESULT CWolf::LookAtPlayer(_float _fDeltaTime)
 {
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
 	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
 	if (nullptr == pPlayerTransform)
 		return E_FAIL;
 	//--------------------------------------------------
@@ -356,21 +432,20 @@ HRESULT CWolf::LookAtPlayer(_float _fDeltaTime)
 	//// Look 과 목적지 - 출발지를 내적
 	////--------------------------------------------------
 
-	memcpy_s(&m_vLook, sizeof(_vec3), &m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld._31, sizeof(_vec3));
+	_vec3 vLook = m_pTransformCom[WOLF_BASE]->Get_Look();
+	_vec3 vMonToPlayer = { vPlayerPos.x - vMonPos.x, 0.f, vPlayerPos.z - vMonPos.z };
 
-	_vec3 vMonToPlayer = vPlayerPos - vMonPos;
-
-	D3DXVec3Normalize(&m_vLook, &m_vLook);
+	D3DXVec3Normalize(&vLook, &vLook);
 	D3DXVec3Normalize(&vMonToPlayer, &vMonToPlayer);
 
 	_float fDot = 0.f;
 	_float fRad = 0.f;
 
-	fDot = D3DXVec3Dot(&m_vLook, &vMonToPlayer);
+	fDot = D3DXVec3Dot(&vLook, &vMonToPlayer);
 	fRad = (_float)acos(fDot);
 
 	_vec3 vMonRight = {};
-	D3DXVec3Cross(&vMonRight, &m_vLook, &_vec3(0.f, 1.f, 0.f));
+	D3DXVec3Cross(&vMonRight, &vLook, &_vec3(0.f, 1.f, 0.f));
 
 	D3DXVec3Dot(&vMonRight, &vMonToPlayer);
 
@@ -387,6 +462,23 @@ HRESULT CWolf::LookAtPlayer(_float _fDeltaTime)
 	return S_OK;
 }
 
+HRESULT CWolf::Update_Part(_float _fDeltaTime)
+{
+	m_pTransformCom[WOLF_BASE]->Update_Transform();
+
+	for (_uint iCnt = WOLF_UPDATEA_START; iCnt < WOLF_END; ++iCnt)
+	{
+		if (FAILED(m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld)))
+		{
+			PRINT_LOG(L"Failed To 멋있음", LOG::DEBUG);
+			return E_FAIL;
+		}
+	}
+
+	return S_OK;
+}
+
+/*
 HRESULT CWolf::Attack(_float _fDeltaTime)
 {
 	if (m_eCurState != CWolf::ATTACK)
@@ -548,6 +640,7 @@ HRESULT CWolf::AttackMotion(_float _fDeltaTime)
 
 	return S_OK;
 }
+*/
 
 HRESULT CWolf::Spawn_InstantImpact(const wstring & LayerTag)
 {
