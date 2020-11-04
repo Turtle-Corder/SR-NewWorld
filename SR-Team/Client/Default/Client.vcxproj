@@ -227,6 +227,7 @@
     <ClInclude Include="..\Headers\Wolf.h" />
     <ClInclude Include="..\Headers\Yeti.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="FlowerQuest_NPC.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -298,6 +299,7 @@
     <ClCompile Include="..\Codes\Wolf.cpp" />
     <ClCompile Include="..\Codes\Yeti.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="FlowerQuest_NPC.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

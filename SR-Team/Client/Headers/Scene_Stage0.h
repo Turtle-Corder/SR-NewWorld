@@ -32,6 +32,7 @@ private:
 	HRESULT Setup_Layer_CubeTerrain(const wstring& LayerTag);
 	HRESULT Setup_Layer_Environment(const wstring& LayerTag);
 	HRESULT Setup_Layer_FlowerQuest(const wstring& LayerTag);
+	HRESULT Setup_Layer_FlowerQuestNPC(const wstring& LayerTag);
 
 	
 private:

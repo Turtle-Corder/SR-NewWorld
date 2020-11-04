@@ -22,6 +22,9 @@ public:
 	virtual ~CFlowerQuest() = default;
 
 public:
+	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
+
+public:
 	// CUIObject을(를) 통해 상속됨
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void * _pArg) override;
@@ -53,6 +56,9 @@ private:
 
 	// 보상을 획득했는지
 	_bool				m_bGetReward = false;
+
+	// 퀘스트 시작할지
+	_bool				m_bStartQuest = false;
 };
 
 END

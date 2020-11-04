@@ -22,8 +22,8 @@ HRESULT CScene_Stage0::Setup_Scene()
 	//--------------------------------------------------
 	// 환경
 	//--------------------------------------------------
-	//if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
-	//	return E_FAIL;
+	if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
+		return E_FAIL;
 
 	if (FAILED(Setup_Layer_Terrain(L"Layer_Terrain")))
 		return E_FAIL;
@@ -40,12 +40,14 @@ HRESULT CScene_Stage0::Setup_Scene()
 	if (FAILED(Setup_Layer_FlowerQuest(L"Layer_FlowerQuest")))
 		return E_FAIL;
 
+	if (FAILED(Setup_Layer_FlowerQuestNPC(L"Layer_FlowerQuestNPC")))
+		return E_FAIL;
+
+	eSCENE_ID ePreLoadScene = SCENE_STAGE1;
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
-
-	eSCENE_ID ePreLoadScene = SCENE_STAGE1;
 
 	CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_Player");
 	_int iNextScene = pPlayer->Get_ClearInfo() + 1;					// 다 끝나고 마을로 돌아오면 안됨!
@@ -302,6 +304,18 @@ HRESULT CScene_Stage0::Setup_Layer_FlowerQuest(const wstring & LayerTag)
 		return E_FAIL;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_FlowerQuest", SCENE_STAGE0, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Stage0::Setup_Layer_FlowerQuestNPC(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_FlowerQuestNPC", SCENE_STAGE0, LayerTag)))
 		return E_FAIL;
 
 	return S_OK;

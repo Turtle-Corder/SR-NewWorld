@@ -213,7 +213,7 @@ HRESULT CScene_Room::Setup_Layer_Camera(const wstring & LayerTag)
 	tCameraDesc.fFovY = D3DXToRadian(60.f);
 	tCameraDesc.fAspect = (float)WINCX / WINCY;
 	tCameraDesc.fNear = 1.f;
-	tCameraDesc.fFar = 100.f;
+	tCameraDesc.fFar = 1000.f;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MainCamera", SCENE_ROOM, LayerTag, &tCameraDesc)))
 		return E_FAIL;

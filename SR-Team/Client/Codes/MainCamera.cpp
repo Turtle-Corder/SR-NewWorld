@@ -34,22 +34,6 @@ HRESULT CMainCamera::Setup_GameObject(void * _pArg)
 
 _int CMainCamera::Update_GameObject(_float _fDeltaTime)
 {
-	if (GetAsyncKeyState('A') & 0x8000)
-	{
-		Set_Camera_Wigging(1.0, 100.0, 3.0, WIG_TYPE::DAMPED);
-	}
-
-
-	if (GetAsyncKeyState('K') & 0x8000)
-	{
-		float a = 4.f;
-		if(m_eViewMode == CAMERA_3D)
-			Set_Camera_Mode(CAMERA_2D_X, &a);
-
-		else if(m_eViewMode != CAMERA_3D)
-			Set_Camera_Mode(CAMERA_3D);
-	}
-
 	if (FAILED(Movement(_fDeltaTime)))
 			return GAMEOBJECT::WARN;
 
