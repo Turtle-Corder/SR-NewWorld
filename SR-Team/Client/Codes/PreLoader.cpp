@@ -24,6 +24,7 @@
 #include "Snail_Impact.h"
 #include "Slime_Impact.h"
 #include "Wand.h"
+#include "Skybox.h"
 #pragma endregion
 
 USING(Client)
@@ -62,11 +63,6 @@ HRESULT CPreLoader::Load_Resources_Room()
 
 #pragma region GameObject_Skybox
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ROOM, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region Component_Texture_Skybox
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ROOM, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Monster%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -124,7 +120,9 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 
 	// skybox
 #pragma region Component_Texture_Skybox
-	pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Monster%d.dds"));
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, 
+		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds"))))
+		return E_FAIL;
 #pragma endregion
 
 // 0¹ø ¸¶À»

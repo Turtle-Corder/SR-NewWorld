@@ -22,8 +22,8 @@ HRESULT CScene_Stage0::Setup_Scene()
 	//--------------------------------------------------
 	// È¯°æ
 	//--------------------------------------------------
-	//if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
-	//	return E_FAIL;
+	if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
+		return E_FAIL;
 
 	if (FAILED(Setup_Layer_Terrain(L"Layer_Terrain")))
 		return E_FAIL;

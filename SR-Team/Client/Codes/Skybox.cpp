@@ -20,6 +20,9 @@ HRESULT CSkybox::Setup_GameObject_Prototype()
 
 HRESULT CSkybox::Setup_GameObject(void * _pArg)
 {
+	if (_pArg)
+		m_iTextureID = (*(_uint*)_pArg);
+
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
@@ -55,16 +58,18 @@ HRESULT CSkybox::Render_Priority()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
+	
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+
 
 	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->SetTexture(0)))
+	if (FAILED(m_pTextureCom->SetTexture(m_iTextureID)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
@@ -77,16 +82,22 @@ HRESULT CSkybox::Render_Priority()
 
 HRESULT CSkybox::Add_Component()
 {
+	CManagement* pManagement = CManagement::Get_Instance();
+
+
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Skybox", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Stump_Part", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vScale = _vec3(10.f, 10.f, 10.f);
+	tTransformDesc.vScale = _vec3(100.f, 100.f, 100.f);
+	tTransformDesc.vPosition = _vec3(5.f, 5.f, 5.f);
+
+
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
