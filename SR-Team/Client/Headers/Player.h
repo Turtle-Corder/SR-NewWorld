@@ -94,6 +94,7 @@ public:
 	void Buff_Off(ACTIVE_BUFF _eType);
 
 	_int Get_ClearInfo();
+	HRESULT Set_ClearInfo(_int _iClearScene);
 
 
 private:

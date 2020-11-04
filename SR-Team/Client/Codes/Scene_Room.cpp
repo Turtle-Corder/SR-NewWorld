@@ -2,6 +2,7 @@
 #include "PreLoader.h"
 #include "CubeTerrain.h"
 #include "Scene_Stage0.h"
+#include "Player.h"
 #include "..\Headers\Scene_Room.h"
 
 USING(Client)
@@ -76,9 +77,13 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 
 	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
 	{
-		if (FAILED(pManagement->Change_CurrentScene(SCENE_STAGE0, CScene_Stage0::Create(m_pDevice))))
+		CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_Player");
+		if (nullptr == pPlayer)
+			return -1;
+
+		if (FAILED(pPlayer->Set_ClearInfo(SCENE_TOWN)))
 		{
-			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);
+			PRINT_LOG(L"Failed To ClearInfo Refresh", LOG::CLIENT);
 			return -1;
 		}
 
@@ -106,7 +111,7 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Wand")))
 			return -1;
 
-		if (FAILED(pManagement->Clear_Except(SCENE_ROOM, SCENE_STAGE0)))
+		if (FAILED(pManagement->Clear_Except(SCENE_ROOM, SCENE_TOWN)))
 		{
 			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
 			return -1;
@@ -115,10 +120,17 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 		_int iCnt = 0;
 		while (true)
 		{
-			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_CubeTerrain", iCnt++);
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_CubeTerrain", iCnt++);
 			if (nullptr == pCubeTerrain)	break;
 
 			pCubeTerrain->SetActive();
+		}
+
+		// 무조건 방 -> 마을 단방향 ROOM -> TOWN
+		if (FAILED(pManagement->Change_CurrentScene(SCENE_TOWN, CScene_Stage0::Create(m_pDevice))))
+		{
+			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);
+			return -1;
 		}
 
 		return 1;

@@ -77,7 +77,7 @@ HRESULT CMainApp::Setup_MainApp()
 	if (nullptr == m_pManagement)
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Setup_Engine(g_hWnd, FRAME_PER_SEC, WINCX, WINCY, CDevice_Manager::DISPLAY_FULL, SCENE_END, MAINAPP_TIMER)))
+	if (FAILED(m_pManagement->Setup_Engine(g_hWnd, FRAME_PER_SEC, WINCX, WINCY, CDevice_Manager::DISPLAY_WINDOW, SCENE_END, MAINAPP_TIMER)))
 	{
 		PRINT_LOG(L"Failed To Setup Engine", LOG::CLIENT);
 		return E_FAIL;

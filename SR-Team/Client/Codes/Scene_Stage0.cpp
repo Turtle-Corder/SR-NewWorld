@@ -3,14 +3,15 @@
 #include "Player.h"
 #include "TerrainBundle.h"
 #include "Scene_Stage1.h"
+#include "Scene_Stage2.h"
+#include "Scene_Stage3.h"
 #include "CubeTerrain.h"
 #include "..\Headers\Scene_Stage0.h"
 
 USING(Client)
 
-CScene_Stage0::CScene_Stage0(LPDIRECT3DDEVICE9 _pDevice, _bool _bReload)
+CScene_Stage0::CScene_Stage0(LPDIRECT3DDEVICE9 _pDevice)
 	: CScene(_pDevice)
-	, m_bReload(_bReload)
 {
 }
 
@@ -34,21 +35,18 @@ HRESULT CScene_Stage0::Setup_Scene()
 		return E_FAIL;
 
 
-	eSCENE_ID ePreLoadScene = SCENE_STAGE1;
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
 
-	if (m_bReload)
-	{
-		CManagement* pManagement = CManagement::Get_Instance();
-		if (nullptr == pManagement)
-			return E_FAIL;
+	CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_Player");
+	_int iNextScene = pPlayer->Get_ClearInfo() + 1;					// 다 끝나고 마을로 돌아오면 안됨!
+	if (0 > iNextScene || iNextScene >= (_int)SCENE_END)
+		return E_FAIL;
 
-		CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Player");
+	m_ePreLoadSceneID = (eSCENE_ID)iNextScene;
 
-		// 다 끝나고 마을로 돌아오면 안됨!
-		ePreLoadScene = (eSCENE_ID)pPlayer->Get_ClearInfo();
-	}
-
-	m_pPreLoader = CPreLoader::Create(m_pDevice, ePreLoadScene);
+	m_pPreLoader = CPreLoader::Create(m_pDevice, m_ePreLoadSceneID);
 	if (nullptr == m_pPreLoader)
 	{
 		PRINT_LOG(L"Failed To PreLoader Create in CScene_Stage0", LOG::CLIENT);
@@ -64,51 +62,72 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return -1;
 
-	if (pManagement->Key_Down(VK_F2) && m_pPreLoader->IsFinished())
+	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
 	{
-		if (FAILED(pManagement->Change_CurrentScene(SCENE_STAGE1, CScene_Stage1::Create(m_pDevice))))
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Mouse")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Camera")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Player")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Item")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_MainUI")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Inventory")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Shop")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Wand")))
+			return -1;
+
+		if (FAILED(pManagement->Clear_Except(SCENE_TOWN, (_int)m_ePreLoadSceneID)))
 		{
-			PRINT_LOG(L"Failed To Setup CScene_Stage1", LOG::CLIENT);
-			return -1;
-		}
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Mouse")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Camera")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Player")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Item")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_MainUI")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Inventory")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Shop")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_STAGE0, L"Layer_Wand")))
-			return -1;
-
-		if (FAILED(pManagement->Clear_Except(SCENE_STAGE0, SCENE_STAGE1)))
-		{
-			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
+			PRINT_LOG(L"Failed To Clear_Except in Town", LOG::CLIENT);
 			return -1;
 		}
 
 		_int iCnt = 0;
 		while (true)
 		{
-			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_STAGE1, L"Layer_CubeTerrain", iCnt++);
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject((_uint)m_ePreLoadSceneID, L"Layer_CubeTerrain", iCnt++);
 			if (nullptr == pCubeTerrain)	break;
 
 			pCubeTerrain->SetActive();
+		}
+
+		//--------------------------------------------------
+		// 아래에 있어야 함!
+		//--------------------------------------------------
+		HRESULT hr = E_FAIL;
+		switch (m_ePreLoadSceneID)
+		{
+		case SCENE_FOREST:
+			hr = pManagement->Change_CurrentScene(m_ePreLoadSceneID, CScene_Stage1::Create(m_pDevice));
+			break;
+		case SCENE_ICELAND:
+			hr = pManagement->Change_CurrentScene(m_ePreLoadSceneID, CScene_Stage2::Create(m_pDevice));
+			break;
+		case SCENE_VOLCANIC:
+			hr = pManagement->Change_CurrentScene(m_ePreLoadSceneID, CScene_Stage3::Create(m_pDevice));
+			break;
+		case SCENE_LAB:
+			PRINT_LOG(L"끗", LOG::CLIENT);
+			//	hr = pManagement->Change_CurrentScene(m_ePreLoadSceneID, CScene_Stage4::Create(m_pDevice));
+			break;
+		}
+
+		if (FAILED(hr))
+		{
+			PRINT_LOG(L"Failed To Setup NextStage in Town", LOG::CLIENT);
+			return -1;
 		}
 
 		return 1;
@@ -141,12 +160,12 @@ _int CScene_Stage0::LateUpdate_Scene(_float _fDeltaTime)
 	return 0;
 }
 
-CScene_Stage0 * CScene_Stage0::Create(LPDIRECT3DDEVICE9 _pDevice, _bool _bReload)
+CScene_Stage0 * CScene_Stage0::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
 	if (nullptr == _pDevice)
 		return nullptr;
 
-	CScene_Stage0* pInstance = new CScene_Stage0(_pDevice, _bReload);
+	CScene_Stage0* pInstance = new CScene_Stage0(_pDevice);
 	if (FAILED(pInstance->Setup_Scene()))
 	{
 		PRINT_LOG(L"Failed To Create CScene_Stage0", LOG::CLIENT);

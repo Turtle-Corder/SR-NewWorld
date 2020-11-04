@@ -213,6 +213,15 @@ _int CPlayer::Get_ClearInfo()
 	return m_iClearInfo;
 }
 
+HRESULT CPlayer::Set_ClearInfo(_int _iClearScene)
+{
+	if (0 > _iClearScene || SCENE_END <= _iClearScene)
+		return E_FAIL;
+
+	m_iClearInfo = _iClearScene;
+	return S_OK;
+}
+
 
 
 //----------------------------------------------------------------------------------------------------

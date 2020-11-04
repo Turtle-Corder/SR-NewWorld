@@ -31,14 +31,8 @@ _int CScene_Logo::Update_Scene(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return -1;
 
-	if (pManagement->Key_Down(VK_RETURN) && m_pPreLoader->IsFinished())
+	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
 	{
-		if (FAILED(pManagement->Change_CurrentScene(SCENE_ROOM, CScene_Room::Create(m_pDevice))))
-		{
-			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);
-			return -1;
-		}
-
 		if (FAILED(pManagement->ClearScene_All(SCENE_LOGO)))
 		{
 			PRINT_LOG(L"Failed To Clear CScene_Room", LOG::CLIENT);
@@ -52,6 +46,12 @@ _int CScene_Logo::Update_Scene(_float _fDeltaTime)
 			if (nullptr == pCubeTerrain)	break;
 
 			pCubeTerrain->SetActive();
+		}
+
+		if (FAILED(pManagement->Change_CurrentScene(SCENE_ROOM, CScene_Room::Create(m_pDevice))))
+		{
+			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);
+			return -1;
 		}
 
 		return 1;
@@ -83,6 +83,6 @@ CScene_Logo * CScene_Logo::Create(LPDIRECT3DDEVICE9 _pDevice)
 void CScene_Logo::Free()
 {
 	Safe_Release(m_pPreLoader);
-
+	
 	CScene::Free();
 }

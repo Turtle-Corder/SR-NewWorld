@@ -465,6 +465,7 @@
     <ClInclude Include="..\Headers\Acorn.h">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Stage3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -665,6 +666,7 @@
     <ClCompile Include="..\Codes\Acorn.cpp">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Stage3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
