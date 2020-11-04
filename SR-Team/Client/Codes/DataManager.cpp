@@ -10,7 +10,7 @@ USING(Client)
 CDataManager::CDataManager(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
-	for (_uint i = 0; i < 18; ++i)
+	for (_uint i = 0; i < 19; ++i)
 	{
 		m_pTextureCom[i] = nullptr;
 		m_pStatCom[i] = nullptr;
@@ -153,7 +153,7 @@ HRESULT CDataManager::Add_Component()
 
 HRESULT CDataManager::Add_Component_Item()
 {
-	for (_uint i = 0; i < 18; ++i)
+	for (_uint i = 0; i < 19; ++i)
 	{
 		// 3. Texture--------------------------------------------------------------
 		TCHAR szTexture[MAX_PATH] = L"";
@@ -211,7 +211,10 @@ HRESULT CDataManager::Add_Component_Item()
 				L"Component_Texture_Item_SorcererGloves");
 		else if (i == 17)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
-				L"Component_Texture_Quest1_Goguma");
+				L"Component_Texture_FlowerQuest_Flower");
+		else if (i == 18)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_FlowerQuest_RewardPotion");
 
 		StringCchPrintf(szTexture, sizeof(TCHAR) * MAX_PATH,
 			L"Com_Texture%d", i);
@@ -386,9 +389,18 @@ HRESULT CDataManager::Add_Component_Item()
 			pItem->iPrice = 50;
 			pItem->eSort = eITEM_SORT::QUEST1;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"Goguma");
+				L"%s", L"flower");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
-				L"고구마");
+				L"특별한 꽃");
+		}
+		if (i == 18)
+		{
+			pItem->iPrice = 100;
+			pItem->eSort = eITEM_SORT::QUEST1;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"RewardPotion");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"포션");
 		}
 		m_vItemList.emplace_back(pItem);
 
@@ -459,6 +471,11 @@ HRESULT CDataManager::Add_Component_Item()
 		{
 			tStat.iHp = 50;
 			tStat.iMp = 50;
+		}
+		else if (i == 18)
+		{
+			tStat.iHp = 100;
+			tStat.iMp = 100;
 		}
 
 		TCHAR szStat[MAX_PATH] = L"";
@@ -624,7 +641,7 @@ CGameObject * CDataManager::Clone_GameObject(void * pArg)
 
 void CDataManager::Free()
 {
-	for (_uint i = 0; i < 18; ++i)
+	for (_uint i = 0; i < 19; ++i)
 	{
 		Safe_Release(m_pTextureCom[i]);
 		Safe_Release(m_pStatCom[i]);

@@ -250,6 +250,9 @@
     <Filter Include="02.GameObject\00.Terrain\99.Dummy">
       <UniqueIdentifier>{3646a843-fdb0-444e-8f26-9f21e0547b79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.UI\06. FlowerQuest">
+      <UniqueIdentifier>{0b724531-e1a6-41df-b602-e65904a9b72f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -465,6 +468,9 @@
     <ClInclude Include="..\Headers\Acorn.h">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\FlowerQuest.h">
+      <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -664,6 +670,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Acorn.cpp">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FlowerQuest.cpp">
+      <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

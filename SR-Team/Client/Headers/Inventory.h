@@ -50,6 +50,7 @@ public:
 	// const wstring& strItemName : 삭제할 아이템의 이름
 	// ------------------------------------------------------------------
 	HRESULT Delete_Item(const wstring& strItemName);
+	HRESULT Get_RewardItem(const wstring& strItemName);
 
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
