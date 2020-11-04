@@ -25,6 +25,7 @@
 #include "Slime_Impact.h"
 #include "Wand.h"
 #include "Skybox.h"
+#include "FlowerQuest_NPC.h"
 #pragma endregion
 
 USING(Client)
@@ -107,6 +108,26 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_FlowerQuestNPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_FlowerQuestNPC", CFlowerQuest_NPC::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+//#pragma region GameObject_Acorn
+//	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
+//		return E_FAIL;
+//#pragma endregion
+
+#pragma region Component_Texture_Stump_Head
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Stump_Part
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
 	//----------------------------------------------------------------------------------------------------
 	// Component
 	//----------------------------------------------------------------------------------------------------
@@ -122,6 +143,22 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 #pragma region Component_Texture_Skybox
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, 
 		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+	// FlowerQuest_NPC
+#pragma region Component_Texture_FlowerQuestNPC
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Head%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Body%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Hand%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
