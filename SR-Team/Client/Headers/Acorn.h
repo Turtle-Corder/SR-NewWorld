@@ -2,6 +2,7 @@
 #ifndef __ACORN_H__
 #define __ACORN_H__
 
+
 #include "GameObject.h"
 USING(Engine)
 BEGIN(Client)
@@ -25,11 +26,10 @@ public:
 public:
 	virtual void Free() override;
 	static CAcorn* Create(LPDIRECT3DDEVICE9 _pDevice);
-
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(float _fDeltaTime);
-	HRESULT IsOnTerrain();
+	HRESULT IsOnTerrain(_float _fDeltaTime);
 	HRESULT FallDown_Acorn(_float _fDeltaTime);
 	HRESULT Player_Position_Confirm();
 	HRESULT Move(_float _fDeltaTime);
@@ -44,13 +44,8 @@ private:
 	CStatus*			m_pStatusCom = nullptr;
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
-	_vec3				m_vPlayerPos = {}; //바닥에 닿았을때 플레이어 위치를 받아서 나아갈 예정
-	_bool				m_bDead = false;
-	_vec3				m_vStartPos = {};
-	_float				m_fJumpPower = 2.f;
-	_float				m_fJumpTime = 0.f;
-	_vec3				m_vDir = {};
-	_bool				m_bFallDown = true;
+	_float				m_fFallDownTime = 0.f;
+	_vec3				m_vPrePos = {};
 	STATE				m_ePreState = FALL;
 	STATE				m_eCurState = FALL;
 	INSTANTIMPACT		m_tInstant = {};

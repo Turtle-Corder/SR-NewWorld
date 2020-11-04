@@ -36,10 +36,10 @@ _int CAcorn::Update_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::DEAD;
 
 	if (FAILED(Update_State()))
-		return E_FAIL;
+		return GAMEOBJECT::WARN;
 
 	if (FAILED(Movement(_fDeltaTime)))
-		return E_FAIL;
+		return GAMEOBJECT::WARN;
 
 	if (FAILED(m_pTransformCom->Update_Transform()))
 		return GAMEOBJECT::WARN;
@@ -126,7 +126,7 @@ HRESULT CAcorn::Add_Component()
 	tTransformDesc.vPosition = m_tInstant.vPosition;
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
-	tTransformDesc.vScale = { 0.5f , 0.5f , 0.5f };
+	tTransformDesc.vScale = { 1.f , 1.f , 1.f };
 	//-------------------------------------------------------
 
 	//-------------------------------------------------------
@@ -141,7 +141,7 @@ HRESULT CAcorn::Add_Component()
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Snow", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Stone", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	// For.Com_Transform
@@ -180,7 +180,7 @@ HRESULT CAcorn::Add_Component()
 		tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
 	}
 
-	tDmgInfo.eType = ICE;
+	tDmgInfo.eType = NONE;
 
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
@@ -194,7 +194,7 @@ HRESULT CAcorn::Movement(float _fDeltaTime)
 	if (FAILED(FallDown_Acorn(_fDeltaTime)))
 		return E_FAIL;
 
-	if (FAILED(IsOnTerrain()))
+	if (FAILED(IsOnTerrain(_fDeltaTime)))
 		return E_FAIL;
 
 	if (FAILED(Player_Position_Confirm()))
@@ -210,26 +210,31 @@ HRESULT CAcorn::Movement(float _fDeltaTime)
 	return S_OK;
 }
 
-HRESULT CAcorn::IsOnTerrain()
+HRESULT CAcorn::IsOnTerrain(_float _fDeltaTime)
 {
-	D3DXVECTOR3 vPos = m_pTransformCom->Get_Desc().vPosition;
+	if (m_eCurState == CAcorn::MOVE)
+		return S_OK;
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Terrain", L"Com_VIBuffer");
+	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Terrain", L"Com_VIBuffer");
 	if (nullptr == pTerrainBuffer)
 		return E_FAIL;
 
+	D3DXVECTOR3 vPos = m_pTransformCom->Get_Desc().vPosition;
 	D3DXVECTOR3 vPosition = m_pTransformCom->Get_Desc().vPosition;
 
 	if (true == pTerrainBuffer->IsOnTerrain(&vPosition))
 	{
-		m_pTransformCom->Set_Position(vPosition);
-		m_eCurState = CAcorn::IDLE;
 	}
 
+	if (vPosition.y > vPos.y)
+	{
+		m_eCurState = CAcorn::IDLE;
+		m_pTransformCom->Set_Position(vPosition);
+	}
 	return S_OK;
 }
 
@@ -240,11 +245,10 @@ HRESULT CAcorn::FallDown_Acorn(_float _fDeltaTime)
 
 	D3DXVECTOR3 vPos = m_pTransformCom->Get_Desc().vPosition;
 
-	vPos.y += m_fJumpPower * m_fJumpTime - 9.8f * m_fJumpTime * m_fJumpTime;
-	m_fJumpTime += _fDeltaTime;
+	m_fFallDownTime += _fDeltaTime;
+	vPos.y -= m_fFallDownTime * 2.f;
 
 	m_pTransformCom->Set_Position(_vec3(vPos.x, vPos.y, vPos.z));
-
 	return S_OK;
 }
 
@@ -262,9 +266,9 @@ HRESULT CAcorn::Player_Position_Confirm()
 	if (nullptr == pPlayerTransform)
 		return E_FAIL;
 
-	m_vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
+	m_vPrePos = pPlayerTransform->Get_Desc().vPosition;
 
-	if (m_vPlayerPos != nullptr)
+	if (m_vPrePos != nullptr)
 		m_eCurState = CAcorn::MOVE;
 
 
@@ -277,19 +281,23 @@ HRESULT CAcorn::Move(_float _fDeltaTime)
 		return S_OK;
 
 	_vec3	vMyPos = m_pTransformCom->Get_Desc().vPosition;
-	_vec3	vDirection = m_vPlayerPos - vMyPos;
+	_vec3	vDirection = m_vPrePos - vMyPos;
 	_float	fDistance = D3DXVec3Length(&vDirection);
 	D3DXVec3Normalize(&vDirection, &vDirection);
 
-	if (fDistance <= 0.1f)
+	if (fDistance <= 0.4f)
 	{
 		m_eCurState = CAcorn::ATTACK;
 		return S_OK;
 	}
 
-	vMyPos += vDirection * _fDeltaTime;
-	m_pTransformCom->Set_Rotation(vMyPos);
+	vMyPos += vDirection * (_fDeltaTime * 2.f);
+	m_pTransformCom->Set_Position(vMyPos);
 
+	if (m_eCurState == CAcorn::MOVE)
+	{
+		m_pTransformCom->Turn(CTransform::AXIS_Y, _fDeltaTime * 6.f);
+	}
 
 	return S_OK;
 }
@@ -301,7 +309,7 @@ HRESULT CAcorn::Attack(_float _fDeltaTime)
 
 
 	// 여기서 터지고 나서 사망 데미지는 폭발로 처리??
-	m_bDead = true;
+	//m_bDead = true;
 	/*
 	INSTANTIMPACT tImpact;
 	tImpact.pAttacker = this;
