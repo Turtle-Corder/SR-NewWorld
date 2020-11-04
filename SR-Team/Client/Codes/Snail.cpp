@@ -479,7 +479,7 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 {
 	if (!_pDamageComp)
 		return S_OK;
-
+	//((CDamageInfo*)_pDamageComp)->Get_Desc().pOwner;
 	if (!m_bTakeCheckOnece)
 	{
 		m_bTakeCheckOnece = true;

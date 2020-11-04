@@ -39,14 +39,14 @@ _int CStump::Update_GameObject(_float _fDeltaTime)
 	if (FAILED(Update_State()))
 		return GAMEOBJECT::WARN;
 
-	if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000)
-		m_eCurState = CStump::ATTACK;
-
 	if (FAILED(Movement(_fDeltaTime)))
 		return E_FAIL;
 
 	if (FAILED(m_pTransformCom[STUMP_BASE]->Update_Transform()))
 		return 0;
+
+	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition)))
+		return GAMEOBJECT::WARN;
 
 	if (FAILED(Setting_Part()))
 		return E_FAIL;
@@ -309,6 +309,9 @@ HRESULT CStump::Movement(_float _fDeltaTime)
 	if (FAILED(LookAtPlayer(_fDeltaTime)))
 		return E_FAIL;
 
+	if (FAILED(Compare_PlayerPosition()))
+		return E_FAIL;
+
 	if (FAILED(Move(_fDeltaTime)))
 		return E_FAIL;
 
@@ -358,7 +361,7 @@ HRESULT CStump::Move(_float _fDeltaTime)
 	_float m_fLength = D3DXVec3Length(&m_vDir);
 	D3DXVec3Normalize(&m_vDir, &m_vDir);
 
-	if (3.f <= m_fLength)
+	if (5.f <= m_fLength)
 	{
 		m_vPos += m_vDir * _fDeltaTime;
 		m_pTransformCom[STUMP_BASE]->Set_Position(m_vPos);
@@ -444,6 +447,7 @@ HRESULT CStump::Attack(_float _fDeltaTime)
 				return E_FAIL;
 		}
 		m_bAcorn_CreateOne_Check = true;
+		m_eCurState = CStump::IDLE;
 	}
 	return S_OK;
 }
@@ -471,16 +475,45 @@ HRESULT CStump::Spawn_Acorn(const wstring & LayerTag, _uint _iCount)
 	_vec3 BodyPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
 
 	if (_iCount == 0)
-		tImpact.vPosition = BodyPos + _vec3(-5.f, BodyPos.y, -5.f);
+		tImpact.vPosition = BodyPos + _vec3(-3.f, 5.f, -3.f);
 	else if (_iCount == 1)
-		tImpact.vPosition = BodyPos + _vec3(5.f, BodyPos.y, -5.f);
+		tImpact.vPosition = BodyPos + _vec3(3.f, 5.f, -3.f);
 	else if (_iCount == 2)
-		tImpact.vPosition = BodyPos + _vec3(-5.f, BodyPos.y, 5.f);
+		tImpact.vPosition = BodyPos + _vec3(-3.f, 5.f, 3.f);
 	else if (_iCount == 3)
-		tImpact.vPosition = BodyPos + _vec3(5.f, BodyPos.y, 5.f);
+		tImpact.vPosition = BodyPos + _vec3(3.f, 5.f, 3.f);
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Acorn", pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CStump::Compare_PlayerPosition()
+{
+	if (m_eCurState != CStump::IDLE)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+
+	if (nullptr == pPlayerTransform)
+		return E_FAIL;
+
+	_vec3 vPlayerPosition = pPlayerTransform->Get_Desc().vPosition;
+	_vec3 vMyPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
+	_vec3 vDirection = _vec3(vPlayerPosition.x, 0.f, vPlayerPosition.z) - _vec3(vMyPos.x, 0.f, vMyPos.z);
+	_float fLength = D3DXVec3Length(&vDirection);
+
+	if (fLength < 10.f)
+	{
+		m_eCurState = CStump::MOVE;
+		//m_bAcorn_CreateOne_Check = false;
+	}
+
 
 	return S_OK;
 }
