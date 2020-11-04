@@ -471,6 +471,9 @@
     <ClInclude Include="..\Headers\Acorn.h">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Stage3.h">
+	  <Filter>01.Scene\04.Scene_Stage3</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\FlowerQuest.h">
       <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClInclude>
@@ -677,6 +680,9 @@
     <ClCompile Include="..\Codes\Acorn.cpp">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Stage3.cpp">
+	<Filter>01.Scene\04.Scene_Stage3</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\FlowerQuest.cpp">
       <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClCompile>

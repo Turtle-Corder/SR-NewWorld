@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __SCENE_STAGE2_H__
-#define __SCENE_STAGE2_H__
+#ifndef __SCENE_STAGE3_H__
+#define __SCENE_STAGE3_H__
 
 #include "Scene.h"
 
@@ -8,11 +8,11 @@ BEGIN(Client)
 USING(Engine)
 
 class CPreLoader;
-class CScene_Stage2 final : public CScene
+class CScene_Stage3 final : public CScene
 {
 private:
-	explicit CScene_Stage2(LPDIRECT3DDEVICE9 _pDeivce);
-	virtual ~CScene_Stage2() = default;
+	explicit CScene_Stage3(LPDIRECT3DDEVICE9 _pDeivce);
+	virtual ~CScene_Stage3() = default;
 
 public:
 	virtual HRESULT Setup_Scene() override;
@@ -20,7 +20,7 @@ public:
 	virtual _int LateUpdate_Scene(_float _fDeltaTime) override;
 
 public:
-	static CScene_Stage2* Create(LPDIRECT3DDEVICE9 _pDevice);
+	static CScene_Stage3* Create(LPDIRECT3DDEVICE9 _pDevice);
 	virtual void Free() override;
 
 	HRESULT Setup_Layer_AllObject();
@@ -43,4 +43,4 @@ private:
 
 END
 
-#endif // !__SCENE_STAGE2_H__
+#endif // !__SCENE_STAGE3_H__

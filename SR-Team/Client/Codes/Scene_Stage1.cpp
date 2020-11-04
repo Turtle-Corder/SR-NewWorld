@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "PreLoader.h"
+#include "CubeTerrain.h"
+#include "Player.h"
+#include "Scene_Stage0.h"
 #include "..\Headers\Scene_Stage1.h"
 
 USING(Client)
@@ -23,17 +26,89 @@ HRESULT CScene_Stage1::Setup_Scene()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_EnergyBolt", SCENE_STAGE1, L"Layer_PlayerAtk")))
+	INSTANTIMPACT tImpact;
+	ZeroMemory(&tImpact, sizeof(INSTANTIMPACT));
+	tImpact.vPosition = { 999.f, 999.f, 999.f };
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_EnergyBolt", SCENE_FOREST, L"Layer_PlayerAtk", &tImpact)))
 		return E_FAIL;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime_Impact", SCENE_STAGE1, L"Layer_MonsterAtk")))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_FOREST, L"GameObject_Slime_Impact", SCENE_FOREST, L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
 	
+	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
+	if (nullptr == m_pPreLoader)
+	{
+		PRINT_LOG(L"Failed To PreLoader Create in CScene_Stage1", LOG::CLIENT);
+		return E_FAIL;
+	}
+
 	return S_OK; 
 }
 
 _int CScene_Stage1::Update_Scene(_float _fDeltaTime)
 {
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return -1;
+
+	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
+	{
+		CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(SCENE_FOREST, L"Layer_Player");
+		if (nullptr == pPlayer)
+			return -1;
+
+		if (FAILED(pPlayer->Set_ClearInfo(SCENE_FOREST)))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_Mouse")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_Camera")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_Player")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_Item")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_MainUI")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_Inventory")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_Shop")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_Wand")))
+			return -1;
+
+		if (FAILED(pManagement->Clear_Except(SCENE_FOREST, SCENE_TOWN)))
+		{
+			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
+			return -1;
+		}
+
+		_int iCnt = 0;
+		while (true)
+		{
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_CubeTerrain", iCnt++);
+			if (nullptr == pCubeTerrain)	break;
+
+			pCubeTerrain->SetActive();
+		}
+
+		// 숲 -> 마을 FOREST -> TOWN 단방향
+		if (FAILED(pManagement->Change_CurrentScene(SCENE_TOWN, CScene_Stage0::Create(m_pDevice))))
+		{
+			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);
+			return -1;
+		}
+
+		return 1;
+	}
 	//--------------------------------------------------
 	// TODO : 스테이지 클리어 조건
 	//--------------------------------------------------
@@ -51,7 +126,7 @@ _int CScene_Stage1::LateUpdate_Scene(_float _fDeltaTime)
 	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE1, L"Layer_MonsterAtk", L"Layer_Player", L"Com_Collider", L"Com_DmgInfo")))
 		return -1;
 
-	if (FAILED(pManagement->CollisionSphere_Detection_Layers(SCENE_STAGE1, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE1, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
 		return -1;
 
 	return GAMEOBJECT::NOEVENT;
@@ -65,7 +140,7 @@ CScene_Stage1 * CScene_Stage1::Create(LPDIRECT3DDEVICE9 _pDevice)
 	CScene_Stage1* pInstance = new CScene_Stage1(_pDevice);
 	if (FAILED(pInstance->Setup_Scene()))
 	{
-		PRINT_LOG(L"Failed To Create CScene_Stage0", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Create CScene_Stage1", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
