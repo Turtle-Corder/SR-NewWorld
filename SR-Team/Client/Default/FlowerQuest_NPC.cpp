@@ -5,7 +5,6 @@
 
 USING(Client)
 
-
 CFlowerQuest_NPC::CFlowerQuest_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
@@ -50,21 +49,25 @@ _int CFlowerQuest_NPC::Update_GameObject(_float _fDeltaTime)
 	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
 		pManagemnet->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
 
-	_vec3 vPlayerPos = vPlayerTransform->Get_Desc().vPosition;
-	_vec3 vNpcPos = m_pTransformCom[0]->Get_Desc().vPosition;
-
-	_vec3 vMoveDir = vNpcPos - vPlayerPos;
-	_float fDist = D3DXVec3Length(&vMoveDir);
 
 	// 일정 거리 이하가 되어야 NPC에게 말 걸 수 있음
-	if (fDist <= 5.f)
+	if (pManagemnet->Key_Pressing('G'))
 	{
+		_vec3 vPlayerPos = vPlayerTransform->Get_Desc().vPosition;
+		_vec3 vNpcPos = m_pTransformCom[0]->Get_Desc().vPosition;
+
+		_vec3 vMoveDir = vNpcPos - vPlayerPos;
+		_float fDist = D3DXVec3Length(&vMoveDir);
+
 		// NPC에게 말걸기
-		if (pManagemnet->Key_Down('G'))
-		{
+		if (fDist <= 5.f)
 			pFlowerQuest->Set_StartQuest(true);
-		}
+		else
+			pFlowerQuest->Set_StartQuest(false);
 	}
+	else if (pManagemnet->Key_Up('G'))
+		pFlowerQuest->Set_StartQuest(false);
+
 
 	for (_uint i = 0; i < PART_END; i++)
 		m_pTransformCom[i]->Update_Transform();

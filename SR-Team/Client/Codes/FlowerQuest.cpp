@@ -52,101 +52,110 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 	if (pInven == nullptr)
 		return E_FAIL;
 
-	switch (m_eSituation)
-	{
-	case FLOWER_GREETINGS:
-		if (pManagement->Key_Down(VK_LBUTTON))
+	
+		switch (m_eSituation)
 		{
-			if (!m_bClear)
-				m_eSituation = FLOWER_QUESTION;
-			else
-				m_eSituation = FLOWER_QUEST_END;
-		}
-		break;
-
-	case FLOWER_QUESTION:
-		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
-			m_eSituation = FLOWER_ANSWER;
-		break;
-
-	case FLOWER_ANSWER:
-		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
-			m_eSituation = FLOWER_QUEST_START;
-		break;
-
-	case FLOWER_QUEST_START:
-		// 수락
-		if (pManagement->Key_Pressing(VK_RETURN))
-			m_eSituation = FLOWER_ON_THE_QUEST;	// 퀘스트 하는중
-		// 거절
-		else if (pManagement->Key_Down(VK_ESCAPE))
-			m_eSituation = FLOWER_QUEST_END;	// 처음으로 돌아감
-		break;
-
-	case FLOWER_QUEST_CLEAR:
-		if (pManagement->Key_Down(VK_LBUTTON))
-		{
-			m_eSituation = FLOWER_REWARD;
-			pInven->Delete_Item(L"flower");
-			m_bRenderClear = false;
-		}
-		break;
-
-	case FLOWER_REWARD:
-		// 포션 아이템 획득
-		if (!m_bGetReward)
-		{
-			m_bGetReward = true;
-			pInven->Get_RewardItem(L"RewardPotion");
-			pInven->Get_RewardItem(L"RewardPotion");
-			pInven->Get_RewardItem(L"RewardPotion");
-		}
-
-		if (pManagement->Key_Down(VK_LBUTTON))
-			m_eSituation = FLOWER_EXTRA_QUESTION;
-		break;
-
-	case FLOWER_EXTRA_QUESTION:
-		if (pManagement->Key_Down(VK_LBUTTON))
-			m_eSituation = FLOWER_FINISH;
-		break;
-
-	case FLOWER_QUEST_NOCLEAR:
-		if (pManagement->Key_Down(VK_LBUTTON))
-			m_eSituation = FLOWER_ON_THE_QUEST;
-		break;
-
-	case FLOWER_QUEST_END:
-		if (pManagement->Key_Pressing('G'))
-			m_eSituation = FLOWER_GREETINGS;
-		if (m_bStartQuest)
-			m_eSituation = FLOWER_GREETINGS;
-		break;
-
-		// 퀘스트 하는중
-	case FLOWER_ON_THE_QUEST:	
-		if (3 == pInven->Get_ItemCount(L"flower"))
-			m_bRenderClear = true;
-		if (pManagement->Key_Pressing('G'))
-		{
-			if (3 == pInven->Get_ItemCount(L"flower"))
+		case FLOWER_GREETINGS:
+			if (pManagement->Key_Down(VK_LBUTTON))
 			{
-				m_bClear = true;
-				m_eSituation = FLOWER_QUEST_CLEAR;
+				if (!m_bClear)
+					m_eSituation = FLOWER_QUESTION;
+				else
+					m_eSituation = FLOWER_QUEST_END;
 			}
-			else
-				m_eSituation = FLOWER_QUEST_NOCLEAR;
+			if (pManagement->Key_Pressing(VK_ESCAPE))
+			{
+				m_eSituation = FLOWER_FINISH;
+				m_bStartQuest = false;
+			}
+			break;
+
+		case FLOWER_QUESTION:
+			if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
+				m_eSituation = FLOWER_ANSWER;
+			break;
+
+		case FLOWER_ANSWER:
+			if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
+				m_eSituation = FLOWER_QUEST_START;
+			break;
+
+		case FLOWER_QUEST_START:
+			// 수락
+			if (pManagement->Key_Pressing(VK_RETURN))
+				m_eSituation = FLOWER_ON_THE_QUEST;	// 퀘스트 하는중
+													// 거절
+			else if (pManagement->Key_Down(VK_ESCAPE))
+				m_eSituation = FLOWER_QUEST_END;	// 처음으로 돌아감
+			break;
+
+		case FLOWER_QUEST_CLEAR:
+			if (pManagement->Key_Down(VK_LBUTTON))
+			{
+				m_eSituation = FLOWER_REWARD;
+				pInven->Delete_Item(L"flower");
+				m_bRenderClear = false;
+			}
+			break;
+
+		case FLOWER_REWARD:
+			// 포션 아이템 획득
+			if (!m_bGetReward)
+			{
+				m_bGetReward = true;
+				pInven->Get_RewardItem(L"RewardPotion");
+				pInven->Get_RewardItem(L"RewardPotion");
+				pInven->Get_RewardItem(L"RewardPotion");
+			}
+
+			if (pManagement->Key_Down(VK_LBUTTON))
+				m_eSituation = FLOWER_EXTRA_QUESTION;
+			break;
+
+		case FLOWER_EXTRA_QUESTION:
+			if (pManagement->Key_Down(VK_LBUTTON))
+			{
+				m_eSituation = FLOWER_FINISH;
+				m_bStartQuest = false;
+			}
+			break;
+
+		case FLOWER_QUEST_NOCLEAR:
+			if (pManagement->Key_Down(VK_LBUTTON))
+				m_eSituation = FLOWER_ON_THE_QUEST;
+			break;
+
+		case FLOWER_QUEST_END:
+			if (m_bStartQuest/*pManagement->Key_Pressing('G')*/)
+				m_eSituation = FLOWER_GREETINGS;
+			break;
+
+			// 퀘스트 하는중
+		case FLOWER_ON_THE_QUEST:
+			if (3 == pInven->Get_ItemCount(L"flower"))
+				m_bRenderClear = true;
+			if (pManagement->Key_Pressing('G'))
+			{
+				if (3 == pInven->Get_ItemCount(L"flower"))
+				{
+					m_bClear = true;
+					m_eSituation = FLOWER_QUEST_CLEAR;
+				}
+				else
+					m_eSituation = FLOWER_QUEST_NOCLEAR;
+			}
+			break;
+
+		case FLOWER_FINISH:
+			if (m_bStartQuest)
+				m_eSituation = FLOWER_GREETINGS;
+			break;
+
+		default:
+			break;
 		}
-		break;
-
-	case FLOWER_FINISH:
-		if (pManagement->Key_Pressing('G'))
-			m_eSituation = FLOWER_GREETINGS;
-		break;
-
-	default:
-		break;
-	}
+	
+	
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -165,7 +174,7 @@ _int CFlowerQuest::LateUpdate_GameObject(_float _fDeltaTime)
 
 HRESULT CFlowerQuest::Render_UI()
 {
-	if (m_eSituation != FLOWER_QUEST_END && m_eSituation != FLOWER_ON_THE_QUEST && m_eSituation != FLOWER_FINISH)
+	if (m_eSituation != FLOWER_QUEST_END && m_eSituation != FLOWER_ON_THE_QUEST && m_eSituation != FLOWER_FINISH && m_eSituation != FLOWER_REAL_FINISH)
 	{
 		D3DXMATRIX matTrans, matWorld;
 		const D3DXIMAGE_INFO* pTexInfo = m_pTextureWnd[m_eSituation]->Get_TexInfo(0);

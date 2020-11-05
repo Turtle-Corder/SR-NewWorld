@@ -443,7 +443,6 @@ HRESULT CMainApp::Setup_EB()
 #pragma endregion
 
 #pragma region GameObject_Item 
-
 	// DataManager
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Item", CDataManager::Create(m_pDevice))))
 		return E_FAIL;
@@ -648,7 +647,6 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Component_Textures_Item
 
 #pragma region Shoes
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_ScholarShoes",
