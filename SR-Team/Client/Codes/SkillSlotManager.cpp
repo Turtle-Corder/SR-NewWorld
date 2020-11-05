@@ -46,7 +46,7 @@ CSkillSlot * CSkillSlotManager::Get_PlayerSkill(eActiveSkill_ID eSkillID)
 	
 	case ACTIVE_BLIND:
 		return m_pSlot_Explosion;
-	
+	 
 	default:
 		break;
 

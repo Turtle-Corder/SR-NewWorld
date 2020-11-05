@@ -114,6 +114,9 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Wand")))
 			return -1;
 
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_PlayerSkill")))
+			return -1;
+
 		if (FAILED(pManagement->Clear_Except(SCENE_ROOM, SCENE_TOWN)))
 		{
 			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
