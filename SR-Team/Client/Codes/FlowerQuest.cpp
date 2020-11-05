@@ -134,7 +134,7 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 		case FLOWER_ON_THE_QUEST:
 			if (3 == pInven->Get_ItemCount(L"flower"))
 				m_bRenderClear = true;
-			if (pManagement->Key_Pressing('G'))
+			if (m_bStartQuest/*pManagement->Key_Pressing('G')*/)
 			{
 				if (3 == pInven->Get_ItemCount(L"flower"))
 				{
@@ -142,7 +142,10 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 					m_eSituation = FLOWER_QUEST_CLEAR;
 				}
 				else
+				{
 					m_eSituation = FLOWER_QUEST_NOCLEAR;
+					m_bStartQuest = false;
+				}
 			}
 			break;
 
