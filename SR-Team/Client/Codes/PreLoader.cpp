@@ -26,6 +26,7 @@
 #include "Wand.h"
 #include "Skybox.h"
 #include "FlowerQuest_NPC.h"
+#include "Shop_NPC.h"
 #pragma endregion
 
 USING(Client)
@@ -113,6 +114,11 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_ShopNPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_ShopNPC", CShop_NPC::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 //#pragma region GameObject_Acorn
 //	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
 //		return E_FAIL;
@@ -143,16 +149,32 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 	// FlowerQuest_NPC
 #pragma region Component_Texture_FlowerQuestNPC
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Head%d.dds"))))
+		L"../Resources/3D/Layer_NPC/FlowerQuestNPC_Head%d.dds"))))
 		return E_FAIL;
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Body%d.dds"))))
+		L"../Resources/3D/Layer_NPC/FlowerQuestNPC_Body%d.dds"))))
 		return E_FAIL;
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Hand%d.dds"))))
+		L"../Resources/3D/Layer_NPC/FlowerQuestNPC_Hand%d.dds"))))
 		return E_FAIL;
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Foot%d.dds"))))
+		L"../Resources/3D/Layer_NPC/FlowerQuestNPC_Foot%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+	// Shop_NPC
+#pragma region Component_Texture_ShopNPC
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/Shopper_Head%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/Shopper_Body%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/Shopper_Hand%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/Shopper_Foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
