@@ -1,11 +1,10 @@
 #include "stdafx.h"
-#include "FlowerQuest_NPC.h"
-#include "Player.h"
-#include "FlowerQuest.h"
+#include "..\Headers\Shop_NPC.h"
+
 
 USING(Client)
 
-CFlowerQuest_NPC::CFlowerQuest_NPC(LPDIRECT3DDEVICE9 _pDevice)
+CShop_NPC::CShop_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
 	for (_uint iCnt = 0; iCnt < PART_END; ++iCnt)
@@ -16,17 +15,17 @@ CFlowerQuest_NPC::CFlowerQuest_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	}
 }
 
-CFlowerQuest_NPC::CFlowerQuest_NPC(const CFlowerQuest_NPC & _rOther)
+CShop_NPC::CShop_NPC(const CShop_NPC & _rOther)
 	: CGameObject(_rOther)
 {
 }
 
-HRESULT CFlowerQuest_NPC::Setup_GameObject_Prototype()
+HRESULT CShop_NPC::Setup_GameObject_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CFlowerQuest_NPC::Setup_GameObject(void * _pArg)
+HRESULT CShop_NPC::Setup_GameObject(void * _pArg)
 {
 	if (FAILED(Add_Component()))
 		return E_FAIL;
@@ -34,48 +33,15 @@ HRESULT CFlowerQuest_NPC::Setup_GameObject(void * _pArg)
 	return S_OK;
 }
 
-_int CFlowerQuest_NPC::Update_GameObject(_float _fDeltaTime)
+_int CShop_NPC::Update_GameObject(_float _fDeltaTime)
 {
-	CManagement* pManagemnet = CManagement::Get_Instance();
-	if (nullptr == pManagemnet)
-		return GAMEOBJECT::ERR;
-	CPlayer* pPlayer = (CPlayer*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Player");
-	if (nullptr == pPlayer)
-		return GAMEOBJECT::ERR;
-	CFlowerQuest* pFlowerQuest = (CFlowerQuest*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_FlowerQuest");
-	if (nullptr == pFlowerQuest)
-		return GAMEOBJECT::ERR;
-
-	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
-		pManagemnet->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
-
-	// 일정 거리 이하가 되어야 NPC에게 말 걸 수 있음
-	if (pManagemnet->Key_Pressing('G'))
-	{
-		_vec3 vPlayerPos = vPlayerTransform->Get_Desc().vPosition;
-		_vec3 vNpcPos = m_pTransformCom[0]->Get_Desc().vPosition;
-
-		_vec3 vMoveDir = vNpcPos - vPlayerPos;
-		_float fDist = D3DXVec3Length(&vMoveDir);
-
-		// NPC에게 말걸기
-		if (fDist <= 5.f)
-			pFlowerQuest->Set_StartQuest(true);
-		else
-			pFlowerQuest->Set_StartQuest(false);
-	}
-	else if (pManagemnet->Key_Up('G'))
-		pFlowerQuest->Set_StartQuest(false);
-
-
 	for (_uint i = 0; i < PART_END; i++)
 		m_pTransformCom[i]->Update_Transform();
 
 	return GAMEOBJECT::NOEVENT;
 }
 
-_int CFlowerQuest_NPC::LateUpdate_GameObject(_float _fDeltaTime)
+_int CShop_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagemnet = CManagement::Get_Instance();
 	if (nullptr == pManagemnet)
@@ -87,7 +53,7 @@ _int CFlowerQuest_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-HRESULT CFlowerQuest_NPC::Render_NoneAlpha()
+HRESULT CShop_NPC::Render_NoneAlpha()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -112,7 +78,7 @@ HRESULT CFlowerQuest_NPC::Render_NoneAlpha()
 	return S_OK;
 }
 
-HRESULT CFlowerQuest_NPC::Add_Component()
+HRESULT CShop_NPC::Add_Component()
 {
 	for (_uint i = 0; i < PART_END; i++)
 	{
@@ -131,7 +97,7 @@ HRESULT CFlowerQuest_NPC::Add_Component()
 	return S_OK;
 }
 
-HRESULT CFlowerQuest_NPC::Add_Component_Transform()
+HRESULT CShop_NPC::Add_Component_Transform()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc[PART_END];
 	ZeroMemory(tTransformDesc, sizeof(CTransform::TRANSFORM_DESC) * PART_END);
@@ -140,7 +106,7 @@ HRESULT CFlowerQuest_NPC::Add_Component_Transform()
 	//--------------------------------------------------
 	// HEAD
 	//--------------------------------------------------
-	tTransformDesc[PART_HEAD].vPosition = { 28.f, 2.f, 13.f };
+	tTransformDesc[PART_HEAD].vPosition = { 17.f, 2.f, 62.f };
 	tTransformDesc[PART_HEAD].vScale = { 1.f, 1.f, 1.f };
 	tTransformDesc[PART_HEAD].fSpeedPerSecond = 5.f;
 	tTransformDesc[PART_HEAD].fRotatePerSecond = fRPS_Rad;
@@ -205,7 +171,7 @@ HRESULT CFlowerQuest_NPC::Add_Component_Transform()
 	return S_OK;
 }
 
-HRESULT CFlowerQuest_NPC::Add_Component_Texture()
+HRESULT CShop_NPC::Add_Component_Texture()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (pManagement == nullptr)
@@ -213,15 +179,15 @@ HRESULT CFlowerQuest_NPC::Add_Component_Texture()
 
 	WCHAR szTextureName[PART_END][MAX_PATH] =
 	{
-		L"Component_Texture_FlowerQuestNPCHead",
+		L"Component_Texture_ShopNPCHead",
 
-		L"Component_Texture_FlowerQuestNPCBody",
+		L"Component_Texture_ShopNPCBody",
 
-		L"Component_Texture_FlowerQuestNPCHand",
-		L"Component_Texture_FlowerQuestNPCHand",
+		L"Component_Texture_ShopNPCHand",
+		L"Component_Texture_ShopNPCHand",
 
-		L"Component_Texture_FlowerQuestNPCFoot",
-		L"Component_Texture_FlowerQuestNPCFoot"
+		L"Component_Texture_ShopNPCFoot",
+		L"Component_Texture_ShopNPCFoot"
 	};
 
 	//--------------------------------------------------
@@ -239,34 +205,34 @@ HRESULT CFlowerQuest_NPC::Add_Component_Texture()
 	return S_OK;
 }
 
-CFlowerQuest_NPC * CFlowerQuest_NPC::Create(LPDIRECT3DDEVICE9 _pDevice)
+CShop_NPC * CShop_NPC::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
 	if (nullptr == _pDevice)
 		return nullptr;
 
-	CFlowerQuest_NPC* pInstance = new CFlowerQuest_NPC(_pDevice);
+	CShop_NPC* pInstance = new CShop_NPC(_pDevice);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{
-		PRINT_LOG(L"Failed To Create CFlowerQuest_NPC", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Create CShop_NPC", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject * CFlowerQuest_NPC::Clone_GameObject(void * _pArg)
+CGameObject * CShop_NPC::Clone_GameObject(void * _pArg)
 {
-	CFlowerQuest_NPC* pInstance = new CFlowerQuest_NPC(*this);
+	CShop_NPC* pInstance = new CShop_NPC(*this);
 	if (FAILED(pInstance->Setup_GameObject(_pArg)))
 	{
-		PRINT_LOG(L"Failed To Clone CFlowerQuest_NPC", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Clone CShop_NPC", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CFlowerQuest_NPC::Free()
+void CShop_NPC::Free()
 {
 	for (_uint i = 0; i < PART_END; ++i)
 	{
@@ -274,8 +240,6 @@ void CFlowerQuest_NPC::Free()
 		Safe_Release(m_pTransformCom[i]);
 		Safe_Release(m_pVIBufferCom[i]);
 	}
-
-	Safe_Release(m_pRaycastCom);
 
 	CGameObject::Free();
 }

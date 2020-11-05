@@ -22,6 +22,9 @@ public:
 	virtual ~CFlowerQuest() = default;
 
 public:
+	_bool Get_StartQuest() { return m_bStartQuest; }
+
+public:
 	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
 
 public:

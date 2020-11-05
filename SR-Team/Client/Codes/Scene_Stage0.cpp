@@ -40,7 +40,7 @@ HRESULT CScene_Stage0::Setup_Scene()
 	if (FAILED(Setup_Layer_FlowerQuest(L"Layer_FlowerQuest")))
 		return E_FAIL;
 
-	if (FAILED(Setup_Layer_FlowerQuestNPC(L"Layer_FlowerQuestNPC")))
+	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
 		return E_FAIL;
 
 	eSCENE_ID ePreLoadScene = SCENE_STAGE1;
@@ -309,13 +309,15 @@ HRESULT CScene_Stage0::Setup_Layer_FlowerQuest(const wstring & LayerTag)
 	return S_OK;
 }
 
-HRESULT CScene_Stage0::Setup_Layer_FlowerQuestNPC(const wstring & LayerTag)
+HRESULT CScene_Stage0::Setup_Layer_NPC(const wstring & LayerTag)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_FlowerQuestNPC", SCENE_STAGE0, LayerTag)))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_ShopNPC", SCENE_STAGE0, LayerTag)))
 		return E_FAIL;
 
 	return S_OK;
