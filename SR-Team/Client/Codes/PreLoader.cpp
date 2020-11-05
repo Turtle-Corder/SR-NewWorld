@@ -120,12 +120,14 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 
 #pragma region Component_Texture_Stump_Head
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 #pragma region Component_Texture_Stump_Part
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 	//----------------------------------------------------------------------------------------------------
@@ -144,16 +146,20 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 #pragma region Component_Texture_FlowerQuestNPC
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Head%d.dds"))))
-		return E_FAIL;
+	{
+	}
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Body%d.dds"))))
-		return E_FAIL;
+	{
+	}
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Hand%d.dds"))))
-		return E_FAIL;
+	{
+	}
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_FlowerQuest_NPC/FlowerQuestNPC_Foot%d.dds"))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 // 0¹ø ¸¶À»
@@ -186,12 +192,14 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 
 #pragma region Component_Texture_SnailBody
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 #pragma region Component_Texture_SnailHead
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 #pragma endregion
@@ -210,7 +218,8 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 
 #pragma region Component_Texture_Translucent_Cube
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/TranslucentCube%d.dds", 2))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 #pragma region GameObject_Slime
@@ -220,7 +229,8 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 
 #pragma region Component_Texture_Translucent_Cube
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 
@@ -240,12 +250,14 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 
 #pragma region Component_Texture_Stump_Head
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 #pragma region Component_Texture_Stump_Part
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
-		return E_FAIL;
+	{
+	}
 #pragma endregion
 
 //#pragma region Component_Texture_Acorn
@@ -358,7 +370,7 @@ _uint CPreLoader::ThreadMain(void * _pParam)
 	LeaveCriticalSection(&pInstance->m_CriticalSection);
 	if (FAILED(hr))
 	{
-		PRINT_LOG(L"Failed To Resource Load", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Resource Load", LOG::DEBUG);
 		return 1;
 	}
 

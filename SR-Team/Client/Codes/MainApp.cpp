@@ -166,7 +166,6 @@ HRESULT CMainApp::Render_MainApp()
 		return E_FAIL;
 	}
 
-	_crtBreakAlloc = 18;
 	return S_OK;
 }
 

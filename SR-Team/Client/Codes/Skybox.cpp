@@ -74,9 +74,6 @@ HRESULT CSkybox::Render_Priority()
 	if (FAILED(m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE)))
 		return E_FAIL;
 
-
-	// 버텍스 버퍼
-
 	if (FAILED(((CVIBuffer_CubeTexture*)m_pVIBufferCom)->Set_Transform_Nothing(&m_pTransformCom->Get_Desc().matWorld)))
 		return E_FAIL;
 
@@ -85,6 +82,8 @@ HRESULT CSkybox::Render_Priority()
 
 	if (FAILED(m_pDevice->SetTransform(D3DTS_PROJECTION, pCamera->Get_ProjMatrix())))
 		return E_FAIL;
+
+	//엔진 렌더링
 
 	if (FAILED(m_pTextureCom->SetTexture(m_iTextureID)))
 		return E_FAIL;
@@ -146,7 +145,12 @@ HRESULT CSkybox::Movement(_float _fDeltaTime)
 	if (nullptr == pCamera)
 		return E_FAIL;
 
-	m_pTransformCom->Set_Position(pCamera->Get_Desc().vEye);
+	m_pTransformCom->Set_Position(pCamera->Get_Desc().vEye * 0.8f);
+
+	_vec3 vRot = { D3DX_PI ,  D3DX_PI , D3DX_PI / 2.5f };
+	
+	m_pTransformCom->Set_Rotation(vRot);
+
 
 	return S_OK;
 }
