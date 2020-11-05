@@ -31,6 +31,9 @@ HRESULT CMeteor::Setup_GameObject(void* _pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	m_vMoveDir = m_tInstant.vPosition - m_pTransformCom->Get_Desc().vPosition;
+	D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
+
 	return S_OK;
 }
 
@@ -58,6 +61,10 @@ int CMeteor::LateUpdate_GameObject(_float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
+
+	m_fDeadTime += _fDeltaTime;
+	if (m_fDeadTime >= 3.f)
+		m_bDead = true;
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return  GAMEOBJECT::WARN;
@@ -90,13 +97,13 @@ HRESULT CMeteor::Render_NoneAlpha()
 HRESULT CMeteor::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x - 10.f , m_tInstant.vPosition.y + 14.f , m_tInstant.vPosition.z + 10.f) };/*{ m_vGoalPos.x - 10.f, m_vGoalPos.y + 14.f, m_vGoalPos.z + 10.f };*/
-	tTransformDesc.fSpeedPerSecond = 10.f;
+	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x - 8.f , m_tInstant.vPosition.y + 14.f , m_tInstant.vPosition.z + 8.f) };
+	tTransformDesc.fSpeedPerSecond = 0.01f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
-	tCollDesc.fRadius = 0.7f;
+	tCollDesc.fRadius = 0.5f;
 
 	CStatus::STAT tStat;
 	tStat.iCriticalHit = 0; tStat.iCriticalRate = 0;
@@ -146,66 +153,32 @@ HRESULT CMeteor::Add_Component()
 	//For.DamageInfo
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CMeteor::Movement(_float _fDeltaTime)
 {
 	if (m_bDead)
-	return GAMEOBJECT::DEAD;
+		return GAMEOBJECT::DEAD;
 
 	if (FAILED(FallDown_Meteor(_fDeltaTime)))
 		return E_FAIL;
-
-	if (FAILED(IsOnTerrain()))
-		return E_FAIL;
-
-	m_fDeadTime += _fDeltaTime;
-
-	if (m_fDeadTime >= 3.f)
-		m_bDead = true;
 
 	return S_OK;
 }
 
 HRESULT CMeteor::FallDown_Meteor(_float _fDeltaTime)
 {
-	m_fDownTime += _fDeltaTime * 1.f;
-
-	_vec3 vPos = m_pTransformCom->Get_Desc().vPosition;
-
-	_vec3 vDir = m_tInstant.vPosition - vPos;
-	D3DXVec3Normalize(&vDir, &vDir);
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (vPos.y < m_tInstant.vPosition.y)
-	{
+	_vec3 vAddPos = m_vMoveDir * m_pTransformCom->Get_Desc().fSpeedPerSecond * _fDeltaTime;
+	m_pTransformCom->Setup_Component(m_pTransformCom->Get_Desc().vPosition + vAddPos);
+
+	if (m_pTransformCom->Get_Desc().vPosition.y < m_tInstant.vPosition.y)
 		m_bDead = true;
-	}
-	else
-	{
-		vPos += vDir * (m_fDownTime);
-		m_pTransformCom->Set_Position(vPos);
-	}
-
-	return S_OK;
-}
-
-HRESULT CMeteor::IsOnTerrain()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Terrain", L"Com_VIBuffer");
-	if (nullptr == pTerrainBuffer)
-		return E_FAIL;
-
-	D3DXVECTOR3 vPosition = m_pTransformCom->Get_Desc().vPosition;
-
 
 	return S_OK;
 }

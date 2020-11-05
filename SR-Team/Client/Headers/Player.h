@@ -163,7 +163,7 @@ private:
 	//--------------------------------------------------
 	// 마우스 피킹
 	//--------------------------------------------------
-	HRESULT Raycast_OnTerrain(_bool* _pFound);	
+	HRESULT Raycast_OnTerrain(_bool* _pFound, _vec3* _pPos);	
 	void Move_Target(_float _fDeltaTime);
 
 

@@ -88,12 +88,14 @@ HRESULT CEnergyBolt::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
 	tTransformDesc.vPosition = m_tInstant.vPosition;
-	tTransformDesc.fSpeedPerSecond = 10.f;
-	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
+	tTransformDesc.vScale = { 0.33f, 0.33f, 0.33f };
+	tTransformDesc.vRotate = { D3DXToRadian(45.f), D3DXToRadian(-90.f), 0.f };
+	tTransformDesc.fSpeedPerSecond = 4.5f;
+	tTransformDesc.fRotatePerSecond = D3DXToRadian(160.f);
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
-	tCollDesc.fRadius = 0.5f;
+	tCollDesc.fRadius = 0.18f;
 
 	CStatus::STAT tStat;
 	tStat.iCriticalHit = 0; tStat.iCriticalRate = 0;
@@ -161,10 +163,12 @@ HRESULT CEnergyBolt::Movement(_float _fDeltaTime)
 
 HRESULT CEnergyBolt::Move(_float _fDeltaTime)
 {
+	_vec3 vAddPos = m_tInstant.vDirection * (_fDeltaTime * m_pTransformCom->Get_Desc().fSpeedPerSecond);
+	m_pTransformCom->Set_Position(m_pTransformCom->Get_Desc().vPosition + vAddPos);
 
-	m_vMyPos = m_pTransformCom->Get_Desc().vPosition;
-	m_vMyPos += m_tInstant.vDirection * (_fDeltaTime * 3.f);
-	m_pTransformCom->Set_Position(m_vMyPos);
+//	m_pTransformCom->Turn(CTransform::AXIS_X, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond);
+	m_pTransformCom->Turn(CTransform::AXIS_Y, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond * 1.2f);
+	//m_pTransformCom->Turn(CTransform::AXIS_Z, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond);
 
 	//m_pTransformCom->Update_Transform();
 	return S_OK;

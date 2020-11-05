@@ -587,7 +587,7 @@ HRESULT CPlayer::Update_Look(_float _fDeltaTime)
 //----------------------------------------------------------------------------------------------------
 // Raycast
 //----------------------------------------------------------------------------------------------------
-HRESULT CPlayer::Raycast_OnTerrain(_bool* _pFound)
+HRESULT CPlayer::Raycast_OnTerrain(_bool* _pFound, _vec3* _pPos)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -606,7 +606,7 @@ HRESULT CPlayer::Raycast_OnTerrain(_bool* _pFound)
 	D3DXMatrixIdentity(&mat);
 
 	// 반환받을 마우스 위치값
-	if (m_pRaycastCom->IsSimulate<VTX_TEXTURE, INDEX16>(g_hWnd, WINCX, WINCY, pTerrainBuffer, &mat, pCamera, &m_vTargetPos))
+	if (m_pRaycastCom->IsSimulate<VTX_TEXTURE, INDEX16>(g_hWnd, WINCX, WINCY, pTerrainBuffer, &mat, pCamera, _pPos))
 	{
 		*_pFound = true;
 		return S_OK;
@@ -721,7 +721,7 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 		if (VALIDATE_MOVE >= m_eCurState)
 		{
 			_bool bFound = false;
-			if (FAILED(Raycast_OnTerrain(&bFound)))
+			if (FAILED(Raycast_OnTerrain(&bFound, &m_vTargetPos)))
 			{
 				PRINT_LOG(L"Failed To Raycast!", LOG::CLIENT);
 				return GAMEOBJECT::WARN;
@@ -994,6 +994,21 @@ _bool CPlayer::Actual_UseSkill()
 	CSkillInven* pSkillInven = (CSkillInven*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 3);
 	if (nullptr == pSkillInven)
 		return false;
+
+	// meteor, ...
+	if (0 == m_iInputIdx_Anim /* || other */)
+	{
+		_bool bFound = false;
+		_vec3 vPos = {};
+		if (FAILED(Raycast_OnTerrain(&bFound, &vPos)))
+		{
+			PRINT_LOG(L"Failed To Raycast!", LOG::CLIENT);
+			return false;
+		}
+
+		if (bFound)
+			m_tImpact.vPosition = vPos;
+	}
 
 	if (!pSkillInven->Actual_UseSkill(m_iInputIdx_Slot, (void*)&m_tImpact))
 		return false;

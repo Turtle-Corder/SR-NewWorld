@@ -28,7 +28,7 @@ private:
 	HRESULT Add_Component();
 	HRESULT Movement(_float _fDeltaTime);
 	HRESULT FallDown_Meteor(_float _fDeltaTime);
-	HRESULT IsOnTerrain();
+
 public:
 	static CMeteor* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
@@ -44,15 +44,10 @@ private:
 	CStatus*			m_pStatusComp = nullptr;
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 	
-	_bool  m_bDead = false;
-	_vec3 m_vPlayerPos = {};
-	_vec3 m_vGoalPos = {};
-	_float m_fDownTime = 0.f;
 	_float m_fDeadTime = 0.f;
-	_float  m_iRand[3] = {};
+	_vec3 m_vMoveDir = {};
+
 	INSTANTIMPACT m_tInstant = {};
-	_bool	m_bOnece = false;
-	_vec3	m_vRand = {};
 };
 
 END

@@ -43,7 +43,6 @@ private:
 	_bool				m_bOnece = false;
 	_float				m_fTestDeadTime = 0.f;
 	_vec3				m_vPlayerLook = {};
-	_vec3				m_vMyPos = {};
 };
 
 END
