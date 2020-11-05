@@ -59,6 +59,9 @@ HRESULT CScene_Room::Setup_Scene()
 	if (FAILED(SetUp_Layer_Shop(L"Layer_Shop")))
 		return E_FAIL;
 
+	if (FAILED(Setup_Layer_PlayerSkill(L"Layer_PlayerSkill")))
+		return E_FAIL;
+
 	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_STAGE0);
 	if (nullptr == m_pPreLoader)
 	{
@@ -109,6 +112,9 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 			return -1;
 
 		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Wand")))
+			return -1;
+
+		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_PlayerSkill")))
 			return -1;
 
 		if (FAILED(pManagement->Clear_Except(SCENE_ROOM, SCENE_TOWN)))
@@ -283,6 +289,39 @@ HRESULT CScene_Room::SetUp_Layer_Item(const wstring & LayerTag)
 		return E_FAIL;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Item", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_PlayerSkill(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_Meteor", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_IceSpear", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_ThunderStorm", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_ManaDrift", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_Blind", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_Shield", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_IceBlast", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_Explosion", SCENE_ROOM, LayerTag)))
 		return E_FAIL;
 
 	return S_OK;

@@ -1,18 +1,17 @@
 #pragma once
-
-#ifndef __SKILLSLOT_METEO_H__
-#define __SKILLSLOT_METEO_H__
+#ifndef __SKILLSLOT_THUNDERSTORM_H__
+#define __SKILLSLOT_THUNDERSTORM_H__
 
 #include "SkillSlot.h"
 USING(Engine)
 BEGIN(Client)
 
-class CSkillSlot_Meteor : public CSkillSlot
+class CSkillSlot_ThunderStorm final : public CSkillSlot
 {
 private:
-	explicit CSkillSlot_Meteor(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
-	explicit CSkillSlot_Meteor(const CSkillSlot_Meteor& _rOther);
-	virtual ~CSkillSlot_Meteor() = default;
+	explicit CSkillSlot_ThunderStorm(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
+	explicit CSkillSlot_ThunderStorm(const CSkillSlot_ThunderStorm& _rOther);
+	virtual ~CSkillSlot_ThunderStorm() = default;
 
 public:
 	// CPlayerSkill을(를) 통해 상속됨
@@ -22,7 +21,7 @@ public:
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 
 public:
-	static CSkillSlot_Meteor* Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
+	static CSkillSlot_ThunderStorm* Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 
 public:
@@ -31,4 +30,5 @@ public:
 };
 
 END
-#endif
+
+#endif // !__THUNDERSTORM_H__

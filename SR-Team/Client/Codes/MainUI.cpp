@@ -668,6 +668,10 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 	if (pMouse == nullptr)
 		return E_FAIL;
 
+	CSkillInven* pSkillInven = (CSkillInven*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 3);
+	if (pSkillInven == nullptr)
+		return E_FAIL;
+
 	_int k = 0;
 	_vec3 vCenter = { 0.f, 0.f, 0.f };
 	_vec3 vPos = { 0.f, 0.f, 0.f };
@@ -714,6 +718,15 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 					(LPDIRECT3DTEXTURE9)m_pTextureLeftQuickSlot[i]->GetTexture(0),
 					nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 			}
+
+
+			//----------------------------------------------------------------------------------------------------
+			_float fProgress = 1.f - pSkillInven->Get_Progress(i);
+			pTexInfo = m_pEmptyTexture->Get_TexInfo(0);
+			vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+
+			RECT rc = { 0, (LONG)(pTexInfo->Height * fProgress), (LONG)pTexInfo->Width,  (LONG)pTexInfo->Height };
+			m_pSprite->Draw((LPDIRECT3DTEXTURE9)m_pEmptyTexture->GetTexture(0), &rc, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
 
 		if (m_pTextureRightQuickSlot[i] != nullptr)		// æ∆¿Ã≈€

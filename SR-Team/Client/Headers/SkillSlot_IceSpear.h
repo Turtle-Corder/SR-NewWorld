@@ -1,18 +1,17 @@
 #pragma once
-
-#ifndef __ENERGYEXPLOITATIONSKILL_H__
-#define __ENERGYEXPLOITATIONSKILL_H__
+#ifndef __SKILLSLOT_ICESPEAR_H__
+#define __SKILLSLOT_ICESPEAR_H__
 
 #include "SkillSlot.h"
 USING(Engine)
 BEGIN(Client)
 
-class CSkillSlot_EnergyExplosion : public CSkillSlot
+class CSkillSlot_IceSpear final : public CSkillSlot
 {
-public:
-	explicit CSkillSlot_EnergyExplosion(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
-	explicit CSkillSlot_EnergyExplosion(const CSkillSlot_EnergyExplosion& _rOther);
-	virtual ~CSkillSlot_EnergyExplosion() = default;
+private:
+	explicit CSkillSlot_IceSpear(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
+	explicit CSkillSlot_IceSpear(const CSkillSlot_IceSpear& _rOther);
+	virtual ~CSkillSlot_IceSpear() = default;
 
 public:
 	// CPlayerSkill을(를) 통해 상속됨
@@ -22,13 +21,13 @@ public:
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 
 public:
-	static CSkillSlot_EnergyExplosion* Create(LPDIRECT3DDEVICE9 pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
+	static CSkillSlot_IceSpear* Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 
 public:
 	virtual _bool Actual_UseSkill(void* _pArg = nullptr) override;
-
 };
 
 END
-#endif
+
+#endif // !__ICESPEAR_H__

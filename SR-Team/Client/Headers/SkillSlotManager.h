@@ -33,12 +33,17 @@ public:
 private:
 	static CSkillSlotManager*	m_pInstance;
 
-	CSkillSlot*			m_pLaserSkill = nullptr;
-	CSkillSlot*			m_pMeteoSkill = nullptr;
-	CSkillSlot*			m_pManaDriftSkill = nullptr;
-	CSkillSlot*			m_pEnergyExplotiationSkill = nullptr;
-	CSkillSlot*			m_pIceCrystalSkill = nullptr;
+	CSkillSlot*		m_pSlot_Meteor			= nullptr;
+	CSkillSlot*		m_pSlot_IceSpear		= nullptr;
+	CSkillSlot*		m_pSlot_ThunderStorm	= nullptr;
+	CSkillSlot*		m_pSlot_ManaDrift		= nullptr;
+	CSkillSlot*		m_pSlot_Blind			= nullptr;
+	CSkillSlot*		m_pSlot_Shield			= nullptr;
+	CSkillSlot*		m_pSlot_IceBlast		= nullptr;
+	CSkillSlot*		m_pSlot_Explosion		= nullptr;
+
 };
 
 END
+
 #endif
