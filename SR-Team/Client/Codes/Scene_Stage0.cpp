@@ -75,33 +75,9 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 
 	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
 	{
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Mouse")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Camera")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Player")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Item")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_MainUI")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Inventory")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Shop")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Wand")))
-			return -1;
-
-		if (FAILED(pManagement->Clear_Except(SCENE_TOWN, (_int)m_ePreLoadSceneID)))
+		if (FAILED(Travel_NextLayers()))
 		{
-			PRINT_LOG(L"Failed To Clear_Except in Town", LOG::CLIENT);
+			PRINT_LOG(L"Failed To Travel Layers in Town", LOG::CLIENT);
 			return -1;
 		}
 
@@ -320,6 +296,51 @@ HRESULT CScene_Stage0::Setup_Layer_NPC(const wstring & LayerTag)
 		return E_FAIL;
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_ShopNPC", SCENE_STAGE0, LayerTag)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Stage0::Travel_NextLayers()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Mouse")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Camera")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Player")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Item")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_MainUI")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Inventory")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Shop")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Wand")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_PlayerSkill")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_PlayerItem")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Clear_Except(SCENE_TOWN, (_int)m_ePreLoadSceneID)))
+	{
+		PRINT_LOG(L"Failed To Clear_Except in Town", LOG::CLIENT);
+		return E_FAIL;
+	}
 
 	return S_OK;
 }

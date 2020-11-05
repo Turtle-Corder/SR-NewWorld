@@ -54,33 +54,9 @@ _int CScene_Stage2::Update_Scene(_float _fDeltaTime)
 		if (FAILED(pPlayer->Set_ClearInfo(SCENE_ICELAND)))
 			return -1;
 
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Mouse")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Camera")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Player")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Item")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_MainUI")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Inventory")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Shop")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Wand")))
-			return -1;
-
-		if (FAILED(pManagement->Clear_Except(SCENE_ICELAND, SCENE_TOWN)))
+		if (FAILED(Travel_NextLayers()))
 		{
-			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
+			PRINT_LOG(L"Failed To Travel Layers in Iceland", LOG::CLIENT);
 			return -1;
 		}
 
@@ -179,5 +155,50 @@ HRESULT CScene_Stage2::Setup_Layer_Player_Attack(const wstring & LayerTag)
 
 HRESULT CScene_Stage2::Setup_Layer_Monster_Attack(const wstring & LayerTag)
 {
+	return S_OK;
+}
+
+HRESULT CScene_Stage2::Travel_NextLayers()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Mouse")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Camera")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Player")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Item")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_MainUI")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Inventory")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Shop")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_Wand")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_PlayerSkill")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_PlayerItem")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Clear_Except(SCENE_ICELAND, SCENE_TOWN)))
+	{
+		PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
+		return E_FAIL;
+	}
+
 	return S_OK;
 }

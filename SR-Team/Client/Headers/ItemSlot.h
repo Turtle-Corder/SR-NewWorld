@@ -20,6 +20,7 @@ protected:
 public:
 	virtual _bool Can_UseItem();
 	virtual _bool Actual_UseItem() = 0;
+	_float Get_Progress();
 
 public:
 	virtual void Free() override;

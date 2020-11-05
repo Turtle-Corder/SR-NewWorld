@@ -23,6 +23,8 @@ HRESULT CItemSlot_BlueElixir::Setup_GameObject_Prototype()
 HRESULT CItemSlot_BlueElixir::Setup_GameObject(void * _pArg)
 {
 	m_iCanUseCnt = m_iMaxUseCnt = 1;
+	m_fEachDelay = 3.f;
+
 
 	return S_OK;
 }

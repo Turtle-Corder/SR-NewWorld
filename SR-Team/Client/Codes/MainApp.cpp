@@ -39,12 +39,13 @@
 #include "SkillSlot_IceBlast.h"
 #include "SkillSlot_Explosion.h"
 
-#include "ItemInventory.h"
 #include "ItemSlot_RedPotion.h"
-#include "Mouse.h"
 #include "ItemSlot_BluePotion.h"
 #include "ItemSlot_RedElixir.h"
 #include "ItemSlot_BlueElixir.h"
+
+#include "ItemInventory.h"
+#include "Mouse.h"
 #include "Tree.h"
 #include "Flower.h"
 //#include "Quest1.h"
@@ -286,31 +287,49 @@ HRESULT CMainApp::Setup_HK()
 
 #pragma region GameObject_SkillSlots
 
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Meteor", CMeteor::Create(m_pDevice))))
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Meteor", CSkillSlot_Meteor::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_IceSpear", CMeteor::Create(m_pDevice))))
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_IceSpear", CSkillSlot_IceSpear::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_ThunderStorm", CMeteor::Create(m_pDevice))))
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_ThunderStorm", CSkillSlot_ThunderStorm::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_ManaDrift", CMeteor::Create(m_pDevice))))
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_ManaDrift", CSkillSlot_ManaDrift::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Blind", CMeteor::Create(m_pDevice))))
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Blind", CSkillSlot_Blind::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Shield", CMeteor::Create(m_pDevice))))
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Shield", CSkillSlot_Shield::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_IceBlast", CMeteor::Create(m_pDevice))))
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_IceBlast", CSkillSlot_IceBlast::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Explosion", CMeteor::Create(m_pDevice))))
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Explosion", CSkillSlot_Explosion::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
-	CSkillSlotManager::Get_Instance();
+#pragma endregion
+
+#pragma region GameObject_ItemSlots
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemSlot_RedPotion", CItemSlot_RedPotion::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemSlot_BluePotion", CItemSlot_BluePotion::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemSlot_RedElixir", CItemSlot_RedElixir::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemSlot_BlueElixir", CItemSlot_BlueElixir::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+
+#pragma endregion
+
+
 
 #pragma endregion
 

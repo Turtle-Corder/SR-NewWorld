@@ -34,6 +34,7 @@ private:
 	HRESULT Setup_Layer_FlowerQuest(const wstring& LayerTag);
 	HRESULT Setup_Layer_NPC(const wstring& LayerTag);
 
+	HRESULT Travel_NextLayers();
 	
 private:
 	CPreLoader*		m_pPreLoader = nullptr;

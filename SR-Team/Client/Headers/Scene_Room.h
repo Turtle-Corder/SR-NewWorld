@@ -41,6 +41,9 @@ private:
 	HRESULT SetUp_Layer_Item(const wstring& LayerTag);
 
 	HRESULT Setup_Layer_PlayerSkill(const wstring& LayerTag);
+	HRESULT Setup_Layer_PlayerItem(const wstring& LayerTag);
+
+	HRESULT Travel_NextLayers();
 
 private:
 	CPreLoader*		m_pPreLoader = nullptr;

@@ -44,6 +44,14 @@ _bool CItemInventory::Actual_UseItem(_int iIndex)
 	return false;
 }
 
+_float CItemInventory::Get_Progress(_int _iIndex)
+{
+	if (m_pPlayerItem[_iIndex])
+		return m_pPlayerItem[_iIndex]->Get_Progress();
+
+	return 0.f;
+}
+
 HRESULT CItemInventory::Setup_GameObject_Prototype()
 {
 	return S_OK;

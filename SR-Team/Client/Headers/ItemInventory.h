@@ -19,6 +19,8 @@ public:
 	HRESULT Set_ItemIndex(_int iIndex, ePotion_ID ePOTION);
 	_bool Can_UseItem(_int _iIndex);
 	_bool Actual_UseItem(_int iIndex);
+	_float Get_Progress(_int _iIndex);
+
 
 public:
 	// CUIObject을(를) 통해 상속됨

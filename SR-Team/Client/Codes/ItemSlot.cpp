@@ -44,6 +44,11 @@ _bool CItemSlot::Actual_UseItem()
 	return false;
 }
 
+_float CItemSlot::Get_Progress()
+{
+	return m_fDelayCnt / m_fEachDelay;
+}
+
 void CItemSlot::Free()
 {
 	CUIObject::Free();

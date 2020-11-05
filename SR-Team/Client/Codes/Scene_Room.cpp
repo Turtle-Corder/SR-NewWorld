@@ -3,6 +3,7 @@
 #include "CubeTerrain.h"
 #include "Scene_Stage0.h"
 #include "Player.h"
+#include "SkillSlotManager.h"
 #include "..\Headers\Scene_Room.h"
 
 USING(Client)
@@ -62,6 +63,10 @@ HRESULT CScene_Room::Setup_Scene()
 	if (FAILED(Setup_Layer_PlayerSkill(L"Layer_PlayerSkill")))
 		return E_FAIL;
 
+	// 퀵슬롯에서 사용 가능한 아이템들
+	if (FAILED(Setup_Layer_PlayerItem(L"Layer_PlayerItem")))
+		return E_FAIL;
+
 	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_STAGE0);
 	if (nullptr == m_pPreLoader)
 	{
@@ -90,36 +95,9 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 			return -1;
 		}
 
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Mouse")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Camera")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Player")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Item")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainUI")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Inventory")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Shop")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Wand")))
-			return -1;
-
-		if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_PlayerSkill")))
-			return -1;
-
-		if (FAILED(pManagement->Clear_Except(SCENE_ROOM, SCENE_TOWN)))
+		if (FAILED(Travel_NextLayers()))
 		{
-			PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
+			PRINT_LOG(L"Failed To Travel Layers in Room", LOG::CLIENT);
 			return -1;
 		}
 
@@ -323,6 +301,72 @@ HRESULT CScene_Room::Setup_Layer_PlayerSkill(const wstring & LayerTag)
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_SkillSlot_Explosion", SCENE_ROOM, LayerTag)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_PlayerItem(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ItemSlot_RedPotion", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ItemSlot_BluePotion", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ItemSlot_RedElixir", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ItemSlot_BlueElixir", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::Travel_NextLayers()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Mouse")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Camera")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Player")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Item")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainUI")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Inventory")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Shop")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_Wand")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_PlayerSkill")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_PlayerItem")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Clear_Except(SCENE_ROOM, SCENE_TOWN)))
+	{
+		PRINT_LOG(L"Failed To Clear_Except in Room", LOG::CLIENT);
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
