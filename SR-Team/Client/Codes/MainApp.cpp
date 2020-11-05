@@ -192,6 +192,14 @@ HRESULT CMainApp::Setup_DefaultSetting()
 	srand(unsigned(time(NULL)));
 
 
+
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE)))
+	{
+		PRINT_LOG(L"Failed To CullMode Change Failed", LOG::CLIENT);
+		return E_FAIL;
+	}
+
+
 	if (FAILED(m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
 	{
 		PRINT_LOG(L"Failed To Light Off", LOG::CLIENT);

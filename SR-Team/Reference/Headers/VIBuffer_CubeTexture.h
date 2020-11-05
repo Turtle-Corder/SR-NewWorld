@@ -21,7 +21,9 @@ private:
 	virtual HRESULT Setup_Component_Prototype() override;
 	virtual HRESULT Setup_Component(void* _pArg) override;
 
+
 public:
+	HRESULT Set_Transform_Nothing(const _matrix * _pMatWorld);
 	virtual HRESULT Set_Transform(const _matrix* _pMatWorld, const CCamera* _pCamera) override;
 	virtual HRESULT Set_Transform(const _matrix* _pMatWorld, const _matrix* _pMatView, const _matrix* _pMatProj) override;
 
