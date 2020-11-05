@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "DamageInfo.h"
 #include "..\Headers\Wolf.h"
 
 USING(Client)
@@ -36,26 +37,6 @@ HRESULT CWolf::Setup_GameObject(void * _pArg)
 	return S_OK;
 }
 
-_int CWolf::Update_GameObject(_float _fDeltaTime)
-{
-
-	Update_AI();						// 1. 뭘 할지 결정만 한다
-
-	Update_Move(_fDeltaTime);			// 2. 실제 이동 시킨다
-
-	IsOnTerrain();						// 3. y축(높이)를 보정 시킨다.
-
-	Update_State(_fDeltaTime);			// 4. 상태 변화에 따른 값 변경 (현재 Anim쪽만..)
-
-	Update_Anim(_fDeltaTime);			// 5. 애니메이션 재생
-
-	Update_Transform(_fDeltaTime);		// 6. 행렬변환
-
-	m_pColliderCom->Update_Collider(m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition);	// 7. 충돌체 이동
-
-	return GAMEOBJECT::NOEVENT;
-}
-
 _int CWolf::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -64,7 +45,7 @@ _int CWolf::LateUpdate_GameObject(_float _fDeltaTime)
 
 	if (FAILED(Update_AtkDelay(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
-	
+
 	if (FAILED(Update_HurtDelay(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
@@ -111,6 +92,19 @@ CGameObject * CWolf::Clone_GameObject(void * _pArg)
 	return pInstance;
 }
 
+HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
+{
+	if (!m_bCanHurt && !_pDamageComp)
+		return S_OK;
+
+	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	if (0 >= m_pStatusCom->Get_Status().iHp)
+		m_bDead = true;
+
+	m_bCanHurt = true;
+	return S_OK;
+}
+
 void CWolf::Free()
 {
 	for (_uint iCnt = 0; iCnt < WOLF_END; ++iCnt)
@@ -120,6 +114,8 @@ void CWolf::Free()
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
 
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pStatusCom);
 
 	CGameObject::Free();
 }
@@ -139,11 +135,16 @@ CWolf * CWolf::Create(LPDIRECT3DDEVICE9 _pDevice)
 	return pInstance;
 }
 
+
+
+//----------------------------------------------------------------------------------------------------
+// Add Component
+//----------------------------------------------------------------------------------------------------
 HRESULT CWolf::Add_Component()
 {
 	if (FAILED(Add_Component_VIBuffer()))
 		return E_FAIL;
-	
+
 	if (FAILED(Add_Component_Transform()))
 		return E_FAIL;
 
@@ -273,122 +274,32 @@ HRESULT CWolf::Add_Component_Extends()
 	return S_OK;
 }
 
-HRESULT CWolf::Update_Transform(_float _fDeltaTime)
+
+
+//----------------------------------------------------------------------------------------------------
+// Behavior
+//----------------------------------------------------------------------------------------------------
+_int CWolf::Update_GameObject(_float _fDeltaTime)
 {
-	m_pTransformCom[WOLF_BASE]->Update_Transform();
+	if (m_bDead)
+		return GAMEOBJECT::DEAD;
 
-	for (_uint iCnt = WOLF_UPDATEA_START; iCnt < WOLF_END; ++iCnt)
-	{
-		if (FAILED(m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld)))
-		{
-			PRINT_LOG(L"Failed To 멋있음", LOG::DEBUG);
-			return E_FAIL;
-		}
-	}
+	Update_AI();						// 1. 뭘 할지 결정만 한다
 
-	return S_OK;
+	Update_Move(_fDeltaTime);			// 2. 실제 이동 시킨다
+
+	IsOnTerrain();						// 3. y축(높이)를 보정 시킨다.
+
+	Update_State(_fDeltaTime);			// 4. 상태 변화에 따른 값 변경 (현재 Anim쪽만..)
+
+	Update_Anim(_fDeltaTime);			// 5. 애니메이션 재생
+
+	Update_Transform(_fDeltaTime);		// 6. 행렬변환
+
+	m_pColliderCom->Update_Collider(m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition);	// 7. 충돌체 이동
+
+	return GAMEOBJECT::NOEVENT;
 }
-
-
-HRESULT CWolf::Update_State(_float _fDeltaTime)
-{
-	if (m_ePreState != m_eCurState)
-	{
-		switch (m_eCurState)
-		{
-		case Client::CWolf::IDLE:
-			break;
-		
-		case Client::CWolf::MOVE:
-			break;
-	
-		case Client::CWolf::ATTACK:
-			break;
-
-		case Client::CWolf::DEAD:
-			break;
-		}
-
-		m_iAnimStep = 0;
-		m_fHurtTimer = 0.f;
-		m_ePreState = m_eCurState;
-	}
-
-	return S_OK;
-}
-
-HRESULT CWolf::Update_AtkDelay(_float _fDeltaTime)
-{
-	if (!m_bAttack)
-	{
-		m_fAttackTimer += _fDeltaTime;
-		if (m_fAttackTimer >= m_fAttackDelay)
-		{
-			m_fAttackTimer = 0.f;
-			m_bAttack = true;
-		}
-	}
-
-	return S_OK;
-}
-
-HRESULT CWolf::Update_HurtDelay(_float _fDeltaTime)
-{
-	if (!m_bHurt)
-	{
-		m_fHurtTimer += _fDeltaTime;
-		if (m_fHurtTimer >= m_fHurtDelay)
-		{
-			m_fHurtTimer = 0.f;
-			m_bHurt = true;
-		}
-	}
-
-	return S_OK;
-}
-
-HRESULT CWolf::Update_Anim(_float _fDeltaTime)
-{
-	switch (m_eCurState)
-	{
-
-	case Client::CWolf::MOVE:
-		Update_Anim_Move(_fDeltaTime);
-		break;
-
-
-	case Client::CWolf::ATTACK:
-	{
-		if (rand() % 2)
-			Update_Anim_Attack1(_fDeltaTime);
-		else
-			Update_Anim_Attack2(_fDeltaTime);
-	}
-		break;
-
-
-	default:
-		break;
-	}
-
-	return S_OK;
-}
-
-HRESULT CWolf::Update_Anim_Move(_float _fDeltaTime)
-{
-	return S_OK;
-}
-
-HRESULT CWolf::Update_Anim_Attack1(_float _fDeltaTime)
-{
-	return S_OK;
-}
-
-HRESULT CWolf::Update_Anim_Attack2(_float _fDeltaTime)
-{
-	return S_OK;
-}
-
 
 HRESULT CWolf::Update_AI()
 {
@@ -474,7 +385,7 @@ HRESULT CWolf::Update_Move(_float _fDeltaTime)
 	//--------------------------------------------------
 	// 이동
 	//--------------------------------------------------
-	_vec3 vAddPos = m_vMoveDirection * m_pTransformCom[WOLF_BASE]->Get_Desc().fSpeedPerSecond;
+	_vec3 vAddPos = m_vMoveDirection * m_pTransformCom[WOLF_BASE]->Get_Desc().fSpeedPerSecond * _fDeltaTime;
 	m_pTransformCom[WOLF_BASE]->Set_Position(m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition + vAddPos);
 
 	return S_OK;
@@ -503,200 +414,285 @@ HRESULT CWolf::IsOnTerrain()
 	return S_OK;
 }
 
-//HRESULT CWolf::Move(_float _fDeltaTime)
-//{
-//	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
-//	_vec3 m_vPos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
-//	m_vDir = vPlayerPos - m_vPos;
-//	_float m_fLength = D3DXVec3Length(&m_vDir);
-//	D3DXVec3Normalize(&m_vDir, &m_vDir);
-//
-//	if (3.f <= m_fLength)
-//	{
-//		m_vPos += m_vDir * _fDeltaTime;
-//		m_pTransformCom[WOLF_BASE]->Set_Position(m_vPos);
-//	}
-//	else
-//		m_eCurState = CWolf::ATTACK;
-//
-//	return S_OK;
-//}
 
 
-/*
-HRESULT CWolf::Attack(_float _fDeltaTime)
+//----------------------------------------------------------------------------------------------------
+// State
+//----------------------------------------------------------------------------------------------------
+HRESULT CWolf::Update_State(_float _fDeltaTime)
 {
-	if (m_eCurState != CWolf::ATTACK)
+	// 상태가 바뀌는 순간 초기화시켜줄 값들!
+	if (m_ePreState != m_eCurState)
+	{
+		switch (m_eCurState)
+		{
+		case Client::CWolf::IDLE:
+			Anim_Reset_Move();
+			break;
+
+		case Client::CWolf::MOVE:
+			break;
+
+		case Client::CWolf::ATTACK:
+			break;
+
+		case Client::CWolf::DEAD:
+			break;
+		}
+
+		m_iAnimStep = 0;
+		m_fHurtTimer = 0.f;
+		m_ePreState = m_eCurState;
+	}
+
+	return S_OK;
+}
+
+
+
+//----------------------------------------------------------------------------------------------------
+// Transform
+//----------------------------------------------------------------------------------------------------
+HRESULT CWolf::Update_Transform(_float _fDeltaTime)
+{
+	m_pTransformCom[WOLF_BASE]->Update_Transform();
+
+	for (_uint iCnt = WOLF_UPDATEA_START; iCnt < WOLF_END; ++iCnt)
+	{
+		if (FAILED(m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld)))
+		{
+			PRINT_LOG(L"Failed To 멋있음", LOG::DEBUG);
+			return E_FAIL;
+		}
+	}
+
+	return S_OK;
+}
+
+
+
+//----------------------------------------------------------------------------------------------------
+// Delay
+//----------------------------------------------------------------------------------------------------
+HRESULT CWolf::Update_AtkDelay(_float _fDeltaTime)
+{
+	if (!m_bCanAttack)
+	{
+		m_fAttackTimer += _fDeltaTime;
+		if (m_fAttackTimer >= m_fAttackDelay)
+		{
+			m_fAttackTimer = 0.f;
+			m_bCanAttack = true;
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CWolf::Update_HurtDelay(_float _fDeltaTime)
+{
+	if (!m_bCanHurt)
+	{
+		m_fHurtTimer += _fDeltaTime;
+		if (m_fHurtTimer >= m_fHurtDelay)
+		{
+			m_fHurtTimer = 0.f;
+			m_bCanHurt = true;
+		}
+	}
+
+	return S_OK;
+}
+
+
+
+//----------------------------------------------------------------------------------------------------
+// Animation
+//----------------------------------------------------------------------------------------------------
+HRESULT CWolf::Update_Anim(_float _fDeltaTime)
+{
+	switch (m_eCurState)
+	{
+
+	case Client::CWolf::MOVE:
+		Update_Anim_Move(_fDeltaTime);
+		break;
+
+
+	case Client::CWolf::ATTACK:
+	{
+		//		_int iRand = rand() % 100;
+
+		//		if (iRand < 70)								// 7할의 확률
+		Update_Anim_Attack1(_fDeltaTime);
+		//		else if (iRand < 90)						// 9-7할의 확률
+		//			Update_Anim_Attack2(_fDeltaTime);
+		//		else
+		//			Update_Anim_Attack3(_fDeltaTime);		// 10-9할의 확률
+	}
+	break;
+
+
+	default:
+		break;
+	}
+
+	return S_OK;
+}
+
+HRESULT CWolf::Anim_Reset_Move()
+{
+	m_pTransformCom[WOLF_LEG1]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[WOLF_LEG2]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[WOLF_LEG3]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[WOLF_LEG4]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+
+	return S_OK;
+}
+
+HRESULT CWolf::Anim_Reset_Attack()
+{
+	m_pTransformCom[WOLF_HEAD]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[WOLF_MOUTH]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[WOLF_EAR1]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[WOLF_EAR2]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+
+	return S_OK;
+}
+
+HRESULT CWolf::Update_Anim_Move(_float _fDeltaTime)
+{
+	if (MOVE != m_eCurState)
 		return S_OK;
 
-	if (!m_bCheck)
+	//--------------------------------------------------
+	// 다음 애니메이션으로 바꿔줌
+	//--------------------------------------------------
+	m_fAnimTimer += _fDeltaTime;
+	if (m_fAnimTimer >= 0.3f)
 	{
-		m_vPrePos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
-		m_bCheck = true;
+		m_fAnimTimer = 0.f;
+		m_iAnimStep = !m_iAnimStep;
+		Anim_Reset_Move();
 	}
 
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
-	if (nullptr == pPlayerTransform)
-		return E_FAIL;
-
-	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
-	_vec3 m_vPos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
-	m_vDir = vPlayerPos - m_vPos;
-	_float m_fLength = D3DXVec3Length(&m_vDir);
-	D3DXVec3Normalize(&m_vDir, &m_vDir);
-
-	if (1.f <= m_fLength && !m_bCrash)
+	//--------------------------------------------------
+	// 애니메이션 동작
+	//--------------------------------------------------
+	if (m_iAnimStep)
 	{
-		m_vPos += m_vDir * (_fDeltaTime * 8.f);
-		m_pTransformCom[WOLF_BASE]->Set_Position(m_vPos);
+		m_pTransformCom[WOLF_LEG1]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[WOLF_LEG2]->Turn(CTransform::AXIS_X, _fDeltaTime);
+		m_pTransformCom[WOLF_LEG3]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[WOLF_LEG4]->Turn(CTransform::AXIS_X, _fDeltaTime);
 	}
-	else if (m_bCrash)
-	{
-		if (m_fLength <= 3.f)
-		{
-			m_vDir = m_vPos - vPlayerPos;
-			_float m_fLength = D3DXVec3Length(&m_vDir);
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-			m_vPos += m_vDir * _fDeltaTime * 2.f;
-			m_pTransformCom[WOLF_BASE]->Set_Position(m_vPos);
-		}
-		else
-		{
-			m_eCurState = CWolf::MOVE;
-			m_bCrash = false;
-			m_bCheck = false;
-			return S_OK;
-		}
-	}
+
 	else
 	{
-		m_eCurState = CWolf::MOVE;
-		m_bCheck = false;
+		m_pTransformCom[WOLF_LEG1]->Turn(CTransform::AXIS_X, _fDeltaTime);
+		m_pTransformCom[WOLF_LEG2]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[WOLF_LEG3]->Turn(CTransform::AXIS_X, _fDeltaTime);
+		m_pTransformCom[WOLF_LEG4]->Turn(CTransform::AXIS_X, -_fDeltaTime);
 	}
 
 	return S_OK;
 }
 
-HRESULT CWolf::Setting_Part()
+HRESULT CWolf::Update_Anim_Attack1(_float _fDeltaTime)
 {
-	for (_uint iCnt = WOLF_BODY; iCnt < WOLF_END; ++iCnt)
+	if (ATTACK != m_eCurState)
+		return S_OK;
+
+
+	//--------------------------------------------------
+	// 다음 애니메이션으로 바꿔줌
+	//--------------------------------------------------
+	m_fAnimTimer += _fDeltaTime;
+	if (m_fAnimTimer >= 0.6f)
 	{
-		m_pTransformCom[iCnt]->Update_Transform();
-		m_pTransformCom[iCnt]->Set_WorldMatrix(m_pTransformCom[iCnt]->Get_Desc().matWorld * m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld);
+		m_fAnimTimer = 0.f;
+		++m_iAnimStep;
+		Anim_Reset_Attack();
+
+		if (2 == m_iAnimStep)
+			Spawn_Impact();
+		else if (4 == m_iAnimStep)
+			m_eCurState = IDLE;
 	}
 
-	return S_OK;
-}
 
-HRESULT CWolf::MoveMotion(_float _fDeltaTime)
-{
-	if (m_eCurState == CWolf::MOVE)
+	//--------------------------------------------------
+	// 애니메이션 동작
+	//--------------------------------------------------
+	if (0 == m_iAnimStep % 2)
 	{
-		m_fMoveTime += _fDeltaTime;
-
-		if (m_fMoveTime >= 0.3f)
-		{
-			if (m_eMove == CWolf::CHANGE_LEFT)
-				m_eMove = CWolf::CHANGE_RIGHT;
-			else if (m_eMove == CWolf::CHANGE_RIGHT)
-				m_eMove = CWolf::CHANGE_LEFT;
-
-			m_fMoveTime = 0.f;
-			m_pTransformCom[WOLF_LEG1]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-			m_pTransformCom[WOLF_LEG2]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-			m_pTransformCom[WOLF_LEG3]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-			m_pTransformCom[WOLF_LEG4]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-
-		}
-
-		if (m_eMove == CWolf::CHANGE_LEFT)
-		{
-			m_pTransformCom[WOLF_LEG1]->Turn(CTransform::AXIS_X, -_fDeltaTime);
-			m_pTransformCom[WOLF_LEG2]->Turn(CTransform::AXIS_X, _fDeltaTime);
-			m_pTransformCom[WOLF_LEG3]->Turn(CTransform::AXIS_X, -_fDeltaTime);
-			m_pTransformCom[WOLF_LEG4]->Turn(CTransform::AXIS_X, _fDeltaTime);
-		}
-		else if (m_eMove == CWolf::CHANGE_RIGHT)
-		{
-			m_pTransformCom[WOLF_LEG1]->Turn(CTransform::AXIS_X, _fDeltaTime);
-			m_pTransformCom[WOLF_LEG2]->Turn(CTransform::AXIS_X, -_fDeltaTime);
-			m_pTransformCom[WOLF_LEG3]->Turn(CTransform::AXIS_X, _fDeltaTime);
-			m_pTransformCom[WOLF_LEG4]->Turn(CTransform::AXIS_X, -_fDeltaTime);
-		}
+		m_pTransformCom[WOLF_HEAD]->Turn(CTransform::AXIS_Z, _fDeltaTime);
+		m_pTransformCom[WOLF_MOUTH]->Turn(CTransform::AXIS_Z, _fDeltaTime);
+		m_pTransformCom[WOLF_EAR1]->Turn(CTransform::AXIS_Z, _fDeltaTime);
+		m_pTransformCom[WOLF_EAR2]->Turn(CTransform::AXIS_Z, _fDeltaTime);
 	}
+
 	else
 	{
-		m_pTransformCom[WOLF_LEG1]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-		m_pTransformCom[WOLF_LEG2]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-		m_pTransformCom[WOLF_LEG3]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-		m_pTransformCom[WOLF_LEG4]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+		m_pTransformCom[WOLF_HEAD]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
+		m_pTransformCom[WOLF_MOUTH]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
+		m_pTransformCom[WOLF_EAR1]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
+		m_pTransformCom[WOLF_EAR2]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
 	}
 
 	return S_OK;
 }
 
-HRESULT CWolf::AttackMotion(_float _fDeltaTime)
+HRESULT CWolf::Update_Anim_Attack2(_float _fDeltaTime)
 {
-	if (m_eCurState == CWolf::ATTACK)
+	if (ATTACK != m_eCurState)
+		return S_OK;
+
+	//--------------------------------------------------
+	// 다음 애니메이션으로 바꿔줌
+	//--------------------------------------------------
+	m_fAnimTimer += _fDeltaTime;
+	if (m_fAnimTimer >= 0.6f)
 	{
-		m_fHeadShakeTime += _fDeltaTime;
-
-		if (m_fHeadShakeTime >= 0.6f)
-		{
-			if (m_eHead == CWolf::SHAKE_LHEAD)
-				m_eHead = CWolf::SHAKE_RHEAD;
-			else if (m_eHead == CWolf::SHAKE_RHEAD)
-				m_eHead = CWolf::SHAKE_LHEAD;
-
-			m_fHeadShakeTime = 0.f;
-			m_pTransformCom[WOLF_HEAD]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-			m_pTransformCom[WOLF_MOUTH]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-			m_pTransformCom[WOLF_EAR1]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-			m_pTransformCom[WOLF_EAR2]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-
-		}
-		if (m_eHead == CWolf::SHAKE_LHEAD)
-		{
-			m_pTransformCom[WOLF_HEAD]->Turn(CTransform::AXIS_Z, _fDeltaTime);
-			m_pTransformCom[WOLF_MOUTH]->Turn(CTransform::AXIS_Z, _fDeltaTime);
-			m_pTransformCom[WOLF_EAR1]->Turn(CTransform::AXIS_Z, _fDeltaTime);
-			m_pTransformCom[WOLF_EAR2]->Turn(CTransform::AXIS_Z, _fDeltaTime);
-		}
-		else if (m_eHead == CWolf::SHAKE_RHEAD)
-		{
-			m_pTransformCom[WOLF_HEAD]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
-			m_pTransformCom[WOLF_MOUTH]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
-			m_pTransformCom[WOLF_EAR1]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
-			m_pTransformCom[WOLF_EAR2]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
-		}
+		m_fAnimTimer = 0.f;
+		++m_iAnimStep;
+		Anim_Reset_Attack();
 	}
-	else
+
+
+	//--------------------------------------------------
+	// 애니메이션 동작
+	//--------------------------------------------------
+	if (0 == m_iAnimStep)
 	{
-		m_pTransformCom[WOLF_HEAD]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-		m_pTransformCom[WOLF_MOUTH]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-		m_pTransformCom[WOLF_EAR1]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-		m_pTransformCom[WOLF_EAR2]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+
+	}
+
+	else if (1 == m_iAnimStep)
+	{
+
+	}
+
+	else if (2 == m_iAnimStep)
+	{
+		// 마지막 행동에서 바꿔줌
+		m_eCurState = IDLE;
 	}
 
 	return S_OK;
 }
-*/
 
-HRESULT CWolf::Spawn_InstantImpact(const wstring & LayerTag)
+
+HRESULT CWolf::Spawn_Impact()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
 	m_tImpact.vPosition = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Instant_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &m_tImpact)))/*여기 StartPos*/
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Instant_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &m_tImpact)))/*여기 StartPos*/
 		return E_FAIL;
 
+	m_bCanAttack = true;
 	return S_OK;
 }
