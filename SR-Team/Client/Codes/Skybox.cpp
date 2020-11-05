@@ -34,6 +34,9 @@ _int CSkybox::Update_GameObject(_float _fDeltaTime)
 	if (FAILED(Movement(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
+	if (FAILED(m_pTransformCom->Update_Transform()))
+		return GAMEOBJECT::WARN;
+
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -43,12 +46,8 @@ _int CSkybox::LateUpdate_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
 
-	if (FAILED(m_pTransformCom->Update_Transform()))
-		return GAMEOBJECT::WARN;
-
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_PRIORITY, this)))
 		return GAMEOBJECT::WARN;
-
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -63,51 +62,28 @@ HRESULT CSkybox::Render_Priority()
 	if (nullptr == pCamera)
 		return E_FAIL;
 
-	
-	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE)))
-		return E_FAIL;
 
-	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	//사용할 매트릭스 설정
 
+	_matrix IdentityMatrix /*ViewMatrix, ProjMatrix*/;
 
-	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
-		return E_FAIL;
+	D3DXMatrixIdentity(&IdentityMatrix);
 
-	if (FAILED(m_pTextureCom->SetTexture(m_iTextureID)))
-		return E_FAIL;
+	//Skybox전용 RenderSetting
 
-	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
-		return E_FAIL;
-
-	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-
-	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW)))
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE)))
 		return E_FAIL;
 
 
-	return S_OK;
-}
+	// 버텍스 버퍼
 
-HRESULT CSkybox::Render_NoneAlpha()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
+	if (FAILED(((CVIBuffer_CubeTexture*)m_pVIBufferCom)->Set_Transform_Nothing(&m_pTransformCom->Get_Desc().matWorld)))
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-	if (nullptr == pCamera)
+	if (FAILED(m_pDevice->SetTransform(D3DTS_VIEW, pCamera->Get_ViewMatrix())))
 		return E_FAIL;
 
-
-
-	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE)))
-		return E_FAIL;
-
-
-	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-
-
-	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
+	if (FAILED(m_pDevice->SetTransform(D3DTS_PROJECTION, pCamera->Get_ProjMatrix())))
 		return E_FAIL;
 
 	if (FAILED(m_pTextureCom->SetTexture(m_iTextureID)))
@@ -116,15 +92,26 @@ HRESULT CSkybox::Render_NoneAlpha()
 	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
 		return E_FAIL;
 
-	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
 
-	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW)))
+
+
+	//m_pDevice 설정복구
+	if (FAILED(m_pDevice->SetTransform(D3DTS_WORLD, &IdentityMatrix)))
 		return E_FAIL;
 
+	if (FAILED(m_pDevice->SetTransform(D3DTS_VIEW, &IdentityMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pDevice->SetTransform(D3DTS_PROJECTION, &IdentityMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE)))
+		return E_FAIL;
 
 	return S_OK;
 }
+
 
 HRESULT CSkybox::Add_Component()
 {
@@ -141,10 +128,9 @@ HRESULT CSkybox::Add_Component()
 		return E_FAIL;
 
 	CTransform::TRANSFORM_DESC tTransformDesc;
+	ZeroMemory(&tTransformDesc, sizeof(CTransform::TRANSFORM_DESC));
+
 	tTransformDesc.vScale = _vec3(100.f, 100.f, 100.f);
-	tTransformDesc.vPosition = _vec3(5.f, 5.f, 5.f);
-
-
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
@@ -158,11 +144,12 @@ HRESULT CSkybox::Movement(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
-	m_pTransformCom->Set_Position(pCamera->Get_Position());
+	m_pTransformCom->Set_Position(pCamera->Get_Desc().vEye);
+
 	return S_OK;
 }
 
