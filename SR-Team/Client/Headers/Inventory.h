@@ -55,6 +55,7 @@ public:
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void * pArg) override;
+
 	virtual _int Update_GameObject(float DeltaTime) override;
 	virtual _int LateUpdate_GameObject(float DeltaTime) override;
 	virtual HRESULT Render_UI() override;

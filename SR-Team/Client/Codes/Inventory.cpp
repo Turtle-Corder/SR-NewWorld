@@ -873,6 +873,9 @@ HRESULT CInventory::Move_InventoryWnd()
 			vWndPos.x = (_float)pMouse->Get_Point().x;
 			vWndPos.y = (_float)pMouse->Get_Point().y;
 			m_pTransformCom[INVEN_WND]->Set_Position(vWndPos);
+			m_pTransformCom[INVEN_SELL_BUTTON]->Set_Position(_vec3(vWndPos.x + 120.f, vWndPos.y + 250.f, 0.f));
+			m_pTransformCom[INVEN_GOLD]->Set_Position(_vec3(vWndPos.x + 25.f, vWndPos.y + 115.f, 0.f));
+
 
 			if (Change_AllPos())
 				return E_FAIL;
@@ -893,9 +896,9 @@ HRESULT CInventory::Change_AllPos()
 	//		m_pTransformCom[i]->Get_Desc().matWorld * matWorld);
 	//}
 
-	m_pTransformCom[INVEN_SELL_BUTTON]->Set_Position(_vec3(vWndPos.x + 110.f, vWndPos.y + 180.f, 0.f));
+	//m_pTransformCom[INVEN_SELL_BUTTON]->Set_Position(_vec3(vWndPos.x + 110.f, vWndPos.y + 180.f, 0.f));
 	//m_pTransformCom[INVEN_GOLD]->Set_Position(_vec3(525.f, 335.f, 0.f));
-	m_pTransformCom[INVEN_GOLD]->Set_Position(_vec3(vWndPos.x + 25.f, vWndPos.y + 115.f, 0.f));
+	//m_pTransformCom[INVEN_GOLD]->Set_Position(_vec3(vWndPos.x + 25.f, vWndPos.y + 115.f, 0.f));
 
 	_int iIndex = 0;
 	for (_uint i = 0; i < 6; ++i)

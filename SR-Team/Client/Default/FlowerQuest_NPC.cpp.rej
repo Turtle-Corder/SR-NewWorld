@@ -1,0 +1,42 @@
+diff a/SR-Team/Client/Default/FlowerQuest_NPC.cpp b/SR-Team/Client/Default/FlowerQuest_NPC.cpp	(rejected hunks)
+@@ -37,11 +37,38 @@
+ 
+ _int CFlowerQuest_NPC::Update_GameObject(_float _fDeltaTime)
+ {
+-	for (_uint i = 0; i < PART_END; i++)
++	CManagement* pManagemnet = CManagement::Get_Instance();
++	if (nullptr == pManagemnet)
++		return GAMEOBJECT::ERR;
++	CPlayer* pPlayer = (CPlayer*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Player");
++	if (nullptr == pPlayer)
++		return GAMEOBJECT::ERR;
++	CFlowerQuest* pFlowerQuest = (CFlowerQuest*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_FlowerQuest");
++	if (nullptr == pFlowerQuest)
++		return GAMEOBJECT::ERR;
++
++	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
++		pManagemnet->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
++
++	_vec3 vPlayerPos = vPlayerTransform->Get_Desc().vPosition;
++	_vec3 vNpcPos = m_pTransformCom[0]->Get_Desc().vPosition;
++
++	_vec3 vMoveDir = vNpcPos - vPlayerPos;
++	_float fDist = D3DXVec3Length(&vMoveDir);
++
++	// ���� �Ÿ� ���ϰ� �Ǿ�� NPC���� �� �� �� ����
++	if (fDist <= 5.f)
+ 	{
+-		m_pTransformCom[i]->Update_Transform();
++		// NPC���� ���ɱ�
++		if (pManagemnet->Key_Down('G'))
++		{
++			pFlowerQuest->Set_StartQuest(true);
++		}
+ 	}
+ 
++	for (_uint i = 0; i < PART_END; i++)
++		m_pTransformCom[i]->Update_Transform();
++
+ 	return GAMEOBJECT::NOEVENT;
+ }
+ 

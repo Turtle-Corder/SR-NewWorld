@@ -172,6 +172,7 @@
     <ClInclude Include="..\Headers\Shield.h" />
     <ClInclude Include="..\Headers\SkillSlot_Blind.h" />
     <ClInclude Include="..\Headers\SkillSlot_Explosion.h" />
+    <ClInclude Include="..\Headers\Shop_NPC.h" />
     <ClInclude Include="..\Headers\Crack.h" />
     <ClInclude Include="..\Headers\EnergyBolt.h" />
     <ClInclude Include="..\Headers\Equip.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="..\Codes\Shield.cpp" />
     <ClCompile Include="..\Codes\SkillSlot_Blind.cpp" />
     <ClCompile Include="..\Codes\SkillSlot_Explosion.cpp" />
+    <ClCompile Include="..\Codes\Shop_NPC.cpp" />
     <ClCompile Include="..\Codes\Crack.cpp" />
     <ClCompile Include="..\Codes\EnergyBolt.cpp" />
     <ClCompile Include="..\Codes\Equip.cpp" />

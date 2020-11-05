@@ -171,7 +171,6 @@ HRESULT CMainApp::Render_MainApp()
 		return E_FAIL;
 	}
 
-	_crtBreakAlloc = 18;
 	return S_OK;
 }
 
@@ -195,6 +194,14 @@ void CMainApp::Render_FrameManager()
 HRESULT CMainApp::Setup_DefaultSetting()
 {
 	srand(unsigned(time(NULL)));
+
+
+
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE)))
+	{
+		PRINT_LOG(L"Failed To CullMode Change Failed", LOG::CLIENT);
+		return E_FAIL;
+	}
 
 
 	if (FAILED(m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
@@ -480,7 +487,6 @@ HRESULT CMainApp::Setup_EB()
 #pragma endregion
 
 #pragma region GameObject_Item 
-
 	// DataManager
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Item", CDataManager::Create(m_pDevice))))
 		return E_FAIL;
@@ -694,7 +700,6 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Component_Textures_Item
 
 #pragma region Shoes
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_ScholarShoes",
