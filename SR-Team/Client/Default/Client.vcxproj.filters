@@ -250,13 +250,12 @@
     <Filter Include="02.GameObject\00.Terrain\99.Dummy">
       <UniqueIdentifier>{3646a843-fdb0-444e-8f26-9f21e0547b79}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
     <Filter Include="02.GameObject\07.UI\06. FlowerQuest">
       <UniqueIdentifier>{0b724531-e1a6-41df-b602-e65904a9b72f}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\16. NPC">
       <UniqueIdentifier>{64965b81-7e14-4cae-b801-bc1506de356f}</UniqueIdentifier>
-=======
+    </Filter>
     <Filter Include="02.GameObject\06.Projectile\00.Player\02.MpDrift">
       <UniqueIdentifier>{6f26a8c4-ecad-4a30-92f5-eac561821b8f}</UniqueIdentifier>
     </Filter>
@@ -274,7 +273,6 @@
     </Filter>
     <Filter Include="02.GameObject\06.Projectile\00.Player\05.">
       <UniqueIdentifier>{bc0185db-a08e-4ba6-a585-c089cf14341d}</UniqueIdentifier>
->>>>>>> Test
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -491,7 +489,6 @@
     <ClInclude Include="..\Headers\Acorn.h">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\Headers\Scene_Stage3.h">
 	  <Filter>01.Scene\04.Scene_Stage3</Filter>
 	</ClInclude>
@@ -500,7 +497,7 @@
     </ClInclude>
     <ClInclude Include="FlowerQuest_NPC.h">
       <Filter>02.GameObject\16. NPC</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="..\Headers\MpDrift.h">
       <Filter>02.GameObject\06.Projectile\00.Player\02.MpDrift</Filter>
     </ClInclude>
@@ -512,7 +509,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\ThunderStorm.h">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm</Filter>
->>>>>>> Test
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -714,7 +710,6 @@
     <ClCompile Include="..\Codes\Acorn.cpp">
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="..\Codes\Scene_Stage3.cpp">
 	<Filter>01.Scene\04.Scene_Stage3</Filter>
 	</ClCompile>
@@ -723,7 +718,7 @@
     </ClCompile>
     <ClCompile Include="FlowerQuest_NPC.cpp">
       <Filter>02.GameObject\16. NPC</Filter>
-=======
+    </ClCompile>
     <ClCompile Include="..\Codes\MpDrift.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\02.MpDrift</Filter>
     </ClCompile>
@@ -735,7 +730,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ThunderStorm.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm</Filter>
->>>>>>> Test
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
