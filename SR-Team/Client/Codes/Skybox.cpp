@@ -97,8 +97,6 @@ HRESULT CSkybox::Render_Priority()
 
 
 	//m_pDevice 설정복구
-	if (FAILED(m_pDevice->SetTransform(D3DTS_WORLD, &IdentityMatrix)))
-		return E_FAIL;
 
 	if (FAILED(m_pDevice->SetTransform(D3DTS_VIEW, &IdentityMatrix)))
 		return E_FAIL;
