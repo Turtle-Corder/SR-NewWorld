@@ -255,38 +255,6 @@ HRESULT CMainApp::Setup_HK()
 		return E_FAIL;
 #pragma endregion
 
-
-#pragma region GameObject_SkillSlots
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_Meteor", CMeteor::Create(m_pDevice))))
-		return E_FAIL;
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_IceSpear", CMeteor::Create(m_pDevice))))
-		return E_FAIL;
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_ThunderStorm", CMeteor::Create(m_pDevice))))
-		return E_FAIL;
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_ManaDrift", CMeteor::Create(m_pDevice))))
-		return E_FAIL;
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_Blind", CMeteor::Create(m_pDevice))))
-		return E_FAIL;
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_Shield", CMeteor::Create(m_pDevice))))
-		return E_FAIL;
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_IceBlast", CMeteor::Create(m_pDevice))))
-		return E_FAIL;
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_Explosion", CMeteor::Create(m_pDevice))))
-		return E_FAIL;
-
-	CSkillSlotManager::Get_Instance();
-
-#pragma endregion
-
-
 #pragma region Component_Textures_Mouse
 
 	// idle
@@ -313,6 +281,36 @@ HRESULT CMainApp::Setup_HK()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Mouse_Work", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/2DResource/Mouse/work/work%d.png", 4))))
 		return E_FAIL;
+
+#pragma endregion
+
+#pragma region GameObject_SkillSlots
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Meteor", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_IceSpear", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_ThunderStorm", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_ManaDrift", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Blind", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Shield", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_IceBlast", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_SkillSlot_Explosion", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	CSkillSlotManager::Get_Instance();
 
 #pragma endregion
 
@@ -516,15 +514,6 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemInven", CItemInventory::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 #pragma endregion
-
-	// TODO : 스킬 껍데기 추가 8개
-
-	// 1. 껍데기 클래스 추가 (13)
-
-	// 2. 여기서 프로토타입 추가
-
-	// 3. Room Setup_Layer에서 추가
-
 
 // UNDONE : Quest Prototype
 //#pragma region GameObject_Quest1
