@@ -53,6 +53,31 @@ _int CShop_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
+HRESULT CShop_NPC::Render_NoneAlpha()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_uint iCnt = PART_START; iCnt < PART_END; ++iCnt)
+	{
+		if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pTextureCom[iCnt]->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 HRESULT CShop_NPC::Add_Component()
 {
 	for (_uint i = 0; i < PART_END; i++)
@@ -81,7 +106,7 @@ HRESULT CShop_NPC::Add_Component_Transform()
 	//--------------------------------------------------
 	// HEAD
 	//--------------------------------------------------
-	tTransformDesc[PART_HEAD].vPosition = { 5.f, 2.f, 5.f };
+	tTransformDesc[PART_HEAD].vPosition = { 17.f, 2.f, 62.f };
 	tTransformDesc[PART_HEAD].vScale = { 1.f, 1.f, 1.f };
 	tTransformDesc[PART_HEAD].fSpeedPerSecond = 5.f;
 	tTransformDesc[PART_HEAD].fRotatePerSecond = fRPS_Rad;
