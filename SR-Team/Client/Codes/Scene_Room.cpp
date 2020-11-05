@@ -21,7 +21,7 @@ HRESULT CScene_Room::Setup_Scene()
 	// È¯°æ
 	//--------------------------------------------------
 	//if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
-	//	return E_FAIL;
+		//return E_FAIL;
 
 	if (FAILED(Setup_Layer_Terrain(L"Layer_Terrain")))
 		return E_FAIL;
@@ -173,6 +173,17 @@ HRESULT CScene_Room::Setup_Layer_AllObject()
 
 HRESULT CScene_Room::Setup_Layer_Skybox(const wstring & LayerTag)
 {
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+	int TextureID = 2;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Skybox", SCENE_STAGE0, LayerTag, &TextureID)))
+		return E_FAIL;
+
+
+
 	return S_OK;
 }
 

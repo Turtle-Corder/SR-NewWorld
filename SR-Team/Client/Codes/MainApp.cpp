@@ -866,7 +866,7 @@ HRESULT CMainApp::Setup_DS()
 
 #pragma region Component_Texture_Skybox
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds"))))
+		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds", 3))))
 		return E_FAIL;
 #pragma endregion
 

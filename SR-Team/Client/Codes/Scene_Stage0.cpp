@@ -260,6 +260,7 @@ HRESULT CScene_Stage0::Setup_Layer_Skybox(const wstring & LayerTag)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
+
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_Skybox", SCENE_STAGE0, LayerTag)))
 		return E_FAIL;
 
