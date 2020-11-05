@@ -35,8 +35,10 @@ private:
 	explicit CWolf(const CWolf& _rOther);
 	virtual ~CWolf() = default;
 
+
+
 	//----------------------------------------------------------------------------------------------------
-	// Common
+	// Function
 	//----------------------------------------------------------------------------------------------------
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
@@ -50,6 +52,7 @@ public:
 	virtual void Free() override;
 	static  CWolf* Create(LPDIRECT3DDEVICE9 _pDevice);
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
+
 
 
 private:
@@ -67,10 +70,10 @@ private:
 	//--------------------------------------------------
 	// Transformation 변경
 	//--------------------------------------------------
-	HRESULT Update_Move(_float _fDeltaTime);
+	HRESULT Update_AI();				// 순찰 체크
 	HRESULT IsOnTerrain();
-	HRESULT LookAtPlayer(_float _fDeltaTime);
-	HRESULT Update_Part(_float _fDeltaTime);
+	HRESULT Update_Move(_float _fDeltaTime);
+	HRESULT Update_Transform(_float _fDeltaTime);
 
 
 	//--------------------------------------------------
@@ -103,6 +106,7 @@ private:
 	CTransform*			m_pTransformCom[WOLF_END] = {};
 	CTexture*			m_pTextureCom[WOLF_END] = {};
 	CSphereCollider*	m_pColliderCom = nullptr;
+	CStatus*			m_pStatusCom = nullptr;
 
 
 	//--------------------------------------------------
@@ -110,6 +114,10 @@ private:
 	//--------------------------------------------------
 	STATE		m_ePreState = IDLE;
 	STATE		m_eCurState = IDLE;
+
+	_float		m_fFollowDistance = 0.f;
+	_float		m_fAttackDistance = 0.f;
+	_vec3		m_vMoveDirection = {};
 
 
 	//--------------------------------------------------
@@ -119,7 +127,7 @@ private:
 	_float		m_fAttackDelay = 0.f;		// 공격 가능한 딜레이
 	_float		m_fAttackTimer = 0.f;		// 공격 쿨타임 시간 재는용
 
-	INSTANTIMPACT*	m_pInstantImpact = nullptr;
+	INSTANTIMPACT	m_tImpact = {};
 
 
 	//--------------------------------------------------
