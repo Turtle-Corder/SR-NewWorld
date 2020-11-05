@@ -1,18 +1,18 @@
 #pragma once
 
-#ifndef __SKILLSLOT_METEO_H__
-#define __SKILLSLOT_METEO_H__
+#ifndef __SKILLSLOT_EXPLOSION_H__
+#define __SKILLSLOT_EXPLOSION_H__
 
 #include "SkillSlot.h"
 USING(Engine)
 BEGIN(Client)
 
-class CSkillSlot_Meteor : public CSkillSlot
+class CSkillSlot_Explosion : public CSkillSlot
 {
-private:
-	explicit CSkillSlot_Meteor(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
-	explicit CSkillSlot_Meteor(const CSkillSlot_Meteor& _rOther);
-	virtual ~CSkillSlot_Meteor() = default;
+public:
+	explicit CSkillSlot_Explosion(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
+	explicit CSkillSlot_Explosion(const CSkillSlot_Explosion& _rOther);
+	virtual ~CSkillSlot_Explosion() = default;
 
 public:
 	// CPlayerSkill을(를) 통해 상속됨
@@ -22,7 +22,7 @@ public:
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 
 public:
-	static CSkillSlot_Meteor* Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
+	static CSkillSlot_Explosion* Create(LPDIRECT3DDEVICE9 pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 
 public:

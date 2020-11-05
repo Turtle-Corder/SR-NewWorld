@@ -49,7 +49,7 @@ CSkillSlot_Meteor * CSkillSlot_Meteor::Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DX
 	CSkillSlot_Meteor* pInstance = new CSkillSlot_Meteor(_pDevice, _pSprite, _pFont);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{
-		PRINT_LOG(L"Failed To Create CMeteoSkill", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Create CSkillSlot_Meteor", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
@@ -61,7 +61,7 @@ CGameObject * CSkillSlot_Meteor::Clone_GameObject(void * _pArg)
 	CSkillSlot_Meteor* pInstance = new CSkillSlot_Meteor(*this);
 	if (FAILED(pInstance->Setup_GameObject(_pArg)))
 	{
-		PRINT_LOG(L"Failed To Clone CMeteoSkill", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Clone CSkillSlot_Meteor", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 

@@ -139,9 +139,6 @@
     <Filter Include="02.GameObject\07.UI\04. Skill">
       <UniqueIdentifier>{2972e127-b047-429d-a9ac-6eaef2882535}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\13. PlayerSkill">
-      <UniqueIdentifier>{e9a43fa0-b414-4dac-8bcd-cef58af142c8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\12. SkillInventory">
       <UniqueIdentifier>{da8eeec8-b224-45e6-80ce-0a6bf67c4ddb}</UniqueIdentifier>
     </Filter>
@@ -187,17 +184,8 @@
     <Filter Include="02.GameObject\14. PlayerItem\03. BlueElixir">
       <UniqueIdentifier>{5d669d84-2c8c-4a02-9aca-637bba1407e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\13. PlayerSkill\03. ManaDirft">
-      <UniqueIdentifier>{d4508580-6c5e-4cd4-924c-7803e8320082}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\13. PlayerSkill\04. EnergyExploitation">
-      <UniqueIdentifier>{746da5d1-79bd-419c-b91b-7349a130b680}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\05.Monster\05.Stump">
       <UniqueIdentifier>{f8917998-c959-4eff-8fc5-7b94bbc43e94}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\13. PlayerSkill\05.IceStrike">
-      <UniqueIdentifier>{8e088724-e126-45d3-881b-75a961e9f7f6}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\05.Monster\06.Wolf">
       <UniqueIdentifier>{08c6e807-e236-4013-99b1-0401255fa85f}</UniqueIdentifier>
@@ -228,9 +216,6 @@
     </Filter>
     <Filter Include="04.Manager\00.DataManager">
       <UniqueIdentifier>{285b4fc2-e219-440b-b43d-6d5f4941fd6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\13. PlayerSkill\01. Meteor">
-      <UniqueIdentifier>{9da80b4c-8ee5-4ced-a1c2-54cefff23de2}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\06.Projectile\01.Monster\01.Acorn">
       <UniqueIdentifier>{5fda5631-38aa-42f9-93b1-e3f58eacdefd}</UniqueIdentifier>
@@ -273,6 +258,33 @@
     </Filter>
     <Filter Include="02.GameObject\06.Projectile\00.Player\05.">
       <UniqueIdentifier>{bc0185db-a08e-4ba6-a585-c089cf14341d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill">
+      <UniqueIdentifier>{e9a43fa0-b414-4dac-8bcd-cef58af142c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill\00. Meteor">
+      <UniqueIdentifier>{9da80b4c-8ee5-4ced-a1c2-54cefff23de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill\01. IceSpear">
+      <UniqueIdentifier>{026bfdbd-44fe-4805-a437-a80df4b7c347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill\02. ThunderStorm">
+      <UniqueIdentifier>{7f5f9bc0-4537-4752-b190-cf07d4be352a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill\03. ManaDirft">
+      <UniqueIdentifier>{d4508580-6c5e-4cd4-924c-7803e8320082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill\04. Blind">
+      <UniqueIdentifier>{807e0737-a6c9-42ea-b30e-ec3fe19aab44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill\05. Shield">
+      <UniqueIdentifier>{3cabf29c-2ec6-4f91-a905-b22a077a2d74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill\06. IceBlast">
+      <UniqueIdentifier>{8e088724-e126-45d3-881b-75a961e9f7f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\13. Slot_PlayerSkill\07. EnergyExplosion">
+      <UniqueIdentifier>{746da5d1-79bd-419c-b91b-7349a130b680}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -445,19 +457,13 @@
       <Filter>02.GameObject\11.Instant_Impact\00.Golem_Impact</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SkillSlot.h">
-      <Filter>02.GameObject\13. PlayerSkill</Filter>
+      <Filter>02.GameObject\13. Slot_PlayerSkill</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SkillSlot_Meteor.h">
-      <Filter>02.GameObject\13. PlayerSkill\01. Meteor</Filter>
+      <Filter>02.GameObject\13. Slot_PlayerSkill\00. Meteor</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SkillSlot_ManaDrift.h">
-      <Filter>02.GameObject\13. PlayerSkill\03. ManaDirft</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\SkillSlot_EnergyExlposion.h">
-      <Filter>02.GameObject\13. PlayerSkill\04. EnergyExploitation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\SkillSlot_IceStrike.h">
-      <Filter>02.GameObject\13. PlayerSkill\05.IceStrike</Filter>
+      <Filter>02.GameObject\13. Slot_PlayerSkill\03. ManaDirft</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\ItemSlot.h">
       <Filter>02.GameObject\14. PlayerItem</Filter>
@@ -490,8 +496,8 @@
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Scene_Stage3.h">
-	  <Filter>01.Scene\04.Scene_Stage3</Filter>
-	</ClInclude>
+      <Filter>01.Scene\04.Scene_Stage3</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\FlowerQuest.h">
       <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClInclude>
@@ -509,6 +515,24 @@
     </ClInclude>
     <ClInclude Include="..\Headers\ThunderStorm.h">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_IceSpear.h">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\01. IceSpear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_ThunderStorm.h">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\02. ThunderStorm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_Blind.h">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\04. Blind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_Shield.h">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\05. Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_IceBlast.h">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\06. IceBlast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkillSlot_Explosion.h">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\07. EnergyExplosion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -666,19 +690,13 @@
       <Filter>02.GameObject\11.Instant_Impact\00.Golem_Impact</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\SkillSlot.cpp">
-      <Filter>02.GameObject\13. PlayerSkill</Filter>
+      <Filter>02.GameObject\13. Slot_PlayerSkill</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\SkillSlot_Meteor.cpp">
-      <Filter>02.GameObject\13. PlayerSkill\01. Meteor</Filter>
+      <Filter>02.GameObject\13. Slot_PlayerSkill\00. Meteor</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\SkillSlot_ManaDrift.cpp">
-      <Filter>02.GameObject\13. PlayerSkill\03. ManaDirft</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\SkillSlot_EnergyExlposion.cpp">
-      <Filter>02.GameObject\13. PlayerSkill\04. EnergyExploitation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\SkillSlot_IceStrike.cpp">
-      <Filter>02.GameObject\13. PlayerSkill\05.IceStrike</Filter>
+      <Filter>02.GameObject\13. Slot_PlayerSkill\03. ManaDirft</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\ItemSlot.cpp">
       <Filter>02.GameObject\14. PlayerItem</Filter>
@@ -711,8 +729,8 @@
       <Filter>02.GameObject\06.Projectile\01.Monster\01.Acorn</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Scene_Stage3.cpp">
-	<Filter>01.Scene\04.Scene_Stage3</Filter>
-	</ClCompile>
+      <Filter>01.Scene\04.Scene_Stage3</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\FlowerQuest.cpp">
       <Filter>02.GameObject\07.UI\06. FlowerQuest</Filter>
     </ClCompile>
@@ -730,6 +748,24 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ThunderStorm.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_IceSpear.cpp">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\01. IceSpear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_ThunderStorm.cpp">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\02. ThunderStorm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_Blind.cpp">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\04. Blind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_Shield.cpp">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\05. Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_IceBlast.cpp">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\06. IceBlast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkillSlot_Explosion.cpp">
+      <Filter>02.GameObject\13. Slot_PlayerSkill\07. EnergyExplosion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,12 +7,12 @@
 USING(Engine)
 BEGIN(Client)
 
-class CSkillSlot_IceStrike final : public CSkillSlot
+class CSkillSlot_IceBlast final : public CSkillSlot
 {
 private:
-	explicit CSkillSlot_IceStrike(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
-	explicit CSkillSlot_IceStrike(const CSkillSlot_IceStrike& _rOther);
-	virtual ~CSkillSlot_IceStrike() = default;
+	explicit CSkillSlot_IceBlast(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
+	explicit CSkillSlot_IceBlast(const CSkillSlot_IceBlast& _rOther);
+	virtual ~CSkillSlot_IceBlast() = default;
 
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
@@ -21,7 +21,7 @@ public:
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 
 public:
-	static CSkillSlot_IceStrike* Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
+	static CSkillSlot_IceBlast* Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
 	virtual CGameObject* Clone_GameObject(void* _pArg) override;
 
 public:

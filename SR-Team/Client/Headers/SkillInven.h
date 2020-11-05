@@ -21,6 +21,7 @@ public:
 	_bool Actual_UseSkill(_int _iIndex, void* _pArg = nullptr);
 	eActiveSkill_ID Get_SkillID(_int _iIndex);
 	_int Get_ConsumeMP(_int _iIndex);
+	_float Get_Progress(_int _iIndex);
 
 public:
 	// CUIObject을(를) 통해 상속됨

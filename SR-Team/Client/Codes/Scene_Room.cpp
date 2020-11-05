@@ -277,6 +277,39 @@ HRESULT CScene_Room::SetUp_Layer_Item(const wstring & LayerTag)
 	return S_OK;
 }
 
+HRESULT CScene_Room::Setup_Layer_PlayerSkill(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 
 HRESULT CScene_Room::Setup_Layer_Mouse(const wstring & LayerTag)
 {

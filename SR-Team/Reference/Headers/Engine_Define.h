@@ -73,7 +73,7 @@ namespace LOG
 	}															\
 }
 #else
-#define PRINT_LOG(log, level)									\
+#define PRINT_LOG(logMsg, level)								\
 {																\
 	switch(level)												\
 	{															\

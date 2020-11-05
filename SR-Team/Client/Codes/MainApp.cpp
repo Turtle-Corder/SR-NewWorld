@@ -24,22 +24,27 @@
 #include "Skill.h"
 #include "TerrainBundle.h"
 #include "SkillInven.h"
-#include "SkillSlot_Meteor.h"
 #include "EnergyBolt.h"
 #include "Meteor.h"
 #include "DummyTerrain.h"
 #include "Terrain.h"
 #include "VIBuffer_TerrainTexture.h"
 
-#include "SkillSlot_IceStrike.h"
+#include "SkillSlot_Meteor.h"
+#include "SkillSlot_IceSpear.h"
+#include "SkillSlot_ThunderStorm.h"
+#include "SkillSlot_ManaDrift.h"
+#include "SkillSlot_Blind.h"
+#include "SkillSlot_Shield.h"
+#include "SkillSlot_IceBlast.h"
+#include "SkillSlot_Explosion.h"
+
 #include "ItemInventory.h"
 #include "ItemSlot_RedPotion.h"
 #include "Mouse.h"
 #include "ItemSlot_BluePotion.h"
 #include "ItemSlot_RedElixir.h"
 #include "ItemSlot_BlueElixir.h"
-#include "SkillSlot_ManaDrift.h"
-#include "SkillSlot_EnergyExlposion.h"
 #include "Tree.h"
 #include "Flower.h"
 //#include "Quest1.h"
@@ -242,6 +247,38 @@ HRESULT CMainApp::Setup_HK()
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Mouse", CMouse::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 #pragma endregion
+
+
+#pragma region GameObject_SkillSlots
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_Meteor", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_IceSpear", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_ThunderStorm", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_ManaDrift", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_Blind", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_Shield", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_IceBlast", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"Component_SkillSlot_Explosion", CMeteor::Create(m_pDevice))))
+		return E_FAIL;
+
+	CSkillSlotManager::Get_Instance();
+
+#pragma endregion
+
 
 #pragma region Component_Textures_Mouse
 
@@ -473,6 +510,15 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemInven", CItemInventory::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 #pragma endregion
+
+	// TODO : 스킬 껍데기 추가 8개
+
+	// 1. 껍데기 클래스 추가 (13)
+
+	// 2. 여기서 프로토타입 추가
+
+	// 3. Room Setup_Layer에서 추가
+
 
 // UNDONE : Quest Prototype
 //#pragma region GameObject_Quest1

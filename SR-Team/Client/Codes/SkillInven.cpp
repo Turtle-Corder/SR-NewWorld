@@ -59,6 +59,14 @@ _int CSkillInven::Get_ConsumeMP(_int _iIndex)
 	return 0;
 }
 
+_float CSkillInven::Get_Progress(_int _iIndex)
+{
+	if (m_pPlayerSkill[_iIndex])
+		return m_pPlayerSkill[_iIndex]->Get_Progress();
+
+	return 0.f;
+}
+
 HRESULT CSkillInven::Setup_GameObject_Prototype()
 {
 	return S_OK;
