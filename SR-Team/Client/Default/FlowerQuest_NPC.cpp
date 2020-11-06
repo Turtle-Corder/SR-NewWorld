@@ -140,7 +140,7 @@ HRESULT CFlowerQuest_NPC::Add_Component_Transform()
 	//--------------------------------------------------
 	// HEAD
 	//--------------------------------------------------
-	tTransformDesc[PART_HEAD].vPosition = { 28.f, 2.f, 13.f };
+	tTransformDesc[PART_HEAD].vPosition = { 10.f, 2.f, 28.f };
 	tTransformDesc[PART_HEAD].vScale = { 1.f, 1.f, 1.f };
 	tTransformDesc[PART_HEAD].fSpeedPerSecond = 5.f;
 	tTransformDesc[PART_HEAD].fRotatePerSecond = fRPS_Rad;
@@ -217,8 +217,8 @@ HRESULT CFlowerQuest_NPC::Add_Component_Texture()
 
 		L"Component_Texture_FlowerQuestNPCBody",
 
-		L"Component_Texture_FlowerQuestNPCHand",
-		L"Component_Texture_FlowerQuestNPCHand",
+		L"Component_Texture_FlowerQuestNPCLeftHand",
+		L"Component_Texture_FlowerQuestNPCRightHand",
 
 		L"Component_Texture_FlowerQuestNPCFoot",
 		L"Component_Texture_FlowerQuestNPCFoot"

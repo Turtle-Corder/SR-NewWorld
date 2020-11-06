@@ -409,22 +409,22 @@ HRESULT CDataManager::Add_Component_Item()
 		CStatus::STAT	tStat;
 		if (i == 0)
 		{
-			tStat.iCriticalHit = 100;
-			tStat.iCriticalRate = 30;
+			tStat.iCriticalRate = 100;
+			tStat.iCriticalChance = 30;
 			tStat.iMaxAtt = 150;
 			tStat.iMinAtt = 10;
 		}
 		else if (i == 1)
 		{
-			tStat.iCriticalHit = 150;
-			tStat.iCriticalRate = 20;
+			tStat.iCriticalRate = 150;
+			tStat.iCriticalChance = 20;
 			tStat.iMaxAtt = 160;
 			tStat.iMinAtt = 50;
 		}
 		else if (i == 2)
 		{
-			tStat.iCriticalHit = 200;
-			tStat.iCriticalRate = 80;
+			tStat.iCriticalRate = 200;
+			tStat.iCriticalChance = 80;
 			tStat.iMaxAtt = 120;
 			tStat.iMinAtt = 70;
 		}
@@ -452,20 +452,20 @@ HRESULT CDataManager::Add_Component_Item()
 			tStat.iMp = 100;
 		else if (i == 13)
 		{
-			tStat.iCriticalRate = 20;
+			tStat.iCriticalChance = 20;
 		}
 		else if (i == 14)
 		{
-			tStat.iCriticalHit = 30;
+			tStat.iCriticalRate = 30;
 		}
 		else if (i == 15)
 		{
 			tStat.iMaxAtt = 100;
-			tStat.iCriticalHit = 50;
+			tStat.iCriticalRate = 50;
 		}
 		else if (i == 16)
 		{
-			tStat.iCriticalRate = 20;
+			tStat.iCriticalChance = 20;
 		}
 		else if (i == 17)
 		{

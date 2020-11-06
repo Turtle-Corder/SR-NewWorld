@@ -95,6 +95,8 @@ public:
 
 	_int Get_ClearInfo();
 	HRESULT Set_ClearInfo(_int _iClearScene);
+	
+	void Set_ConsumeRate(_float _fConsumeRate);
 
 
 private:
@@ -190,7 +192,7 @@ private:
 
 	void Update_AtkDelay(_float _fDeltaTime);
 
-
+	//void Update_BuffTime(_float _fDeltaTime);
 
 
 
@@ -258,7 +260,6 @@ private:
 
 	// mana, atk, shield rate
 	_float				m_fConsumeRate = 1.f;
-	_float				m_fAttackRate = 1.f;
 
 
 	//--------------------------------------------------

@@ -296,6 +296,8 @@ HRESULT CScene_Stage0::Setup_Layer_NPC(const wstring & LayerTag)
 		return E_FAIL;
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_ShopNPC", SCENE_STAGE0, LayerTag)))
 		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_MainQuestNPC", SCENE_STAGE0, LayerTag)))
+		return E_FAIL;
 
 	return S_OK;
 }

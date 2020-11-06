@@ -39,6 +39,34 @@ void CStatus::Set_MP(_int _iMP)
 	m_tStat.iMp -= _iMP;
 }
 
+_int CStatus::Get_Att()
+{
+	_int iSimulateAtt = 0;
+	_int iAttBound = m_tStat.iMaxAtt - m_tStat.iMinAtt;
+	iSimulateAtt = rand() % iAttBound + m_tStat.iMinAtt;
+
+	_int iSimulateCriticalChance = rand() % 100;
+	if (iSimulateCriticalChance < m_tStat.iCriticalChance)
+		iSimulateAtt *= m_tStat.iCriticalRate;
+
+	return iSimulateAtt;
+}
+
+_int CStatus::Get_Def()
+{
+	return (_int)(m_tStat.iDef * m_tStat.fDefRate);
+}
+
+void CStatus::Set_AttRate(_float _fAttRate)
+{
+	m_tStat.fAttRate = _fAttRate;
+}
+
+void CStatus::Set_DefRate(_float _fDefRate)
+{
+	m_tStat.fDefRate = _fDefRate;
+}
+
 _int CStatus::Increase_FireStack()
 {
 	m_tStat.iCurFireStack = min(m_tStat.iMaxFireStack, m_tStat.iCurFireStack + 1);
@@ -69,7 +97,7 @@ void CStatus::Set_EquipStat(const CStatus::STAT & tStat)
 	m_tStat.iMaxAtt = tStat.iMaxAtt + 50;
 	m_tStat.iDef = tStat.iDef + 50;
 	m_tStat.iCriticalRate = tStat.iCriticalRate + 20;
-	m_tStat.iCriticalHit = tStat.iCriticalHit + 10;
+	m_tStat.iCriticalChance = tStat.iCriticalChance + 10;
 }
 
 HRESULT CStatus::Setup_Component_Prototype()

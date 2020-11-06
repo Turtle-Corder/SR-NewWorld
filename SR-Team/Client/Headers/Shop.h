@@ -20,6 +20,7 @@ public:
 	// bool bRender : true면 그린다, false면 그리지 않는다
 	// ------------------------------------------------------------------
 	void Set_Render(bool bRender) { m_bRender = bRender; }
+	void Change_RenderState() { m_bRender = !m_bRender; }
 
 	void Set_ShopItemTexturePos(_vec3* pPos);
 	void Set_ShopItemNamePos(_vec3* pPos);

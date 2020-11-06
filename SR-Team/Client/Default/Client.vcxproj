@@ -165,6 +165,7 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
     <ClInclude Include="..\Headers\ItemSlot_BluePotion.h" />
     <ClInclude Include="..\Headers\Bomb.h" />
+    <ClInclude Include="..\Headers\MainQuest_NPC.h" />
     <ClInclude Include="..\Headers\MpDrift.h" />
     <ClInclude Include="..\Headers\Scene_Room.h" />
     <ClInclude Include="..\Headers\Scene_Stage1.h" />
@@ -222,6 +223,7 @@
     <ClInclude Include="..\Headers\Snail.h" />
     <ClInclude Include="..\Headers\Snail_Impact.h" />
     <ClInclude Include="..\Headers\Snow.h" />
+    <ClInclude Include="..\Headers\Stage1_NPC.h" />
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\Stump.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
@@ -250,6 +252,7 @@
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BluePotion.cpp" />
     <ClCompile Include="..\Codes\Bomb.cpp" />
+    <ClCompile Include="..\Codes\MainQuest_NPC.cpp" />
     <ClCompile Include="..\Codes\MpDrift.cpp" />
     <ClCompile Include="..\Codes\Scene_Room.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage1.cpp" />
@@ -304,6 +307,7 @@
     <ClCompile Include="..\Codes\Snail.cpp" />
     <ClCompile Include="..\Codes\Snail_Impact.cpp" />
     <ClCompile Include="..\Codes\Snow.cpp" />
+    <ClCompile Include="..\Codes\Stage1_NPC.cpp" />
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\Stump.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Player.h"
 #include "..\Headers\SkillSlot_ManaDrift.h"
 #include "Equip.h"
 
@@ -23,7 +24,7 @@ HRESULT CSkillSlot_ManaDrift::Setup_GameObject_Prototype()
 HRESULT CSkillSlot_ManaDrift::Setup_GameObject(void * _pArg)
 {
 	m_iCanUseCnt = m_iMaxUseCnt = 1;
-	m_fEachDelay = 10.f;
+	m_fEachDelay = 30.f;
 
 	m_iConsumeMP = 10;
 
@@ -72,13 +73,43 @@ CGameObject * CSkillSlot_ManaDrift::Clone_GameObject(void * _pArg)
 
 _bool CSkillSlot_ManaDrift::Actual_UseSkill(void* _pArg)
 {
+	INSTANTIMPACT* pImpact = nullptr;
+	CStatus* pStatus = nullptr;
+
 	// 한번 더 검사
 	if (!Can_UseSkill())
+		return false;
+
+	if (_pArg)
+	{
+		pImpact = (INSTANTIMPACT*)_pArg;
+
+		if (pImpact)
+			pStatus = (CStatus*)pImpact->pStatusComp;
+
+		CPlayer* pPlayer = (CPlayer*)pImpact->pAttacker;
+		if (!pPlayer)	return false;
+
+		if (!pPlayer->IsOnBuff(CPlayer::BUFF_MANA))
+		{
+			pPlayer->Buff_On(CPlayer::BUFF_MANA);
+		}
+	}
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
 		return false;
 
 	//--------------------------------------------------
 	// TODO : 버프 이펙트 소환
 	//--------------------------------------------------
+
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MPDrift", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
+	{
+		PRINT_LOG(L"Failed To Spawn Meteor", LOG::DEBUG);
+		return false;
+	}
 
 
 	--m_iCanUseCnt;

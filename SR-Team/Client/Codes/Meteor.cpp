@@ -107,7 +107,6 @@ HRESULT CMeteor::Add_Component()
 	tCollDesc.fRadius = 0.5f;
 
 	CStatus::STAT tStat;
-	tStat.iCriticalHit = 0; tStat.iCriticalRate = 0;
 	tStat.iMinAtt = 10; tStat.iMaxAtt = 10;
 
 	// For.Com_VIBuffer
@@ -138,14 +137,14 @@ HRESULT CMeteor::Add_Component()
 		tDmgInfo.pOwner = m_tInstant.pAttacker;
 		tDmgInfo.iMinAtt = pOwnerStatusComp->Get_Status().iMinAtt + m_pStatusComp->Get_Status().iMinAtt;
 		tDmgInfo.iMaxAtt = pOwnerStatusComp->Get_Status().iMaxAtt + m_pStatusComp->Get_Status().iMaxAtt;
-		tDmgInfo.iCriticalHit = pOwnerStatusComp->Get_Status().iCriticalHit + m_pStatusComp->Get_Status().iCriticalHit;
+		tDmgInfo.iCriticalChance = pOwnerStatusComp->Get_Status().iCriticalChance + m_pStatusComp->Get_Status().iCriticalChance;
 		tDmgInfo.iCriticalRate = pOwnerStatusComp->Get_Status().iCriticalRate + m_pStatusComp->Get_Status().iCriticalRate;
 	}
 	else
 	{
 		tDmgInfo.iMinAtt = m_pStatusComp->Get_Status().iMinAtt;
 		tDmgInfo.iMaxAtt = m_pStatusComp->Get_Status().iMaxAtt;
-		tDmgInfo.iCriticalHit = m_pStatusComp->Get_Status().iCriticalHit;
+		tDmgInfo.iCriticalChance = m_pStatusComp->Get_Status().iCriticalChance;
 		tDmgInfo.iCriticalRate = m_pStatusComp->Get_Status().iCriticalRate;
 	}
 

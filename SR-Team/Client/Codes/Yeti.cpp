@@ -199,7 +199,7 @@ HRESULT CYeti::Add_Component()
 
 	}
 		CStatus::STAT tStat;
-		tStat.iCriticalRate = 20;	tStat.iCriticalHit = 10;
+		tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
 		tStat.iDef = 50;
 		tStat.iHp = 100;			tStat.iMp = 100;
 		tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;

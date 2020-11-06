@@ -292,6 +292,15 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder">
       <UniqueIdentifier>{a6720cf7-b6ab-418f-89c4-57fe13c8f9aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\16. NPC\02. MainQuest">
+      <UniqueIdentifier>{d3e244a8-700d-480b-82ec-373d4c6b3afd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\04. Stage2">
+      <UniqueIdentifier>{49e58669-f668-4eec-960a-d50c7e38e37d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\03. Stage1">
+      <UniqueIdentifier>{36d5a94d-c005-4499-9d20-21103a118880}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -546,6 +555,12 @@
     <ClInclude Include="..\Headers\Thunder.h">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MainQuest_NPC.h">
+      <Filter>02.GameObject\16. NPC\02. MainQuest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage1_NPC.h">
+      <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -784,6 +799,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Thunder.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainQuest_NPC.cpp">
+      <Filter>02.GameObject\16. NPC\02. MainQuest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage1_NPC.cpp">
+      <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

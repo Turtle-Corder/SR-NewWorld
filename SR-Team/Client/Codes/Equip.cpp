@@ -393,8 +393,8 @@ HRESULT CEquip::Count_Stat()
 			iMinAtt += m_pStatItem[i]->Get_Status().iMinAtt;
 			iMaxAtt += m_pStatItem[i]->Get_Status().iMaxAtt;
 			iDef += m_pStatItem[i]->Get_Status().iDef;
-			iCirRate += m_pStatItem[i]->Get_Status().iCriticalRate;
-			iCriHit += m_pStatItem[i]->Get_Status().iCriticalHit;
+			iCirRate += m_pStatItem[i]->Get_Status().iCriticalChance;
+			iCriHit += m_pStatItem[i]->Get_Status().iCriticalRate;
 		}
 	}
 
@@ -402,8 +402,8 @@ HRESULT CEquip::Count_Stat()
 	tStat.iMaxAtt = iMinAtt;
 	tStat.iMaxAtt = iMaxAtt;
 	tStat.iDef = iDef;
-	tStat.iCriticalRate = iCirRate;
-	tStat.iCriticalHit = iCriHit;
+	tStat.iCriticalChance = iCirRate;
+	tStat.iCriticalRate = iCriHit;
 
 	tStat.iHp = m_pStatCom->Get_Status().iHp;
 	tStat.iMp = m_pStatCom->Get_Status().iMp;
