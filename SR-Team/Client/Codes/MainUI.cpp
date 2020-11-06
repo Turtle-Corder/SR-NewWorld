@@ -9,6 +9,7 @@
 #include "Status.h"
 #include "..\Headers\MainUI.h"
 #include "Mouse.h"
+#include "Skill.h"
 
 USING(Client)
 
@@ -52,6 +53,7 @@ HRESULT CMainUI::Get_QuickSlotItem(INVEN_ITEM * pItem)
 
 	m_bRender_GoingItem = true;
 
+
 	_int p = 0;
 
 	if (m_pTexture_GoingItem)
@@ -83,6 +85,9 @@ HRESULT CMainUI::Get_QuickSlotSkill(_int iSkillID)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (pManagement == nullptr)
 		return E_FAIL;
+	CSkill* pSkill = (CSkill*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 2);
+	if (pSkill == nullptr)
+		return E_FAIL;
 	CDataManager* pItems = (CDataManager*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Item");
 
 	// 받아온 스킬 아이디로 아이템 클래스에서 스킬 아이콘 객체를 받아온다
@@ -91,6 +96,7 @@ HRESULT CMainUI::Get_QuickSlotSkill(_int iSkillID)
 		return E_FAIL;
 
 	m_bRender_GoingItem = true;
+	pSkill->Set_MovingClear(true);
 
 	if (m_pTexture_GoingItem)
 		m_pTexture_GoingItem = nullptr;
@@ -413,7 +419,9 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 	CSkillInven* pSkillInven = (CSkillInven*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 3);
 	if (pSkillInven == nullptr)
 		return E_FAIL;
-
+	CSkill* pSkill = (CSkill*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 2);
+	if (pSkill == nullptr)
+		return E_FAIL;
 	RECT rc = {};
 
 	for (_uint i = 0; i < 8; i++)
@@ -432,6 +440,8 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 						{
 							// 초기화
 							m_bRender_GoingItem = false;
+							// 이동 끝
+							pSkill->Set_MovingClear(false);
 
 							if (m_pTextureLeftQuickSlot[i])
 								m_pTextureLeftQuickSlot[i] = nullptr;
@@ -486,6 +496,7 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 				}
 				else
 				{
+					pSkill->Set_MovingClear(false);
 					m_bRender_GoingItem = false;
 					m_pMovingItem = nullptr;
 					m_pTexture_GoingItem = nullptr;
@@ -493,6 +504,23 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 			}
 		}
 	}
+
+	// 이동중 마우스에서 손 뗐는지 확인
+	if (pManagement->Key_Up(VK_LBUTTON) && m_pMovingItem != nullptr)
+	{
+		for (_uint i = 0; i < 8; i++)
+		{
+			// 왼쪽
+			if (!IntersectRect(&rc, &m_tLeftSlotCollRt[i], &m_tGoingItem_CollRt))
+			{
+				pSkill->Set_MovingClear(false);
+				m_bRender_GoingItem = false;
+				m_pMovingItem = nullptr;
+				m_pTexture_GoingItem = nullptr;
+			}
+		}
+	}
+
 
 	return S_OK;
 }
@@ -583,6 +611,21 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 					m_pMovingItem = nullptr;
 					m_pTexture_GoingItem = nullptr;
 				}
+			}
+		}
+	}
+
+	// 이동중 마우스에서 손 뗐는지 확인
+	if (pManagement->Key_Up(VK_LBUTTON) && m_pMovingItem != nullptr)
+	{
+		for (_uint i = 0; i < 8; i++)
+		{
+			// 왼쪽
+			if (!IntersectRect(&rc, &m_tRightSlotCollRt[i], &m_tGoingItem_CollRt))
+			{
+				m_bRender_GoingItem = false;
+				m_pMovingItem = nullptr;
+				m_pTexture_GoingItem = nullptr;
 			}
 		}
 	}
