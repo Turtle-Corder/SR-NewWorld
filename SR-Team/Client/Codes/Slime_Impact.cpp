@@ -70,7 +70,7 @@ HRESULT CSlime_Impact::Add_Component()
 		return E_FAIL;
 
 	CStatus::STAT tStat;
-	tStat.iCriticalRate = 0;	tStat.iCriticalHit = 0;
+	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
 	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
@@ -83,15 +83,15 @@ HRESULT CSlime_Impact::Add_Component()
 		CStatus* pOnwerStatusComp = (CStatus*)m_tInstant.pStatusComp;
 		tDmgInfo.iMinAtt = pOnwerStatusComp->Get_Status().iMinAtt + m_pStatusCom->Get_Status().iMaxAtt;
 		tDmgInfo.iMaxAtt = pOnwerStatusComp->Get_Status().iMaxAtt + m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = pOnwerStatusComp->Get_Status().iCriticalChance + m_pStatusCom->Get_Status().iCriticalChance;
 		tDmgInfo.iCriticalRate = pOnwerStatusComp->Get_Status().iCriticalRate + m_pStatusCom->Get_Status().iCriticalRate;
-		tDmgInfo.iCriticalRate = pOnwerStatusComp->Get_Status().iCriticalHit + m_pStatusCom->Get_Status().iCriticalHit;
 	}
 	else
 	{
 		tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMaxAtt;
 		tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
 		tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
-		tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalHit;
 	}
 
 	tDmgInfo.eType = NONE;

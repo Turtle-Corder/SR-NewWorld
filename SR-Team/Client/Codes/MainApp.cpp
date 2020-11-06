@@ -24,11 +24,13 @@
 #include "Skill.h"
 #include "TerrainBundle.h"
 #include "SkillInven.h"
-#include "EnergyBolt.h"
-#include "Meteor.h"
 #include "DummyTerrain.h"
 #include "Terrain.h"
 #include "VIBuffer_TerrainTexture.h"
+
+#include "EnergyBolt.h"
+#include "Meteor.h"
+#include "MpDrift.h"
 
 #include "SkillSlot_Meteor.h"
 #include "SkillSlot_IceSpear.h"
@@ -445,6 +447,21 @@ HRESULT CMainApp::Setup_YJ()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Meteor", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Meteor%d.dds"))))
 		return E_FAIL;
 #pragma endregion
+
+
+
+#pragma region GameObject_MPDrift
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_MPDrift", CMpDrift::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Texture_MPDrift
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MPDrift", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/Sprite/Effect/%d.png", 9))))
+		return E_FAIL;
+#pragma endregion
+
+
+
 
 #pragma region Component_Texture_EnergyBolt
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_EnergyBolt", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/EnergyBolt%d.dds"))))

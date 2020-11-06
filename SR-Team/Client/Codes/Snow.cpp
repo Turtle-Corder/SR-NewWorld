@@ -127,7 +127,7 @@ HRESULT CSnow::Add_Component()
 
 	// TODO : m_pStatusComp 셋팅
 	CStatus::STAT tStat;
-	tStat.iCriticalRate = 0;	tStat.iCriticalHit = 0;
+	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
 	tStat.iMinAtt = 10;			tStat.iMaxAtt = 10;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusComp, &tStat)))
@@ -142,15 +142,15 @@ HRESULT CSnow::Add_Component()
 		// ex) yeti의 공격력 + 눈덩이 자체의 공격력 -> player의 기본 공격력 + 스태프의 공격력
 		tDmgInfo.iMinAtt = pOwnerStatusComp->Get_Status().iMinAtt + m_pStatusComp->Get_Status().iMinAtt;
 		tDmgInfo.iMaxAtt = pOwnerStatusComp->Get_Status().iMaxAtt + m_pStatusComp->Get_Status().iMaxAtt;
-		tDmgInfo.iCriticalHit = pOwnerStatusComp->Get_Status().iCriticalHit + m_pStatusComp->Get_Status().iCriticalHit;
 		tDmgInfo.iCriticalRate = pOwnerStatusComp->Get_Status().iCriticalRate + m_pStatusComp->Get_Status().iCriticalRate;
+		tDmgInfo.iCriticalChance = pOwnerStatusComp->Get_Status().iCriticalChance + m_pStatusComp->Get_Status().iCriticalChance;
 	}
 	else
 	{
 		tDmgInfo.iMinAtt = m_pStatusComp->Get_Status().iMinAtt;
 		tDmgInfo.iMaxAtt = m_pStatusComp->Get_Status().iMaxAtt;
-		tDmgInfo.iCriticalHit = m_pStatusComp->Get_Status().iCriticalHit;
 		tDmgInfo.iCriticalRate = m_pStatusComp->Get_Status().iCriticalRate;
+		tDmgInfo.iCriticalChance = m_pStatusComp->Get_Status().iCriticalChance;
 	}
 
 	tDmgInfo.eType = ICE;

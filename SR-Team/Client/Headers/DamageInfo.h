@@ -15,8 +15,8 @@ public:
 		CGameObject*	pOwner = nullptr;
 		_int			iMinAtt = 0;
 		_int			iMaxAtt = 0;
+		_int			iCriticalChance = 0;
 		_int			iCriticalRate = 0;
-		_int			iCriticalHit = 0;
 		eELEMENTAL_TYPE	eType = eELEMENTAL_TYPE::NONE;
 	} DAMAGE_DESC;
 

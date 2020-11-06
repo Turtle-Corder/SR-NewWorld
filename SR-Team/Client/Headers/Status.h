@@ -14,9 +14,12 @@ public:
 	{
 		_int	iMinAtt = 0;
 		_int	iMaxAtt = 0;
-		_int	iCriticalRate = 0;
-		_int	iCriticalHit = 0;
+		_int	iCriticalChance = 10;
+		_int	iCriticalRate = 2;
 		_int	iDef = 0;
+
+		_float	fDefRate = 1.f;
+		_float	fAttRate = 1.f;
 
 		_int	iMaxHp = 0;
 		_int	iMaxMp = 0;
@@ -50,6 +53,13 @@ public:
 	void Set_MP(_int _iMP);
 	void Change_Hp(_int iHp) { m_tStat.iHp = iHp; }
 	void Change_Mp(_int iMp) { m_tStat.iMp = iMp; }
+
+	_int Get_Att();
+	_int Get_Def();
+	
+	void Set_AttRate(_float _fAttRate);
+	void Set_DefRate(_float _fDefRate);
+
 
 	// 속성 스택 카운트를 하나 올린 결과를 반환한다.
 	_int Increase_FireStack();
