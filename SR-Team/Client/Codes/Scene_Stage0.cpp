@@ -87,7 +87,7 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject((_uint)m_ePreLoadSceneID, L"Layer_CubeTerrain", iCnt++);
 			if (nullptr == pCubeTerrain)	break;
 
-			pCubeTerrain->SetActive();
+			pCubeTerrain->Set_Active();
 		}
 
 		//--------------------------------------------------

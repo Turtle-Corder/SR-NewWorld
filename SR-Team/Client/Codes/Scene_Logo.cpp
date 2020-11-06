@@ -45,7 +45,7 @@ _int CScene_Logo::Update_Scene(_float _fDeltaTime)
 			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_CubeTerrain", iCnt++);
 			if (nullptr == pCubeTerrain)	break;
 
-			pCubeTerrain->SetActive();
+			pCubeTerrain->Set_Active();
 		}
 
 		if (FAILED(pManagement->Change_CurrentScene(SCENE_ROOM, CScene_Room::Create(m_pDevice))))

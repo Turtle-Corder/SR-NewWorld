@@ -8,14 +8,14 @@ CSkillSlotManager::CSkillSlotManager()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 
-	m_pSlot_Meteor = (CSkillSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerSkill", 0);;
-	m_pSlot_IceSpear = (CSkillSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerSkill", 1);
-	m_pSlot_ThunderStorm = (CSkillSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerSkill", 2);
-	m_pSlot_ManaDrift = (CSkillSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerSkill", 3);
-	m_pSlot_Blind = (CSkillSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerSkill", 4);
-	m_pSlot_Shield = (CSkillSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerSkill", 5);
-	m_pSlot_IceBlast = (CSkillSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerSkill", 6);
-	m_pSlot_Explosion = (CSkillSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerSkill", 7);
+	m_pSlot_Meteor = (CSkillSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerSkill", 0);;
+	m_pSlot_IceSpear = (CSkillSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerSkill", 1);
+	m_pSlot_ThunderStorm = (CSkillSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerSkill", 2);
+	m_pSlot_ManaDrift = (CSkillSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerSkill", 3);
+	m_pSlot_Blind = (CSkillSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerSkill", 4);
+	m_pSlot_Shield = (CSkillSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerSkill", 5);
+	m_pSlot_IceBlast = (CSkillSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerSkill", 6);
+	m_pSlot_Explosion = (CSkillSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerSkill", 7);
 }
 
 CSkillSlot * CSkillSlotManager::Get_PlayerSkill(eActiveSkill_ID eSkillID)

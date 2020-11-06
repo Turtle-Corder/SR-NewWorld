@@ -89,11 +89,6 @@ HRESULT CCubeTerrain::Render_NoneAlpha()
 	return S_OK;
 }
 
-void CCubeTerrain::SetActive()
-{
-	m_bActive = true;
-}
-
 HRESULT CCubeTerrain::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;

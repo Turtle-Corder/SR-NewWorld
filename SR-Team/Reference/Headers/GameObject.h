@@ -36,6 +36,11 @@ public:
 	void	Set_Dead();
 	_bool	IsDead();
 
+	void Set_Active();
+	void Set_DeActive();
+	_bool IsActive();
+
+
 public:
 	virtual CGameObject* Clone_GameObject(void* _pArg) = 0;
 	virtual void Free() override;
@@ -48,7 +53,7 @@ protected:
 
 	LPDIRECT3DDEVICE9	m_pDevice;
 
-
+	_bool				m_bActive = false;
 	_bool				m_bDead = false;
 };
 

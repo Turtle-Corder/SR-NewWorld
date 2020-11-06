@@ -76,7 +76,7 @@ _int CScene_Stage1::Update_Scene(_float _fDeltaTime)
 			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_CubeTerrain", iCnt++);
 			if (nullptr == pCubeTerrain)	break;
 
-			pCubeTerrain->SetActive();
+			pCubeTerrain->Set_Active();
 		}
 
 		// 숲 -> 마을 FOREST -> TOWN 단방향

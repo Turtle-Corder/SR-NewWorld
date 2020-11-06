@@ -41,8 +41,8 @@ int CSnail::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
-	if (GetAsyncKeyState(VK_NUMPAD0) & 0x8000)
-		m_eCurState = CSnail::IDLE;
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
 
 	if (FAILED(Update_State()))
 		return GAMEOBJECT::ERR;

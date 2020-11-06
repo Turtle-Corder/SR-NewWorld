@@ -107,7 +107,7 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_CubeTerrain", iCnt++);
 			if (nullptr == pCubeTerrain)	break;
 
-			pCubeTerrain->SetActive();
+			pCubeTerrain->Set_Active();
 		}
 
 		// 무조건 방 -> 마을 단방향 ROOM -> TOWN

@@ -29,13 +29,21 @@ HRESULT CBlind::Setup_GameObject(void * _pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	if (m_tImpact.pTarget)
+		m_tImpact.pTarget->Set_DeActive();
+
 	return S_OK;
 }
 
 _int CBlind::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
+	{
+		if (m_tImpact.pTarget)
+			m_tImpact.pTarget->Set_Active();
+
 		return GAMEOBJECT::DEAD;
+	}
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -138,7 +146,7 @@ HRESULT CBlind::Add_Component()
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
 
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_Pyramid", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Blind", L"Com_Texture", (CComponent**)&m_pTextureCom)))
@@ -160,6 +168,9 @@ void CBlind::Update_TargetDeadCheck()
 	if (m_tImpact.pTarget)
 	{
 		if (m_tImpact.pTarget->IsDead())
+		{
+			m_tImpact.pTarget = nullptr;
 			m_bDead = true;
+		}
 	}
 }

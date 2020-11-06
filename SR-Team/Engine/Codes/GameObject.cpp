@@ -76,6 +76,21 @@ _bool CGameObject::IsDead()
 	return m_bDead;
 }
 
+void CGameObject::Set_Active()
+{
+	m_bActive = true;
+}
+
+void CGameObject::Set_DeActive()
+{
+	m_bActive = false;
+}
+
+_bool CGameObject::IsActive()
+{
+	return m_bActive;
+}
+
 CComponent * CGameObject::Get_Component(const wstring & _strComponentTag)
 {
 	auto iter_find = m_Components.find(_strComponentTag);

@@ -848,7 +848,6 @@ _int CPlayer::Update_Input_Skill(_float _fDeltaTime)
 			iRemainMP = m_pStatusCom->Get_Status().iMp - iConsumeMP;
 			if (0 <= iRemainMP && pSkillInven->Can_UseSkill(SLOT_Q))
 			{
-				m_pStatusCom->Set_MP(iConsumeMP);
 				m_iInputIdx_Slot = SLOT_Q;
 				m_iInputIdx_Anim = pSkillInven->Get_SkillID(SLOT_Q);
 				m_eCurState = SKILL;
@@ -868,7 +867,6 @@ _int CPlayer::Update_Input_Skill(_float _fDeltaTime)
 			iRemainMP = m_pStatusCom->Get_Status().iMp - iConsumeMP;
 			if (0 <= iRemainMP && pSkillInven->Can_UseSkill(SLOT_W))
 			{
-				m_pStatusCom->Set_MP(iConsumeMP);
 				m_iInputIdx_Slot = SLOT_W;
 				m_iInputIdx_Anim = pSkillInven->Get_SkillID(SLOT_W);
 				m_eCurState = SKILL;
@@ -888,7 +886,6 @@ _int CPlayer::Update_Input_Skill(_float _fDeltaTime)
 			iRemainMP = m_pStatusCom->Get_Status().iMp - iConsumeMP;
 			if (0 <= iRemainMP && pSkillInven->Can_UseSkill(SLOT_E))
 			{
-				m_pStatusCom->Set_MP(iConsumeMP);
 				m_iInputIdx_Slot = SLOT_E;
 				m_iInputIdx_Anim = pSkillInven->Get_SkillID(SLOT_E);
 				m_eCurState = SKILL;
@@ -908,7 +905,6 @@ _int CPlayer::Update_Input_Skill(_float _fDeltaTime)
 			iRemainMP = m_pStatusCom->Get_Status().iMp - iConsumeMP;
 			if (0 <= iRemainMP && pSkillInven->Can_UseSkill(SLOT_R))
 			{
-				m_pStatusCom->Set_MP(iConsumeMP);
 				m_iInputIdx_Slot = SLOT_R;
 				m_iInputIdx_Anim = pSkillInven->Get_SkillID(SLOT_R);
 				m_eCurState = SKILL;
@@ -928,7 +924,6 @@ _int CPlayer::Update_Input_Skill(_float _fDeltaTime)
 			iRemainMP = m_pStatusCom->Get_Status().iMp - iConsumeMP;
 			if (0 <= iRemainMP && pSkillInven->Can_UseSkill(SLOT_A))
 			{
-				m_pStatusCom->Set_MP(iConsumeMP);
 				m_iInputIdx_Slot = SLOT_A;
 				m_iInputIdx_Anim = pSkillInven->Get_SkillID(SLOT_A);
 				m_eCurState = SKILL;
@@ -948,7 +943,6 @@ _int CPlayer::Update_Input_Skill(_float _fDeltaTime)
 			iRemainMP = m_pStatusCom->Get_Status().iMp - iConsumeMP;
 			if (0 <= iRemainMP && pSkillInven->Can_UseSkill(SLOT_S))
 			{
-				m_pStatusCom->Set_MP(iConsumeMP);
 				m_iInputIdx_Slot = SLOT_S;
 				m_iInputIdx_Anim = pSkillInven->Get_SkillID(SLOT_S);
 				m_eCurState = SKILL;
@@ -968,7 +962,6 @@ _int CPlayer::Update_Input_Skill(_float _fDeltaTime)
 			iRemainMP = m_pStatusCom->Get_Status().iMp - iConsumeMP;
 			if (0 <= iRemainMP && pSkillInven->Can_UseSkill(SLOT_D))
 			{
-				m_pStatusCom->Set_MP(iConsumeMP);
 				m_iInputIdx_Slot = SLOT_D;
 				m_iInputIdx_Anim = pSkillInven->Get_SkillID(SLOT_D);
 				m_eCurState = SKILL;
@@ -988,7 +981,6 @@ _int CPlayer::Update_Input_Skill(_float _fDeltaTime)
 			iRemainMP = m_pStatusCom->Get_Status().iMp - iConsumeMP;
 			if (0 <= iRemainMP && pSkillInven->Can_UseSkill(SLOT_F))
 			{
-				m_pStatusCom->Set_MP(iConsumeMP);
 				m_iInputIdx_Slot = SLOT_F;
 				m_iInputIdx_Anim = pSkillInven->Get_SkillID(SLOT_F);
 				m_eCurState = SKILL;
@@ -1079,6 +1071,7 @@ _bool CPlayer::Actual_UseSkill()
 	if (!pSkillInven->Actual_UseSkill(m_iInputIdx_Slot, (void*)&m_tImpact))
 		return false;
 
+	m_pStatusCom->Set_MP(_int(pSkillInven->Get_ConsumeMP(m_iInputIdx_Slot) * m_fConsumeRate));
 	return true;
 }
 
