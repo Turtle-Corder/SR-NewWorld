@@ -171,6 +171,7 @@
     <ClInclude Include="..\Headers\Scene_Stage2.h" />
     <ClInclude Include="..\Headers\Scene_Stage3.h" />
     <ClInclude Include="..\Headers\Shield.h" />
+    <ClInclude Include="..\Headers\Shop_ChatWnd.h" />
     <ClInclude Include="..\Headers\SkillSlot_Blind.h" />
     <ClInclude Include="..\Headers\SkillSlot_Explosion.h" />
     <ClInclude Include="..\Headers\Shop_NPC.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="..\Codes\Scene_Stage2.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage3.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />
+    <ClCompile Include="..\Codes\Shop_ChatWnd.cpp" />
     <ClCompile Include="..\Codes\SkillSlot_Blind.cpp" />
     <ClCompile Include="..\Codes\SkillSlot_Explosion.cpp" />
     <ClCompile Include="..\Codes\Shop_NPC.cpp" />

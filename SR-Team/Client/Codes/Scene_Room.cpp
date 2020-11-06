@@ -256,6 +256,9 @@ HRESULT CScene_Room::SetUp_Layer_Shop(const wstring & LayerTag)
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Shop", SCENE_ROOM, LayerTag)))
 		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ShopChatWnd", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
 
 	return S_OK;
 }

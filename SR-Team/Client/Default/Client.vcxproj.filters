@@ -295,11 +295,11 @@
     <Filter Include="02.GameObject\16. NPC\02. MainQuest">
       <UniqueIdentifier>{d3e244a8-700d-480b-82ec-373d4c6b3afd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\16. NPC\04. Stage2">
-      <UniqueIdentifier>{49e58669-f668-4eec-960a-d50c7e38e37d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\16. NPC\03. Stage1">
       <UniqueIdentifier>{36d5a94d-c005-4499-9d20-21103a118880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\02.Shop\ChatWnd">
+      <UniqueIdentifier>{22a8fd26-4589-460a-931f-8c4bc5704054}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -558,6 +558,7 @@
     <ClInclude Include="..\Headers\Stage1_NPC.h">
       <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Shop_ChatWnd.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -800,6 +801,7 @@
     <ClCompile Include="..\Codes\Stage1_NPC.cpp">
       <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Shop_ChatWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

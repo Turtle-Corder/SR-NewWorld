@@ -2,6 +2,7 @@
 #include "..\Headers\Shop_NPC.h"
 #include "Player.h"
 #include "Shop.h"
+#include "Shop_ChatWnd.h"
 
 USING(Client)
 
@@ -46,13 +47,16 @@ _int CShop_NPC::Update_GameObject(_float _fDeltaTime)
 	CShop* pShop = (CShop*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Shop");
 	if (nullptr == pShop)
 		return GAMEOBJECT::ERR;
+	CShop_ChatWnd* pShopChat = (CShop_ChatWnd*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Shop", 1);
+	if (nullptr == pShopChat)
+		return GAMEOBJECT::ERR;
 
 	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
 		pManagemnet->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
 
 
 	// 일정 거리 이하가 되어야 NPC에게 말 걸 수 있음
-	if (pManagemnet->Key_Down('G'))
+	if (pManagemnet->Key_Pressing('G'))
 	{
 		_vec3 vPlayerPos = vPlayerTransform->Get_Desc().vPosition;
 		_vec3 vNpcPos = m_pTransformCom[0]->Get_Desc().vPosition;
@@ -62,8 +66,14 @@ _int CShop_NPC::Update_GameObject(_float _fDeltaTime)
 
 		// NPC에게 말걸기
 		if (fDist <= 5.f)
-			pShop->Change_RenderState();
+			pShopChat->Set_StartChat(true);
+		else
+			pShopChat->Set_StartChat(false);
+		//if (fDist <= 5.f)
+		//	pShop->Change_RenderState();
 	}
+	else if (pManagemnet->Key_Up('G'))
+		pShopChat->Set_StartChat(false);
 
 	for (_uint i = 0; i < PART_END; i++)
 		m_pTransformCom[i]->Update_Transform();

@@ -223,4 +223,18 @@ enum eFlowerQuest_ID
 };
 
 
+//--------------------------------------------------
+// 상점 ChatWnd 상황
+//--------------------------------------------------
+enum eShopChatWnd_ID
+{
+	SHOPCHAT_GREETINGS,
+	SHOPCHAT_REQUIRE,
+	SHOPCHAT_ANSWER,
+	SHOPCHAT_FINAL,
+	SHOPCHAT_END,
+
+	SHOPCHAT_FINISH
+};
+
 #endif
