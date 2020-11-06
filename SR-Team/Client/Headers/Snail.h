@@ -56,8 +56,8 @@ private:
 private:
 	_vec3			m_vStartPos = {};
 	_vec3			m_vDir = {};
-	STATE			m_ePreState = SLEEP;
-	STATE			m_eCurState = SLEEP;
+	STATE			m_ePreState = IDLE;
+	STATE			m_eCurState = IDLE;
 	_vec3			m_vLook = {};
 	_vec3			m_vPrePos = {};
 	_bool			m_bInstanceCreate = false;

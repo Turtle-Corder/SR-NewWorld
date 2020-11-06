@@ -288,9 +288,6 @@ HRESULT CSnail::Move(_float _fDeltaTime)
 
 HRESULT CSnail::LookAtPlayer(_float _fDeltaTime)
 {
-	if (SLEEP == m_eCurState)
-		return S_OK;
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
