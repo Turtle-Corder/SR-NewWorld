@@ -1,12 +1,10 @@
 #include "stdafx.h"
-#include "..\Headers\Shop_NPC.h"
-#include "Player.h"
-#include "Shop.h"
+#include "..\Headers\MainQuest_NPC.h"
+
 
 USING(Client)
 
-
-CShop_NPC::CShop_NPC(LPDIRECT3DDEVICE9 _pDevice)
+CMainQuest_NPC::CMainQuest_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
 	for (_uint iCnt = 0; iCnt < PART_END; ++iCnt)
@@ -17,61 +15,32 @@ CShop_NPC::CShop_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	}
 }
 
-CShop_NPC::CShop_NPC(const CShop_NPC & _rOther)
+CMainQuest_NPC::CMainQuest_NPC(const CMainQuest_NPC & _rOther)
 	: CGameObject(_rOther)
 {
 }
 
-HRESULT CShop_NPC::Setup_GameObject_Prototype()
+HRESULT CMainQuest_NPC::Setup_GameObject_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CShop_NPC::Setup_GameObject(void * _pArg)
+HRESULT CMainQuest_NPC::Setup_GameObject(void * _pArg)
 {
 	if (FAILED(Add_Component()))
 		return E_FAIL;
-
 	return S_OK;
 }
 
-_int CShop_NPC::Update_GameObject(_float _fDeltaTime)
+_int CMainQuest_NPC::Update_GameObject(_float _fDeltaTime)
 {
-	CManagement* pManagemnet = CManagement::Get_Instance();
-	if (nullptr == pManagemnet)
-		return GAMEOBJECT::ERR;
-	CPlayer* pPlayer = (CPlayer*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Player");
-	if (nullptr == pPlayer)
-		return GAMEOBJECT::ERR;
-	CShop* pShop = (CShop*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Shop");
-	if (nullptr == pShop)
-		return GAMEOBJECT::ERR;
-
-	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
-		pManagemnet->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
-
-	// 일정 거리 이하가 되어야 NPC에게 말 걸 수 있음
-	if (pManagemnet->Key_Down('G'))
-	{
-		_vec3 vPlayerPos = vPlayerTransform->Get_Desc().vPosition;
-		_vec3 vNpcPos = m_pTransformCom[0]->Get_Desc().vPosition;
-
-		_vec3 vMoveDir = vNpcPos - vPlayerPos;
-		_float fDist = D3DXVec3Length(&vMoveDir);
-
-		// NPC에게 말걸기
-		if (fDist <= 5.f)
-			pShop->Change_RenderState();
-	}
-
 	for (_uint i = 0; i < PART_END; i++)
 		m_pTransformCom[i]->Update_Transform();
 
 	return GAMEOBJECT::NOEVENT;
 }
 
-_int CShop_NPC::LateUpdate_GameObject(_float _fDeltaTime)
+_int CMainQuest_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagemnet = CManagement::Get_Instance();
 	if (nullptr == pManagemnet)
@@ -83,7 +52,7 @@ _int CShop_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-HRESULT CShop_NPC::Render_NoneAlpha()
+HRESULT CMainQuest_NPC::Render_NoneAlpha()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -93,22 +62,25 @@ HRESULT CShop_NPC::Render_NoneAlpha()
 	if (nullptr == pCamera)
 		return E_FAIL;
 
-	for (_uint iCnt = PART_START; iCnt < PART_END; ++iCnt)
+	if (pManagement->Get_CurrentSceneID() == SCENE_STAGE0)
 	{
-		if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
-			return E_FAIL;
+		for (_uint iCnt = PART_START; iCnt < PART_END; ++iCnt)
+		{
+			if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+				return E_FAIL;
 
-		if (FAILED(m_pTextureCom[iCnt]->SetTexture(0)))
-			return E_FAIL;
+			if (FAILED(m_pTextureCom[iCnt]->SetTexture(0)))
+				return E_FAIL;
 
-		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
-			return E_FAIL;
+			if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+				return E_FAIL;
+		}
 	}
 
 	return S_OK;
 }
 
-HRESULT CShop_NPC::Add_Component()
+HRESULT CMainQuest_NPC::Add_Component()
 {
 	for (_uint i = 0; i < PART_END; i++)
 	{
@@ -127,7 +99,7 @@ HRESULT CShop_NPC::Add_Component()
 	return S_OK;
 }
 
-HRESULT CShop_NPC::Add_Component_Transform()
+HRESULT CMainQuest_NPC::Add_Component_Transform()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc[PART_END];
 	ZeroMemory(tTransformDesc, sizeof(CTransform::TRANSFORM_DESC) * PART_END);
@@ -136,7 +108,7 @@ HRESULT CShop_NPC::Add_Component_Transform()
 	//--------------------------------------------------
 	// HEAD
 	//--------------------------------------------------
-	tTransformDesc[PART_HEAD].vPosition = { 17.f, 2.f, 62.f };
+	tTransformDesc[PART_HEAD].vPosition = { 32.f, 2.f, 35.f };
 	tTransformDesc[PART_HEAD].vScale = { 1.f, 1.f, 1.f };
 	tTransformDesc[PART_HEAD].fSpeedPerSecond = 5.f;
 	tTransformDesc[PART_HEAD].fRotatePerSecond = fRPS_Rad;
@@ -152,7 +124,7 @@ HRESULT CShop_NPC::Add_Component_Transform()
 	//--------------------------------------------------
 	// HAND_L
 	//--------------------------------------------------
-	tTransformDesc[PART_HAND_LEFT].vPosition = tTransformDesc[PART_BODY].vPosition + _vec3(-0.7f, 0.0f, 0.f);
+	tTransformDesc[PART_HAND_LEFT].vPosition = tTransformDesc[PART_BODY].vPosition + _vec3(-0.5f, 0.0f, 0.f);
 	tTransformDesc[PART_HAND_LEFT].vScale = { 0.2f, 0.7f, 0.2f };
 	tTransformDesc[PART_HAND_LEFT].fSpeedPerSecond = 5.f;
 	tTransformDesc[PART_HAND_LEFT].fRotatePerSecond = fRPS_Rad;
@@ -160,7 +132,7 @@ HRESULT CShop_NPC::Add_Component_Transform()
 	//--------------------------------------------------
 	// HAND_R
 	//--------------------------------------------------
-	tTransformDesc[PART_HAND_RIGHT].vPosition = tTransformDesc[PART_BODY].vPosition + _vec3(0.7f, 0.0f, 0.f);
+	tTransformDesc[PART_HAND_RIGHT].vPosition = tTransformDesc[PART_BODY].vPosition + _vec3(0.5f, 0.0f, 0.f);
 	tTransformDesc[PART_HAND_RIGHT].vScale = { 0.2f, 0.7f, 0.2f };
 	tTransformDesc[PART_HAND_RIGHT].fSpeedPerSecond = 5.f;
 	tTransformDesc[PART_HAND_RIGHT].fRotatePerSecond = fRPS_Rad;
@@ -201,7 +173,7 @@ HRESULT CShop_NPC::Add_Component_Transform()
 	return S_OK;
 }
 
-HRESULT CShop_NPC::Add_Component_Texture()
+HRESULT CMainQuest_NPC::Add_Component_Texture()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (pManagement == nullptr)
@@ -209,15 +181,15 @@ HRESULT CShop_NPC::Add_Component_Texture()
 
 	WCHAR szTextureName[PART_END][MAX_PATH] =
 	{
-		L"Component_Texture_ShopNPCHead",
+		L"Component_Texture_MainQuestNPCHead",
 
-		L"Component_Texture_ShopNPCBody",
+		L"Component_Texture_MainQuestNPCBody",
 
-		L"Component_Texture_ShopNPCHand",
-		L"Component_Texture_ShopNPCHand",
+		L"Component_Texture_MainQuestNPCHand",
+		L"Component_Texture_MainQuestNPCHand",
 
-		L"Component_Texture_ShopNPCFoot",
-		L"Component_Texture_ShopNPCFoot"
+		L"Component_Texture_MainQuestNPCFoot",
+		L"Component_Texture_MainQuestNPCFoot"
 	};
 
 	//--------------------------------------------------
@@ -235,34 +207,34 @@ HRESULT CShop_NPC::Add_Component_Texture()
 	return S_OK;
 }
 
-CShop_NPC * CShop_NPC::Create(LPDIRECT3DDEVICE9 _pDevice)
+CMainQuest_NPC * CMainQuest_NPC::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
 	if (nullptr == _pDevice)
 		return nullptr;
 
-	CShop_NPC* pInstance = new CShop_NPC(_pDevice);
+	CMainQuest_NPC* pInstance = new CMainQuest_NPC(_pDevice);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{
-		PRINT_LOG(L"Failed To Create CShop_NPC", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Create CMainQuest_NPC", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject * CShop_NPC::Clone_GameObject(void * _pArg)
+CGameObject * CMainQuest_NPC::Clone_GameObject(void * _pArg)
 {
-	CShop_NPC* pInstance = new CShop_NPC(*this);
+	CMainQuest_NPC* pInstance = new CMainQuest_NPC(*this);
 	if (FAILED(pInstance->Setup_GameObject(_pArg)))
 	{
-		PRINT_LOG(L"Failed To Clone CShop_NPC", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Clone CMainQuest_NPC", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CShop_NPC::Free()
+void CMainQuest_NPC::Free()
 {
 	for (_uint i = 0; i < PART_END; ++i)
 	{

@@ -316,6 +316,9 @@ HRESULT CMainUI::Render_UI()
 		// HP/MP 감소에 따른 RECT 변경 나중에 하기
 		if (i == MAINUI_HP)
 		{
+			if (pPlayerStat->Get_Status().iHp <= 0)
+				pPlayerStat->Change_Hp(0);
+
 			m_tCollRt[i].left = 0;
 			m_tCollRt[i].right = (LONG)(pTexInfo->Width);
 			m_tCollRt[i].top = (LONG)((pTexInfo->Height - pPlayerStat->Get_Status().iHp * 2.2f));
@@ -335,6 +338,9 @@ HRESULT CMainUI::Render_UI()
 		}
 		else if (i == MAINUI_MP)
 		{
+			if (pPlayerStat->Get_Status().iMp <= 0)
+				pPlayerStat->Change_Mp(0);
+
 			m_tCollRt[i].left = 0;
 			m_tCollRt[i].right = (LONG)(pTexInfo->Width);
 			m_tCollRt[i].top = (LONG)((pTexInfo->Height - pPlayerStat->Get_Status().iMp * 2.2f));

@@ -292,6 +292,15 @@
     <Filter Include="02.GameObject\16. NPC\01. Shop">
       <UniqueIdentifier>{e3c23e1c-2325-4d2c-81f9-f6f8964dfb25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\16. NPC\02. MainQuest">
+      <UniqueIdentifier>{d3e244a8-700d-480b-82ec-373d4c6b3afd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\04. Stage2">
+      <UniqueIdentifier>{49e58669-f668-4eec-960a-d50c7e38e37d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\03. Stage1">
+      <UniqueIdentifier>{36d5a94d-c005-4499-9d20-21103a118880}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -543,6 +552,12 @@
     <ClInclude Include="..\Headers\Shop_NPC.h">
       <Filter>02.GameObject\16. NPC\01. Shop</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MainQuest_NPC.h">
+      <Filter>02.GameObject\16. NPC\02. MainQuest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage1_NPC.h">
+      <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -778,6 +793,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shop_NPC.cpp">
       <Filter>02.GameObject\16. NPC\01. Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainQuest_NPC.cpp">
+      <Filter>02.GameObject\16. NPC\02. MainQuest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage1_NPC.cpp">
+      <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
