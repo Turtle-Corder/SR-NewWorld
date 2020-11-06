@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __METEOR_H__
-#define __METEOR_H__
+#ifndef __ICESPEAR_H__
+#define __ICESPEAR_H__
 
 #include"GameObject.h"
 
@@ -27,7 +27,6 @@ public:
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(_float _fDeltaTime);
-	HRESULT FallDown_Meteor(_float _fDeltaTime);
 
 public:
 	static CIceSpear* Create(LPDIRECT3DDEVICE9 pDevice);
