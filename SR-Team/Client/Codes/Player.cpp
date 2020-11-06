@@ -173,14 +173,13 @@ void CPlayer::Buff_On(ACTIVE_BUFF _eType)
 		break;
 
 	case Client::CPlayer::BUFF_ATTACK:
-		m_fAttackRate = 2.f;
+		m_pStatusCom->Set_AttRate(2.f);
 		break;
 
 	case Client::CPlayer::BUFF_SHIELD:
+		m_pStatusCom->Set_DefRate(1.5f);
 		break;
 
-	default:
-		break;
 	}
 
 	m_bBuffActive[_eType] = true;
@@ -195,13 +194,11 @@ void CPlayer::Buff_Off(ACTIVE_BUFF _eType)
 		break;
 
 	case Client::CPlayer::BUFF_ATTACK:
-		m_fAttackRate = 1.f;
+		m_pStatusCom->Set_AttRate(1.f);
 		break;
 
 	case Client::CPlayer::BUFF_SHIELD:
-		break;
-
-	default:
+		m_pStatusCom->Set_DefRate(1.f);
 		break;
 	}
 
@@ -220,6 +217,11 @@ HRESULT CPlayer::Set_ClearInfo(_int _iClearScene)
 
 	m_iClearInfo = _iClearScene;
 	return S_OK;
+}
+
+void CPlayer::Set_ConsumeRate(_float _fConsumeRate)
+{
+	m_fConsumeRate = _fConsumeRate;
 }
 
 
@@ -365,7 +367,7 @@ HRESULT CPlayer::Add_Component_Extends()
 	// Status
 	//--------------------------------------------------
 	CStatus::STAT tStat;
-	tStat.iCriticalRate = 20;	tStat.iCriticalHit = 10;
+	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
 	tStat.iDef = 50;
 	tStat.iHp = 50;				tStat.iMp = 50;
 	tStat.iMaxHp = 100;			tStat.iMaxMp = 100;
@@ -1300,3 +1302,19 @@ void CPlayer::Update_AtkDelay(_float _fDeltaTime)
 		}
 	}
 }
+
+//void CPlayer::Update_BuffTime(_float _fDeltaTime)
+//{
+//	for (_uint iCnt = 0; iCnt < BUFF_END; ++iCnt)
+//	{
+//		if (m_bBuffActive[iCnt])
+//		{
+//			m_fBuffTimer[iCnt] += _fDeltaTime;
+//			if (m_fBuffKeepTime[iCnt] <= m_fBuffTimer[iCnt])
+//			{
+//				m_fBuffTimer[iCnt] = 0.f;
+//				Buff_Off((ACTIVE_BUFF)iCnt);			
+//			}
+//		}
+//	}
+//}

@@ -100,8 +100,15 @@ _bool CSkillSlot_Meteor::Actual_UseSkill(void* _pArg)
 
 	for (_uint iCnt = 0; iCnt < 5; ++iCnt)
 	{
-		_vec3 vAddSpawnPos = { (_float)(rand() % 21 - 10) * 0.1f, (_float)(rand() % 9 - 4) * 0.3f, (_float)(rand() % 21 - 10) * 0.1f };
+		//떨어지기 시작하는 위치
+		_float fRandomness = 0.3f;
+		_float fDirectionCorrention = 0.9f;
+		_vec3 vAddSpawnPos = { (_float)(rand() % 60 - 30) * fRandomness, (_float)(rand() % 9 - 4) * 0.3f +14.f, (_float)(rand() % 60 - 30) * fRandomness };
+		pImpact->vOption = vBaseSpawnPos;
 		pImpact->vPosition = vBaseSpawnPos + vAddSpawnPos;
+		pImpact->vDirection =  vBaseSpawnPos - pImpact->vPosition;
+		pImpact->vDirection.x *= fDirectionCorrention;
+		pImpact->vDirection.z *= fDirectionCorrention;
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Meteor", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
 		{

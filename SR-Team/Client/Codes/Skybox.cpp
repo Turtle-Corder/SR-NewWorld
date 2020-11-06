@@ -131,7 +131,7 @@ HRESULT CSkybox::Add_Component()
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
-	
+
 	return S_OK;
 }
 
@@ -148,7 +148,7 @@ HRESULT CSkybox::Movement(_float _fDeltaTime)
 	m_pTransformCom->Set_Position(pCamera->Get_Desc().vEye * 0.8f);
 
 	_vec3 vRot = { D3DX_PI ,  D3DX_PI , D3DX_PI / 2.5f };
-	
+
 	m_pTransformCom->Set_Rotation(vRot);
 
 

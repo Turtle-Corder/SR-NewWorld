@@ -161,7 +161,7 @@ HRESULT CSnail::Add_Component()
 	// 나중에 몬스터 데이터 불러올때 지정함
 	//----------------------------------------
 	CStatus::STAT tStat;
-	tStat.iCriticalRate = 20;	tStat.iCriticalHit = 10;
+	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
 	tStat.iDef = 50;
 	tStat.iHp = 100;			tStat.iMp = 100;
 	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
@@ -179,7 +179,7 @@ HRESULT CSnail::Add_Component()
 	CDamageInfo::DAMAGE_DESC tDmgInfo;
 	tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMinAtt;
 	tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
-	tDmgInfo.iCriticalHit = m_pStatusCom->Get_Status().iCriticalHit;
+	tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
 	tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
 	tDmgInfo.pOwner = this;
 	tDmgInfo.eType = eELEMENTAL_TYPE::NONE;

@@ -253,12 +253,6 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\00.ThunderBox">
       <UniqueIdentifier>{a0054e46-d1cc-40be-86bd-ee98393440aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm">
-      <UniqueIdentifier>{a6720cf7-b6ab-418f-89c4-57fe13c8f9aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\06.Projectile\00.Player\05.">
-      <UniqueIdentifier>{bc0185db-a08e-4ba6-a585-c089cf14341d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\13. Slot_PlayerSkill">
       <UniqueIdentifier>{e9a43fa0-b414-4dac-8bcd-cef58af142c8}</UniqueIdentifier>
     </Filter>
@@ -291,6 +285,12 @@
     </Filter>
     <Filter Include="02.GameObject\16. NPC\01. Shop">
       <UniqueIdentifier>{e3c23e1c-2325-4d2c-81f9-f6f8964dfb25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\05.IceSpear">
+      <UniqueIdentifier>{bc0185db-a08e-4ba6-a585-c089cf14341d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder">
+      <UniqueIdentifier>{a6720cf7-b6ab-418f-89c4-57fe13c8f9aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\16. NPC\02. MainQuest">
       <UniqueIdentifier>{d3e244a8-700d-480b-82ec-373d4c6b3afd}</UniqueIdentifier>
@@ -525,9 +525,6 @@
     <ClInclude Include="..\Headers\ThunderBox.h">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\00.ThunderBox</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\ThunderStorm.h">
-      <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\SkillSlot_IceSpear.h">
       <Filter>02.GameObject\13. Slot_PlayerSkill\01. IceSpear</Filter>
     </ClInclude>
@@ -551,6 +548,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Shop_NPC.h">
       <Filter>02.GameObject\16. NPC\01. Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IceSpear.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Thunder.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MainQuest_NPC.h">
       <Filter>02.GameObject\16. NPC\02. MainQuest</Filter>
@@ -768,9 +771,6 @@
     <ClCompile Include="..\Codes\ThunderBox.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\00.ThunderBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\ThunderStorm.cpp">
-      <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.ThunderStorm</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\SkillSlot_IceSpear.cpp">
       <Filter>02.GameObject\13. Slot_PlayerSkill\01. IceSpear</Filter>
     </ClCompile>
@@ -794,6 +794,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shop_NPC.cpp">
       <Filter>02.GameObject\16. NPC\01. Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceSpear.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Thunder.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MainQuest_NPC.cpp">
       <Filter>02.GameObject\16. NPC\02. MainQuest</Filter>

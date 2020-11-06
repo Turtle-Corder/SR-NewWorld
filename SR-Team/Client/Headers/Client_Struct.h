@@ -46,6 +46,7 @@ typedef struct tagInstantImpact
 	CComponent*		pStatusComp = nullptr;
 	_vec3			vPosition = {};
 	_vec3			vDirection = {};
+	_vec3			vOption = {};
 }INSTANTIMPACT;
 
 typedef struct tagFileInfo

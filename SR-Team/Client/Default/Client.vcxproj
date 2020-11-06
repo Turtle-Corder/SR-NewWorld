@@ -161,6 +161,7 @@
     <ClInclude Include="..\Headers\DummyTerrain.h" />
     <ClInclude Include="..\Headers\Acorn.h" />
     <ClInclude Include="..\Headers\FlowerQuest.h" />
+    <ClInclude Include="..\Headers\IceSpear.h" />
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
     <ClInclude Include="..\Headers\ItemSlot_BluePotion.h" />
     <ClInclude Include="..\Headers\Bomb.h" />
@@ -229,7 +230,7 @@
     <ClInclude Include="..\Headers\Terrain.h" />
     <ClInclude Include="..\Headers\TerrainBundle.h" />
     <ClInclude Include="..\Headers\ThunderBox.h" />
-    <ClInclude Include="..\Headers\ThunderStorm.h" />
+    <ClInclude Include="..\Headers\Thunder.h" />
     <ClInclude Include="..\Headers\Tree.h" />
     <ClInclude Include="..\Headers\VIBuffer_Flower.h" />
     <ClInclude Include="..\Headers\VIBuffer_Pyramid.h" />
@@ -248,6 +249,7 @@
     <ClCompile Include="..\Codes\DummyTerrain.cpp" />
     <ClCompile Include="..\Codes\Acorn.cpp" />
     <ClCompile Include="..\Codes\FlowerQuest.cpp" />
+    <ClCompile Include="..\Codes\IceSpear.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BluePotion.cpp" />
     <ClCompile Include="..\Codes\Bomb.cpp" />
@@ -313,7 +315,7 @@
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainBundle.cpp" />
     <ClCompile Include="..\Codes\ThunderBox.cpp" />
-    <ClCompile Include="..\Codes\ThunderStorm.cpp" />
+    <ClCompile Include="..\Codes\Thunder.cpp" />
     <ClCompile Include="..\Codes\Tree.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_Flower.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_Pyramid.cpp" />
