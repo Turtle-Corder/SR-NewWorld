@@ -166,9 +166,9 @@ HRESULT CEnergyBolt::Move(_float _fDeltaTime)
 	_vec3 vAddPos = m_tInstant.vDirection * (_fDeltaTime * m_pTransformCom->Get_Desc().fSpeedPerSecond);
 	m_pTransformCom->Set_Position(m_pTransformCom->Get_Desc().vPosition + vAddPos);
 
-//	m_pTransformCom->Turn(CTransform::AXIS_X, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond);
-	m_pTransformCom->Turn(CTransform::AXIS_Y, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond * 1.2f);
-	//m_pTransformCom->Turn(CTransform::AXIS_Z, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond);
+	m_pTransformCom->Turn(CTransform::AXIS_X, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond * 1.f);
+	m_pTransformCom->Turn(CTransform::AXIS_Y, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond * 1.f);
+	m_pTransformCom->Turn(CTransform::AXIS_Z, _fDeltaTime * m_pTransformCom->Get_Desc().fRotatePerSecond * 7.f);
 
 	//m_pTransformCom->Update_Transform();
 	return S_OK;
