@@ -46,12 +46,16 @@ HRESULT CMainUI::Get_QuickSlotItem(INVEN_ITEM * pItem)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (pManagement == nullptr)
 		return E_FAIL;
-
+	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
+	if (pInven == nullptr)
+		return E_FAIL;
 	CDataManager* pItems = (CDataManager*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Item");
 
 	m_pMovingItem = pItem;
 
 	m_bRender_GoingItem = true;
+
+	pInven->Set_MovingClear(true);
 
 
 	_int p = 0;
@@ -533,6 +537,9 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 	CItemInventory* pItemInven = (CItemInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 4);
 	if (pItemInven == nullptr)
 		return E_FAIL;
+	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
+	if (pInven == nullptr)
+		return E_FAIL;
 
 	RECT rc = {};
 
@@ -566,6 +573,8 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 								if (FAILED(pItemInven->Set_ItemIndex(i, m_pMovingItem->ePotionID)))
 									return E_FAIL;
 							m_pMovingItem = nullptr;
+
+							pInven->Set_MovingClear(false);
 						}
 					}
 					// ½ºÅ³ Äü½½·Ô ³» À§Ä¡ ÀÌµ¿
@@ -603,6 +612,7 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 						//if (m_pLeftSlotItem[m_iBefore_SkillIconIndex])
 						//	m_pLeftSlotItem[m_iBefore_SkillIconIndex] = nullptr;
 						m_iBefore_ItemIndex = -1;
+						pInven->Set_MovingClear(false);
 					}
 				}
 				else
@@ -610,6 +620,7 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 					m_bRender_GoingItem = false;
 					m_pMovingItem = nullptr;
 					m_pTexture_GoingItem = nullptr;
+					pInven->Set_MovingClear(false);
 				}
 			}
 		}

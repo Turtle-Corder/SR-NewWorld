@@ -301,6 +301,9 @@
     <Filter Include="02.GameObject\07.UI\02.Shop\ChatWnd">
       <UniqueIdentifier>{22a8fd26-4589-460a-931f-8c4bc5704054}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.UI\06. FlowerQuest\Flower">
+      <UniqueIdentifier>{8d576cb1-e4c0-43e6-ac1e-61778040736d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -561,7 +564,12 @@
     <ClInclude Include="..\Headers\Stage1_NPC.h">
       <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shop_ChatWnd.h" />
+    <ClInclude Include="..\Headers\QuestItem_Flower.h">
+      <Filter>02.GameObject\07.UI\06. FlowerQuest\Flower</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shop_ChatWnd.h">
+      <Filter>02.GameObject\07.UI\02.Shop\ChatWnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -807,7 +815,12 @@
     <ClCompile Include="..\Codes\Stage1_NPC.cpp">
       <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shop_ChatWnd.cpp" />
+    <ClCompile Include="..\Codes\QuestItem_Flower.cpp">
+      <Filter>02.GameObject\07.UI\06. FlowerQuest\Flower</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shop_ChatWnd.cpp">
+      <Filter>02.GameObject\07.UI\02.Shop\ChatWnd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

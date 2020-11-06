@@ -23,7 +23,7 @@ CInventory::CInventory(const CInventory & _rOther)
 {
 }
 
-void CInventory::Set_Render(bool bRender)
+void CInventory::Set_Render(_bool bRender)
 {
 	m_bRender = bRender;
 }
@@ -661,7 +661,7 @@ HRESULT CInventory::Move_To_QuickSlot()
 			{
 				iIndex = i * 6 + j;
 			
-				if (PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
+				if (PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()) && !m_bMovingClear)
 				{
 					_int k = 0;
 					m_bMoveInvenWnd = false;
