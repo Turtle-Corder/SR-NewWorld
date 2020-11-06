@@ -605,6 +605,11 @@ HRESULT CMainApp::Setup_EB()
 		L"../Resources/Sprite/Layer_MainUI/QuickSlot_RightFont%d.png"))))
 		return E_FAIL;
 
+	// ÄðÅ¸ÀÓ
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainUI_Time", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainUI/empty%d.png"))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Component_Textures_Shop
@@ -865,35 +870,35 @@ HRESULT CMainApp::Setup_EB()
 #pragma region Component_Texture_FlowerQuest
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_FlowerQuest_Greeting", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/greeting%d.png"))))
+			L"../Resources/Sprite/Layer_FlowerQuest2/greeting%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
-		L"Component_Texture_FlowerQuest_Question", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/question%d.png"))))
+		L"Component_Texture_FlowerQuest_Answer1", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/Answer%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
-		L"Component_Texture_FlowerQuest_Answer", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/answer%d.png"))))
+		L"Component_Texture_FlowerQuest_Chat", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/Chat%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
-		L"Component_Texture_FlowerQuest_QuestStart", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/quest_start%d.png"))))
+		L"Component_Texture_FlowerQuest_Answer2", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/Answerr%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
-		L"Component_Texture_FlowerQuest_QuestClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/quest_clear%d.png"))))
+		L"Component_Texture_FlowerQuest_RequireQuest", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/require%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_FlowerQuest_Reject", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/reject%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_FlowerQuest_NoClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/noclear%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_FlowerQuest_Reward", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/reward%d.png"))))
-		return E_FAIL;
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
-		L"Component_Texture_FlowerQuest_ExtraQuestion", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/extra_question%d.png"))))
-		return E_FAIL;
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
-		L"Component_Texture_FlowerQuest_QuestNoClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/quest_noclear%d.png"))))
+			L"../Resources/Sprite/Layer_FlowerQuest2/reward%d.png"))))
 		return E_FAIL;
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
@@ -907,11 +912,11 @@ HRESULT CMainApp::Setup_EB()
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_FlowerQuest_HelpWnd_Clear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/helpwnd_clear%d.png"))))
+			L"../Resources/Sprite/Layer_FlowerQuest2/HELPWND_CLEAR%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_FlowerQuest_HelpWnd_NoClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_FlowerQuest/helpwnd_noclear%d.png"))))
+			L"../Resources/Sprite/Layer_FlowerQuest2/NOCLEAR_HELPWND%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

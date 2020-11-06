@@ -770,7 +770,9 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 			vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
 
 			RECT rc = { 0, 0, (LONG)pTexInfo->Width, (LONG)(pTexInfo->Height * fProgress) };
-			m_pSprite->Draw((LPDIRECT3DTEXTURE9)m_pEmptyTexture->GetTexture(0), &rc, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+			m_pSprite->Draw(
+				(LPDIRECT3DTEXTURE9)m_pEmptyTexture->GetTexture(0), 
+				&rc, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 
 			// °³¼ö
@@ -949,7 +951,7 @@ HRESULT CMainUI::Add_Component()
 	}
 
 	if (FAILED(CGameObject::Add_Component(
-		SCENE_STATIC, L"Component_Texture_Item_Empty",
+		SCENE_STATIC, L"Component_Texture_MainUI_Time",
 		L"Com_EmptyItemTexture", (CComponent**)&m_pEmptyTexture)))
 		return E_FAIL;
 
