@@ -45,15 +45,13 @@ int CMeteor::Update_GameObject(_float _fDeltaTime)
 	if (FAILED(Movement(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
-	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
-		return GAMEOBJECT::WARN;
-
 	if (FAILED(m_pTransformCom->Update_Transform()))
 		return GAMEOBJECT::WARN;
 
+	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
+		return GAMEOBJECT::WARN;
 
-
-	return GAMEOBJECT::NOEVENT;                                                   
+	return GAMEOBJECT::NOEVENT;
 }
 
 int CMeteor::LateUpdate_GameObject(_float _fDeltaTime)
@@ -97,9 +95,9 @@ HRESULT CMeteor::Render_NoneAlpha()
 HRESULT CMeteor::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x - 8.f , m_tInstant.vPosition.y + 14.f , m_tInstant.vPosition.z + 8.f) };
-	tTransformDesc.fSpeedPerSecond = 0.01f;
-	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
+	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x + 0.05f , m_tInstant.vPosition.y + 14.f , m_tInstant.vPosition.z - 0.05f) };
+	tTransformDesc.fSpeedPerSecond = (_float)(rand() % 4 + 6);
+	tTransformDesc.fRotatePerSecond = D3DXToRadian(30.f);
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
@@ -116,22 +114,22 @@ HRESULT CMeteor::Add_Component()
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Meteor", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
-	
+
 	// For.Transform
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
-	
+
 	// For.Collider
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tCollDesc)))
 		return E_FAIL;
-	
+
 	// For.Status
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusComp, &tStat)))
 		return E_FAIL;
 
 	CStatus* pOwnerStatusComp = (CStatus*)m_tInstant.pStatusComp;
 	CDamageInfo::DAMAGE_DESC tDmgInfo;
-	
+
 	if (pOwnerStatusComp)
 	{
 		tDmgInfo.pOwner = m_tInstant.pAttacker;
@@ -159,9 +157,6 @@ HRESULT CMeteor::Add_Component()
 
 HRESULT CMeteor::Movement(_float _fDeltaTime)
 {
-	if (m_bDead)
-		return GAMEOBJECT::DEAD;
-
 	if (FAILED(FallDown_Meteor(_fDeltaTime)))
 		return E_FAIL;
 
@@ -175,7 +170,7 @@ HRESULT CMeteor::FallDown_Meteor(_float _fDeltaTime)
 		return E_FAIL;
 
 	_vec3 vAddPos = m_vMoveDir * m_pTransformCom->Get_Desc().fSpeedPerSecond * _fDeltaTime;
-	m_pTransformCom->Setup_Component(m_pTransformCom->Get_Desc().vPosition + vAddPos);
+	m_pTransformCom->Set_Position(m_pTransformCom->Get_Desc().vPosition + vAddPos);
 
 	if (m_pTransformCom->Get_Desc().vPosition.y < m_tInstant.vPosition.y)
 		m_bDead = true;
@@ -224,8 +219,8 @@ void CMeteor::Free()
 
 HRESULT CMeteor::Take_Damage(const CComponent * _pDamageComp)
 {
-	if(!_pDamageComp)
-	return S_OK;
+	if (!_pDamageComp)
+		return S_OK;
 
 
 

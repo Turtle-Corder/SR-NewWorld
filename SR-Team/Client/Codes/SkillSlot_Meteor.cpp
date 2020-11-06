@@ -81,10 +81,10 @@ _bool CSkillSlot_Meteor::Actual_UseSkill(void* _pArg)
 	if (_pArg)
 	{
 		pImpact = (INSTANTIMPACT*)_pArg;
-		
-		if(pImpact)
+
+		if (pImpact)
 			pStatus = (CStatus*)pImpact->pStatusComp;
-		
+
 		if (pStatus)
 			pStatus->Increase_FireStack();
 	}
@@ -96,18 +96,20 @@ _bool CSkillSlot_Meteor::Actual_UseSkill(void* _pArg)
 	//--------------------------------------------------
 	// TODO : 메테오 소환, 5개 한방에 소환
 	//--------------------------------------------------
-	_vec3 vAddSpawnPos = { (_float)(rand() % 11 - 5), 0.f, (_float)(rand() % 11 - 5) };
-	pImpact->vPosition += vAddSpawnPos;
+	_vec3 vBaseSpawnPos = pImpact->vPosition;
 
 	for (_uint iCnt = 0; iCnt < 5; ++iCnt)
 	{
+		_vec3 vAddSpawnPos = { (_float)(rand() % 21 - 10) * 0.1f, (_float)(rand() % 9 - 4) * 0.3f, (_float)(rand() % 21 - 10) * 0.1f };
+		pImpact->vPosition = vBaseSpawnPos + vAddSpawnPos;
+
 		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Meteor", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
 		{
 			PRINT_LOG(L"Failed To Spawn Meteor", LOG::DEBUG);
 			return false;
 		}
 	}
-	
+
 	--m_iCanUseCnt;
 	return true;
 }
