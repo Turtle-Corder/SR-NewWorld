@@ -151,16 +151,19 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 	// FlowerQuest_NPC
 #pragma region Component_Texture_FlowerQuestNPC
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_NPC/FlowerQuestNPC_Head%d.dds"))))
+		L"../Resources/3D/Layer_NPC/FlowerQuest_Head%d.dds"))))
 		return E_FAIL;
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_NPC/FlowerQuestNPC_Body%d.dds"))))
+		L"../Resources/3D/Layer_NPC/FlowerQuest_Body%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_NPC/FlowerQuestNPC_Hand%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCLeftHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/FlowerQuest_LeftHand%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCRightHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/FlowerQuest_RightHand%d.dds"))))
 		return E_FAIL;
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_NPC/FlowerQuestNPC_Foot%d.dds"))))
+		L"../Resources/3D/Layer_NPC/FlowerQuest_Foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
