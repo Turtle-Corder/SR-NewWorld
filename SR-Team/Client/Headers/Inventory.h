@@ -20,7 +20,8 @@ public:
 	// 인벤과 아이템을 그릴것인지 안그릴것인지 외부에서 설정해주는 함수
 	// bool bRender : true면 그린다, false면 그리지 않는다
 	// ------------------------------------------------------------------
-	void Set_Render(bool bRender);
+	void Set_Render(_bool bRender);
+	void Set_MovingClear(_bool bCheck) { m_bMovingClear = bCheck; }
 
 
 // Getter
@@ -206,6 +207,9 @@ private:
 	// 인벤 창 움직이면 안된다
 	_bool				m_bMoveInvenWnd = true;
 
+	
+private:
+	_bool				m_bMovingClear = false;
 };
 
 END

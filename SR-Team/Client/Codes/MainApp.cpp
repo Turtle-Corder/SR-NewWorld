@@ -57,6 +57,7 @@
 //#include "Quest1.h"
 #include "FlowerQuest.h"
 #include "Shop_ChatWnd.h"
+#include "QuestItem_Flower.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -594,6 +595,11 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
+//#pragma region GameObject_QuestItemFlower
+//	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_QuestItemFlower", CQuestItem_Flower::Create(m_pDevice, m_pSprite, m_pFont))))
+//		return E_FAIL;
+//#pragma endregion
+
 // UNDONE : Quest Prototype
 //#pragma region GameObject_Quest1
 //	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Quest1", CQuest1::Create(m_pDevice, m_pSprite, m_pFont))))
@@ -890,6 +896,7 @@ HRESULT CMainApp::Setup_EB()
 #pragma endregion
 
 #pragma region Component_Texture_FlowerQuest
+	// 대화
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_FlowerQuest_Greeting", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_FlowerQuest2/greeting%d.png"))))
@@ -923,6 +930,7 @@ HRESULT CMainApp::Setup_EB()
 			L"../Resources/Sprite/Layer_FlowerQuest2/reward%d.png"))))
 		return E_FAIL;
 
+	// 아이템
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_FlowerQuest_Flower", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_FlowerQuest/flower%d.png"))))
@@ -932,6 +940,7 @@ HRESULT CMainApp::Setup_EB()
 			L"../Resources/Sprite/Layer_FlowerQuest/reward_potion%d.png"))))
 		return E_FAIL;
 
+	// HelpWnd
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_FlowerQuest_HelpWnd_Clear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_FlowerQuest2/HELPWND_CLEAR%d.png"))))
@@ -939,6 +948,16 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_FlowerQuest_HelpWnd_NoClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_FlowerQuest2/NOCLEAR_HELPWND%d.png"))))
+		return E_FAIL;
+
+	// 로딩
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_FlowerQuest_Loading_BackGround", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/background%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_FlowerQuest_Loading_Bar", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/bar%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

@@ -168,6 +168,7 @@
     <ClInclude Include="..\Headers\Bomb.h" />
     <ClInclude Include="..\Headers\MainQuest_NPC.h" />
     <ClInclude Include="..\Headers\MpDrift.h" />
+    <ClInclude Include="..\Headers\QuestItem_Flower.h" />
     <ClInclude Include="..\Headers\Scene_Room.h" />
     <ClInclude Include="..\Headers\Scene_Stage1.h" />
     <ClInclude Include="..\Headers\Scene_Stage2.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="..\Codes\Bomb.cpp" />
     <ClCompile Include="..\Codes\MainQuest_NPC.cpp" />
     <ClCompile Include="..\Codes\MpDrift.cpp" />
+    <ClCompile Include="..\Codes\QuestItem_Flower.cpp" />
     <ClCompile Include="..\Codes\Scene_Room.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage1.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage2.cpp" />
