@@ -1226,10 +1226,10 @@ void CPlayer::Update_Anim_Skill(_float _fDeltaTime)
 	{
 	case ACTIVE_ICE_BLAST:
 	case ACTIVE_MANA_DRIFT:
-	case ACTIVE_ENERGY_EXPLOTIATION:
-	case ACTIVE_FLAME_WAVE:
+	case ACTIVE_EXPLOTIATION:
+	case ACTIVE_METEO:
 	case ACTIVE_ICE_SPEAR:
-	case ACTIVE_MAGIC_ARMOR:
+	case ACTIVE_SHIELD:
 	case ACTIVE_THUNDER_STORM:
 	case ACTIVE_BLIND:
 		Update_Anim_Skill_Common(_fDeltaTime);

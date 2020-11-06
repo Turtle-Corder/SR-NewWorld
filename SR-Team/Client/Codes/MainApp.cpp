@@ -656,7 +656,7 @@ HRESULT CMainApp::Setup_EB()
 
 #pragma region Component_Texture_Skill
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Skill_ActiveWnd", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/2DResource/Skill/new_active%d.png"))))
+		L"../Resources/Sprite/Layer_MainUI/new_active%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Skill_PassiveWnd", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/2DResource/Skill/passive%d.png"))))
@@ -726,7 +726,7 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_SkillInfo_IceStrike", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-			L"../Resources/Sprite/Layer_MainUI/ice_strike%d.png"))))
+			L"../Resources/Sprite/Layer_MainUI/ice_blast%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_SkillInfo_MagicArmor", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
