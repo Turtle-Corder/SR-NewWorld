@@ -23,28 +23,28 @@ CSkillSlot * CSkillSlotManager::Get_PlayerSkill(eActiveSkill_ID eSkillID)
 	switch (eSkillID)
 	{
 
-	case ACTIVE_ICE_BLAST:
+	case ACTIVE_METEO:
 		return m_pSlot_Meteor;
 
-	case ACTIVE_MANA_DRIFT:
+	case ACTIVE_ICE_SPEAR:
 		return m_pSlot_IceSpear;
 	
-	case ACTIVE_ENERGY_EXPLOTIATION:
+	case ACTIVE_THUNDER_STORM:
 		return m_pSlot_ThunderStorm;
 	
-	case ACTIVE_FLAME_WAVE:
+	case ACTIVE_MANA_DRIFT:
 		return m_pSlot_ManaDrift;
 	
-	case ACTIVE_ICE_SPEAR:
+	case ACTIVE_BLIND:
 		return m_pSlot_Blind;
 	
-	case ACTIVE_MAGIC_ARMOR:
+	case ACTIVE_SHIELD:
 		return m_pSlot_Shield;
 	
-	case ACTIVE_THUNDER_STORM:
+	case ACTIVE_ICE_BLAST:
 		return m_pSlot_IceBlast;
 	
-	case ACTIVE_BLIND:
+	case ACTIVE_EXPLOTIATION:
 		return m_pSlot_Explosion;
 	 
 	default:

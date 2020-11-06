@@ -551,13 +551,13 @@ HRESULT CDataManager::Add_Component_SkillIcon()
 		}
 		if (i == 1)
 		{
-			pItem->eActiveID = ACTIVE_ENERGY_EXPLOTIATION;
+			pItem->eActiveID = ACTIVE_EXPLOTIATION;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
 				L"%s", L"EnergyExplotiation");
 		}
 		if (i == 2)
 		{
-			pItem->eActiveID = ACTIVE_FLAME_WAVE;
+			pItem->eActiveID = ACTIVE_METEO;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
 				L"%s", L"FlameWave");
 		}
@@ -585,7 +585,7 @@ HRESULT CDataManager::Add_Component_SkillIcon()
 		}
 		if (i == 7)
 		{
-			pItem->eActiveID = ACTIVE_MAGIC_ARMOR;
+			pItem->eActiveID = ACTIVE_SHIELD;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
 				L"%s", L"MagicArmor");
 		}

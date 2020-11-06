@@ -706,9 +706,9 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 			D3DXMatrixTranslation(&matTrans, vPos.x + 25.f, vPos.y + 25.f, 0.f);
 			matWorld = matScale * matTrans;
 
-			if (m_pLeftSlotItem[i]->eActiveID == ACTIVE_ENERGY_EXPLOTIATION)
+			if (m_pLeftSlotItem[i]->eActiveID == ACTIVE_EXPLOTIATION)
 				bCheck = pPlayer->IsOnBuff(CPlayer::ACTIVE_BUFF::BUFF_ATTACK);
-			else if (m_pLeftSlotItem[i]->eActiveID == ACTIVE_MAGIC_ARMOR)
+			else if (m_pLeftSlotItem[i]->eActiveID == ACTIVE_SHIELD)
 				bCheck = pPlayer->IsOnBuff(CPlayer::ACTIVE_BUFF::BUFF_SHIELD);
 			else if (m_pLeftSlotItem[i]->eActiveID == ACTIVE_MANA_DRIFT)
 				bCheck = pPlayer->IsOnBuff(CPlayer::ACTIVE_BUFF::BUFF_MANA);

@@ -303,14 +303,14 @@ HRESULT CSkill::Add_Component()
 	// 변경(추가)
 	TCHAR szTextureName[][MIN_STR] =
 	{
-		L"Component_Texture_SkillInfo_IceBlast",
-		L"Component_Texture_SkillInfo_ManaDrift",
-		L"Component_Texture_SkillInfo_EnergyExploitiation",
 		L"Component_Texture_SkillInfo_FlameWave",
 		L"Component_Texture_SkillInfo_IceSpear",
-		L"Component_Texture_SkillInfo_MagicArmor",
 		L"Component_Texture_SkillInfo_ThunderStorm",
-		L"Component_Texture_SkillInfo_Blind"
+		L"Component_Texture_SkillInfo_ManaDrift",
+		L"Component_Texture_SkillInfo_Blind",
+		L"Component_Texture_SkillInfo_MagicArmor",
+		L"Component_Texture_SkillInfo_IceStrike",
+		L"Component_Texture_SkillInfo_EnergyExploitiation"
 	};
 	TCHAR szTexture[MIN_STR] = L"Com_SkillInfoTexture%d";
 	TCHAR szCombine[MIN_STR] = L"";
@@ -319,14 +319,14 @@ HRESULT CSkill::Add_Component()
 
 	TCHAR szTextureIconName[][MIN_STR] =
 	{
-		L"Component_Texture_SkillIcon_IceStrike",
-		L"Component_Texture_SkillIcon_ManaDrift",
-		L"Component_Texture_SkillIcon_EnergyExplotiation",
 		L"Component_Texture_SkillIcon_FlameWave",
 		L"Component_Texture_SkillIcon_IceSpear",
-		L"Component_Texture_SkillIcon_MagicArmor",
 		L"Component_Texture_SkillIcon_ThunderStorm",
-		L"Component_Texture_SkillIcon_Blind"
+		L"Component_Texture_SkillIcon_ManaDrift",
+		L"Component_Texture_SkillIcon_Blind",
+		L"Component_Texture_SkillIcon_MagicArmor",
+		L"Component_Texture_SkillIcon_IceStrike",
+		L"Component_Texture_SkillIcon_EnergyExplotiation"
 	};
 	TCHAR szTextureIcon[MIN_STR] = L"Com_SkillIcon%d";
 	TCHAR szTextureIconCombine[MIN_STR] = L"";
