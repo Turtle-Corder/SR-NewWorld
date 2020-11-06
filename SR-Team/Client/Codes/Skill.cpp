@@ -249,7 +249,7 @@ HRESULT CSkill::Move_To_QuickSlot()
 	{
 		if (pManagement->Key_Pressing(VK_LBUTTON))
 		{
-			if (PtInRect(&m_tActiveCollRt[i], pMouse->Get_Point()))
+			if (PtInRect(&m_tActiveCollRt[i], pMouse->Get_Point()) && !m_bMovingClear)
 			{
 				_int k = 0;
 				if (FAILED(pMainUI->Get_QuickSlotSkill(i)))

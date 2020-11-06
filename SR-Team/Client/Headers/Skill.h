@@ -24,6 +24,9 @@ public:
 	_bool Get_Render() { return m_bRender; }
 
 public:
+	void Set_MovingClear(_bool bCheck) { m_bMovingClear = bCheck; }
+
+public:
 	// CUIObject을(를) 통해 상속됨
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void * _pArg) override;
@@ -79,6 +82,9 @@ private:
 	_int					m_iSkillInfoIndex = -1;
 	_bool					m_bRenderSkillInfo = false;
 	_vec3					m_vSkillInfoPos = { 0.f, 0.f, 0.f };
+
+private:
+	_bool					m_bMovingClear = false;
 };
 
 END

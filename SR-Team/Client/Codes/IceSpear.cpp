@@ -34,6 +34,32 @@ HRESULT CIceSpear::Setup_GameObject(void* _pArg)
 	m_vMoveDir = m_tInstant.vDirection;
 	D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
 
+	//_vec3 vMove, vLook;
+	//_float RotationXZ, RotationXY;
+	///////-----------------------------------------
+	//vLook = m_pTransformCom->Get_Look();
+	//D3DXVec3Normalize(&vLook, &vLook);
+	//vMove = m_vMoveDir;
+
+	//vMove.y = 0;
+	//vLook.y = 0;
+
+	//RotationXZ = D3DXVec3Dot(&vMove, &vLook);
+	///////----------------------------------------------
+	//vLook = m_pTransformCom->Get_Look();
+	//D3DXVec3Normalize(&vLook, &vLook);
+	//vMove = m_vMoveDir;
+
+	//vMove.z = 0;
+	//vLook.z = 0;
+
+	//RotationXY = D3DXVec3Dot(&vMove, &vLook);
+	///////---------------------------------------------
+
+
+
+	m_pTransformCom->Update_Transform();
+	
 	return S_OK;
 }
 
@@ -100,7 +126,7 @@ HRESULT CIceSpear::Add_Component()
 	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x + 0.05f , m_tInstant.vPosition.y , m_tInstant.vPosition.z - 0.05f) };
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(30.f);
-	tTransformDesc.vScale = { 2.5f, 0.1f, 2.5f };
+	tTransformDesc.vScale = { 0.5f, 3.f, 0.5f };
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
@@ -111,11 +137,11 @@ HRESULT CIceSpear::Add_Component()
 	tStat.iMinAtt = 10; tStat.iMaxAtt = 10;
 
 	// For.Com_VIBuffer
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_Pyramid", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Ice", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_IceSpear", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	// For.Transform
