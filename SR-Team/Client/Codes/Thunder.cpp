@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Headers\ThunderStorm.h"
+#include "..\Headers\Thunder.h"
 #include "DamageInfo.h"
 
 USING(Client)

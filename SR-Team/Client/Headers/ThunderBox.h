@@ -21,7 +21,6 @@ public:
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
-	virtual HRESULT Render_NoneAlpha() override;
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 public:
 	static CThunderBox* Create(LPDIRECT3DDEVICE9 _pDevice);
@@ -30,9 +29,7 @@ private:
 	HRESULT Add_Component();
 	HRESULT Spawn_ThunderStorm(const wstring& LayerTag, _vec3 _vTargetPos);
 private:
-	CVIBuffer*			m_pVIBufferCom = nullptr;
 	CTransform*			m_pTransformCom = nullptr;
-	CTexture*			m_pTextureCom = nullptr;
 	CSphereCollider*	m_pColliderCom = nullptr;
 	CStatus*			m_pStatusCom = nullptr;
 	CDamageInfo*		m_pDmgInfoCom = nullptr;

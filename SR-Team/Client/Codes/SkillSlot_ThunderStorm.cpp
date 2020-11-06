@@ -70,19 +70,46 @@ CGameObject * CSkillSlot_ThunderStorm::Clone_GameObject(void * _pArg)
 
 _bool CSkillSlot_ThunderStorm::Actual_UseSkill(void * _pArg)
 {
+	INSTANTIMPACT* pImpact = nullptr;
+	CStatus* pStatus = nullptr;
+
+
 	// 한번 더 검사
 	if (!Can_UseSkill())
 		return false;
 
 	if (_pArg)
 	{
-		INSTANTIMPACT* pImpact = (INSTANTIMPACT*)_pArg;
-		CStatus* pStatus = (CStatus*)pImpact->pStatusComp;
+		pImpact = (INSTANTIMPACT*)_pArg;
+
+		if (pImpact)
+			pStatus = (CStatus*)pImpact->pStatusComp;
+
+		if (pStatus)
+			pStatus->Increase_IceStack();
+
 	}
 
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return false;
+
+
 	//--------------------------------------------------
-	// TODO :
+	// TODO : 폭풍우 영역 소환
 	//--------------------------------------------------
+	pImpact->vOption = { 10.f, 0.f, 0.f };
+
+	pImpact->vPosition = ((CTransform*)(pImpact->pAttacker->Get_Component(L"Com_Transform0")))->Get_Desc().vPosition;
+
+	pImpact->vDirection = { 0.f, 0.f, 0.f };
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ThunderStormSphere", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
+	{
+		PRINT_LOG(L"Failed To Spawn Meteor", LOG::DEBUG);
+		return false;
+	}
 
 	--m_iCanUseCnt;
 	return true;

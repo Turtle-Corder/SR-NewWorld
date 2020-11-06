@@ -1,27 +1,27 @@
 #include "stdafx.h"
-#include "..\Headers\Meteor.h"
+#include "..\Headers\IceSpear.h"
 #include "Status.h"
 #include "DamageInfo.h"
 
 USING(Client)
 
-CMeteor::CMeteor(LPDIRECT3DDEVICE9 pDevice)
+CIceSpear::CIceSpear(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 
 {
 }
 
-CMeteor::CMeteor(const CMeteor& other)
+CIceSpear::CIceSpear(const CIceSpear& other)
 	: CGameObject(other)
 {
 }
 
-HRESULT CMeteor::Setup_GameObject_Prototype()
+HRESULT CIceSpear::Setup_GameObject_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CMeteor::Setup_GameObject(void* _pArg)
+HRESULT CIceSpear::Setup_GameObject(void* _pArg)
 {
 	if (_pArg)
 	{
@@ -37,7 +37,7 @@ HRESULT CMeteor::Setup_GameObject(void* _pArg)
 	return S_OK;
 }
 
-int CMeteor::Update_GameObject(_float _fDeltaTime)
+int CIceSpear::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
@@ -54,7 +54,7 @@ int CMeteor::Update_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-int CMeteor::LateUpdate_GameObject(_float _fDeltaTime)
+int CIceSpear::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -70,7 +70,7 @@ int CMeteor::LateUpdate_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-HRESULT CMeteor::Render_NoneAlpha()
+HRESULT CIceSpear::Render_NoneAlpha()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -92,15 +92,15 @@ HRESULT CMeteor::Render_NoneAlpha()
 	return S_OK;
 }
 
-HRESULT CMeteor::Add_Component()
+HRESULT CIceSpear::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
 
 	//시작할위치
 	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x + 0.05f , m_tInstant.vPosition.y , m_tInstant.vPosition.z - 0.05f) };
 	tTransformDesc.fSpeedPerSecond = 10.f;
-	tTransformDesc.fRotatePerSecond = D3DXToRadian(135.f);
-
+	tTransformDesc.fRotatePerSecond = D3DXToRadian(30.f);
+	tTransformDesc.vScale = { 2.5f, 0.1f, 2.5f };
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
@@ -115,7 +115,7 @@ HRESULT CMeteor::Add_Component()
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Meteor", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Ice", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	// For.Transform
@@ -149,7 +149,7 @@ HRESULT CMeteor::Add_Component()
 		tDmgInfo.iCriticalRate = m_pStatusComp->Get_Status().iCriticalRate;
 	}
 
-	tDmgInfo.eType = FIRE;
+	tDmgInfo.eType = ICE;
 
 	//For.DamageInfo
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
@@ -158,15 +158,7 @@ HRESULT CMeteor::Add_Component()
 	return S_OK;
 }
 
-HRESULT CMeteor::Movement(_float _fDeltaTime)
-{
-	if (FAILED(FallDown_Meteor(_fDeltaTime)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CMeteor::FallDown_Meteor(_float _fDeltaTime)
+HRESULT CIceSpear::Movement(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -175,24 +167,20 @@ HRESULT CMeteor::FallDown_Meteor(_float _fDeltaTime)
 	_vec3 vAddPos = m_vMoveDir * m_pTransformCom->Get_Desc().fSpeedPerSecond * _fDeltaTime;
 	m_pTransformCom->Set_Position(m_pTransformCom->Get_Desc().vPosition + vAddPos);
 
-	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_X, _fDeltaTime);
-	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, _fDeltaTime * 2.f);
-	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Z, _fDeltaTime);
-
-
-
 	if (m_pTransformCom->Get_Desc().vPosition.y < m_tInstant.vOption.y)
 		m_bDead = true;
 
 	return S_OK;
+
+	return S_OK;
 }
 
-CMeteor * CMeteor::Create(LPDIRECT3DDEVICE9 pDevice)
+CIceSpear * CIceSpear::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (nullptr == pDevice)
 		return nullptr;
 
-	CMeteor* pInstance = new CMeteor(pDevice);
+	CIceSpear* pInstance = new CIceSpear(pDevice);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Failed To Create CMeteor", LOG::CLIENT);
@@ -202,9 +190,9 @@ CMeteor * CMeteor::Create(LPDIRECT3DDEVICE9 pDevice)
 	return pInstance;
 }
 
-CGameObject * CMeteor::Clone_GameObject(void * pArg)
+CGameObject * CIceSpear::Clone_GameObject(void * pArg)
 {
-	CMeteor* pInstance = new CMeteor(*this);
+	CIceSpear* pInstance = new CIceSpear(*this);
 	if (FAILED(pInstance->Setup_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Failed To Clone CMeteor", LOG::CLIENT);
@@ -214,7 +202,7 @@ CGameObject * CMeteor::Clone_GameObject(void * pArg)
 	return pInstance;
 }
 
-void CMeteor::Free()
+void CIceSpear::Free()
 {
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
@@ -226,7 +214,7 @@ void CMeteor::Free()
 	CGameObject::Free();
 }
 
-HRESULT CMeteor::Take_Damage(const CComponent * _pDamageComp)
+HRESULT CIceSpear::Take_Damage(const CComponent * _pDamageComp)
 {
 	if (!_pDamageComp)
 		return S_OK;
