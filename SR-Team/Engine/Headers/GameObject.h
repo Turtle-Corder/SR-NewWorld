@@ -36,8 +36,8 @@ public:
 	void	Set_Dead();
 	_bool	IsDead();
 
-	void Set_Active();
-	void Set_DeActive();
+	virtual void Set_Active();
+	virtual void Set_DeActive();
 	_bool IsActive();
 
 
