@@ -27,6 +27,7 @@
 #include "Skybox.h"
 #include "FlowerQuest_NPC.h"
 #include "Shop_NPC.h"
+#include "MainQuest_NPC.h"
 #pragma endregion
 
 USING(Client)
@@ -119,6 +120,11 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_MainQuestNPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_MainQuestNPC", CMainQuest_NPC::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 //#pragma region GameObject_Acorn
 //	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
 //		return E_FAIL;
@@ -180,6 +186,22 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 		return E_FAIL;
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/Shopper_Foot%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+	// MainQuest_NPC
+#pragma region Component_Texture_MainQuestNPC
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_MainQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/MainQuestNPC_Head%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_MainQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/MainQuestNPC_Body%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_MainQuestNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/MainQuestNPC_Hand%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_MainQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/MainQuestNPC_Foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
