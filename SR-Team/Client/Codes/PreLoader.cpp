@@ -28,6 +28,7 @@
 #include "FlowerQuest_NPC.h"
 #include "Shop_NPC.h"
 #include "MainQuest_NPC.h"
+#include "Stage1_NPC.h"
 #pragma endregion
 
 USING(Client)
@@ -323,6 +324,11 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 1)))
 		return E_FAIL;
 
+#pragma region GameObject_Stage2NPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Stage1NPC", CStage1_NPC::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 	return S_OK;
 }
 
@@ -339,6 +345,7 @@ HRESULT CPreLoader::Load_Resources_Stage2()
 
 	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 2)))
 		return E_FAIL;
+
 
 	return S_OK;
 }
