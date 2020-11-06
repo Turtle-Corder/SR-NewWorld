@@ -34,6 +34,8 @@ HRESULT CWolf::Setup_GameObject(void * _pArg)
 	m_tImpact.pAttacker = this;
 	m_tImpact.pStatusComp = m_pStatusCom;
 
+	Set_Active();
+
 	return S_OK;
 }
 
@@ -103,6 +105,12 @@ HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
 
 	m_bCanHurt = true;
 	return S_OK;
+}
+
+void CWolf::Set_Active()
+{
+	m_bActive = true;
+	m_eCurState = IDLE;
 }
 
 void CWolf::Free()
@@ -283,6 +291,9 @@ _int CWolf::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
+
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
 
 	Update_AI();						// 1. 뭘 할지 결정만 한다
 

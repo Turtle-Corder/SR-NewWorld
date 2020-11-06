@@ -303,9 +303,12 @@
     </Filter>
     <Filter Include="02.GameObject\06.Projectile\00.Player\06.Blind">
       <UniqueIdentifier>{da039a98-c402-4e6c-87cb-a0cea7fceb7e}</UniqueIdentifier>
-  </Filter>
+    </Filter>
     <Filter Include="02.GameObject\07.UI\06. FlowerQuest\Flower">
       <UniqueIdentifier>{8d576cb1-e4c0-43e6-ac1e-61778040736d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\07.IceBlast">
+      <UniqueIdentifier>{a2609f0f-e32a-4d5e-b58a-ca71cc0c3dbb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -578,6 +581,9 @@
     <ClInclude Include="..\Headers\Shop_ChatWnd.h">
       <Filter>02.GameObject\07.UI\02.Shop\ChatWnd</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\IceBlast.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -833,6 +839,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shop_ChatWnd.cpp">
       <Filter>02.GameObject\07.UI\02.Shop\ChatWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceBlast.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

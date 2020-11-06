@@ -34,11 +34,19 @@ HRESULT CYeti::Setup_GameObject(void * pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	Set_Active();
+
 	return S_OK;
 }
 
 int CYeti::Update_GameObject(float _fDeltaTime)
 {
+	if (m_bDead)
+		return GAMEOBJECT::DEAD;
+
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
 	if (FAILED(Update_State()))
 		return GAMEOBJECT::WARN;
 
@@ -507,4 +515,10 @@ HRESULT CYeti::Spawn_Snow(const wstring & LayerTag)
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CYeti::Set_Active()
+{
+	m_bActive = true;
+	m_eCurState = IDLE;
 }

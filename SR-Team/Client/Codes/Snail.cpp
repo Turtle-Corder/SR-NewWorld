@@ -33,6 +33,8 @@ HRESULT CSnail::Setup_GameObject(void* pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	Set_Active();
+
 	return S_OK;
 }
 
@@ -490,4 +492,10 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 		m_bDead = true;
 	}
 	return S_OK;
+}
+
+void CSnail::Set_Active()
+{
+	m_bActive = true;
+	m_eCurState = IDLE;
 }

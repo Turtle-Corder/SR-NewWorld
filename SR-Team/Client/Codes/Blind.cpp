@@ -49,6 +49,8 @@ _int CBlind::Update_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
+	m_pTransformCom->Turn(CTransform::AXIS_Y, _fDeltaTime);
+
 	if (m_tImpact.pTarget)
 	{
 		CTransform* pTargetTransform = (CTransform*)m_tImpact.pTarget->Get_Component(L"Com_Transform0");
@@ -138,8 +140,8 @@ HRESULT CBlind::Add_Component()
 	CTransform::TRANSFORM_DESC tTransformDesc;
 	ZeroMemory(&tTransformDesc, sizeof(CTransform::TRANSFORM_DESC));
 
-	tTransformDesc.vPosition = { 0.f , 0.f , 0.f };
-	tTransformDesc.vScale = { 2.f, 2.f, 2.f };
+	tTransformDesc.vPosition = { 0.f , -0.2f , 0.f };
+	tTransformDesc.vScale = { 2.2f, 2.2f, 2.2f };
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
 

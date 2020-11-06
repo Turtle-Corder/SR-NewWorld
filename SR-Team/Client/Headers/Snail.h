@@ -44,6 +44,8 @@ public:
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
 	virtual void Free() override;
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
+	
+	virtual void Set_Active() override;
 
 private:
 	CVIBuffer*			m_pVIBufferCom[SNAIL_END] = {};

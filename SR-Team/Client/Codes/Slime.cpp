@@ -30,6 +30,8 @@ HRESULT CSlime::Setup_GameObject(void * pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	Set_Active();
+
 	return S_OK;
 }
 
@@ -64,19 +66,14 @@ _int CSlime::Update_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::DEAD;
 	}
 
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
 	if (FAILED(Update_State()))
 		return E_FAIL;
 
-	if (pManagement->Key_Down(VK_F4))
-		m_bDead = true;
-
 	if (FAILED(Movement(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
-
-
-
-	if (pManagement->Key_Down(VK_F8))
-		m_eCurState = CSlime::MOVE;
 
 	if (FAILED(Setting_SlimeJelly()))
 		return GAMEOBJECT::WARN;
@@ -462,6 +459,12 @@ void CSlime::Free()
 	Safe_Release(m_pDmgInfoCom);
 
 	CGameObject::Free();
+}
+
+void CSlime::Set_Active()
+{
+	m_bActive = true;
+	m_eCurState = IDLE;
 }
 
 HRESULT CSlime::Spawn_Item(const wstring & LayerTag)

@@ -40,6 +40,7 @@ public:
 public:
 	virtual void Free() override;
 	static  CStump* Create(LPDIRECT3DDEVICE9 _pDevice);
+	virtual void Set_Active() override;
 private:
 	HRESULT Add_Component();
 	HRESULT Update_State();
@@ -51,6 +52,8 @@ private:
 	HRESULT Attack(_float _fDeltaTime);
 	HRESULT Setting_Part();
 	HRESULT Spawn_Acorn(const wstring& LayerTag, _uint _iCount);
+
+
 private:
 	CVIBuffer*			m_pVIBufferCom[STUMP_END] = {};
 	CTransform*			m_pTransformCom[STUMP_END] = {};

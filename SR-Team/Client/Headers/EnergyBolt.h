@@ -1,6 +1,6 @@
 #pragma once
 #ifndef __ENERGY_BOLT_H__
-#define  __ENERGY_BOLT_H__
+#define __ENERGY_BOLT_H__
 
 #include "GameObject.h"
 

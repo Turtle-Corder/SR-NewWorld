@@ -28,6 +28,8 @@ HRESULT CStump::Setup_GameObject(void * _pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	Set_Active();
+
 	return S_OK;
 }
 
@@ -35,6 +37,9 @@ _int CStump::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
+
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
 
 	if (FAILED(Update_State()))
 		return GAMEOBJECT::WARN;
@@ -488,6 +493,13 @@ HRESULT CStump::Spawn_Acorn(const wstring & LayerTag, _uint _iCount)
 
 	return S_OK;
 }
+
+void CStump::Set_Active()
+{
+	m_bActive = true;
+	m_eCurState = IDLE;
+}
+
 
 HRESULT CStump::Compare_PlayerPosition()
 {

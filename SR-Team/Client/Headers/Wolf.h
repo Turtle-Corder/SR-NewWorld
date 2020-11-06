@@ -55,7 +55,7 @@ public:
 
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp);
 
-
+	virtual void Set_Active() override;
 
 private:
 	//--------------------------------------------------

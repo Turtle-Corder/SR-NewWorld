@@ -54,6 +54,10 @@ public:
 	static CSlime* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone_GameObject(void * _pArg) override;
 	virtual void Free() override;
+
+	virtual void Set_Active() override;
+
+
 	//----------------------------------
 	//----------------------------------
 private:

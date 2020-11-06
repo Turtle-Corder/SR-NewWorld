@@ -54,6 +54,8 @@ public:
 	HRESULT LookAtPlayer(float _fDeltaTime);
 	HRESULT Spawn_Snow(const wstring& LayerTag);
 
+	virtual void Set_Active() override;
+
 private:
 	CVIBuffer*		m_pVIBufferCom[YETI_END];
 	CTransform*		m_pTransformCom[YETI_END];
