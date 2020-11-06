@@ -1070,6 +1070,9 @@ _bool CPlayer::Actual_UseSkill()
 			return false;
 		}
 
+		if (!bFound)
+			return false;
+
 		m_tImpact.pTarget = pObject;
 	}
 

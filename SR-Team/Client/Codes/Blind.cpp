@@ -131,6 +131,7 @@ HRESULT CBlind::Add_Component()
 	ZeroMemory(&tTransformDesc, sizeof(CTransform::TRANSFORM_DESC));
 
 	tTransformDesc.vPosition = { 0.f , 0.f , 0.f };
+	tTransformDesc.vScale = { 2.f, 2.f, 2.f };
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
 
