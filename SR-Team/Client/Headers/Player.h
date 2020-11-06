@@ -166,6 +166,7 @@ private:
 	// 마우스 피킹
 	//--------------------------------------------------
 	HRESULT Raycast_OnTerrain(_bool* _pFound, _vec3* _pPos);	
+	HRESULT Raycast_OnMonster(_bool* _pFound, CGameObject** _ppObject);
 	void Move_Target(_float _fDeltaTime);
 
 
@@ -268,6 +269,12 @@ private:
 	INSTANTIMPACT		m_tImpact = {};
 
 	_int				m_iClearInfo = 0;
+
+
+	//--------------------------------------------------
+	// 블래스트 구체
+	//--------------------------------------------------
+	CGameObject*		m_pBlast[3] = { nullptr, };
 };
 
 END

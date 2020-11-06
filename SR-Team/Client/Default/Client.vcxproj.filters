@@ -247,12 +247,6 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\03.Shield">
       <UniqueIdentifier>{5799d202-a36b-44d2-9a03-ccaf734b938e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder">
-      <UniqueIdentifier>{fd12a845-80f2-4ab3-a450-f43b2428029c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\00.ThunderBox">
-      <UniqueIdentifier>{a0054e46-d1cc-40be-86bd-ee98393440aa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\13. Slot_PlayerSkill">
       <UniqueIdentifier>{e9a43fa0-b414-4dac-8bcd-cef58af142c8}</UniqueIdentifier>
     </Filter>
@@ -289,9 +283,6 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\05.IceSpear">
       <UniqueIdentifier>{bc0185db-a08e-4ba6-a585-c089cf14341d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder">
-      <UniqueIdentifier>{a6720cf7-b6ab-418f-89c4-57fe13c8f9aa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\16. NPC\02. MainQuest">
       <UniqueIdentifier>{d3e244a8-700d-480b-82ec-373d4c6b3afd}</UniqueIdentifier>
     </Filter>
@@ -300,6 +291,18 @@
     </Filter>
     <Filter Include="02.GameObject\07.UI\02.Shop\ChatWnd">
       <UniqueIdentifier>{22a8fd26-4589-460a-931f-8c4bc5704054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder">
+      <UniqueIdentifier>{fd12a845-80f2-4ab3-a450-f43b2428029c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\00.ThunderBox">
+      <UniqueIdentifier>{a0054e46-d1cc-40be-86bd-ee98393440aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder">
+      <UniqueIdentifier>{a6720cf7-b6ab-418f-89c4-57fe13c8f9aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\06.Blind">
+      <UniqueIdentifier>{da039a98-c402-4e6c-87cb-a0cea7fceb7e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -562,6 +565,9 @@
       <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shop_ChatWnd.h" />
+    <ClInclude Include="..\Headers\Blind.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\06.Blind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -808,6 +814,9 @@
       <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shop_ChatWnd.cpp" />
+    <ClCompile Include="..\Codes\Blind.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\06.Blind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

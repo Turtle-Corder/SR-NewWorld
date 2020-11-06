@@ -70,19 +70,28 @@ CGameObject * CSkillSlot_Blind::Clone_GameObject(void * _pArg)
 
 _bool CSkillSlot_Blind::Actual_UseSkill(void * _pArg)
 {
+	INSTANTIMPACT* pImpact = nullptr;
+	CTransform* pTargetTransform = nullptr;
+	CStatus* pStatus = nullptr;
+
 	// 한번 더 검사
 	if (!Can_UseSkill())
 		return false;
 
 	if (_pArg)
 	{
-		INSTANTIMPACT* pImpact = (INSTANTIMPACT*)_pArg;
-		CStatus* pStatus = (CStatus*)pImpact->pStatusComp;
+		pImpact = (INSTANTIMPACT*)_pArg;
 	}
 
-	//--------------------------------------------------
-	// TODO : 
-	//--------------------------------------------------
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return false;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Blind", pManagement->Get_CurrentSceneID(), L"Layer_Effect", pImpact)))
+	{
+		PRINT_LOG(L"Failed To Spawn Blind", LOG::DEBUG);
+		return false;
+	}
 
 	--m_iCanUseCnt;
 	return true;

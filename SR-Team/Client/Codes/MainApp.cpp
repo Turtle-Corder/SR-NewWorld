@@ -32,6 +32,9 @@
 #include "Meteor.h"
 #include "MpDrift.h"
 #include "IceSpear.h"
+#include "Shield.h"
+#include "Blind.h"
+//#include ""
 
 #include "SkillSlot_Meteor.h"
 #include "SkillSlot_IceSpear.h"
@@ -467,13 +470,32 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Shield
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Shield", CShield::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
-
+#pragma region GameObject_Texture_Shield
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Shield", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/3D/Layer_PlayerAtk/GameObject_Shield/DDS/Shield%d.dds"))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region Component_Texture_EnergyBolt
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_EnergyBolt", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/EnergyBolt%d.dds"))))
 		return E_FAIL;
 #pragma endregion
+
+
+#pragma region GameObject_Blind
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Blind", CBlind::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_EnergyBolt
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Blind", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/3D/Layer_PlayerAtk/GameObject_Blind/DDS/Blind%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
 
 #pragma endregion
 

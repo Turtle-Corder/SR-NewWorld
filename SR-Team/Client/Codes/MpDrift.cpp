@@ -45,9 +45,6 @@ int CMpDrift::Update_GameObject(float _fDeltaTime)
 		return GAMEOBJECT::DEAD;
 	}
 
-	//if (FAILED(Movement(_fDeltaTime)))
-	//	return GAMEOBJECT::WARN;
-
 	_matrix matParent;
 	D3DXMatrixIdentity(&matParent);
 

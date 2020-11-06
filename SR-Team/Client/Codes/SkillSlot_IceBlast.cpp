@@ -70,21 +70,39 @@ CGameObject * CSkillSlot_IceBlast::Clone_GameObject(void * _pArg)
 
 _bool CSkillSlot_IceBlast::Actual_UseSkill(void * _pArg)
 {
+	INSTANTIMPACT* pImpact = nullptr;
+	CStatus* pStatus = nullptr;
+
 	if (!Can_UseSkill())
 		return false;
 
-	// TODO : 소환..
 	if (_pArg)
 	{
-		INSTANTIMPACT* pImpact = (INSTANTIMPACT*)_pArg;
-		CStatus* pStatus = (CStatus*)pImpact->pStatusComp;
+		pImpact = (INSTANTIMPACT*)_pArg;
+		pStatus = (CStatus*)pImpact->pStatusComp;
 		if (pStatus)
-			pStatus->Clear_IceStack();
+		{
+			if (pStatus->Get_Status().iCurIceStack > 0)
+			{
+				pImpact->vOption.x = (_float)pStatus->Get_Status().iCurIceStack;
+				pStatus->Clear_IceStack();
+			}
+		}
 	}
 
-	//--------------------------------------------------
-	// TODO : 
-	//--------------------------------------------------
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return false;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceBlast", pManagement->Get_CurrentSceneID(), L"Layer_Effect", pImpact)))
+	{
+		PRINT_LOG(L"Failed To Spawn IceBlast", LOG::DEBUG);
+		return false;
+	}
+
+	// 여기서 target pos 셋팅해서 던져줌?
+
+	//
 
 	--m_iCanUseCnt;
 	return true;

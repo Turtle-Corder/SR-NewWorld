@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Player.h"
 #include "..\Headers\Shield.h"
 
 USING(Client)
@@ -22,7 +23,7 @@ HRESULT CShield::Setup_GameObject(void * _pArg)
 {
 	if (_pArg)
 	{
-		m_tInstant = *(INSTANTIMPACT*)_pArg;
+		m_tImpact = *(INSTANTIMPACT*)_pArg;
 	}
 
 	if (FAILED(Add_Component()))
@@ -33,13 +34,21 @@ HRESULT CShield::Setup_GameObject(void * _pArg)
 
 _int CShield::Update_GameObject(_float _fDeltaTime)
 {
+	CPlayer* pPlayer = (CPlayer*)m_tImpact.pAttacker;
+
 	if (m_bDead)
+	{
+		if (pPlayer)
+			pPlayer->Buff_Off(CPlayer::BUFF_SHIELD);
+
 		return GAMEOBJECT::DEAD;
+	}
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Player", L"Com_Transform0");
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
 
 	if (nullptr == pPlayerTransform)
 		return E_FAIL;
@@ -59,13 +68,6 @@ _int CShield::Update_GameObject(_float _fDeltaTime)
 		m_pTransformCom[iCnt]->Set_WorldMatrix(m_pTransformCom[iCnt]->Get_Desc().matWorld *m_pTransformCom[SHIELD_BASE]->Get_Desc().matWorld);
 	}
 
-	m_fDeadTime += _fDeltaTime;
-
-	if (m_fDeadTime > 4.f)
-	{
-		m_bDead = true;
-	}
-
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -74,6 +76,8 @@ _int CShield::LateUpdate_GameObject(_float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return 0;
+
+	Update_DeadDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
 		return GAMEOBJECT::WARN;
@@ -95,12 +99,11 @@ CGameObject * CShield::Clone_GameObject(void * _pArg)
 
 HRESULT CShield::Render_BlendAlpha()
 {
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
@@ -173,7 +176,7 @@ HRESULT CShield::Add_Component()
 
 		// For.Com_Texture
 		StringCchPrintf(szName, _countof(szName), L"Com_Texture%d", iCnt);
-		if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Shield", szName, (CComponent**)&m_pTextureCom[iCnt])))
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Shield", szName, (CComponent**)&m_pTextureCom[iCnt])))
 			return E_FAIL;
 
 		if (iCnt == SHIELD_BASE)
@@ -219,7 +222,7 @@ HRESULT CShield::Movement(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Player", L"Com_Transform0");
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
 
 	if (nullptr == pPlayerTransform)
 		return E_FAIL;
@@ -252,5 +255,12 @@ HRESULT CShield::Movement(_float _fDeltaTime)
 	m_pTransformCom[SHIELD_RIGHT]->Set_Position(vRightPos);
 
 	return S_OK;
+}
+
+void CShield::Update_DeadDelay(_float _fDeltaTime)
+{
+	m_fDeadTime += _fDeltaTime;
+	if (m_fDeadTime > 4.f)
+		m_bDead = true;
 }
 

@@ -617,6 +617,44 @@ HRESULT CPlayer::Raycast_OnTerrain(_bool* _pFound, _vec3* _pPos)
 	return S_OK;
 }
 
+HRESULT CPlayer::Raycast_OnMonster(_bool * _pFound, CGameObject** _ppObject)
+{
+	CGameObject* pObject = nullptr;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	_int iCnt = 0;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	while (true)
+	{
+		pObject = pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Monster", iCnt++);
+		if (!pObject) break;
+
+		CVIBuffer_CubeTexture* pCubeBuffer = dynamic_cast<CVIBuffer_CubeTexture*>(pObject->Get_Component(L"Com_VIBuffer0"));
+		if (!pCubeBuffer)	continue;
+
+		CTransform* pTransform = dynamic_cast<CTransform*>(pObject->Get_Component(L"Com_Transform0"));
+		if (!pTransform)	continue;
+
+		_matrix mat = pTransform->Get_Desc().matWorld;
+		_vec3 vPos = {};
+		if (m_pRaycastCom->IsSimulate<VTX_CUBETEXTURE, INDEX16>(g_hWnd, WINCX, WINCY, pCubeBuffer, &mat, pCamera, &vPos))
+		{
+			*_pFound = true;
+			*_ppObject = pObject;
+			return S_OK;
+		}
+	}
+
+	return S_OK;
+}
+
 
 
 //----------------------------------------------------------------------------------------------------
@@ -1007,18 +1045,32 @@ _bool CPlayer::Actual_UseSkill()
 		return false;
 
 	// meteor, ...
-	if ((0 || 4) == m_iInputIdx_Anim /* || other */)
+	if (0 == m_iInputIdx_Anim /* || other */)
 	{
 		_bool bFound = false;
 		_vec3 vPos = {};
 		if (FAILED(Raycast_OnTerrain(&bFound, &vPos)))
 		{
-			PRINT_LOG(L"Failed To Raycast!", LOG::CLIENT);
+			PRINT_LOG(L"Failed To Raycast Terrain!", LOG::CLIENT);
 			return false;
 		}
 
 		if (bFound)
 			m_tImpact.vPosition = vPos;
+	}
+
+	// blind
+	else if (4 == m_iInputIdx_Anim)
+	{
+		_bool bFound = false;
+		CGameObject* pObject = nullptr;
+		if (FAILED(Raycast_OnMonster(&bFound, &pObject)))
+		{
+			PRINT_LOG(L"Failed To Raycast Monster!", LOG::CLIENT);
+			return false;
+		}
+
+		m_tImpact.pTarget = pObject;
 	}
 
 	if (!pSkillInven->Actual_UseSkill(m_iInputIdx_Slot, (void*)&m_tImpact))
