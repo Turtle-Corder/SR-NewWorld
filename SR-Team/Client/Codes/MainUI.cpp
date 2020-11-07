@@ -870,6 +870,9 @@ HRESULT CMainUI::Change_SkillIconPos()
 	CMouse* pMouse = (CMouse*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Mouse");
 	if (pMouse == nullptr)
 		return E_FAIL;
+	CSkill* pSkill = (CSkill*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 2);
+	if (pSkill == nullptr)
+		return E_FAIL;
 
 	RECT rc = {};
 
@@ -880,7 +883,8 @@ HRESULT CMainUI::Change_SkillIconPos()
 		{
 			if (pManagement->Key_Pressing(VK_LBUTTON))
 			{
-				if (m_pLeftSlotItem[i] != nullptr && m_pTextureLeftQuickSlot[i] != nullptr)
+				if (m_pLeftSlotItem[i] != nullptr && m_pTextureLeftQuickSlot[i] != nullptr &&
+					!pSkill->Get_MovingClear())
 				{
 					m_bChange_SkillIconPos = true;
 					m_bRender_GoingItem = true;
