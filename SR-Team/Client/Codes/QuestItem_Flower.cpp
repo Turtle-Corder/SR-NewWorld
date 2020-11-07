@@ -74,13 +74,17 @@ _int CQuestItem_Flower::Update_GameObject(_float _fDeltaTime)
 		if (pManagement->Key_Pressing('G'))
 		{
 			m_fGatheringTime += _fDeltaTime;
+			m_bRenderLoadingBar = true;
+
 			if (m_fGatheringTime >= 1.f)
 			{
 				m_fGatheringTime = 0.f;
 
 				m_bGatheringFlower = true;
+				m_bRenderLoadingBar = false;
 				++m_iGatheringFlowerCnt;
 				pInven->Get_RewardItem(L"flower");
+				PRINT_LOG(L"²É È¹µæ", LOG::CLIENT);
 			}
 		}
 	}
@@ -102,12 +106,29 @@ _int CQuestItem_Flower::LateUpdate_GameObject(_float _fDeltaTime)
 
 HRESULT CQuestItem_Flower::Render_UI()
 {
+	_matrix matTrans, matWorld;
+
 	if (m_bRenderLoadingBar)
 	{
-		for (_uint i = 0; i < LOADING_END; i++)
-		{
+		// ·Îµù¹Ù ¹è°æ
+		const D3DXIMAGE_INFO* pTexInfo = m_pTextureLoading[0]->Get_TexInfo(0);
+		_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
 
-		}
+		D3DXMatrixTranslation(&matTrans, WINCX * 0.5f, WINCY * 0.5f, 0.f);
+		matWorld = matTrans;
+		m_pSprite->SetTransform(&matWorld);
+
+		m_pSprite->Draw(
+			(LPDIRECT3DTEXTURE9)m_pTextureLoading[0]->GetTexture(0),
+			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(100, 255, 255, 255));
+
+		// ·Îµù¹Ù
+		_float fProgress = 1.f - m_fGatheringTime;
+		pTexInfo = m_pTextureLoading[1]->Get_TexInfo(0);
+		vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+
+		RECT rc = { 0, 0, (LONG)(pTexInfo->Width * fProgress), (LONG)pTexInfo->Height };
+		m_pSprite->Draw((LPDIRECT3DTEXTURE9)m_pTextureLoading[1]->GetTexture(0), &rc, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 	}
 
 	return S_OK;

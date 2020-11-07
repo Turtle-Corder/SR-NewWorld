@@ -61,6 +61,7 @@
 #include "FlowerQuest.h"
 #include "Shop_ChatWnd.h"
 #include "QuestItem_Flower.h"
+#include "MainQuest.h"
 #pragma endregion
 
 #pragma region Component_Headers
