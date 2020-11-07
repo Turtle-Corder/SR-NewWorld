@@ -158,6 +158,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Headers\AcornExplosion.h" />
     <ClInclude Include="..\Headers\Blind.h" />
     <ClInclude Include="..\Headers\DummyTerrain.h" />
     <ClInclude Include="..\Headers\Acorn.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
     <ClInclude Include="..\Headers\ItemSlot_BluePotion.h" />
     <ClInclude Include="..\Headers\Bomb.h" />
+    <ClInclude Include="..\Headers\MainQuest.h" />
     <ClInclude Include="..\Headers\MainQuest_NPC.h" />
     <ClInclude Include="..\Headers\MpDrift.h" />
     <ClInclude Include="..\Headers\QuestItem_Flower.h" />
@@ -244,6 +246,7 @@
     <ClInclude Include="..\Headers\UICamera.h" />
     <ClInclude Include="..\Headers\Wand.h" />
     <ClInclude Include="..\Headers\Wolf.h" />
+    <ClInclude Include="..\Headers\Wolf_Impact.h" />
     <ClInclude Include="..\Headers\Yeti.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="FlowerQuest_NPC.h" />
@@ -252,6 +255,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\AcornExplosion.cpp" />
     <ClCompile Include="..\Codes\Blind.cpp" />
     <ClCompile Include="..\Codes\DummyTerrain.cpp" />
     <ClCompile Include="..\Codes\Acorn.cpp" />
@@ -264,6 +268,7 @@
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BluePotion.cpp" />
     <ClCompile Include="..\Codes\Bomb.cpp" />
+    <ClCompile Include="..\Codes\MainQuest.cpp" />
     <ClCompile Include="..\Codes\MainQuest_NPC.cpp" />
     <ClCompile Include="..\Codes\MpDrift.cpp" />
     <ClCompile Include="..\Codes\QuestItem_Flower.cpp" />
@@ -335,6 +340,7 @@
     <ClCompile Include="..\Codes\UICamera.cpp" />
     <ClCompile Include="..\Codes\Wand.cpp" />
     <ClCompile Include="..\Codes\Wolf.cpp" />
+    <ClCompile Include="..\Codes\Wolf_Impact.cpp" />
     <ClCompile Include="..\Codes\Yeti.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="FlowerQuest_NPC.cpp" />

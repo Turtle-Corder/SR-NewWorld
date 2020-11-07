@@ -29,6 +29,10 @@
 #include "Shop_NPC.h"
 #include "MainQuest_NPC.h"
 #include "Stage1_NPC.h"
+#include "Acorn.h"
+#include "AcornExplosion.h"
+#include "Wolf.h"
+#include "Wolf_Impact.h"
 #pragma endregion
 
 USING(Client)
@@ -81,7 +85,7 @@ HRESULT CPreLoader::Load_Resources_Room()
 	return S_OK;
 }
 
-HRESULT CPreLoader::Load_Resources_Stage0()
+HRESULT CPreLoader::Load_Resources_Town()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -92,37 +96,37 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 	//----------------------------------------------------------------------------------------------------
 
 #pragma region GameObject_Skybox
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Snail
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_Snail", CSnail::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Snail", CSnail::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Snail_Impact
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Stump
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_Stump", CStump::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Stump", CStump::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_FlowerQuestNPC
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_FlowerQuestNPC", CFlowerQuest_NPC::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_FlowerQuestNPC", CFlowerQuest_NPC::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_ShopNPC
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_ShopNPC", CShop_NPC::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_ShopNPC", CShop_NPC::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_MainQuestNPC
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_MainQuestNPC", CMainQuest_NPC::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_MainQuestNPC", CMainQuest_NPC::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
@@ -132,13 +136,13 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 //#pragma endregion
 
 #pragma region Component_Texture_Stump_Head
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
 	{
 	}
 #pragma endregion
 
 #pragma region Component_Texture_Stump_Part
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
 	{
 	}
 #pragma endregion
@@ -150,58 +154,58 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 	// terrain
 
 #pragma region GameObject_CubeTerrain
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE0, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 
 	// FlowerQuest_NPC
 #pragma region Component_Texture_FlowerQuestNPC
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_FlowerQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/FlowerQuest_Head%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_FlowerQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/FlowerQuest_Body%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCLeftHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_FlowerQuestNPCLeftHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/FlowerQuest_LeftHand%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCRightHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_FlowerQuestNPCRightHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/FlowerQuest_RightHand%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_FlowerQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_FlowerQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/FlowerQuest_Foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 	// Shop_NPC
 #pragma region Component_Texture_ShopNPC
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_ShopNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/Shopper_Head%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_ShopNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/Shopper_Body%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_ShopNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/Shopper_Hand%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_ShopNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_ShopNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/Shopper_Foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 	// MainQuest_NPC
 #pragma region Component_Texture_MainQuestNPC
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_MainQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_MainQuestNPCHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/MainQuestNPC_Head%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_MainQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_MainQuestNPCBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/MainQuestNPC_Body%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_MainQuestNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_MainQuestNPCHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/MainQuestNPC_Hand%d.dds"))))
 		return E_FAIL;
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE0, L"Component_Texture_MainQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_MainQuestNPCFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/MainQuestNPC_Foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
@@ -215,9 +219,8 @@ HRESULT CPreLoader::Load_Resources_Stage0()
 	return S_OK;
 }
 
-HRESULT CPreLoader::Load_Resources_Stage1()
+HRESULT CPreLoader::Load_Resources_Forest()
 {
-	// TODO : 추가하시오
 	//숲
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -225,23 +228,23 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 #pragma region Snail
 
 #pragma region GameObject_Snail
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Snail", CSnail::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Snail", CSnail::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Snail_Impact
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_SnailBody
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
 	{
 	}
 #pragma endregion
 
 #pragma region Component_Texture_SnailHead
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
 	{
 	}
 #pragma endregion
@@ -251,28 +254,28 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 #pragma region Slime
 
 #pragma region GameObject_Slime
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Slime", CSlime::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Slime", CSlime::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region GameObject_Slime_Impact
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Slime_Impact", CSlime_Impact::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Slime_Impact", CSlime_Impact::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_Translucent_Cube
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/TranslucentCube%d.dds", 2))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/TranslucentCube%d.dds", 2))))
 	{
 	}
 #pragma endregion
 
 #pragma region GameObject_Slime
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Crack", CCrack::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Crack", CCrack::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_Translucent_Cube
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
 	{
 	}
 #pragma endregion
@@ -283,63 +286,145 @@ HRESULT CPreLoader::Load_Resources_Stage1()
 #pragma region Stump
 
 #pragma region GameObject_Stump
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Stump", CStump::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Stump", CStump::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
-//#pragma region GameObject_Acorn
-//	if (FAILED(pManagement->Add_GameObject_Prototype(m_eNextSceneID, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
-//		return E_FAIL;
-//#pragma endregion
+#pragma region GameObject_Acorn
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Acorn_Explosion
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_AcornExplosion", CAcornExplosion::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region Component_Texture_Stump_Head
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
-	{
-	}
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_Stump_Part
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_STAGE1, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
-	{
-	}
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
+		return E_FAIL;
 #pragma endregion
 
-//#pragma region Component_Texture_Acorn
-//	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_Acorn", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
-//		return E_FAIL;
-//#pragma endregion
+#pragma region Component_Texture_Acorn
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Acorn", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stone%d.dds"))))
+		return E_FAIL;
+#pragma endregion
 
-//#pragma region Component_Texture_AcornExplosion
-//	if (FAILED(pManagement->Add_Component_Prototype(m_eNextSceneID, L"Component_Texture_AcornExplosion", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
-//		return E_FAIL;
-//#pragma endregion
+#pragma region Component_Texture_AcornExplosion
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_AcornExplosion", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stone%d.dds"))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma endregion
 
 #pragma region GameObject_CubeTerrain
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Stage2NPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Stage1NPC", CStage1_NPC::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
 	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 1)))
 		return E_FAIL;
 
-#pragma region GameObject_Stage2NPC
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE1, L"GameObject_Stage1NPC", CStage1_NPC::Create(m_pDevice))))
-		return E_FAIL;
-#pragma endregion
-
 	return S_OK;
 }
 
-HRESULT CPreLoader::Load_Resources_Stage2()
+HRESULT CPreLoader::Load_Resources_Iceland()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
+#pragma region Yeti
+
+#pragma region GameObject_Yeti
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Yeti", CYeti::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_YetiBody
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_YetiBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/YetiBody%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_YetiHead
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_YetiHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/YetiHead%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_YetiPart
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_YetiPart", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/YetiPart%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+	// Snow
+#pragma region GameObject_Snow
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Snow", CSnow::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Snow", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Snow%d.dds"))))
+		return E_FAIL;
+
+#pragma endregion
+
+
+#pragma region Wolf
+
+#pragma region GameObject_Wolf
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Wolf", CWolf::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Wolf_Impact
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Wolf_Impact", CWolf_Impact::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+
+
+#pragma region Component_Texture_Wolf_Face
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Wolf_Face", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Wolf_Face%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Wolf_Mouth
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Wolf_Mouth", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Wolf_Mouth%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Wolf_Ear
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Wolf_Ear", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Wolf_Ear%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Wolf_Neck
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Wolf_Neck", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Wolf_Neck%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Wolf_Body
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Wolf_Body", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Wolf_Body%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Wolf_Leg
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Wolf_Leg", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Wolf_Leg%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+
 #pragma region GameObject_CubeTerrain
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE2, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
@@ -350,7 +435,7 @@ HRESULT CPreLoader::Load_Resources_Stage2()
 	return S_OK;
 }
 
-HRESULT CPreLoader::Load_Resources_Stage3()
+HRESULT CPreLoader::Load_Resources_Volcanic()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -367,7 +452,7 @@ HRESULT CPreLoader::Load_Resources_Stage3()
 	return S_OK;
 }
 
-HRESULT CPreLoader::Load_Resources_Stage4()
+HRESULT CPreLoader::Load_Resources_Lab()
 {
 	return S_OK;
 }
@@ -394,23 +479,23 @@ _uint CPreLoader::ThreadMain(void * _pParam)
 		break;
 
 	case eSCENE_ID::SCENE_STAGE0:
-		hr = pInstance->Load_Resources_Stage0();
+		hr = pInstance->Load_Resources_Town();
 		break;
 
 	case eSCENE_ID::SCENE_STAGE1:
-		hr = pInstance->Load_Resources_Stage1();
+		hr = pInstance->Load_Resources_Forest();
 		break;
 
 	case eSCENE_ID::SCENE_STAGE2:
-		hr = pInstance->Load_Resources_Stage2();
+		hr = pInstance->Load_Resources_Iceland();
 		break;
 
 	case eSCENE_ID::SCENE_STAGE3:
-		hr = pInstance->Load_Resources_Stage3();
+		hr = pInstance->Load_Resources_Volcanic();
 		break;
 
 	case eSCENE_ID::SCENE_STAGE4:
-		hr = pInstance->Load_Resources_Stage4();
+		hr = pInstance->Load_Resources_Lab();
 		break;
 
 	default:

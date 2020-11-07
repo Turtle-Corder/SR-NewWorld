@@ -87,6 +87,8 @@ _int CManagement::Update_Engine(void)
 		nullptr == m_pObject_Manager)
 		return -1;
 
+	if (m_bAppDown)
+		return 999;
 
 	//--------------------------------------------------
 	// timer
@@ -103,7 +105,13 @@ _int CManagement::Update_Engine(void)
 	// Update
 	//--------------------------------------------------
 	if (m_iUpdate_Result = m_pScene_Manager->Update_Scene_Manager(fDeltaTime))
-		return 0;
+	{
+		if (1 == m_iUpdate_Result)
+			return 0;
+
+		if (999 == m_iUpdate_Result)
+			m_bAppDown = true;
+	}
 
 	if (m_iUpdate_Result = m_pObject_Manager->Update_Object_Manger(fDeltaTime))
 		return 0;

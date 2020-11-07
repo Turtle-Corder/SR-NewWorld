@@ -61,6 +61,7 @@
 #include "FlowerQuest.h"
 #include "Shop_ChatWnd.h"
 #include "QuestItem_Flower.h"
+#include "MainQuest.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -168,7 +169,6 @@ _int CMainApp::Update_MainApp()
 
 	_int iBehaviour = m_pManagement->Update_Engine();
 
-	//_crtBreakAlloc = 18;
 	return iBehaviour;
 }
 

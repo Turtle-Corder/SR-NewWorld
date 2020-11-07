@@ -44,11 +44,14 @@ private:
 	CStatus*			m_pStatusCom = nullptr;
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
-	_float				m_fFallDownTime = 0.f;
+	_float				m_fJumpPower = 2.f;
+	_float				m_fJumpTime = 0.f;
+
 	_vec3				m_vPrePos = {};
 	STATE				m_ePreState = FALL;
 	STATE				m_eCurState = FALL;
 	INSTANTIMPACT		m_tInstant = {};
+	_float				m_fTestTime = 0.f;
 };
 
 END

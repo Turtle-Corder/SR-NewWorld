@@ -33,7 +33,14 @@ HRESULT CAcorn::Setup_GameObject(void * _pArg)
 _int CAcorn::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
+	{
+		for (_uint iCnt = 0; iCnt < 25; ++iCnt)
+		{
+			if (FAILED(Spawn_AcornExplosion(L"Layer_MonsterAtk")))
+				return E_FAIL;
+		}
 		return GAMEOBJECT::DEAD;
+	}
 
 	if (FAILED(Update_State()))
 		return GAMEOBJECT::WARN;
@@ -52,6 +59,10 @@ _int CAcorn::LateUpdate_GameObject(_float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
+
+	m_fTestTime += _fDeltaTime;
+	if (m_fTestTime >= 4.f)
+		m_bDead = true;
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
@@ -77,7 +88,7 @@ HRESULT CAcorn::Render_NoneAlpha()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
@@ -136,12 +147,18 @@ HRESULT CAcorn::Add_Component()
 	tColDesc.vPosition = tTransformDesc.vPosition;
 	tColDesc.fRadius = 0.7f;
 	//-------------------------------------------------------
+	
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Stone", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Acorn", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	// For.Com_Transform
@@ -245,8 +262,8 @@ HRESULT CAcorn::FallDown_Acorn(_float _fDeltaTime)
 
 	D3DXVECTOR3 vPos = m_pTransformCom->Get_Desc().vPosition;
 
-	m_fFallDownTime += _fDeltaTime;
-	vPos.y -= m_fFallDownTime * 2.f;
+	m_fJumpTime += _fDeltaTime;
+	vPos.y -= m_fJumpTime * 2.f;
 
 	m_pTransformCom->Set_Position(_vec3(vPos.x, vPos.y, vPos.z));
 	return S_OK;
@@ -281,7 +298,7 @@ HRESULT CAcorn::Move(_float _fDeltaTime)
 		return S_OK;
 
 	_vec3	vMyPos = m_pTransformCom->Get_Desc().vPosition;
-	_vec3	vDirection = m_vPrePos - vMyPos;
+	_vec3	vDirection = _vec3(m_vPrePos.x, 0.f, m_vPrePos.z) - _vec3(vMyPos.x, 0.f, vMyPos.z);
 	_float	fDistance = D3DXVec3Length(&vDirection);
 	D3DXVec3Normalize(&vDirection, &vDirection);
 
@@ -291,7 +308,7 @@ HRESULT CAcorn::Move(_float _fDeltaTime)
 		return S_OK;
 	}
 
-	vMyPos += vDirection * (_fDeltaTime * 2.f);
+	vMyPos += vDirection * (_fDeltaTime * 3.f);
 	m_pTransformCom->Set_Position(vMyPos);
 
 	if (m_eCurState == CAcorn::MOVE)
@@ -357,8 +374,7 @@ HRESULT CAcorn::Spawn_AcornExplosion(const wstring & LayerTag)
 	_vec3 vMyPos = m_pTransformCom->Get_Desc().vPosition;
 	tImpact.vPosition = vMyPos;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE0, L"GameObject_AcornExplosion",
-		SCENE_STAGE0, LayerTag, &tImpact)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_AcornExplosion",pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
 		return E_FAIL;
 
 	return S_OK;

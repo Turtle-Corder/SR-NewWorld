@@ -6,6 +6,12 @@ USING(Client)
 CStump::CStump(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
+	for (_uint iCnt = 0; iCnt < STUMP_END; ++iCnt)
+	{
+		m_pTransformCom[iCnt] = nullptr;
+		m_pVIBufferCom[iCnt] = nullptr;
+		m_pTextureCom[iCnt] = nullptr;
+	}
 }
 
 CStump::CStump(const CStump & _rOther)
@@ -43,6 +49,9 @@ _int CStump::Update_GameObject(_float _fDeltaTime)
 
 	if (FAILED(Update_State()))
 		return GAMEOBJECT::WARN;
+
+	if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000)
+		m_eCurState = CStump::ATTACK;
 
 	if (FAILED(Movement(_fDeltaTime)))
 		return E_FAIL;
@@ -137,6 +146,12 @@ CStump * CStump::Create(LPDIRECT3DDEVICE9 _pDevice)
 	}
 
 	return pInstance;
+}
+
+void CStump::Set_Active()
+{
+	m_bActive = true;
+	m_eCurState = IDLE;
 }
 
 HRESULT CStump::Add_Component()
@@ -448,7 +463,7 @@ HRESULT CStump::Attack(_float _fDeltaTime)
 	{
 		for (_uint iCnt = 0; iCnt < 4; ++iCnt)
 		{
-			if (FAILED(Spawn_Acorn(L"Layer_Acorn", iCnt)))
+			if (FAILED(Spawn_Acorn(L"Layer_Effect", iCnt)))
 				return E_FAIL;
 		}
 		m_bAcorn_CreateOne_Check = true;
@@ -494,13 +509,6 @@ HRESULT CStump::Spawn_Acorn(const wstring & LayerTag, _uint _iCount)
 	return S_OK;
 }
 
-void CStump::Set_Active()
-{
-	m_bActive = true;
-	m_eCurState = IDLE;
-}
-
-
 HRESULT CStump::Compare_PlayerPosition()
 {
 	if (m_eCurState != CStump::IDLE)
@@ -529,3 +537,4 @@ HRESULT CStump::Compare_PlayerPosition()
 
 	return S_OK;
 }
+

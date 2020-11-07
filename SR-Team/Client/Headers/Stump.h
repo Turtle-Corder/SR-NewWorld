@@ -63,13 +63,15 @@ private:
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
 private:
-	_vec3				m_vStartPos = {};
-	_vec3				m_vDir = {};
-	_vec3				m_vLook = {};
-	_vec3				m_vPrePos = {};
-	_bool				m_bAcorn_CreateOne_Check = false;
-	STATE				m_ePreState = IDLE;
-	STATE				m_eCurState = IDLE;
+	_vec3		m_vStartPos = {};
+	_vec3		m_vDir = {};
+	_vec3		m_vLook = {};
+	_bool		m_bAcorn_CreateOne_Check = false;
+
+
+	STATE		m_ePreState = IDLE;
+	STATE		m_eCurState = IDLE;
+
 };
 
 END

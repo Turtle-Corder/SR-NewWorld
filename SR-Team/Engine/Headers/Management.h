@@ -161,6 +161,8 @@ private:
 
 	_int				m_iUpdate_Result = 0;
 	wstring				m_strAppTimerTag;
+
+	_bool				m_bAppDown = false;
 };
 
 END

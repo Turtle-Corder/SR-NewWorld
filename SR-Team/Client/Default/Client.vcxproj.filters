@@ -325,6 +325,15 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\08.Explosion\00.Crystal">
       <UniqueIdentifier>{966a4f04-2bd5-4d78-8430-8bcca1bc29f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster\02.AcornExplosion">
+      <UniqueIdentifier>{334520c6-e7cf-4718-ac76-14545d34c40f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\11.Instant_Impact\03.Wolf_Impact">
+      <UniqueIdentifier>{8959fecc-c75f-40c0-b459-dec4158fd87f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\07. MainQuest">
+      <UniqueIdentifier>{5d13e54b-4ed1-4b95-aca4-0b14d14593a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -585,8 +594,6 @@
     <ClInclude Include="..\Headers\Stage1_NPC.h">
       <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shop_ChatWnd.h">
-    </ClInclude>
     <ClInclude Include="..\Headers\Blind.h">
       <Filter>02.GameObject\06.Projectile\00.Player\06.Blind</Filter>
     </ClInclude>
@@ -607,6 +614,18 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Explosion.h">
       <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\AcornExplosion.h">
+      <Filter>02.GameObject\06.Projectile\01.Monster\02.AcornExplosion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Wolf_Impact.h">
+      <Filter>02.GameObject\11.Instant_Impact\03.Wolf_Impact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shop_ChatWnd.h">
+      <Filter>02.GameObject\07.UI\02.Shop\ChatWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainQuest.h">
+      <Filter>02.GameObject\07.UI\07. MainQuest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -853,8 +872,6 @@
     <ClCompile Include="..\Codes\Stage1_NPC.cpp">
       <Filter>02.GameObject\16. NPC\03. Stage1</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shop_ChatWnd.cpp">
-    </ClCompile>
     <ClCompile Include="..\Codes\Blind.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\06.Blind</Filter>
     </ClCompile>
@@ -875,6 +892,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Explosion.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\AcornExplosion.cpp">
+      <Filter>02.GameObject\06.Projectile\01.Monster\02.AcornExplosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Wolf_Impact.cpp">
+      <Filter>02.GameObject\11.Instant_Impact\03.Wolf_Impact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shop_ChatWnd.cpp">
+      <Filter>02.GameObject\07.UI\02.Shop\ChatWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainQuest.cpp">
+      <Filter>02.GameObject\07.UI\07. MainQuest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

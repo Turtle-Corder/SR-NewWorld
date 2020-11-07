@@ -55,7 +55,7 @@ public:
 
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp);
 
-	virtual void Set_Active() override;
+
 
 private:
 	//--------------------------------------------------
@@ -120,15 +120,16 @@ private:
 	STATE		m_eCurState = IDLE;
 
 	_vec3		m_vMoveDirection = {};		// 이동할 or 쳐다 볼 방향
-	_float		m_fFollowDistance = 0.f;	// 추적 가능한 거리
-	_float		m_fAttackDistance = 0.f;	// 공격 가능한 거리
+	_float		m_fFollowDistance = 10.f;	// 추적 가능한 거리
+	_float		m_fFollowLimitNear = 0.2f;
+	_float		m_fAttackDistance = 3.f;	// 공격 가능한 거리
 
 
-	//--------------------------------------------------
-	// 공격
-	//--------------------------------------------------
+											//--------------------------------------------------
+											// 공격
+											//--------------------------------------------------
 	_bool		m_bCanAttack = true;		// 공격 가능 or 불가능
-	_float		m_fAttackDelay = 0.f;		// 공격 가능한 딜레이
+	_float		m_fAttackDelay = 5.f;		// 공격 가능한 딜레이
 	_float		m_fAttackTimer = 0.f;		// 공격 쿨타임 시간 재는용
 
 	INSTANTIMPACT	m_tImpact = {};
@@ -138,18 +139,19 @@ private:
 	// 피격
 	//--------------------------------------------------
 	_bool		m_bCanHurt = true;			// 피격 가능 or 불가능
-	_float		m_fHurtDelay = 0.f;			// 피격 가능한 딜레이
+	_float		m_fHurtDelay = 5.f;			// 피격 가능한 딜레이
 	_float		m_fHurtTimer = 0.f;			// 피격 쿨타임 시간 재는용
 
 
-	//--------------------------------------------------
-	// 애니메이션
-	//--------------------------------------------------
+											//--------------------------------------------------
+											// 애니메이션
+											//--------------------------------------------------
 	_int		m_iAnimStep = 0;
 	_float		m_fAnimTimer = 0.f;
-
+	_bool		m_bDead = false;
 };
 
 END
 
 #endif // !__WOLF_H__
+

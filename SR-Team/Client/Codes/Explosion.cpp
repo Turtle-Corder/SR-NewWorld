@@ -126,7 +126,7 @@ HRESULT CExplosion::Add_Component()
 
 	CTransform::TRANSFORM_DESC tTransformDesc;
 
-	tTransformDesc.vPosition = { 0.f, -1.0f, 0.f };
+	tTransformDesc.vPosition = { 0.f, -1.2f, 0.f };
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
 	tTransformDesc.vScale = { m_fScaleMin , m_fScaleMin , m_fScaleMin };

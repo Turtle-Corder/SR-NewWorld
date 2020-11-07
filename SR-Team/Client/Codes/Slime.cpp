@@ -7,6 +7,11 @@ USING(Client)
 CSlime::CSlime(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
+	for (_uint iCnt = 0; iCnt < SLIME_END; ++iCnt)
+	{
+		m_pVIBufferCom[iCnt] = nullptr;
+		m_pTransformCom[iCnt] = nullptr;
+	}
 }
 
 CSlime::CSlime(const CSlime & _rOther)

@@ -86,6 +86,12 @@ _int CScene_Stage1::Update_Scene(_float _fDeltaTime)
 			return -1;
 		}
 
+		if (FAILED(pManagement->ClearScene_Component_All(SCENE_FOREST)))
+		{
+			PRINT_LOG(L"Failed To ClearScene_Component_All in Forest", LOG::CLIENT);
+			return -1;
+		}
+
 		return 1;
 	}
 	//--------------------------------------------------
