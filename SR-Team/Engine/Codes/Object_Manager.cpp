@@ -341,7 +341,11 @@ HRESULT CObject_Manager::CollisionSphere_Impulse_Layers(_int _iSceneID, const ws
 	if (m_pLayers[_iSceneID].end() == iter_dst)
 		return E_FAIL;
 
-	if (FAILED(iter_dst->second->CollisionSphere_Impulse_Layers(iter_src->second, _strColliderTag, _strTransformTag)))
+	_bool bSame = false;
+	if (_strSrcLayerTag == _strDstLayerTag)
+		bSame = true;
+
+	if (FAILED(iter_dst->second->CollisionSphere_Impulse_Layers(iter_src->second, _strColliderTag, _strTransformTag, bSame)))
 		return E_FAIL;
 
 	return S_OK;
@@ -370,7 +374,11 @@ HRESULT CObject_Manager::CollisionBox_Impulse_Layers(_int _iSceneID, const wstri
 	if (m_pLayers[_iSceneID].end() == iter_dst)
 		return E_FAIL;
 
-	if (FAILED(iter_dst->second->CollisionBox_Impulse_Layers(iter_src->second, _strColliderTag, _strTransformTag)))
+	_bool bSame = false;
+	if (_strSrcLayerTag == _strDstLayerTag)
+		bSame = true;
+
+	if (FAILED(iter_dst->second->CollisionBox_Impulse_Layers(iter_src->second, _strColliderTag, _strTransformTag, bSame)))
 		return E_FAIL;
 
 	return S_OK;

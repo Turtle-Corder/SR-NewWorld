@@ -187,7 +187,7 @@ HRESULT CSlime::Add_Component()
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc[SLIME_BASE].vPosition;
-	tCollDesc.fRadius = 0.5f/(_float)m_iCurCount;
+	tCollDesc.fRadius = 0.6f/(_float)m_iCurCount;
 
 
 	//--------------------------------------------------

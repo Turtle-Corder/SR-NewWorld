@@ -281,7 +281,7 @@ HRESULT CLayer::CollisionBox_Detection_Layers_Both(CLayer * _pSrcLayer, const ws
 	return S_OK;
 }
 
-HRESULT CLayer::CollisionSphere_Impulse_Layers(CLayer * _pSrcLayer, const wstring & _strColliderTag, const wstring & _strTransformTag)
+HRESULT CLayer::CollisionSphere_Impulse_Layers(CLayer * _pSrcLayer, const wstring & _strColliderTag, const wstring & _strTransformTag, _bool _bSame)
 {
 	if (nullptr == _pSrcLayer)
 		return E_FAIL;
@@ -331,16 +331,19 @@ HRESULT CLayer::CollisionSphere_Impulse_Layers(CLayer * _pSrcLayer, const wstrin
 			{
 				_float fDeltaDist = fNearMaxDistance - fNearDistance;
 				D3DXVec3Normalize(&vNearDist, &vNearDist);
-				pSrcTransfomrm->Set_Position(pSrcTransfomrm->Get_Desc().vPosition + (-vNearDist * fDeltaDist));
+				pSrcTransfomrm->Set_Position(pSrcTransfomrm->Get_Desc().vPosition + (-vNearDist * fDeltaDist * 2.f));
 				pSrcTransfomrm->Update_Transform();
 			}
 		}
+		
+		// 같은 레이어면 한번만 비교하고 나간다
+		if(_bSame)	break;
 	}
 
 	return S_OK;
 }
 
-HRESULT CLayer::CollisionBox_Impulse_Layers(CLayer * _pSrcLayer, const wstring & _strColliderTag, const wstring & _strTransformTag)
+HRESULT CLayer::CollisionBox_Impulse_Layers(CLayer * _pSrcLayer, const wstring & _strColliderTag, const wstring & _strTransformTag, _bool _bSame)
 {
 	if (nullptr == _pSrcLayer)
 		return E_FAIL;
@@ -402,11 +405,13 @@ HRESULT CLayer::CollisionBox_Impulse_Layers(CLayer * _pSrcLayer, const wstring &
 			{
 				_float fDeltaDist = fNearMaxDistance - fNearDistance;
 				D3DXVec3Normalize(&vNearDist, &vNearDist);
-				pSrcTransform->Set_Position(pSrcTransform->Get_Desc().vPosition + (-vNearDist * fDeltaDist));
+				pSrcTransform->Set_Position(pSrcTransform->Get_Desc().vPosition + (-vNearDist * fDeltaDist * 2.f));
 				pSrcTransform->Update_Transform();
 			}
 		}
 
+		// 같은 레이어면 한번만 비교하고 나간다
+		if (_bSame)	break;
 	}
 
 	return S_OK;

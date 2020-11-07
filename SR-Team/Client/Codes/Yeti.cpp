@@ -130,17 +130,17 @@ HRESULT CYeti::Add_Component()
 		else if (iCnt == YETI_HEAD)
 			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiHead");
 		else if (iCnt == YETI_LEFT)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiLeft");
+			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_RIGHT)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiRight");
+			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_LEFTLEG)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiLeftLeg");
+			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_RIGHTLEG)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiRightLeg");
+			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
 
 		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_Texture%d", iCnt);
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, szPartName, szName, (CComponent**)&m_pTextureCom[iCnt]))) ////积己 肮荐
+		if (FAILED(CGameObject::Add_Component(SCENE_ICELAND, szPartName, szName, (CComponent**)&m_pTextureCom[iCnt]))) ////积己 肮荐
 			return E_FAIL;
 
 		if (iCnt == YETI_BASE)

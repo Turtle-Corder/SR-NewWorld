@@ -134,7 +134,7 @@ HRESULT CSnail::Add_Component()
 
 		StringCchPrintf(szName, _countof(szName), L"Com_Texture%d", iAll);
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, szPartName, szName, (CComponent**)&m_pTextureCom[iAll]))) ////积己 肮荐
+		if (FAILED(CGameObject::Add_Component(SCENE_FOREST, szPartName, szName, (CComponent**)&m_pTextureCom[iAll]))) ////积己 肮荐
 			return E_FAIL;
 
 		if (iAll == SNAIL_HEAD)
@@ -173,7 +173,7 @@ HRESULT CSnail::Add_Component()
 
 	CSphereCollider::COLLIDER_DESC tColDesc;
 	tColDesc.vPosition = tTransformDesc[SNAIL_BODY].vPosition;
-	tColDesc.fRadius = 0.5f; /* * Scale*/
+	tColDesc.fRadius = 0.6f; /* * Scale*/
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
 		return E_FAIL;

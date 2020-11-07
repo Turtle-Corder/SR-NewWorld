@@ -137,14 +137,12 @@ HRESULT CPreLoader::Load_Resources_Town()
 
 #pragma region Component_Texture_Stump_Head
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Stump_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Head%d.dds"))))
-	{
-	}
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_Stump_Part
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Stump_Part", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stump_Part%d.dds"))))
-	{
-	}
+		return E_FAIL;
 #pragma endregion
 
 	//----------------------------------------------------------------------------------------------------
