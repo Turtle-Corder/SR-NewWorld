@@ -38,6 +38,42 @@ HRESULT CPipeline::Setup_WorldMatrix(_matrix * _pOut, const _vec3 & _vScale, con
 	return Setup_StateMatrix(_pOut, vRight, vUp, vLook, _vPosition);
 }
 
+HRESULT CPipeline::Setup_WorldMatrix(_matrix * _pOut, const _vec3 & _vScale, const _vec3 & _vRotate, const _vec3 & _vPosition, const _matrix * _Rotation)
+{
+	if (nullptr == _pOut)
+		return E_FAIL;
+
+	D3DXMatrixIdentity(_pOut);
+	_vec3 vRight = { 1.f, 0.f, 0.f };
+	_vec3 vUp = { 0.f, 1.f, 0.f };
+	_vec3 vLook = { 0.f, 0.f, 1.f };
+
+	vRight.x *= _vScale.x;
+	vUp.y *= _vScale.y;
+	vLook.z *= _vScale.z;
+
+	// x-axis
+	Rotate_AxisX(&vRight, vRight, _vRotate.x);
+	Rotate_AxisX(&vUp, vUp, _vRotate.x);
+	Rotate_AxisX(&vLook, vLook, _vRotate.x);
+
+	// y-axis
+	Rotate_AxisY(&vRight, vRight, _vRotate.y);
+	Rotate_AxisY(&vUp, vUp, _vRotate.y);
+	Rotate_AxisY(&vLook, vLook, _vRotate.y);
+
+	// z-axis
+	Rotate_AxisZ(&vRight, vRight, _vRotate.z);
+	Rotate_AxisZ(&vUp, vUp, _vRotate.z);
+	Rotate_AxisZ(&vLook, vLook, _vRotate.z);
+
+	D3DXVec3TransformCoord(&vRight, &vRight, _Rotation);
+	D3DXVec3TransformCoord(&vUp, &vUp, _Rotation);
+	D3DXVec3TransformCoord(&vLook, &vLook, _Rotation);
+
+	return Setup_StateMatrix(_pOut, vRight, vUp, vLook, _vPosition);
+}
+
 HRESULT CPipeline::Setup_ViewMatrix(_matrix * _pOut, const _vec3 & _vEye, const _vec3 & _vAt, const _vec3 & _vUp)
 {
 	if (nullptr == _pOut)

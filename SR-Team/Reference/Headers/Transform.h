@@ -25,6 +25,7 @@ public:
 
 		_float	fSpeedPerSecond = 0.f;
 		_float	fRotatePerSecond = 0.f;
+		_matrix matAxis;
 	} TRANSFORM_DESC;
 
 
@@ -46,6 +47,7 @@ public:
 	void Set_Rotation(const _vec3& _vRotation);
 	void Set_Scale(const _vec3& _vScale);
 
+
 public:
 	virtual HRESULT Setup_Component_Prototype() override;
 	virtual HRESULT Setup_Component(void* _pArg) override;
@@ -54,9 +56,11 @@ public:
 	HRESULT Update_Transform();
 	HRESULT Update_Transform(const _matrix& _matRevolution);
 	HRESULT Update_Transform(const _matrix& _matRevolution, const _matrix& _matParent);
+	HRESULT Update_Transform_Rotate(const _matrix* _matRotate);
 	void Move_Vertical(_float _fDeltaTime);
 	void Move_Horizontal(_float _fDeltaTime);
 	void Turn(AXIS_XYZ _eAxis, _float _fDeltaTime);
+
 
 public:
 	static CTransform* Create(LPDIRECT3DDEVICE9 _pDevice);

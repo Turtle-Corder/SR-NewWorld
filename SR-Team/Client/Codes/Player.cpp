@@ -1127,7 +1127,7 @@ _bool CPlayer::Actual_UseSkill()
 		return false;
 
 	// meteor, blast ...
-	if (0 == m_iInputIdx_Anim || 6 == m_iInputIdx_Anim /* || other */)
+	if (0 == m_iInputIdx_Anim || 1 == m_iInputIdx_Anim || 6 == m_iInputIdx_Anim /* || other */)
 	{
 		_bool bFound = false;
 		_vec3 vPos = {};

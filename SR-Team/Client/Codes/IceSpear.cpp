@@ -34,32 +34,7 @@ HRESULT CIceSpear::Setup_GameObject(void* _pArg)
 	m_vMoveDir = m_tInstant.vDirection;
 	D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
 
-	//_vec3 vMove, vLook;
-	//_float RotationXZ, RotationXY;
-	///////-----------------------------------------
-	//vLook = m_pTransformCom->Get_Look();
-	//D3DXVec3Normalize(&vLook, &vLook);
-	//vMove = m_vMoveDir;
 
-	//vMove.y = 0;
-	//vLook.y = 0;
-
-	//RotationXZ = D3DXVec3Dot(&vMove, &vLook);
-	///////----------------------------------------------
-	//vLook = m_pTransformCom->Get_Look();
-	//D3DXVec3Normalize(&vLook, &vLook);
-	//vMove = m_vMoveDir;
-
-	//vMove.z = 0;
-	//vLook.z = 0;
-
-	//RotationXY = D3DXVec3Dot(&vMove, &vLook);
-	///////---------------------------------------------
-
-
-
-	m_pTransformCom->Update_Transform();
-	
 	return S_OK;
 }
 
@@ -71,9 +46,7 @@ int CIceSpear::Update_GameObject(_float _fDeltaTime)
 	if (FAILED(Movement(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
-	if (FAILED(m_pTransformCom->Update_Transform()))
-		return GAMEOBJECT::WARN;
-
+	
 	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
 		return GAMEOBJECT::WARN;
 
@@ -195,8 +168,14 @@ HRESULT CIceSpear::Movement(_float _fDeltaTime)
 
 	if (m_pTransformCom->Get_Desc().vPosition.y < m_tInstant.vOption.y)
 		m_bDead = true;
+	_matrix matRotation;
 
-	return S_OK;
+	D3DXMatrixRotationAxis(&matRotation, &m_vMoveDir, D3DX_PI / 2.f);
+
+	if (FAILED(m_pTransformCom->Update_Transform_Rotate(&matRotation)))
+		return GAMEOBJECT::WARN;
+
+
 
 	return S_OK;
 }

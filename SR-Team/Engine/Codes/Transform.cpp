@@ -6,12 +6,14 @@ USING(Engine)
 CTransform::CTransform(LPDIRECT3DDEVICE9 _pDevice)
 	: CComponent(_pDevice)
 {
+	D3DXMatrixIdentity(&m_tTransformDesc.matAxis);
 }
 
 CTransform::CTransform(const CTransform & _rOther)
 	: CComponent(_rOther)
 	, m_tTransformDesc(_rOther.m_tTransformDesc)
 {
+	D3DXMatrixIdentity(&m_tTransformDesc.matAxis);
 }
 
 const CTransform::TRANSFORM_DESC & CTransform::Get_Desc() const
@@ -109,6 +111,19 @@ HRESULT CTransform::Update_Transform(const _matrix & _matRevolution, const _matr
 	return S_OK;
 }
 
+HRESULT CTransform::Update_Transform_Rotate(const _matrix * _matRotate)
+{
+	if (FAILED(CPipeline::Setup_WorldMatrix(
+		&m_tTransformDesc.matWorld,
+		m_tTransformDesc.vScale,
+		m_tTransformDesc.vRotate,
+		m_tTransformDesc.vPosition,
+		_matRotate)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CTransform::Move_Vertical(_float _fDeltaTime)
 {
 	_vec3 vLook;
@@ -144,6 +159,7 @@ void CTransform::Turn(AXIS_XYZ _eAxis, _float _fDeltaTime)
 		break;
 	}
 }
+
 
 CTransform * CTransform::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
