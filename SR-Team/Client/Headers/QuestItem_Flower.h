@@ -42,6 +42,10 @@ private:
 	CTexture*		m_pTextureFlower = nullptr;
 
 	_bool			m_bRenderLoadingBar = false;
+
+	_float			m_fGatheringTime = 0.f;
+	_bool			m_bGatheringFlower = false;
+	_int			m_iGatheringFlowerCnt = 0;
 };
 
 END

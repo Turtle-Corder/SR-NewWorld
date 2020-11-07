@@ -23,6 +23,7 @@ public:
 
 public:
 	_bool Get_StartQuest() { return m_bStartQuest; }
+	eFlowerQuest_ID Get_FlowerQuestID() { return m_eSituation; }
 
 public:
 	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
@@ -31,6 +32,7 @@ public:
 	// CUIObject을(를) 통해 상속됨
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void * _pArg) override;
+
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_UI() override;
