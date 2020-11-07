@@ -310,6 +310,12 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\07.IceBlast">
       <UniqueIdentifier>{a2609f0f-e32a-4d5e-b58a-ca71cc0c3dbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\07.IceBlast\00.Blast">
+      <UniqueIdentifier>{e9fa095b-5059-4272-9bdf-6530d9d2054e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\07.IceBlast\01.Crystal">
+      <UniqueIdentifier>{68c2aca3-6a82-43cb-8769-53ca9a8e6184}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -581,8 +587,11 @@
     <ClInclude Include="..\Headers\Shop_ChatWnd.h">
       <Filter>02.GameObject\07.UI\02.Shop\ChatWnd</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\IceCrystal.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\01.Crystal</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\IceBlast.h">
-      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast</Filter>
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\00.Blast</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -840,8 +849,11 @@
     <ClCompile Include="..\Codes\Shop_ChatWnd.cpp">
       <Filter>02.GameObject\07.UI\02.Shop\ChatWnd</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\IceCrystal.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\01.Crystal</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\IceBlast.cpp">
-      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast</Filter>
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\00.Blast</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

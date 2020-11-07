@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Player.h"
 #include "..\Headers\SkillSlot_IceSpear.h"
 
 USING(Client)
@@ -89,6 +90,9 @@ _bool CSkillSlot_IceSpear::Actual_UseSkill(void * _pArg)
 		if (pStatus)
 			pStatus->Increase_IceStack();
 
+		CPlayer* pPlayer = (CPlayer*)pImpact->pAttacker;
+		if(pPlayer)
+			pPlayer->Active_Crystal();
 	}
 
 

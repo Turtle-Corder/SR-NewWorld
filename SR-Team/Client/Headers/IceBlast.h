@@ -7,6 +7,8 @@
 USING(Engine)
 BEGIN(Client)
 
+class CStatus;
+class CDamageInfo;
 class CIceBlast final : public CGameObject
 {
 private:
@@ -23,6 +25,8 @@ public:
 private:
 	HRESULT Add_Component();
 
+	void Update_InitDelay(_float _fDeltaTime);
+	void Update_DeadDelay(_float _fDeltaTime);
 public:
 	virtual CGameObject* Clone_GameObject(void* _pArg) override;
 	virtual void Free() override;
@@ -34,6 +38,20 @@ private:
 	CVIBuffer*		m_pVIBufferComp = nullptr;
 	CTransform*		m_pTransformComp = nullptr;
 	CTexture*		m_pTextureComp = nullptr;
+
+	CSphereCollider*	m_pColliderCom = nullptr;
+	CStatus*			m_pStatusComp = nullptr;
+	CDamageInfo*		m_pDmgInfoCom = nullptr;
+	
+	// damage, collider, status
+
+	INSTANTIMPACT	m_tImpact;
+
+	_float			m_fInitTimer = 0.f;
+	_float			m_fInitDelay = 1.f;
+								 
+	_float			m_fDeadTimer = 0.f;
+	_float			m_fDeadDelay = 5.f;
 };
 
 END

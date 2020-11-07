@@ -137,12 +137,9 @@ HRESULT CDropItem::Add_Component()
 	case 7:
 	case 8:
 	case 9:
-		StringCchPrintf(szName, _countof(szName),
-			L"Component_Texture_DropRuby");
-		break;
 	case 10:
 		StringCchPrintf(szName, _countof(szName),
-			L"Component_Texture_Dropiron_sword");
+			L"Component_Texture_DropRuby");
 		break;
 	}
 

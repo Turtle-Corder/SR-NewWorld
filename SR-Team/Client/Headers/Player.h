@@ -10,6 +10,7 @@ USING(Engine)
 class CStatus;
 class CDamageInfo;
 class CWand;
+class CIceCrystal;
 
 class CPlayer final : public CGameObject
 {
@@ -97,7 +98,8 @@ public:
 	HRESULT Set_ClearInfo(_int _iClearScene);
 	
 	void Set_ConsumeRate(_float _fConsumeRate);
-
+	void Active_Crystal();
+	void DeActive_Crystal();
 
 private:
 	//----------------------------------------------------------------------------------------------------
@@ -111,7 +113,7 @@ private:
 	HRESULT Add_Component_Extends();
 
 	// 장비지만 여기 껴준다..
-	HRESULT Add_Wand(const wstring & LayerTag);
+	HRESULT Add_Extends(const wstring & LayerTag);
 
 
 
@@ -274,7 +276,8 @@ private:
 	//--------------------------------------------------
 	// 블래스트 구체
 	//--------------------------------------------------
-	CGameObject*		m_pBlast[3] = { nullptr, };
+	CIceCrystal*	m_pCrystal[3] = { nullptr, };
+	_int			m_iActiveBlast = 0;
 };
 
 END

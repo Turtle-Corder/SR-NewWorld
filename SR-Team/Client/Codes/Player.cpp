@@ -9,6 +9,7 @@
 #include "SkillInven.h"
 #include "ItemInventory.h"
 #include "Wand.h"
+#include "IceCrystal.h"
 #include "Mouse.h"
 #include "..\Headers\Player.h"
 
@@ -44,7 +45,7 @@ HRESULT CPlayer::Setup_GameObject(void * _pArg)
 		return E_FAIL;
 
 
-	if (FAILED(Add_Wand(L"Layer_Wand")))
+	if (FAILED(Add_Extends(L"Layer_Wand")))
 		return E_FAIL;
 
 
@@ -224,6 +225,29 @@ void CPlayer::Set_ConsumeRate(_float _fConsumeRate)
 	m_fConsumeRate = _fConsumeRate;
 }
 
+void CPlayer::Active_Crystal()
+{
+	if (m_iActiveBlast >= 3)
+		return;
+
+	if (!m_pCrystal[m_iActiveBlast]->IsActive())
+	{
+		m_pCrystal[m_iActiveBlast]->Set_Active();
+		m_iActiveBlast++;
+	}
+}
+
+void CPlayer::DeActive_Crystal()
+{
+	for (_uint iCnt = 0; iCnt < 3; ++iCnt)
+	{
+		if (m_pCrystal[iCnt]->IsActive())
+			m_pCrystal[iCnt]->Set_DeActive();
+	}
+
+	m_iActiveBlast = 0;
+}
+
 
 
 //----------------------------------------------------------------------------------------------------
@@ -399,16 +423,38 @@ HRESULT CPlayer::Add_Component_Extends()
 	return S_OK;
 }
 
-HRESULT CPlayer::Add_Wand(const wstring & LayerTag)
+HRESULT CPlayer::Add_Extends(const wstring & LayerTag)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	_vec3 vPlayer_RightHand_Pos = m_pTransformCom[PART_HAND_RIGHT]->Get_Desc().vPosition;
+	//--------------------------------------------------
+	// WAND
+	//--------------------------------------------------
+	_vec3 vInitPos = m_pTransformCom[PART_HAND_RIGHT]->Get_Desc().vPosition;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Wand", SCENE_ROOM, LayerTag, &vPlayer_RightHand_Pos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Wand", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
 		return E_FAIL;
+
+
+	//--------------------------------------------------
+	// Blast
+	//--------------------------------------------------
+	vInitPos = { -0.9f ,0.3f, -0.7f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+		return E_FAIL;
+
+	vInitPos = { 0.f, 0.8f, -0.7f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+		return E_FAIL;
+
+	vInitPos = { 0.9f ,0.3f, -0.7f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+		return E_FAIL;
+
+	for (_uint iCnt = 0; iCnt < 3; ++iCnt)
+		m_pCrystal[iCnt] = (CIceCrystal*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), LayerTag, iCnt + 1);
 
 	return S_OK;
 }
@@ -1036,8 +1082,8 @@ _bool CPlayer::Actual_UseSkill()
 	if (nullptr == pSkillInven)
 		return false;
 
-	// meteor, ...
-	if (0 == m_iInputIdx_Anim /* || other */)
+	// meteor, blast ...
+	if (0 == m_iInputIdx_Anim || 6 == m_iInputIdx_Anim /* || other */)
 	{
 		_bool bFound = false;
 		_vec3 vPos = {};

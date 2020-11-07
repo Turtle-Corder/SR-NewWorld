@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Player.h"
 #include "..\Headers\SkillSlot_IceBlast.h"
 
 USING(Client)
@@ -72,6 +73,7 @@ _bool CSkillSlot_IceBlast::Actual_UseSkill(void * _pArg)
 {
 	INSTANTIMPACT* pImpact = nullptr;
 	CStatus* pStatus = nullptr;
+	_uint iStackCnt = 0;
 
 	if (!Can_UseSkill())
 		return false;
@@ -82,11 +84,17 @@ _bool CSkillSlot_IceBlast::Actual_UseSkill(void * _pArg)
 		pStatus = (CStatus*)pImpact->pStatusComp;
 		if (pStatus)
 		{
-			if (pStatus->Get_Status().iCurIceStack > 0)
-			{
-				pImpact->vOption.x = (_float)pStatus->Get_Status().iCurIceStack;
-				pStatus->Clear_IceStack();
-			}
+			iStackCnt = pStatus->Get_Status().iCurIceStack;
+			if (iStackCnt <= 0)
+				return false;
+
+			CPlayer* pPlayer = (CPlayer*)pImpact->pAttacker;
+			if (!pPlayer)
+				return false;
+
+			pPlayer->DeActive_Crystal();
+
+			pStatus->Clear_IceStack();
 		}
 	}
 
@@ -94,15 +102,17 @@ _bool CSkillSlot_IceBlast::Actual_UseSkill(void * _pArg)
 	if (nullptr == pManagement)
 		return false;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceBlast", pManagement->Get_CurrentSceneID(), L"Layer_Effect", pImpact)))
+	for (_uint iCnt = 0; iCnt < iStackCnt; ++iCnt)
 	{
-		PRINT_LOG(L"Failed To Spawn IceBlast", LOG::DEBUG);
-		return false;
+		if (pImpact)
+			pImpact->vOption.x = (_float)iCnt;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceBlast", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
+		{
+			PRINT_LOG(L"Failed To Spawn IceBlast", LOG::DEBUG);
+			return false;
+		}
 	}
-
-	// 여기서 target pos 셋팅해서 던져줌?
-
-	//
 
 	--m_iCanUseCnt;
 	return true;
