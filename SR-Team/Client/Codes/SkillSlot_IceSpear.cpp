@@ -92,7 +92,7 @@ _bool CSkillSlot_IceSpear::Actual_UseSkill(void * _pArg)
 
 		CPlayer* pPlayer = (CPlayer*)pImpact->pAttacker;
 		if(pPlayer)
-			pPlayer->Active_Crystal();
+			pPlayer->Active_IceCrystal();
 	}
 
 

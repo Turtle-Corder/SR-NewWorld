@@ -98,8 +98,12 @@ public:
 	HRESULT Set_ClearInfo(_int _iClearScene);
 	
 	void Set_ConsumeRate(_float _fConsumeRate);
-	void Active_Crystal();
-	void DeActive_Crystal();
+
+	void Active_IceCrystal();
+	void DeActive_IceCrystal();
+
+	void Active_FireCrystal();
+	void DeActive_FireCrystal();
 
 private:
 	//----------------------------------------------------------------------------------------------------
@@ -276,8 +280,11 @@ private:
 	//--------------------------------------------------
 	// 블래스트 구체
 	//--------------------------------------------------
-	CIceCrystal*	m_pCrystal[3] = { nullptr, };
-	_int			m_iActiveBlast = 0;
+	CIceCrystal*	m_pIceCrystal[3] = { nullptr, };
+	_int			m_iActiveIceCrystal = 0;
+
+//	CFireCrystal*	m_pFireCrystal[3] = { nullptr };
+//	_int			m_iActiveFireCrystal = 0;
 };
 
 END

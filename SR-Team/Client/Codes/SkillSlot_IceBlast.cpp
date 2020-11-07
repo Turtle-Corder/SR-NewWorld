@@ -92,7 +92,7 @@ _bool CSkillSlot_IceBlast::Actual_UseSkill(void * _pArg)
 			if (!pPlayer)
 				return false;
 
-			pPlayer->DeActive_Crystal();
+			pPlayer->DeActive_IceCrystal();
 
 			pStatus->Clear_IceStack();
 		}

@@ -316,6 +316,15 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\07.IceBlast\01.Crystal">
       <UniqueIdentifier>{68c2aca3-6a82-43cb-8769-53ca9a8e6184}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\08.Explosion">
+      <UniqueIdentifier>{e1eb8768-dd18-495d-9deb-2da4c33f6192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion">
+      <UniqueIdentifier>{dc7eb58a-33a8-4bc4-8c58-f6ff0f091461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\08.Explosion\00.Crystal">
+      <UniqueIdentifier>{966a4f04-2bd5-4d78-8430-8bcca1bc29f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -593,6 +602,8 @@
     <ClInclude Include="..\Headers\IceBlast.h">
       <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\00.Blast</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Explosion.h" />
+    <ClInclude Include="..\Headers\FireCrystal.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -855,6 +866,8 @@
     <ClCompile Include="..\Codes\IceBlast.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\00.Blast</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Explosion.cpp" />
+    <ClCompile Include="..\Codes\FireCrystal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

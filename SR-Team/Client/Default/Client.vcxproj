@@ -161,6 +161,8 @@
     <ClInclude Include="..\Headers\Blind.h" />
     <ClInclude Include="..\Headers\DummyTerrain.h" />
     <ClInclude Include="..\Headers\Acorn.h" />
+    <ClInclude Include="..\Headers\Explosion.h" />
+    <ClInclude Include="..\Headers\FireCrystal.h" />
     <ClInclude Include="..\Headers\FlowerQuest.h" />
     <ClInclude Include="..\Headers\IceBlast.h" />
     <ClInclude Include="..\Headers\IceCrystal.h" />
@@ -253,6 +255,8 @@
     <ClCompile Include="..\Codes\Blind.cpp" />
     <ClCompile Include="..\Codes\DummyTerrain.cpp" />
     <ClCompile Include="..\Codes\Acorn.cpp" />
+    <ClCompile Include="..\Codes\Explosion.cpp" />
+    <ClCompile Include="..\Codes\FireCrystal.cpp" />
     <ClCompile Include="..\Codes\FlowerQuest.cpp" />
     <ClCompile Include="..\Codes\IceBlast.cpp" />
     <ClCompile Include="..\Codes\IceCrystal.cpp" />

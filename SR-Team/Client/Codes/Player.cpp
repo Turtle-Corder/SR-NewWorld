@@ -225,27 +225,35 @@ void CPlayer::Set_ConsumeRate(_float _fConsumeRate)
 	m_fConsumeRate = _fConsumeRate;
 }
 
-void CPlayer::Active_Crystal()
+void CPlayer::Active_FireCrystal()
 {
-	if (m_iActiveBlast >= 3)
+}
+
+void CPlayer::DeActive_FireCrystal()
+{
+}
+
+void CPlayer::Active_IceCrystal()
+{
+	if (m_iActiveIceCrystal >= 3)
 		return;
 
-	if (!m_pCrystal[m_iActiveBlast]->IsActive())
+	if (!m_pIceCrystal[m_iActiveIceCrystal]->IsActive())
 	{
-		m_pCrystal[m_iActiveBlast]->Set_Active();
-		m_iActiveBlast++;
+		m_pIceCrystal[m_iActiveIceCrystal]->Set_Active();
+		m_iActiveIceCrystal++;
 	}
 }
 
-void CPlayer::DeActive_Crystal()
+void CPlayer::DeActive_IceCrystal()
 {
 	for (_uint iCnt = 0; iCnt < 3; ++iCnt)
 	{
-		if (m_pCrystal[iCnt]->IsActive())
-			m_pCrystal[iCnt]->Set_DeActive();
+		if (m_pIceCrystal[iCnt]->IsActive())
+			m_pIceCrystal[iCnt]->Set_DeActive();
 	}
 
-	m_iActiveBlast = 0;
+	m_iActiveIceCrystal = 0;
 }
 
 
@@ -434,7 +442,7 @@ HRESULT CPlayer::Add_Extends(const wstring & LayerTag)
 	//--------------------------------------------------
 	_vec3 vInitPos = m_pTransformCom[PART_HAND_RIGHT]->Get_Desc().vPosition;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Wand", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Wand", SCENE_ROOM, LayerTag, &vInitPos)))
 		return E_FAIL;
 
 
@@ -442,19 +450,34 @@ HRESULT CPlayer::Add_Extends(const wstring & LayerTag)
 	// Blast
 	//--------------------------------------------------
 	vInitPos = { -0.9f ,0.3f, -0.7f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
 		return E_FAIL;
 
 	vInitPos = { 0.f, 0.8f, -0.7f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
 		return E_FAIL;
 
 	vInitPos = { 0.9f ,0.3f, -0.7f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
 		return E_FAIL;
 
 	for (_uint iCnt = 0; iCnt < 3; ++iCnt)
-		m_pCrystal[iCnt] = (CIceCrystal*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), LayerTag, iCnt + 1);
+		m_pIceCrystal[iCnt] = (CIceCrystal*)pManagement->Get_GameObject(SCENE_ROOM, LayerTag, iCnt + 1);
+
+	//vInitPos = { -0.9f ,0.3f, -0.7f };
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+	//	return E_FAIL;
+
+	//vInitPos = { 0.f, 0.8f, -0.7f };
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+	//	return E_FAIL;
+
+	//vInitPos = { 0.9f ,0.3f, -0.7f };
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
+	//	return E_FAIL;
+
+	//for (_uint iCnt = 0; iCnt < 3; ++iCnt)
+	//	m_pFireCrystal[iCnt] = (CFireCrystal*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), LayerTag, iCnt + 4);
 
 	return S_OK;
 }
