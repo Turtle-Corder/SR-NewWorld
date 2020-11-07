@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Meteor.h"
+#include "Player.h"
 #include "..\Headers\SkillSlot_Meteor.h"
 
 USING(Client)
@@ -87,6 +87,10 @@ _bool CSkillSlot_Meteor::Actual_UseSkill(void* _pArg)
 
 		if (pStatus)
 			pStatus->Increase_FireStack();
+
+		CPlayer* pPlayer = (CPlayer*)pImpact->pAttacker;
+		if (pPlayer)
+			pPlayer->Active_FireCrystal();
 	}
 
 	CManagement* pManagement = CManagement::Get_Instance();

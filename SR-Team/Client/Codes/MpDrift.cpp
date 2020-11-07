@@ -131,34 +131,6 @@ HRESULT CMpDrift::Add_Component()
 	return S_OK;
 }
 
-HRESULT CMpDrift::Movement(float _fDeltaTime)
-{
-	if (FAILED(IsOnTerrain()))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-
-
-HRESULT CMpDrift::IsOnTerrain()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Terrain", L"Com_VIBuffer");
-	if (nullptr == pTerrainBuffer)
-		return E_FAIL;
-
-	D3DXVECTOR3 vPosition = m_pTransformCom->Get_Desc().vPosition;
-
-	if (true == pTerrainBuffer->IsOnTerrain(&vPosition))
-		m_pTransformCom->Set_Position(vPosition);
-
-	return S_OK;
-}
-
 void CMpDrift::Update_DeadDelay(float _fDeltaTime)
 {
 	m_fDeadTimer += _fDeltaTime;

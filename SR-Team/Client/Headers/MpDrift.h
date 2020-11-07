@@ -21,8 +21,6 @@ public:
 
 private:
 	HRESULT Add_Component();
-	HRESULT Movement(float _fDeltaTime);
-	HRESULT IsOnTerrain();
 	void Update_DeadDelay(float _fDeltaTime);
 
 public:

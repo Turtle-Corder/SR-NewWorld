@@ -22,6 +22,7 @@ public:
 
 private:
 	HRESULT Add_Component();
+	HRESULT Floating(_float _fDeltaTime);
 
 public:
 	virtual CGameObject* Clone_GameObject(void* _pArg) override;
@@ -37,6 +38,7 @@ private:
 
 	_vec3			m_vInitPos = {};
 	_int			m_iRandRot = 0;
+	_float			m_fFloatTime = 0.f;
 };
 
 END

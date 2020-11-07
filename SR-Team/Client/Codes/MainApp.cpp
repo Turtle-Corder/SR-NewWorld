@@ -36,6 +36,8 @@
 #include "Blind.h"
 #include "IceCrystal.h"
 #include "IceBlast.h"
+#include "FireCrystal.h"
+#include "Explosion.h"
 
 #include "SkillSlot_Meteor.h"
 #include "SkillSlot_IceSpear.h"
@@ -483,6 +485,28 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+
+#pragma region GameObject_FireCystal
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_FireCrystal", CFireCrystal::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_FireCrystal
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_FireCrystal", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_PlayerAtk/GameObject_Explosion/Crystal/DDS/FireCrystal%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Explosion
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Explosion", CExplosion::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Explosion
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Explosion", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL,
+		L"../Resources/3D/Layer_PlayerAtk/GameObject_Explosion/Explosion/PNG/Explosion%d.png", 6))))
+		return E_FAIL;
+#pragma endregion
 
 
 #pragma region GameObject_MPDrift

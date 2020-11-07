@@ -35,6 +35,8 @@ private:
 	HRESULT Move(float _fDeltaTime);
 	HRESULT Setting_ItemBox();
 	HRESULT Setting_ItemTexture();
+	HRESULT Floating(_float _fDeltaTime);
+
 public:
 	static CDropItem* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone_GameObject(void * pArg) override;
@@ -50,6 +52,8 @@ private:
 	_int		m_iRand = 0;
 
 	_uint		m_iCurFrame = 0;
+
+	_float		m_fTimeFlow = 0.f;
 };
 
 END

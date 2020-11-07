@@ -602,8 +602,12 @@
     <ClInclude Include="..\Headers\IceBlast.h">
       <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\00.Blast</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Explosion.h" />
-    <ClInclude Include="..\Headers\FireCrystal.h" />
+    <ClInclude Include="..\Headers\FireCrystal.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Explosion.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -866,8 +870,12 @@
     <ClCompile Include="..\Codes\IceBlast.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\00.Blast</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Explosion.cpp" />
-    <ClCompile Include="..\Codes\FireCrystal.cpp" />
+    <ClCompile Include="..\Codes\FireCrystal.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Explosion.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

@@ -52,6 +52,7 @@ _int CFireCrystal::Update_GameObject(_float _fDeltaTime)
 	if (nullptr == pPlayerTransform)
 		return GAMEOBJECT::NOEVENT;
 
+	Floating(_fDeltaTime);
 
 	switch (m_iRandRot)
 	{
@@ -140,6 +141,19 @@ HRESULT CFireCrystal::Add_Component()
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformComp, &tTransformDesc)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CFireCrystal::Floating(_float _fDeltaTime)
+{
+	m_fFloatTime += _fDeltaTime * 2.f;
+	if (m_fFloatTime >= D3DX_PI)
+		m_fFloatTime = 0.f;
+
+	_vec3 vPos = { m_pTransformComp->Get_Desc().vPosition.x, sinf(m_fFloatTime) * 0.5f, m_pTransformComp->Get_Desc().vPosition.z };
+
+	m_pTransformComp->Set_Position(vPos);
 
 	return S_OK;
 }

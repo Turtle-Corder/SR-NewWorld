@@ -90,19 +90,15 @@ _bool CSkillSlot_ManaDrift::Actual_UseSkill(void* _pArg)
 		CPlayer* pPlayer = (CPlayer*)pImpact->pAttacker;
 		if (!pPlayer)	return false;
 
-		if (!pPlayer->IsOnBuff(CPlayer::BUFF_MANA))
-		{
-			pPlayer->Buff_On(CPlayer::BUFF_MANA);
-		}
+		if (pPlayer->IsOnBuff(CPlayer::BUFF_MANA))
+			return false;
+
+		pPlayer->Buff_On(CPlayer::BUFF_MANA);
 	}
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return false;
-
-	//--------------------------------------------------
-	// TODO : 버프 이펙트 소환
-	//--------------------------------------------------
 
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MPDrift", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))

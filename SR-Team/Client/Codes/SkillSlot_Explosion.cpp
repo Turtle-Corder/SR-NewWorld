@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Player.h"
 #include "..\Headers\SkillSlot_Explosion.h"
 
 
@@ -71,13 +72,46 @@ CGameObject * CSkillSlot_Explosion::Clone_GameObject(void * _pArg)
 
 _bool CSkillSlot_Explosion::Actual_UseSkill(void* _pArg)
 {
-	// 한번 더 검사
+	INSTANTIMPACT* pImpact = nullptr;
+	CStatus* pStatus = nullptr;
+	_uint iStackCnt = 0;
+
 	if (!Can_UseSkill())
 		return false;
 
-	//--------------------------------------------------
-	// TODO : 폭발 소환
-	//--------------------------------------------------
+	if (_pArg)
+	{
+		pImpact = (INSTANTIMPACT*)_pArg;
+		pStatus = (CStatus*)pImpact->pStatusComp;
+		if (pStatus)
+		{
+			iStackCnt = pStatus->Get_Status().iCurFireStack;
+			if (iStackCnt <= 0)
+				return false;
+
+			CPlayer* pPlayer = (CPlayer*)pImpact->pAttacker;
+			if (!pPlayer)
+				return false;
+
+			if (pPlayer->IsOnBuff(CPlayer::BUFF_ATTACK))
+				return false;
+
+			pPlayer->Buff_On(CPlayer::BUFF_ATTACK);
+			pPlayer->DeActive_FireCrystal();
+			pStatus->Clear_FireStack();
+			pImpact->vOption.x = (_float)iStackCnt;
+		}
+	}
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return false;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Explosion", pManagement->Get_CurrentSceneID(), L"Layer_Effect", pImpact)))
+	{
+		PRINT_LOG(L"Failed To Spawn IceBlast", LOG::DEBUG);
+		return false;
+	}
 
 	--m_iCanUseCnt;
 	return true;

@@ -238,6 +238,26 @@ HRESULT CDropItem::Setting_ItemTexture()
 	return S_OK;
 }
 
+HRESULT CDropItem::Floating(_float _fDeltaTime)
+{
+	m_fTimeFlow += _fDeltaTime;
+
+	if (m_fTimeFlow >= D3DX_PI)
+		m_fTimeFlow = 0;
+
+	for (_uint iCnt = 0; iCnt < ITEM_TEXTURE; ++iCnt)
+	{
+
+		_vec3 Temp = m_pTransformCom[iCnt]->Get_Desc().vPosition;
+
+		Temp.y = sinf(m_fTimeFlow);
+
+		m_pTransformCom[iCnt]->Set_Position(Temp);
+	}
+
+	return S_OK;
+}
+
 CDropItem* CDropItem::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (nullptr == pDevice)

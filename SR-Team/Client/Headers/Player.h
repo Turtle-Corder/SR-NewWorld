@@ -11,6 +11,7 @@ class CStatus;
 class CDamageInfo;
 class CWand;
 class CIceCrystal;
+class CFireCrystal;
 
 class CPlayer final : public CGameObject
 {
@@ -283,8 +284,8 @@ private:
 	CIceCrystal*	m_pIceCrystal[3] = { nullptr, };
 	_int			m_iActiveIceCrystal = 0;
 
-//	CFireCrystal*	m_pFireCrystal[3] = { nullptr };
-//	_int			m_iActiveFireCrystal = 0;
+	CFireCrystal*	m_pFireCrystal[3] = { nullptr };
+	_int			m_iActiveFireCrystal = 0;
 };
 
 END

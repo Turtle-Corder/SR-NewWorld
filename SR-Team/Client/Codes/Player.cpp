@@ -10,6 +10,7 @@
 #include "ItemInventory.h"
 #include "Wand.h"
 #include "IceCrystal.h"
+#include "FireCrystal.h"
 #include "Mouse.h"
 #include "..\Headers\Player.h"
 
@@ -227,10 +228,25 @@ void CPlayer::Set_ConsumeRate(_float _fConsumeRate)
 
 void CPlayer::Active_FireCrystal()
 {
+	if (m_iActiveFireCrystal >= 3)
+		return;
+
+	if (!m_pFireCrystal[m_iActiveFireCrystal]->IsActive())
+	{
+		m_pFireCrystal[m_iActiveFireCrystal]->Set_Active();
+		m_iActiveFireCrystal++;
+	}
 }
 
 void CPlayer::DeActive_FireCrystal()
 {
+	for (_uint iCnt = 0; iCnt < 3; ++iCnt)
+	{
+		if (m_pFireCrystal[iCnt]->IsActive())
+			m_pFireCrystal[iCnt]->Set_DeActive();
+	}
+
+	m_iActiveFireCrystal = 0;
 }
 
 void CPlayer::Active_IceCrystal()
@@ -449,35 +465,40 @@ HRESULT CPlayer::Add_Extends(const wstring & LayerTag)
 	//--------------------------------------------------
 	// Blast
 	//--------------------------------------------------
-	vInitPos = { -0.9f ,0.3f, -0.7f };
+	vInitPos = { 0.7f ,0.3f, -0.7f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
 		return E_FAIL;
 
-	vInitPos = { 0.f, 0.8f, -0.7f };
+	vInitPos = { 1.2f, 0.6f, -0.7f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
 		return E_FAIL;
 
-	vInitPos = { 0.9f ,0.3f, -0.7f };
+	vInitPos = { 0.7f ,0.9f, -0.7f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
 		return E_FAIL;
 
 	for (_uint iCnt = 0; iCnt < 3; ++iCnt)
 		m_pIceCrystal[iCnt] = (CIceCrystal*)pManagement->Get_GameObject(SCENE_ROOM, LayerTag, iCnt + 1);
 
-	//vInitPos = { -0.9f ,0.3f, -0.7f };
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
-	//	return E_FAIL;
 
-	//vInitPos = { 0.f, 0.8f, -0.7f };
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
-	//	return E_FAIL;
 
-	//vInitPos = { 0.9f ,0.3f, -0.7f };
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceCrystal", pManagement->Get_CurrentSceneID(), LayerTag, &vInitPos)))
-	//	return E_FAIL;
+	//--------------------------------------------------
+	// Explosion
+	//--------------------------------------------------
+	vInitPos = { -0.7f ,0.3f, -0.7f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_FireCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
+		return E_FAIL;
 
-	//for (_uint iCnt = 0; iCnt < 3; ++iCnt)
-	//	m_pFireCrystal[iCnt] = (CFireCrystal*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), LayerTag, iCnt + 4);
+	vInitPos = { -1.2f, 0.6f, -0.7f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_FireCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
+		return E_FAIL;
+
+	vInitPos = { -0.7f ,0.9f, -0.7f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_FireCrystal", SCENE_ROOM, LayerTag, &vInitPos)))
+		return E_FAIL;
+
+	for (_uint iCnt = 0; iCnt < 3; ++iCnt)
+		m_pFireCrystal[iCnt] = (CFireCrystal*)pManagement->Get_GameObject(SCENE_ROOM, LayerTag, iCnt + 4);
 
 	return S_OK;
 }
