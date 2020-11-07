@@ -22,7 +22,8 @@ public:
 
 public:
 	_bool Get_Render() { return m_bRender; }
-
+	_bool Get_MovingClear() { return m_bMovingClear; }
+ 
 public:
 	void Set_MovingClear(_bool bCheck) { m_bMovingClear = bCheck; }
 
