@@ -36,6 +36,13 @@ HRESULT CScene_Stage2::Setup_Scene()
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Snow", SCENE_ICELAND, L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
 
+	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
+	if (nullptr == m_pPreLoader)
+	{
+		PRINT_LOG(L"Failed To PreLoader Create in CScene_Stage2", LOG::CLIENT);
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -76,6 +83,12 @@ _int CScene_Stage2::Update_Scene(_float _fDeltaTime)
 			return -1;
 		}
 
+		if (FAILED(pManagement->ClearScene_Component_All(SCENE_ICELAND)))
+		{
+			PRINT_LOG(L"Failed To ClearScene_Component_All in Iceland", LOG::CLIENT);
+			return -1;
+		}
+
 		return 1;
 	}
 	//--------------------------------------------------
@@ -107,6 +120,7 @@ CScene_Stage2 * CScene_Stage2::Create(LPDIRECT3DDEVICE9 _pDevice)
 
 void CScene_Stage2::Free()
 {
+	Safe_Release(m_pPreLoader);
 
 	CScene::Free();
 }

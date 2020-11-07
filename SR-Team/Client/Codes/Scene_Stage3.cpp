@@ -33,8 +33,15 @@ HRESULT CScene_Stage3::Setup_Scene()
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_EnergyBolt", SCENE_VOLCANIC, L"Layer_PlayerAtk", &tImpact)))
 		return E_FAIL;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_VOLCANIC, L"GameObject_Snow", SCENE_VOLCANIC, L"Layer_MonsterAtk", &tImpact)))
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_VOLCANIC, L"", SCENE_VOLCANIC, L"Layer_MonsterAtk", &tImpact)))
+	//	return E_FAIL;
+
+	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
+	if (nullptr == m_pPreLoader)
+	{
+		PRINT_LOG(L"Failed To PreLoader Create in CScene_Stage3", LOG::CLIENT);
 		return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -76,6 +83,12 @@ _int CScene_Stage3::Update_Scene(_float _fDeltaTime)
 			return -1;
 		}
 
+		if (FAILED(pManagement->ClearScene_Component_All(SCENE_VOLCANIC)))
+		{
+			PRINT_LOG(L"Failed To ClearScene_Component_All in Volcanic", LOG::CLIENT);
+			return -1;
+		}
+
 		return 1;
 	}
 
@@ -89,52 +102,71 @@ _int CScene_Stage3::LateUpdate_Scene(_float _fDeltaTime)
 
 CScene_Stage3 * CScene_Stage3::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
-	return nullptr;
+	if (nullptr == _pDevice)
+		return nullptr;
+
+	CScene_Stage3* pInstance = new CScene_Stage3(_pDevice);
+	if (FAILED(pInstance->Setup_Scene()))
+	{
+		PRINT_LOG(L"Failed To Create CScene_Stage3", LOG::CLIENT);
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CScene_Stage3::Free()
 {
+	Safe_Release(m_pPreLoader);
+
 	CScene::Free();
 }
 
 HRESULT CScene_Stage3::Setup_Layer_AllObject()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Setup_Layer_Skybox(const wstring & LayerTag)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Setup_Layer_Terrain(const wstring & LayerTag)
 {
-	return E_NOTIMPL;
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DummyTerrain", SCENE_STAGE3, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Setup_Layer_CubeTerrain(const wstring & LayerTag)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Setup_Layer_Environment(const wstring & LayerTag)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Setup_Layer_Monster(const wstring & LayerTag)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Setup_Layer_Player_Attack(const wstring & LayerTag)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Setup_Layer_Monster_Attack(const wstring & LayerTag)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Travel_NextLayers()

@@ -168,7 +168,6 @@ _int CMainApp::Update_MainApp()
 
 	_int iBehaviour = m_pManagement->Update_Engine();
 
-	//_crtBreakAlloc = 18;
 	return iBehaviour;
 }
 

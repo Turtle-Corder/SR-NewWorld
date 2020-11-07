@@ -56,6 +56,10 @@ HRESULT CScene_Stage0::Setup_Scene()
 
 	m_ePreLoadSceneID = (eSCENE_ID)iNextScene;
 
+	// PreLoad 할 것 없음
+	if (SCENE_LAB == m_ePreLoadSceneID)
+		return S_OK;
+
 	m_pPreLoader = CPreLoader::Create(m_pDevice, m_ePreLoadSceneID);
 	if (nullptr == m_pPreLoader)
 	{
@@ -73,7 +77,12 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return -1;
 
-	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
+	if (!m_pPreLoader && pManagement->Key_Down(VK_ESCAPE))
+	{
+		return 999;
+	}
+
+	else if (pManagement->Key_Down(VK_F1) && m_pPreLoader && m_pPreLoader->IsFinished())
 	{
 		if (FAILED(Travel_NextLayers()))
 		{
@@ -114,6 +123,12 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 		if (FAILED(hr))
 		{
 			PRINT_LOG(L"Failed To Setup NextStage in Town", LOG::CLIENT);
+			return -1;
+		}
+
+		if (FAILED(pManagement->ClearScene_Component_All(SCENE_TOWN)))
+		{
+			PRINT_LOG(L"Failed To ClearScene_Component_All in Room", LOG::CLIENT);
 			return -1;
 		}
 

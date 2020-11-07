@@ -6,6 +6,12 @@ USING(Client)
 CMonSub::CMonSub(LPDIRECT3DDEVICE9 _pDevice)
 	:CGameObject(_pDevice)
 {
+	for (_uint iCnt = 0; iCnt < MONSUB_END; ++iCnt)
+	{
+		m_pVIBufferCom[iCnt] = nullptr;
+		m_pTransformCom[iCnt] = nullptr;
+		m_pTextureCom[iCnt] = nullptr;
+	}
 }
 
 CMonSub::CMonSub(const CMonSub& _rOther)

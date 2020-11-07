@@ -325,6 +325,12 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\08.Explosion\00.Crystal">
       <UniqueIdentifier>{966a4f04-2bd5-4d78-8430-8bcca1bc29f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\01.Monster\02.AcornExplosion">
+      <UniqueIdentifier>{334520c6-e7cf-4718-ac76-14545d34c40f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\11.Instant_Impact\03.Wolf_Impact">
+      <UniqueIdentifier>{8959fecc-c75f-40c0-b459-dec4158fd87f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -608,6 +614,12 @@
     <ClInclude Include="..\Headers\Explosion.h">
       <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\AcornExplosion.h">
+      <Filter>02.GameObject\06.Projectile\01.Monster\02.AcornExplosion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Wolf_Impact.h">
+      <Filter>02.GameObject\11.Instant_Impact\03.Wolf_Impact</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -875,6 +887,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Explosion.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\AcornExplosion.cpp">
+      <Filter>02.GameObject\06.Projectile\01.Monster\02.AcornExplosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Wolf_Impact.cpp">
+      <Filter>02.GameObject\11.Instant_Impact\03.Wolf_Impact</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,12 @@ USING(Client)
 CGolem::CGolem(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
-
+	for (_uint iCnt = 0; iCnt < GOLEM_END; ++iCnt)
+	{
+		m_pVIBufferCom[iCnt] = nullptr;
+		m_pTransformCom[iCnt] = nullptr;
+		m_pTextureCom[iCnt] = nullptr;
+	}
 }
 
 CGolem::CGolem(const CGolem& _rOther)

@@ -114,7 +114,7 @@ HRESULT CSnow::Add_Component()
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Snow", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_ICELAND, L"Component_Texture_Snow", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 	
 	// For.Com_Transform
@@ -192,10 +192,11 @@ HRESULT CSnow::Setting_Dir()
 
 	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform1");
 
+	_vec3 vPlayerPos = {};
 	if (nullptr == pPlayerTransform)
-		return E_FAIL;
-
-	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
+		vPlayerPos = { 999.f, 999.f, 999.f };
+	else
+		vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
 
 	m_vDir = vPlayerPos - vPos;
 	D3DXVec3Normalize(&m_vDir, &m_vDir);

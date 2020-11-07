@@ -8,6 +8,12 @@ USING(Client)
 CWand::CWand(LPDIRECT3DDEVICE9 _pDevice)
 	:CGameObject(_pDevice)
 {
+	for (_uint iCnt = 0; iCnt < WAND_BASE; ++iCnt)
+	{
+		m_pVIBufferCom[iCnt] = nullptr;
+		m_pTransformCom[iCnt] = nullptr;
+		m_pTextureCom[iCnt] = nullptr;
+	}
 }
 
 CWand::CWand(const CWand & _rOther)

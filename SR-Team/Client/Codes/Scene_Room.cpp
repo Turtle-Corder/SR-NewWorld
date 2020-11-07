@@ -117,6 +117,12 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 			return -1;
 		}
 
+		if (FAILED(pManagement->ClearScene_Component_All(SCENE_ROOM)))
+		{
+			PRINT_LOG(L"Failed To ClearScene_Component_All in Room", LOG::CLIENT);
+			return -1;
+		}
+
 		return 1;
 	}
 
