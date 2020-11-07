@@ -116,10 +116,10 @@ HRESULT CMpDrift::Add_Component()
 
 	CTransform::TRANSFORM_DESC tTransformDesc;
 
-	tTransformDesc.vPosition = { 0.f, -1.2f, 0.f };
+	tTransformDesc.vPosition = { 0.f, -1.0f, 0.f };
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
-	tTransformDesc.vScale = { 2.2f , 1.f , 2.2f };
+	tTransformDesc.vScale = { 2.2f , 2.2f , 2.2f };
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
