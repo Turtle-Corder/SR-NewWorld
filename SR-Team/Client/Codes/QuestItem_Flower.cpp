@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "..\Headers\QuestItem_Flower.h"
 #include "Mouse.h"
-
+#include "FlowerQuest.h"
+#include "Player.h"
+#include "Inventory.h"
 USING(Client)
 
 
@@ -38,20 +40,50 @@ _int CQuestItem_Flower::Update_GameObject(_float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (pManagement == nullptr)
 		return GAMEOBJECT::ERR;
+
 	CMouse* pMouse = (CMouse*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Mouse");
 	if (pMouse == nullptr)
 		return GAMEOBJECT::ERR;
 
-	if (pManagement->Key_Down(VK_LBUTTON))
-	{
-		TCHAR szBuff[MIN_STR] = L"";
-		wsprintf(szBuff, L"%f, %f", pMouse->Get_Point().x, pMouse->Get_Point().y);
-		//PRINT_LOG(szBuff, LOG::CLIENT);
-	}
+	CFlowerQuest* pFlowerQuest = (CFlowerQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_FlowerQuest", 0);
+	if (nullptr == pFlowerQuest)
+		return E_FAIL;
+
+	CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Player");
+	if (nullptr == pPlayer)
+		return E_FAIL;
+
+	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
+	if (nullptr == pInven)
+		return E_FAIL;
+
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+	if (nullptr == pPlayerTransform)
+		return E_FAIL;
+
+	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
+
+	if (m_bGatheringFlower && m_iGatheringFlowerCnt <= 2.f)
+		m_bGatheringFlower = false;
 
 	// 조건
 	// 1. 퀘스트 하는중이어야 한다
 	// 2. 꽃밭 안에 있어야 한다
+	if (vPlayerPos.x <= 8.f && vPlayerPos.z <= 40.f && !m_bGatheringFlower && pFlowerQuest->Get_FlowerQuestID() == FLOWER_ON_THE_QUEST)
+	{
+		if (pManagement->Key_Pressing('G'))
+		{
+			m_fGatheringTime += _fDeltaTime;
+			if (m_fGatheringTime >= 1.f)
+			{
+				m_fGatheringTime = 0.f;
+
+				m_bGatheringFlower = true;
+				++m_iGatheringFlowerCnt;
+				pInven->Get_RewardItem(L"flower");
+			}
+		}
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -98,6 +130,7 @@ HRESULT CQuestItem_Flower::Add_Component()
 			szCombine, (CComponent**)&m_pTextureLoading[i])))
 			return E_FAIL;
 	}
+
 
 	return S_OK;
 }

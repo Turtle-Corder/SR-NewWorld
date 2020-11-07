@@ -634,10 +634,10 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
-//#pragma region GameObject_QuestItemFlower
-//	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_QuestItemFlower", CQuestItem_Flower::Create(m_pDevice, m_pSprite, m_pFont))))
-//		return E_FAIL;
-//#pragma endregion
+#pragma region GameObject_QuestItemFlower
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_QuestItemFlower", CQuestItem_Flower::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+#pragma endregion
 
 // UNDONE : Quest Prototype
 //#pragma region GameObject_Quest1
