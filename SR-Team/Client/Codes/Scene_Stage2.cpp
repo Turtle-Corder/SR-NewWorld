@@ -223,6 +223,9 @@ HRESULT CScene_Stage2::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_PlayerItem")))
 		return E_FAIL;
 
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainQuest")))
+		return E_FAIL;
+
 	if (FAILED(pManagement->Clear_Except(SCENE_ICELAND, SCENE_TOWN)))
 	{
 		PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);

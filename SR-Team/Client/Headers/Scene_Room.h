@@ -42,6 +42,7 @@ private:
 
 	HRESULT Setup_Layer_PlayerSkill(const wstring& LayerTag);
 	HRESULT Setup_Layer_PlayerItem(const wstring& LayerTag);
+	HRESULT SetUp_Layer_MainQuest(const wstring& LayerTag);
 
 	HRESULT Travel_NextLayers();
 
