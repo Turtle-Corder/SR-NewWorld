@@ -293,4 +293,27 @@ enum eNormalNPC_ID
 	STAGE_NPC_END
 };
 
+
+//--------------------------------------------------
+// ICELAND Äù½ºÆ® »óÈ²
+//--------------------------------------------------
+enum eIceQuest_ID
+{
+	ICEQUEST_ASK1,
+	ICEQUEST_ANSWER1,
+	ICEQUEST_ASK2,
+	ICEQUEST_ANSWER2,
+	ICEQUEST_ASK_QUEST,
+	ICEQUEST_AGREE,
+	ICEQUEST_REJECT,
+	ICEQUEST_REWARD,
+	ICEQUEST_NO_CLEAR,
+	ICEQUEST_END,
+
+	ICEQUEST_ON_THE_QUEST,
+	ICEQUEST_FINISH,
+	ICEQUEST_REAL_FINISH
+};
+
+
 #endif
