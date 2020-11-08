@@ -40,6 +40,7 @@ public:
 	HRESULT Setup_Layer_Projectile();
 
 	HRESULT Setup_Layer_NPC(const wstring& LayerTag);
+	HRESULT SetUp_Layer_IceLandQuest(const wstring& LayerTag);
 
 	HRESULT Travel_NextLayers();
 
