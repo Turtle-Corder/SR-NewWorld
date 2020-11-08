@@ -235,9 +235,9 @@ int CMainUI::Update_GameObject(float DeltaTime)
 	{
 		if (FAILED(Move_To_QuickSlot()))
 			return GAMEOBJECT::WARN;
-		if (FAILED(Check_LeftQuickSlot_Item()))
-			return GAMEOBJECT::WARN;
 		if (FAILED(Check_RightQuickSlot_Item()))
+			return GAMEOBJECT::WARN;
+		if (FAILED(Check_LeftQuickSlot_Item()))
 			return GAMEOBJECT::WARN;
 	}
 
@@ -559,6 +559,7 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 						{
 							// 초기화
 							m_bRender_GoingItem = false;
+							pInven->Set_MovingClear(false);
 
 							if (m_pTextureRightQuickSlot[i])
 								m_pTextureRightQuickSlot[i] = nullptr;
@@ -574,7 +575,7 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 									return E_FAIL;
 							m_pMovingItem = nullptr;
 
-							pInven->Set_MovingClear(false);
+			
 						}
 					}
 					// 스킬 퀵슬롯 내 위치 이동
@@ -612,7 +613,7 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 						//if (m_pLeftSlotItem[m_iBefore_SkillIconIndex])
 						//	m_pLeftSlotItem[m_iBefore_SkillIconIndex] = nullptr;
 						m_iBefore_ItemIndex = -1;
-						pInven->Set_MovingClear(false);
+					
 					}
 				}
 				else
@@ -627,13 +628,16 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 	}
 
 	// 이동중 마우스에서 손 뗐는지 확인
+	rc = { 0, };
 	if (pManagement->Key_Up(VK_LBUTTON) && m_pMovingItem != nullptr)
 	{
+		_int k = 0;
 		for (_uint i = 0; i < 8; i++)
 		{
-			// 왼쪽
+			// 오른쪽
 			if (!IntersectRect(&rc, &m_tRightSlotCollRt[i], &m_tGoingItem_CollRt))
 			{
+				pInven->Set_MovingClear(false);
 				m_bRender_GoingItem = false;
 				m_pMovingItem = nullptr;
 				m_pTexture_GoingItem = nullptr;
@@ -817,16 +821,16 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 				nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 
-			// 쿨타임
-			_float fProgress = 1.f - pItemInven->Get_Progress(i);
-			if (1.f == fProgress) continue;
-			pTexInfo = m_pEmptyTexture->Get_TexInfo(0);
-			vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+			//// 쿨타임
+			//_float fProgress = 1.f - pItemInven->Get_Progress(i);
+			//if (1.f == fProgress) continue;
+			//pTexInfo = m_pEmptyTexture->Get_TexInfo(0);
+			//vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
 
-			RECT rc = { 0, 0, (LONG)pTexInfo->Width, (LONG)(pTexInfo->Height * fProgress) };
-			m_pSprite->Draw(
-				(LPDIRECT3DTEXTURE9)m_pEmptyTexture->GetTexture(0), 
-				&rc, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+			//RECT rc = { 0, 0, (LONG)pTexInfo->Width, (LONG)(pTexInfo->Height * fProgress) };
+			//m_pSprite->Draw(
+			//	(LPDIRECT3DTEXTURE9)m_pEmptyTexture->GetTexture(0), 
+			//	&rc, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 
 			// 개수

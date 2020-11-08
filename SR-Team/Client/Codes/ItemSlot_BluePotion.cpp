@@ -2,6 +2,7 @@
 #include "..\Headers\ItemSlot_BluePotion.h"
 #include "Equip.h"
 #include "Inventory.h"
+#include "Player.h"
 
 USING(Client)
 
@@ -84,8 +85,16 @@ _bool CItemSlot_BluePotion::Actual_UseItem()
 	if (pInven == nullptr)
 		return false;
 
-	// 장비창에서 플레이어 MP 증가
-	pEquip->Set_PlayerMP(30);
+	CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Player", 0);
+	if (pPlayer == nullptr)
+		return false;
+	CStatus* pPlayerStat = (CStatus*)pManagement->Get_Component(
+		pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Stat");
+	if (pPlayerStat == nullptr)
+		return false;
+
+	// 장비창에서 플레이어 HP 증가
+	pPlayerStat->Change_Mp(pPlayerStat->Get_Status().iMp + 30);
 	
 	// 인벤에서 포션 아이템 개수 감소
 	pInven->Use_Potion(BLUE_POTION);

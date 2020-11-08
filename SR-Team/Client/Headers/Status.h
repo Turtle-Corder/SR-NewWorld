@@ -51,8 +51,8 @@ public:
 	void Set_Att(_int iAtt);
 	void Set_HP(_int _iAtt);
 	void Set_MP(_int _iMP);
-	void Change_Hp(_int iHp) { m_tStat.iHp = iHp; }
-	void Change_Mp(_int iMp) { m_tStat.iMp = iMp; }
+	void Change_Hp(_int iHp) { m_tStat.iHp = iHp; if (m_tStat.iHp >= 100) m_tStat.iHp = 100; }
+	void Change_Mp(_int iMp) { m_tStat.iMp = iMp;  if (m_tStat.iMp >= 100) m_tStat.iMp = 100;}
 
 	_int Get_Att();
 	_int Get_Def();
