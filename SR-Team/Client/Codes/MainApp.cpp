@@ -595,6 +595,11 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Component_Texture_DropItem
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_DropItem", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/itembox%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region GameObject_Wand
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Wand", CWand::Create(m_pDevice))))
 		return E_FAIL;

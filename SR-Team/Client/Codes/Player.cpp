@@ -249,6 +249,11 @@ void CPlayer::DeActive_FireCrystal()
 	m_iActiveFireCrystal = 0;
 }
 
+_bool CPlayer::IsInteraction()
+{
+	return 	m_bInteraction;
+}
+
 void CPlayer::Active_IceCrystal()
 {
 	if (m_iActiveIceCrystal >= 3)
@@ -444,6 +449,19 @@ HRESULT CPlayer::Add_Component_Extends()
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Raycast", L"Com_Ray", (CComponent**)&m_pRaycastCom)))
 		return E_FAIL;
 
+
+	CDamageInfo::DAMAGE_DESC tDmgInfo;
+	tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMinAtt;
+	tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+	tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
+	tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
+	tDmgInfo.pOwner = this;
+	tDmgInfo.eType = eELEMENTAL_TYPE::NONE;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -547,6 +565,7 @@ void CPlayer::Free()
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pRaycastCom);
 	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pDmgInfoCom);
 
 	CGameObject::Free();
 }
@@ -890,11 +909,15 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 	//--------------------------------------------------
 	// G : Interaction
 	//--------------------------------------------------
-	else if (pManagement->Key_Down('G'))
+	else if (pManagement->Key_Pressing('G'))
 	{
-		// TODO : Interaction
+		m_bInteraction = true;
 	}
 
+	else if (pManagement->Key_Up('G'))
+	{
+		m_bInteraction = false;
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
