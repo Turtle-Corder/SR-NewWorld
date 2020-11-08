@@ -31,6 +31,7 @@ public:
 	// m_bRender : true면 그린다, false면 그리지 않는다
 	// ------------------------------------------------------------------
 	_bool Get_Render() { return m_bRender; }
+	_bool Get_MovingClear() { return m_bMovingClear; }
 
 public:
 	void Use_Potion(ePotion_ID ePotionID);

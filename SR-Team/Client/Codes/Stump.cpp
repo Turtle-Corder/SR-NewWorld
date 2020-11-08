@@ -155,6 +155,20 @@ void CStump::Set_Active()
 
 HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 {
+	m_bDead = true;
+
+	DROPBOX_INFO tBoxInfo;
+	tBoxInfo.vPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
+	tBoxInfo.iItemNo = 1;
+	tBoxInfo.bGone = false;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_DropItem", &tBoxInfo)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

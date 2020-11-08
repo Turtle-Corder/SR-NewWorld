@@ -476,21 +476,23 @@ void CSnail::Free()
 
 HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 {
-	if (!_pDamageComp)
-		return S_OK;
-	//((CDamageInfo*)_pDamageComp)->Get_Desc().pOwner;
-	if (!m_bTakeCheckOnece)
-	{
-		m_bTakeCheckOnece = true;
-		m_eCurState = CSnail::IDLE;
-	}
+	m_bDead = true;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	//if (!_pDamageComp)
+	//	return S_OK;
+	////((CDamageInfo*)_pDamageComp)->Get_Desc().pOwner;
+	//if (!m_bTakeCheckOnece)
+	//{
+	//	m_bTakeCheckOnece = true;
+	//	m_eCurState = CSnail::IDLE;
+	//}
 
-	if (0 >= m_pStatusCom->Get_Status().iHp)
-	{
-		m_bDead = true;
-	}
+	//m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+
+	//if (0 >= m_pStatusCom->Get_Status().iHp)
+	//{
+	//	m_bDead = true;
+	//}
 	return S_OK;
 }
 

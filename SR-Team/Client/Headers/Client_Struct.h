@@ -63,7 +63,6 @@ typedef struct tagFileInfo
 
 typedef struct tagInitializeInfo
 {
-
 	_vec3 vStartPos;
 	_uint iOption;
 
@@ -74,6 +73,13 @@ typedef struct tagSlime
 	_vec3	vPos = {};
 	_uint	iCurCount = 0;
 }SLIMEINFO;
+
+typedef struct tagDropBoxInitInfo
+{
+	_vec3	vPos;
+	_int	iItemNo;
+	_bool	bGone;
+} DROPBOX_INFO;
 
 //----------------------------
 // 
