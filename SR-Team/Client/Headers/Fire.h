@@ -27,6 +27,7 @@ public:
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual void Free() override;
 	static CFire* Create(LPDIRECT3DDEVICE9 _pDevice);
+	HRESULT Billboard();
 	HRESULT Dead_Fire(_float _fDeltaTime);
 private:
 	CVIBuffer*		m_pVIBufferCom = nullptr;
@@ -45,6 +46,11 @@ private:
 	_uint			m_iTexCnt = 0;
 	_float			m_fBombTime = 0.f;
 	_float			m_fDeadTime = 0.f;
+
+
+	INSTANTIMPACT	m_tInstant = {};
+	_uint			m_iMaxCnt = 0;
+	_uint			m_iCurrFrame = 0;
 };
 
 END

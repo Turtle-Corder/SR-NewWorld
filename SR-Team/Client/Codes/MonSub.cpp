@@ -1,17 +1,12 @@
 #include "stdafx.h"
 #include "..\Headers\MonSub.h"
+#include "DamageInfo.h"
 
 USING(Client)
 
 CMonSub::CMonSub(LPDIRECT3DDEVICE9 _pDevice)
 	:CGameObject(_pDevice)
 {
-	for (_uint iCnt = 0; iCnt < MONSUB_END; ++iCnt)
-	{
-		m_pVIBufferCom[iCnt] = nullptr;
-		m_pTransformCom[iCnt] = nullptr;
-		m_pTextureCom[iCnt] = nullptr;
-	}
 }
 
 CMonSub::CMonSub(const CMonSub& _rOther)
@@ -27,7 +22,7 @@ HRESULT CMonSub::Setup_GameObject_Prototype()
 HRESULT CMonSub::Setup_GameObject(void * _pArg)
 {
 	if (_pArg)
-		m_vStartPos = *(_vec3*)_pArg;
+		m_tInstant = *(INSTANTIMPACT*)_pArg;
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
@@ -37,17 +32,11 @@ HRESULT CMonSub::Setup_GameObject(void * _pArg)
 
 _int CMonSub::Update_GameObject(_float _fDeltaTime)
 {
+	if (m_bDead)
+		return GAMEOBJECT::DEAD;
+
 	if (Movement(_fDeltaTime))
 		return 0;
-
-	return 0;
-}
-
-_int CMonSub::LateUpdate_GameObject(_float _fDeltaTime)
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return GAMEOBJECT::WARN;
 
 	if (FAILED(m_pTransformCom[MONSUB_BASE]->Update_Transform()))
 		return GAMEOBJECT::WARN;
@@ -57,6 +46,18 @@ _int CMonSub::LateUpdate_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::WARN;
 
 	m_pTransformCom[MONSUB_RIGHT]->Set_WorldMatrix(m_pTransformCom[MONSUB_RIGHT]->Get_Desc().matWorld * m_pTransformCom[MONSUB_BASE]->Get_Desc().matWorld);
+
+	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom[MONSUB_BASE]->Get_Desc().vPosition)))
+		return GAMEOBJECT::WARN;
+
+	return GAMEOBJECT::NOEVENT;
+}
+
+_int CMonSub::LateUpdate_GameObject(_float _fDeltaTime)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return GAMEOBJECT::WARN;
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
@@ -86,6 +87,13 @@ HRESULT CMonSub::Render_NoneAlpha()
 	return S_OK;
 }
 
+HRESULT CMonSub::Take_Damage(const CComponent * _pDamageComp)
+{
+	m_bDead = true;
+
+	return S_OK;
+}
+
 HRESULT CMonSub::Add_Component()
 {
 	TCHAR szName[MAX_PATH] = L"";
@@ -97,7 +105,7 @@ HRESULT CMonSub::Add_Component()
 
 		if (iCnt == MONSUB_BASE)
 		{
-			tTransformDesc[iCnt].vPosition = { m_vStartPos.x , 0.f , m_vStartPos.z };
+			tTransformDesc[iCnt].vPosition = { m_tInstant.vPosition.x , 0.f , m_tInstant.vPosition.z };
 			tTransformDesc[iCnt].fSpeedPerSecond = 10.f;
 			tTransformDesc[iCnt].fRotatePerSecond = D3DXToRadian(90.f);
 			tTransformDesc[iCnt].vScale = { 1.f , 1.f , 1.f };
@@ -112,7 +120,7 @@ HRESULT CMonSub::Add_Component()
 		//--------------------------------------------------
 		// VIBuffer Component
 		//--------------------------------------------------
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_VIBuffer%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_VIBuffer%d", iCnt);
 
 		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", szName, (CComponent**)&m_pVIBufferCom[iCnt]))) //생성 갯수
 			return E_FAIL;
@@ -120,7 +128,7 @@ HRESULT CMonSub::Add_Component()
 		//--------------------------------------------------
 		// Transform Component
 		//--------------------------------------------------
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_Transform%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_Transform%d", iCnt);
 
 		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", szName, (CComponent**)&m_pTransformCom[iCnt], &tTransformDesc[iCnt]))) ////생성 갯수
 			return E_FAIL;
@@ -129,18 +137,62 @@ HRESULT CMonSub::Add_Component()
 		//--------------------------------------------------
 		if (iCnt == MONSUB_BASE)
 		{
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_MonSub");
+			StringCchPrintf(szPartName, _countof(szName), L"Component_Texture_MonSub");
 		}
 		else if (iCnt == MONSUB_RIGHT)
 		{
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_MonSub");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_MonSub");
 		}
 
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_Texture%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_Texture%d", iCnt);
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, szPartName, szName, (CComponent**)&m_pTextureCom[iCnt]))) ////생성 갯수
+		if (FAILED(CGameObject::Add_Component(SCENE_VOLCANIC, szPartName, szName, (CComponent**)&m_pTextureCom[iCnt]))) ////생성 갯수
 			return E_FAIL;
 	}
+
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = m_pTransformCom[MONSUB_BASE]->Get_Desc().vPosition;
+	tColDesc.fRadius = 0.5f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
+
+
+	CStatus::STAT tStat;
+	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
+	tStat.iMinAtt = 10;			tStat.iMaxAtt = 10;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
+		return E_FAIL;
+
+	CStatus* pOwnerStatusComp = (CStatus*)m_tInstant.pStatusComp;
+	CDamageInfo::DAMAGE_DESC tDmgInfo;
+	if (pOwnerStatusComp)
+	{
+		tDmgInfo.pOwner = m_tInstant.pAttacker;
+
+		// ex) yeti의 공격력 + 눈덩이 자체의 공격력 -> player의 기본 공격력 + 스태프의 공격력
+		tDmgInfo.iMinAtt = pOwnerStatusComp->Get_Status().iMinAtt + m_pStatusCom->Get_Status().iMinAtt;
+		tDmgInfo.iMaxAtt = pOwnerStatusComp->Get_Status().iMaxAtt + m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = pOwnerStatusComp->Get_Status().iCriticalChance + m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = pOwnerStatusComp->Get_Status().iCriticalRate + m_pStatusCom->Get_Status().iCriticalRate;
+	}
+	else
+	{
+		tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMinAtt;
+		tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
+	}
+
+	tDmgInfo.eType = NONE;
+
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
+
+
 
 	return S_OK;
 }
@@ -200,7 +252,7 @@ HRESULT CMonSub::Move(_float _fDeltaTime)
 		if (nullptr == pManagement)
 			return E_FAIL;
 
-		CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+		CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Player", L"Com_Transform0");
 
 		if (nullptr == pPlayerTransform)
 			return E_FAIL;
@@ -286,7 +338,7 @@ HRESULT CMonSub::Setting_Dir()
 
 	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
 
-	m_vDir = m_vStartPos - vPos;
+	m_vDir = { m_vStartPos.x - vPos.x , 0.f , m_vStartPos.z - vPos.z };
 	D3DXVec3Normalize(&m_vDir, &m_vDir);
 	m_bFallDown = true;
 	m_bOnece = true;

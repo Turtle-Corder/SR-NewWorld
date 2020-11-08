@@ -20,6 +20,7 @@ public:
 	virtual HRESULT Setup_GameObject(void * _pArg) override;
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
+	virtual HRESULT Render_NoneAlpha() override;
 private:
 	HRESULT Add_Component();
 public:
@@ -31,16 +32,19 @@ public:
 
 
 private:
+	CVIBuffer*			m_pVIBufferCom = nullptr;
+	CTexture*			m_pTextureCom = nullptr;
 	CTransform*			m_pTransformCom = nullptr;
 	CSphereCollider*	m_pColliderCom = nullptr;
 	CStatus*			m_pStatusCom = nullptr;
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
-	_vec3			m_vPos = {};
-	_bool			m_bDead = false;
-	INSTANTIMPACT	m_tInstant = {};
+	_vec3				m_vPos = {};
+	_bool				m_bDead = false;
+	INSTANTIMPACT		m_tInstant = {};
 
-	_float			m_fDeadTime = 0.f;
+	_float				m_fDeadTime = 0.f;
+	_matrix				m_matGolemRot = {};
 };
 
 END

@@ -9,8 +9,8 @@ CGolem_Impact::CGolem_Impact(LPDIRECT3DDEVICE9 _pDevice)
 {
 }
 
-CGolem_Impact::CGolem_Impact(const CGolem_Impact & _rOther)
-	:CGameObject(_rOther)
+CGolem_Impact::CGolem_Impact(const CGolem_Impact& _rOther)
+	: CGameObject(_rOther)
 {
 }
 
@@ -35,6 +35,10 @@ _int CGolem_Impact::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
+	m_pTransformCom->Update_Transform();
+
+	m_pTransformCom->Set_WorldMatrix(m_matGolemRot * m_pTransformCom->Get_Desc().matWorld);
+
 	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
 		return GAMEOBJECT::WARN;
 
@@ -47,23 +51,64 @@ _int CGolem_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 	if (m_fDeadTime >= 1.f)
 		m_bDead = true;
 
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return 0;
+
+	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
+		return 0;
+
 	return GAMEOBJECT::NOEVENT;
+}
+
+HRESULT CGolem_Impact::Render_NoneAlpha()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->SetTexture(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CGolem_Impact::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vPosition = { m_tInstant.vPosition };
+	_vec3 vGolemLook = _vec3(m_tInstant.vDirection.x, 0.f, m_tInstant.vDirection.z);
+	D3DXVec3Normalize(&vGolemLook, &vGolemLook);
+	_vec3 vPosition = { m_tInstant.vPosition.x , 0.f, m_tInstant.vPosition.z };
+	vPosition -= vGolemLook * 3.f;
+	tTransformDesc.vPosition = vPosition;
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
-	tTransformDesc.vScale = { 0.5f , 0.5f , 0.5f };
+	tTransformDesc.vScale = { 3.f , 3.f , 3.f };
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
 
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom))) //积己 肮荐
+		return E_FAIL;
+
+
+	if (FAILED(CGameObject::Add_Component(SCENE_VOLCANIC, L"Component_Texture_Wolf_Face", L"Com_Texture", (CComponent**)&m_pTextureCom))) ////积己 肮荐
+		return E_FAIL;
+
 	CSphereCollider::COLLIDER_DESC tColDesc;
 	tColDesc.vPosition = tTransformDesc.vPosition;
-	tColDesc.fRadius = 0.7f;
+	tColDesc.fRadius = 0.5f * 3.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
 		return E_FAIL;
@@ -72,7 +117,7 @@ HRESULT CGolem_Impact::Add_Component()
 	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
 	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
 
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"", L"", (CComponent**)&m_pStatusCom, &tStat)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
 
 	CDamageInfo::DAMAGE_DESC tDmgInfo;
@@ -82,7 +127,7 @@ HRESULT CGolem_Impact::Add_Component()
 		CStatus* pOnwerStatusComp = (CStatus*)m_tInstant.pStatusComp;
 		tDmgInfo.iMinAtt = pOnwerStatusComp->Get_Status().iMinAtt + m_pStatusCom->Get_Status().iMaxAtt;
 		tDmgInfo.iMaxAtt = pOnwerStatusComp->Get_Status().iMaxAtt + m_pStatusCom->Get_Status().iMaxAtt;
-		tDmgInfo.iCriticalChance = pOnwerStatusComp->Get_Status().iCriticalChance + m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = pOnwerStatusComp->Get_Status().iCriticalChance + m_pStatusCom->Get_Status().iCriticalChance;
 		tDmgInfo.iCriticalRate = pOnwerStatusComp->Get_Status().iCriticalRate + m_pStatusCom->Get_Status().iCriticalRate;
 	}
 	else
@@ -96,6 +141,21 @@ HRESULT CGolem_Impact::Add_Component()
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;
 
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CTransform* pGolemTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Golem", L"Com_Transform0");
+	if (nullptr == pGolemTransform)
+		return E_FAIL;
+
+	D3DXMatrixIdentity(&m_matGolemRot);
+	_matrix GolemWorld = pGolemTransform->Get_Desc().matWorld;
+
+	m_matGolemRot._11 = GolemWorld._11;
+	m_matGolemRot._13 = GolemWorld._13;
+	m_matGolemRot._31 = GolemWorld._31;
+	m_matGolemRot._33 = GolemWorld._33;
 
 	return S_OK;
 }
@@ -114,6 +174,8 @@ CGameObject * CGolem_Impact::Clone_GameObject(void * _pArg)
 
 void CGolem_Impact::Free()
 {
+	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
@@ -124,7 +186,7 @@ void CGolem_Impact::Free()
 
 CGolem_Impact * CGolem_Impact::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
-	if(nullptr == _pDevice)
+	if (nullptr == _pDevice)
 		return nullptr;
 
 	CGolem_Impact* pInstance = new CGolem_Impact(_pDevice);
