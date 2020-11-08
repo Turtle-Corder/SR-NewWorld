@@ -10,6 +10,8 @@ CMainQuest::CMainQuest(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DX
 {
 	for (_uint i = 0; i < MAINQUEST_END; ++i)
 		m_pTextureWnd[i] = nullptr;
+	for (_uint i = 0; i < MAIN_STATE_END; ++i)
+		m_pTextureHelp[i] = nullptr;
 }
 
 CMainQuest::CMainQuest(const CMainQuest & other)
@@ -41,6 +43,9 @@ _int CMainQuest::Update_GameObject(_float _fDeltaTime)
 	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
 	if (pInven == nullptr)
 		return E_FAIL;
+
+	if (FAILED(Check_GolemCore_Count()))
+		return GAMEOBJECT::WARN;
 
 	switch (m_eSituation)
 	{
@@ -89,7 +94,10 @@ _int CMainQuest::Update_GameObject(_float _fDeltaTime)
 
 	case MAINQUEST_AGREE:
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
+		{
 			m_eSituation = MAINQUEST_ON_THE_QUEST;	// Äù½ºÆ® ÇÏ´ÂÁß
+			m_bStartQuest = false;
+		}
 		break;
 
 	case MAINQUEST_REJECT:
@@ -185,6 +193,67 @@ HRESULT CMainQuest::Render_UI()
 
 	}
 
+	if (FAILED(Render_HelpWnd()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CMainQuest::Render_HelpWnd()
+{
+	_int iIndex = -1;
+	TCHAR szBuff[MIN_STR] = L"";
+	_matrix matTrans, matWorld, matScale;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
+	if (pInven == nullptr)
+		return E_FAIL;
+
+	if (m_bRenderClear)
+		iIndex = MAIN_STATE_CLEAR;
+	else if (m_eSituation == MAINQUEST_ON_THE_QUEST)
+		iIndex = MAIN_STATE_NOCLEAR;
+
+	if (iIndex != -1)
+	{
+		const D3DXIMAGE_INFO* pTexInfo = m_pTextureHelp[iIndex]->Get_TexInfo(0);
+		if (nullptr == pTexInfo)
+			return E_FAIL;
+		_vec3 vCenter = { (_float)(pTexInfo->Width >> 1), (_float)(pTexInfo->Height >> 1), 0.f };
+
+		D3DXMatrixTranslation(&matTrans, 1700.f, 400.f, 0.f);
+		matWorld = matTrans;
+
+		m_pSprite->SetTransform(&matWorld);
+		m_pSprite->Draw(
+			(LPDIRECT3DTEXTURE9)m_pTextureHelp[iIndex]->GetTexture(0),
+			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+		// °ñ·½ ÇÙ °³¼ö Ãâ·Â
+		// »¡°­ -> ÃÊ·Ï -> ÆÄ¶û -> ¹àÀº ÆÄ¶û
+		for (_uint i = 0; i < GOLEM_SORT_END; i++)
+		{
+			if (m_bGetGolemCore[i])
+				StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"1");
+			else
+				StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"0");
+
+			D3DXMatrixScaling(&matScale, 2.f, 2.f, 0.f);
+			if (iIndex == MAIN_STATE_NOCLEAR)
+				D3DXMatrixTranslation(&matTrans, 1730.f, 357.f + (i * 27.f), 0.f);
+			else
+				D3DXMatrixTranslation(&matTrans, 1730.f, 327.f + (i * 27.f), 0.f);
+			matWorld = matScale * matTrans;
+
+			m_pSprite->SetTransform(&matWorld);
+			m_pFont->DrawTextW(m_pSprite, szBuff, lstrlen(szBuff),
+				nullptr, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+		}
+	}
+
 	return S_OK;
 }
 
@@ -206,12 +275,72 @@ HRESULT CMainQuest::Add_Component()
 	TCHAR szTexture[MIN_STR] = L"Com_TextureWnd%d";
 	TCHAR szCombine[MIN_STR] = L"";
 
+	TCHAR szTextureHelpNameTag[][MAX_STR] =
+	{
+		L"Component_Texture_MainQuest_HelpWnd_NoClear",
+		L"Component_Texture_MainQuest_HelpWnd_Clear",
+	};
+	TCHAR szTextureHelp[MIN_STR] = L"Com_TextureHelp%d";
+	TCHAR szCombineHelp[MIN_STR] = L"";
+
 	for (_uint i = 0; i < MAINQUEST_END; i++)
 	{
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, i);
 		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szTextureNameTag[i],
 			szCombine, (CComponent**)&m_pTextureWnd[i])))
 			return E_FAIL;
+	}
+
+	for (_uint i = 0; i < MAIN_STATE_END; i++)
+	{
+		StringCchPrintf(szCombineHelp, _countof(szCombineHelp), szTextureHelp, i);
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szTextureHelpNameTag[i],
+			szCombineHelp, (CComponent**)&m_pTextureHelp[i])))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CMainQuest::Check_GolemCore_Count()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
+	if (pInven == nullptr)
+		return E_FAIL;
+
+	for (_uint i = 0; i < GOLEM_SORT_END; i++)
+	{
+		if (i == RED)
+		{
+			if (1 == pInven->Get_ItemCount(L"GolemCore_Red"))
+				m_bGetGolemCore[i] = true;
+			else if (0 == pInven->Get_ItemCount(L"GolemCore_Red"))
+				m_bGetGolemCore[i] = false;
+		}
+		else if (i == GREEN)
+		{
+			if (1 == pInven->Get_ItemCount(L"GolemCore_Green"))
+				m_bGetGolemCore[i] = true;
+			else if (0 == pInven->Get_ItemCount(L"GolemCore_Green"))
+				m_bGetGolemCore[i] = false;
+		}
+		else if (i == BLUE)
+		{
+			if (1 == pInven->Get_ItemCount(L"GolemCore_Blue"))
+				m_bGetGolemCore[i] = true;
+			else if (0 == pInven->Get_ItemCount(L"GolemCore_Blue"))
+				m_bGetGolemCore[i] = false;
+		}
+		else if (i == BRIGHT_BLUE)
+		{
+			if (1 == pInven->Get_ItemCount(L"GolemCore_BrightBlue"))
+				m_bGetGolemCore[i] = true;
+			else if (0 == pInven->Get_ItemCount(L"GolemCore_BrightBlue"))
+				m_bGetGolemCore[i] = false;
+		}
 	}
 
 	return S_OK;
@@ -248,6 +377,9 @@ void CMainQuest::Free()
 {
 	for (_uint i = 0; i < MAINQUEST_END; ++i)
 		Safe_Release(m_pTextureWnd[i]);
+
+	for (_uint i = 0; i < MAIN_STATE_END; ++i)
+		Safe_Release(m_pTextureHelp[i]);
 
 	CUIObject::Free();
 }
