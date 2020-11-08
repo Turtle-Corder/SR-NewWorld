@@ -473,6 +473,29 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+
+#pragma region GameObject_ThunderBox
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ThunderStormSphere", CThunderBox::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_ThunderStormSphere
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_ThunderStormSphere", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL,
+		L"../Resources/SpellJin%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Thunder
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Thunder", CThunderStorm::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_ThunderStormSphere
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Thunder", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL,
+		L"../Resources/SpellJin%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region GameObject_IceCystal
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceCrystal", CIceCrystal::Create(m_pDevice))))
 		return E_FAIL;
