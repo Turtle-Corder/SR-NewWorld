@@ -258,7 +258,7 @@ HRESULT CWolf::Add_Component_Texture()
 	{
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, iCnt);
 
-		if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
+		if (FAILED(CGameObject::Add_Component(SCENE_ICELAND, szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
 			return E_FAIL;
 	}
 
@@ -372,7 +372,7 @@ HRESULT CWolf::Update_Move(_float _fDeltaTime)
 	// 추적 가능한 거리보다 가까이는 있는 경우 이므로 
 	//  추적(MOVE)을 하던 공격(ATTACK)을 하던 방향을 회전시킨다.
 	//--------------------------------------------------
-	_vec3 vLook = m_pTransformCom[WOLF_BASE]->Get_Right();
+	_vec3 vLook = m_pTransformCom[WOLF_BASE]->Get_Look();
 	D3DXVec3Normalize(&vLook, &vLook);
 	D3DXVec3Normalize(&m_vMoveDirection, &m_vMoveDirection);
 

@@ -202,6 +202,14 @@ Wolf||0|68.24|20.56|
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
 
+	_vec3 vSpawnPos = { 7.68f, 0.f, 36.88f };
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Stump", SCENE_STAGE1, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vSpawnPos)))
+	//	return E_FAIL;
+
 	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag)))
 	//	return E_FAIL;
 

@@ -193,7 +193,7 @@ HRESULT CStump::Add_Component()
 			return E_FAIL;
 
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, iCnt);
-		if (FAILED(CGameObject::Add_Component(SCENE_STAGE0/*pManagement->Get_CurrentSceneID()*/, szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
+		if (FAILED(CGameObject::Add_Component(SCENE_STAGE1, szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
 			return E_FAIL;
 
 		if (iCnt == STUMP_BASE)
