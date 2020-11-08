@@ -28,7 +28,7 @@ HRESULT CFlowerQuest::Setup_GameObject_Prototype()
 HRESULT CFlowerQuest::Setup_GameObject(void * _pArg)
 {
 	if (FAILED(Add_Component()))
-		return S_OK;
+		return E_FAIL;
 	
 	m_tQuestWndCollRt.left = 0;
 	m_tQuestWndCollRt.right = 1920;
@@ -113,6 +113,8 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 			pInven->Get_RewardItem(L"RewardPotion");
 			pInven->Get_RewardItem(L"RewardPotion");
 			pInven->Get_RewardItem(L"RewardPotion");
+
+			pInven->Get_RewardItem(L"GolemCore_Red");
 		}
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
 		{

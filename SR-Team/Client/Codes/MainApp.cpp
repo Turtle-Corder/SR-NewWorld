@@ -64,6 +64,7 @@
 #include "Shop_ChatWnd.h"
 #include "QuestItem_Flower.h"
 #include "MainQuest.h"
+#include "NpcWnd.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -669,6 +670,11 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_NpcWnd
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_NpcWnd", CNpcWnd::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+#pragma endregion
+
 // UNDONE : Quest Prototype
 //#pragma region GameObject_Quest1
 //	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Quest1", CQuest1::Create(m_pDevice, m_pSprite, m_pFont))))
@@ -1048,7 +1054,7 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
-#pragma Component_Texture_MainQuest
+#pragma region Component_Texture_MainQuest
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_One", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/one%d.png"))))
 		return E_FAIL;
@@ -1078,6 +1084,35 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_ing", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/ing%d.png"))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_NoClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/helpwnd_noclear%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_Clear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/helpwnd_clear%d.png"))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Red", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Red%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Green%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Blue%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_BrightBlue", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/GolemCore_BrightBlue%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_NormalNpcWnd
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_NormalNpcWnd_Stage1", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/stage1_npc%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_NormalNpcWnd_Stage3", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/stage3_npc%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

@@ -25,18 +25,7 @@ HRESULT CScene_Stage1::Setup_Scene()
 	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
 		return E_FAIL;
 
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	INSTANTIMPACT tImpact;
-	ZeroMemory(&tImpact, sizeof(INSTANTIMPACT));
-	tImpact.vPosition = { 999.f, 999.f, 999.f };
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_EnergyBolt", SCENE_FOREST, L"Layer_PlayerAtk", &tImpact)))
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_FOREST, L"GameObject_Slime_Impact", SCENE_FOREST, L"Layer_MonsterAtk", &tImpact)))
+	if (FAILED(Setup_Layer_Projectile()))
 		return E_FAIL;
 	
 	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
@@ -240,6 +229,25 @@ HRESULT CScene_Stage1::Setup_Layer_Monster_Attack(const wstring & LayerTag)
 	return S_OK;
 }
 
+HRESULT CScene_Stage1::Setup_Layer_Projectile()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact;
+	ZeroMemory(&tImpact, sizeof(INSTANTIMPACT));
+	tImpact.vPosition = { 999.f, 999.f, 999.f };
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_EnergyBolt", SCENE_FOREST, L"Layer_PlayerAtk", &tImpact)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_FOREST, L"GameObject_Slime_Impact", SCENE_FOREST, L"Layer_MonsterAtk", &tImpact)))
+		return E_FAIL;
+	
+	return S_OK;
+}
+
 HRESULT CScene_Stage1::Setup_Layer_NPC(const wstring & LayerTag)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -288,7 +296,7 @@ HRESULT CScene_Stage1::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_PlayerItem")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainQuest")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_MainQuest")))
 		return E_FAIL;
 
 	if (FAILED(pManagement->Clear_Except(SCENE_FOREST, SCENE_TOWN)))

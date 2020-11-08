@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef __STAGE2NPC_H__
-#define __STAGE2NPC_H__
+#ifndef __STAGE1NPC_H__
+#define __STAGE1NPC_H__
 
 #include "GameObject.h"
 BEGIN(Client)
@@ -36,6 +36,10 @@ private:
 	CVIBuffer*			m_pVIBufferCom[PART_END];
 	CTransform*			m_pTransformCom[PART_END];
 	CTexture*			m_pTextureCom[PART_END];
+
+	CTexture*			m_pTextureWnd = nullptr;
+
+	_bool				m_bRenderWnd = false;
 };
 
 END

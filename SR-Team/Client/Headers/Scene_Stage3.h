@@ -34,8 +34,13 @@ public:
 	HRESULT Setup_Layer_Environment(const wstring& LayerTag);
 
 	HRESULT Setup_Layer_Monster(const wstring& LayerTag);
+	HRESULT Setup_Layer_Golem(const wstring& LayerTag);
 	HRESULT Setup_Layer_Player_Attack(const wstring& LayerTag);
 	HRESULT Setup_Layer_Monster_Attack(const wstring& LayerTag);
+
+	HRESULT Setup_Layer_Projectile();
+
+	HRESULT Setup_Layer_NPC(const wstring& LayerTag);
 
 	HRESULT Travel_NextLayers();
 

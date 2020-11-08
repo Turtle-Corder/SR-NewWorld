@@ -33,6 +33,11 @@
 #include "AcornExplosion.h"
 #include "Wolf.h"
 #include "Wolf_Impact.h"
+#include "Golem_Impact.h"
+#include "Fire.h"
+#include "Stage2_NPC.h"
+#include "Stage3_NPC.h"
+
 #pragma endregion
 
 USING(Client)
@@ -325,8 +330,14 @@ HRESULT CPreLoader::Load_Resources_Forest()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region GameObject_Stage2NPC
+#pragma region GameObject_Stage1NPC
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Stage1NPC", CStage1_NPC::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Stage1NPC_WND
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Stage1NPC_WND", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/stage1_npc%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -426,6 +437,11 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Stage2NPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Stage2NPC", CStage2_NPC::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 2)))
 		return E_FAIL;
 
@@ -439,8 +455,75 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
+#pragma region GameObject_Golem
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Golem", CGolem::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_GolemBody
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_BossBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/BossBody%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_GolemHead
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_BossHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/BossHead%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_GolemPart
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_BossPart", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/BossPart%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Bomb
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Bomb", CBomb::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Bomb
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_Bomb", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Bomb/Bomb%d.dds", 3))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_MonSub
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_MonSub", CMonSub::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_MonSub
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_MonSub", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/MonSub%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Fire
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Fire", CFire::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Fire
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_Fire", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/Fire/Fire%d.png", 11))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Golem_Impact
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Golem_Impact", CGolem_Impact::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_GolemImpact
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_Wolf_Face", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Wolf_Face%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+
+
 #pragma region GameObject_CubeTerrain
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE3, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Stage3NPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE3, L"GameObject_Stage3NPC", CStage3_NPC::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 

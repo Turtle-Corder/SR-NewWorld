@@ -10,6 +10,16 @@ BEGIN(Client)
 class CMainQuest : public CUIObject
 {
 public:
+	enum MAIN_STATE
+	{
+		MAIN_STATE_NOCLEAR, MAIN_STATE_CLEAR, MAIN_STATE_END
+	};
+	enum GOLEM_SORT
+	{
+		RED, GREEN, BLUE, BRIGHT_BLUE, GOLEM_SORT_END
+	};
+
+public:
 	explicit CMainQuest(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
 	explicit CMainQuest(const CMainQuest& other);
 	virtual ~CMainQuest() = default;
@@ -27,7 +37,13 @@ public:
 	virtual HRESULT Render_UI() override;
 
 private:
+	HRESULT Render_HelpWnd();
+
+private:
 	HRESULT Add_Component();
+
+private:
+	HRESULT Check_GolemCore_Count();
 
 public:
 	static CMainQuest* Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
@@ -35,8 +51,13 @@ public:
 	virtual void Free() override;
 
 private:
-	CTexture*		m_pTextureWnd[MAINQUEST_END];
+	CTexture*		m_pTextureWnd[MAINQUEST_END] = { nullptr, };
 	eMainQuest_ID	m_eSituation = MAINQUEST_END;
+
+	// HelpWnd
+	CTexture*		m_pTextureHelp[MAIN_STATE_END] = { nullptr, };
+
+	_bool			m_bGetGolemCore[GOLEM_SORT_END] = { false, };
 
 	_bool			m_bClear = false;
 	_bool			m_bGetReward = false;

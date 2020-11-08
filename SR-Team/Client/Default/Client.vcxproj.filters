@@ -334,6 +334,24 @@
     <Filter Include="02.GameObject\07.UI\07. MainQuest">
       <UniqueIdentifier>{5d13e54b-4ed1-4b95-aca4-0b14d14593a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\02MiniGolem">
+      <UniqueIdentifier>{a2d24bfb-0a3b-419c-8dbc-92ba42160d7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\03.Fire">
+      <UniqueIdentifier>{9d93ba74-e774-405c-8253-ad4b134251c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\04. Stage2">
+      <UniqueIdentifier>{8dcf8d3a-5736-4100-8a03-0eacf78a6a5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\05. Stage3">
+      <UniqueIdentifier>{145ae26f-bdda-4e1a-9cac-23235594c517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\06. NpcWnd">
+      <UniqueIdentifier>{1f7824e8-263c-43b7-b93c-26818f1d23bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.UI\08. IceLand">
+      <UniqueIdentifier>{c3857be8-47a4-4dcc-aaa2-dab19128d78e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -627,6 +645,24 @@
     <ClInclude Include="..\Headers\MainQuest.h">
       <Filter>02.GameObject\07.UI\07. MainQuest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MiniGolem.h">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\02MiniGolem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Fire.h">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\03.Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage2_NPC.h">
+      <Filter>02.GameObject\16. NPC\04. Stage2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage3_NPC.h">
+      <Filter>02.GameObject\16. NPC\05. Stage3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\NpcWnd.h">
+      <Filter>02.GameObject\16. NPC\06. NpcWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IceLandQuest.h">
+      <Filter>02.GameObject\07.UI\08. IceLand</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -904,6 +940,24 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MainQuest.cpp">
       <Filter>02.GameObject\07.UI\07. MainQuest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MiniGolem.cpp">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\02MiniGolem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Fire.cpp">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\03.Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage2_NPC.cpp">
+      <Filter>02.GameObject\16. NPC\04. Stage2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage3_NPC.cpp">
+      <Filter>02.GameObject\16. NPC\05. Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\NpcWnd.cpp">
+      <Filter>02.GameObject\16. NPC\06. NpcWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceLandQuest.cpp">
+      <Filter>02.GameObject\07.UI\08. IceLand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

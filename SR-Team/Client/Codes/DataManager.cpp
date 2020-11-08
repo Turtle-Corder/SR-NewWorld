@@ -10,7 +10,7 @@ USING(Client)
 CDataManager::CDataManager(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
-	for (_uint i = 0; i < 19; ++i)
+	for (_uint i = 0; i < 23; ++i)
 	{
 		m_pTextureCom[i] = nullptr;
 		m_pStatCom[i] = nullptr;
@@ -153,7 +153,7 @@ HRESULT CDataManager::Add_Component()
 
 HRESULT CDataManager::Add_Component_Item()
 {
-	for (_uint i = 0; i < 19; ++i)
+	for (_uint i = 0; i < 23; ++i)
 	{
 		// 3. Texture--------------------------------------------------------------
 		TCHAR szTexture[MAX_PATH] = L"";
@@ -215,6 +215,18 @@ HRESULT CDataManager::Add_Component_Item()
 		else if (i == 18)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
 				L"Component_Texture_FlowerQuest_RewardPotion");
+		else if (i == 19)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Red");
+		else if (i == 20)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green");
+		else if (i == 21)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue");
+		else if (i == 22)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_MainQuest_HelpWnd_GolemCore_BrightBlue");
 
 		StringCchPrintf(szTexture, sizeof(TCHAR) * MAX_PATH,
 			L"Com_Texture%d", i);
@@ -402,6 +414,43 @@ HRESULT CDataManager::Add_Component_Item()
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
 				L"Æ÷¼Ç");
 		}
+
+		if (i == 19)
+		{
+			pItem->iPrice = 100;
+			pItem->eSort = eITEM_SORT::MAIN_QUEST;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"GolemCore_Red");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"»¡°£ °ñ·½ÀÇ ÇÙ");
+		}
+		if (i == 20)
+		{
+			pItem->iPrice = 100;
+			pItem->eSort = eITEM_SORT::MAIN_QUEST;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"GolemCore_Green");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"ÃÊ·Ï °ñ·½ÀÇ ÇÙ");
+		}
+		if (i == 21)
+		{
+			pItem->iPrice = 100;
+			pItem->eSort = eITEM_SORT::MAIN_QUEST;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"GolemCore_Blue");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"ÆÄ¶õ °ñ·½ÀÇ ÇÙ");
+		}
+		if (i == 22)
+		{
+			pItem->iPrice = 100;
+			pItem->eSort = eITEM_SORT::MAIN_QUEST;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"GolemCore_BrightBlue");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"¹àÀº ÆÄ¶õ °ñ·½ÀÇ ÇÙ");
+		}
 		m_vItemList.emplace_back(pItem);
 
 
@@ -473,6 +522,27 @@ HRESULT CDataManager::Add_Component_Item()
 			tStat.iMp = 50;
 		}
 		else if (i == 18)
+		{
+			tStat.iHp = 100;
+			tStat.iMp = 100;
+		}
+
+		else if (i == 19)
+		{
+			tStat.iHp = 100;
+			tStat.iMp = 100;
+		}
+		else if (i == 20)
+		{
+			tStat.iHp = 100;
+			tStat.iMp = 100;
+		}
+		else if (i == 21)
+		{
+			tStat.iHp = 100;
+			tStat.iMp = 100;
+		}
+		else if (i == 22)
 		{
 			tStat.iHp = 100;
 			tStat.iMp = 100;
@@ -641,7 +711,7 @@ CGameObject * CDataManager::Clone_GameObject(void * pArg)
 
 void CDataManager::Free()
 {
-	for (_uint i = 0; i < 19; ++i)
+	for (_uint i = 0; i < 23; ++i)
 	{
 		Safe_Release(m_pTextureCom[i]);
 		Safe_Release(m_pStatCom[i]);

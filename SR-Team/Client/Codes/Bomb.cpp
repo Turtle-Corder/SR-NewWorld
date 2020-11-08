@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\Bomb.h"
+#include "DamageInfo.h"
 
 USING(Client)
 
@@ -21,7 +22,9 @@ HRESULT CBomb::Setup_GameObject_Prototype()
 HRESULT CBomb::Setup_GameObject(void * _pArg)
 {
 	if (_pArg)
-		m_vStartPos = *(_vec3*)_pArg;
+	{
+		m_tInstant = *(INSTANTIMPACT*)_pArg;
+	}
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
@@ -34,19 +37,31 @@ _int CBomb::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
-	if (Movement(_fDeltaTime))
-		return 0;
+	if (FAILED(IsOnTerrain(_fDeltaTime)))
+		return GAMEOBJECT::WARN;
 
-	return 0;
+
+	if (FAILED(Dead_Bomb(_fDeltaTime)))
+		return GAMEOBJECT::WARN;
+
+
+	if (FAILED(m_pTransformCom->Update_Transform()))
+		return GAMEOBJECT::WARN;
+
+	if (m_iTexCnt == 2) // 터지는 상황
+	{
+		m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition);
+	}
+	else
+		m_pColliderCom->Update_Collider(_vec3(99.f, 99.f, 99.f));
+
+	return GAMEOBJECT::NOEVENT;
 }
 
 _int CBomb::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
-		return 0;
-
-	if (FAILED(m_pTransformCom->Update_Transform()))
 		return GAMEOBJECT::WARN;
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
@@ -79,62 +94,124 @@ HRESULT CBomb::Render_NoneAlpha()
 
 HRESULT CBomb::Add_Component()
 {
-	CTransform::TRANSFORM_DESC tTransformDesc;
-
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CTransform* pGolemTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Golem", L"Com_Transform0");
-
-	if (nullptr == pGolemTransform)
-		return E_FAIL;
-
-	_vec3 vPos = pGolemTransform->Get_Desc().vPosition;
-
-	tTransformDesc.vPosition = { vPos.x , vPos.y, vPos.z };
-	tTransformDesc.fSpeedPerSecond = 10.f;
-	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
-	tTransformDesc.vScale = { 1.f , 0.5f , 1.f };
 	//--------------------------------------------------
 	// VIBuffer Component
 	//--------------------------------------------------
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
+	if (FAILED(Add_Component_VIBuffer()))
 		return E_FAIL;
 
 	//--------------------------------------------------
 	// Transform Component
 	//--------------------------------------------------
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
+	if (FAILED(Add_Component_Transform()))
 		return E_FAIL;
+
 
 
 	//--------------------------------------------------
 	// Texture Component
 	//--------------------------------------------------
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Bomb", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(Add_Component_Texture()))
 		return E_FAIL;
+
+
+
+	//--------------------------------------------------
+	// Extends Component
+	//--------------------------------------------------
+	if (FAILED(Add_Component_Extends()))
+		return E_FAIL;
+
 
 
 	return S_OK;
 }
 
-HRESULT CBomb::Movement(_float _fDeltaTime)
+HRESULT CBomb::Add_Component_VIBuffer()
 {
-	if (!m_bOnece)
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CBomb::Add_Component_Transform()
+{
+	CTransform::TRANSFORM_DESC tTransformDesc;
+
+	tTransformDesc.vPosition = m_tInstant.vPosition;
+	tTransformDesc.fSpeedPerSecond = 10.f;
+	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
+	tTransformDesc.vScale = { 1.f , 0.5f , 1.f };
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CBomb::Add_Component_Texture()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_VOLCANIC, L"Component_Texture_Bomb", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CBomb::Add_Component_Extends()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = m_pTransformCom->Get_Desc().vPosition;
+	tColDesc.fRadius = 0.7f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
+
+
+	CStatus::STAT tStat;
+	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
+	tStat.iMinAtt = 10;			tStat.iMaxAtt = 10;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
+		return E_FAIL;
+
+	CStatus* pOwnerStatusComp = (CStatus*)m_tInstant.pStatusComp;
+	CDamageInfo::DAMAGE_DESC tDmgInfo;
+	if (pOwnerStatusComp)
 	{
-		if (FAILED(Setting_Dir()))
-			return E_FAIL;
+		tDmgInfo.pOwner = m_tInstant.pAttacker;
+
+		// ex) yeti의 공격력 + 눈덩이 자체의 공격력 -> player의 기본 공격력 + 스태프의 공격력
+		tDmgInfo.iMinAtt = pOwnerStatusComp->Get_Status().iMinAtt + m_pStatusCom->Get_Status().iMinAtt;
+		tDmgInfo.iMaxAtt = pOwnerStatusComp->Get_Status().iMaxAtt + m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = pOwnerStatusComp->Get_Status().iCriticalChance + m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = pOwnerStatusComp->Get_Status().iCriticalRate + m_pStatusCom->Get_Status().iCriticalRate;
+	}
+	else
+	{
+		tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMinAtt;
+		tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
 	}
 
-	if (FAILED(IsOnTerrain(_fDeltaTime)))
-		return E_FAIL;
+	tDmgInfo.eType = NONE;
 
-	if (FAILED(Dead_Bomb(_fDeltaTime)))
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;
 
 	return S_OK;
 }
+
 
 HRESULT CBomb::IsOnTerrain(_float _fDeltaTime)
 {
@@ -148,35 +225,16 @@ HRESULT CBomb::IsOnTerrain(_float _fDeltaTime)
 	if (nullptr == pTerrainBuffer)
 		return E_FAIL;
 
-	D3DXVECTOR3 vPosition = m_pTransformCom->Get_Desc().vPosition;
+	_vec3 vPosition = m_pTransformCom->Get_Desc().vPosition;
 
 	if (true == pTerrainBuffer->IsOnTerrain(&vPosition))
 	{
 		m_pTransformCom->Set_Position(vPosition);
 	}
 
-	if (vPosition.y > vPos.y)
-	{
-		m_bFallDown = false;
-	}
-
-	if (m_bFallDown)
-	{
-		vPos.y += m_fJumpPower * m_fJumpTime - 9.8f * m_fJumpTime * m_fJumpTime;
-		m_fJumpTime += _fDeltaTime;
-
-		vPos += _vec3(m_vDir.x, 0.f, m_vDir.z) * (_fDeltaTime * 10.f);
-		m_pTransformCom->Set_Position(_vec3(vPos.x, vPos.y, vPos.z));
-	}
-	else if (!m_bFallDown)
-	{
-		m_bStart = true;
-		D3DXVECTOR3 vLastPos = m_pTransformCom->Get_Desc().vPosition;
-		m_pTransformCom->Set_Position(_vec3(vLastPos.x, vPosition.y, vLastPos.z));
-	}
-
 	return S_OK;
 }
+
 CGameObject* CBomb::Clone_GameObject(void * _pArg)
 {
 	CBomb* pInstance = new CBomb(*this);
@@ -187,6 +245,8 @@ CGameObject* CBomb::Clone_GameObject(void * _pArg)
 		Safe_Release(pInstance);
 	}
 
+
+
 	return pInstance;
 }
 
@@ -195,6 +255,9 @@ void CBomb::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pStatusCom);
+	Safe_Release(m_pDmgInfoCom);
 
 	CGameObject::Free();
 }
@@ -215,53 +278,32 @@ CBomb * CBomb::Create(LPDIRECT3DDEVICE9 _pDevice)
 	return pInstance;
 }
 
-HRESULT CBomb::Setting_Dir()
-{
-	_vec3 vPos = m_pTransformCom->Get_Desc().vPosition;
-
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
-	if (nullptr == pPlayerTransform)
-		return E_FAIL;
-
-	_vec3 vPlayerPos = pPlayerTransform->Get_Desc().vPosition;
-
-	m_vDir = m_vStartPos - vPos;
-	D3DXVec3Normalize(&m_vDir, &m_vDir);
-	m_bFallDown = true;
-	m_bOnece = true;
-
-	return S_OK;
-}
-
 HRESULT CBomb::Dead_Bomb(_float _fDeltaTime)
 {
-	if (m_bStart)
-	{
-		m_fBombTime += _fDeltaTime;
-		m_fDeadTime += _fDeltaTime;
+	m_fBombTime += _fDeltaTime;
 
-		if (m_iTexCnt == 0 && m_fBombTime >= 0.6f)
+	if (m_fBombTime >= 0.6f)
+	{
+		m_fBombTime = 0.f;
+		++m_iAnimationStep;
+
+		if (6 == m_iAnimationStep)
 		{
-			m_iTexCnt = 1;
-			m_fBombTime = 0.f;
-		}
-		else if (m_iTexCnt == 1 && m_fBombTime >= 0.6f)
-		{
-			m_iTexCnt = 0;
-			m_fBombTime = 0.f;
+			m_bDead = true;
+			return S_OK;
 		}
 	}
 
-	if (m_fDeadTime >= 3.f)
+	if (m_iAnimationStep >= 5)
 	{
-		m_bStart = false;
-		m_bDead = true;
+		m_iTexCnt = 2;
+		m_pTransformCom->Set_Scale(_vec3(3.f, 3.f, 3.f));
 	}
+	else if (0 == m_iAnimationStep % 2)
+		m_iTexCnt = 0;
+	else if (1 == m_iAnimationStep % 2)
+		m_iTexCnt = 1;
+
 
 	return S_OK;
 }

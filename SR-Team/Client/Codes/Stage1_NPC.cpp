@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "..\Headers\Stage1_NPC.h"
+#include "Player.h"
+#include "NpcWnd.h"
 
 
 USING(Client)
+
 
 CStage1_NPC::CStage1_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
@@ -34,6 +37,43 @@ HRESULT CStage1_NPC::Setup_GameObject(void * _pArg)
 
 _int CStage1_NPC::Update_GameObject(_float _fDeltaTime)
 {
+	CManagement* pManagemnet = CManagement::Get_Instance();
+	if (nullptr == pManagemnet)
+		return GAMEOBJECT::ERR;
+
+	CPlayer* pPlayer = (CPlayer*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Player");
+	if (nullptr == pPlayer)
+		return GAMEOBJECT::ERR;
+
+	CNpcWnd* pNpcWnd = (CNpcWnd*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_MainQuest", 1);
+	if (nullptr == pNpcWnd)
+		return GAMEOBJECT::ERR;
+
+	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
+		pManagemnet->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+
+	// 일정 거리 이하가 되어야 NPC에게 말 걸 수 있음
+	if (pManagemnet->Key_Pressing('G'))
+	{
+		_vec3 vPlayerPos = vPlayerTransform->Get_Desc().vPosition;
+		_vec3 vNpcPos = m_pTransformCom[0]->Get_Desc().vPosition;
+
+		_vec3 vMoveDir = vNpcPos - vPlayerPos;
+		_float fDist = D3DXVec3Length(&vMoveDir);
+
+		// NPC에게 말걸기
+		if (fDist <= 5.f)
+			pNpcWnd->Set_NpcID(STAGE1_NPC);
+		else
+			pNpcWnd->Set_NpcID(STAGE_NPC_END);
+	}
+
+	if (pNpcWnd->Get_NpcID() == STAGE1_NPC)
+	{
+		if (pManagemnet->Key_Down(VK_LBUTTON) || pManagemnet->Key_Down(VK_SPACE))
+			pNpcWnd->Set_NpcID(STAGE_NPC_END);
+	}
+
 	for (_uint i = 0; i < PART_END; i++)
 		m_pTransformCom[i]->Update_Transform();
 
@@ -73,6 +113,11 @@ HRESULT CStage1_NPC::Render_NoneAlpha()
 
 		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
 			return E_FAIL;
+	}
+
+	if (m_bRenderWnd)
+	{
+
 	}
 	
 
@@ -241,6 +286,8 @@ void CStage1_NPC::Free()
 		Safe_Release(m_pTransformCom[i]);
 		Safe_Release(m_pVIBufferCom[i]);
 	}
+
+	Safe_Release(m_pTextureWnd);
 
 	CGameObject::Free();
 }
