@@ -34,6 +34,19 @@ HRESULT CIceSpear::Setup_GameObject(void* _pArg)
 	m_vMoveDir = m_tInstant.vDirection;
 	D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
 
+	_float AngleToXZ, AngleToYZ;
+	_vec3 VecUp = { 0.f, 1.f, 0.f };
+	_vec3 VecZ = { 0.f, 0.f, 1.f };
+	_vec3 VecOnYZ = { 0.f, m_vMoveDir.y, m_vMoveDir.z };
+
+	D3DXVec3Normalize(&VecOnYZ, &VecOnYZ);
+ 	AngleToXZ = D3DXVec3Dot(&m_vMoveDir, &VecUp);
+	AngleToYZ = D3DXVec3Dot(&VecOnYZ, &VecZ);
+
+	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_X, acosf(AngleToXZ));
+	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ));
+
+	m_pTransformCom->Update_Transform();
 
 	return S_OK;
 }
@@ -98,7 +111,7 @@ HRESULT CIceSpear::Add_Component()
 	//시작할위치
 	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x + 0.05f , m_tInstant.vPosition.y , m_tInstant.vPosition.z - 0.05f) };
 	tTransformDesc.fSpeedPerSecond = 10.f;
-	tTransformDesc.fRotatePerSecond = D3DXToRadian(30.f);
+	tTransformDesc.fRotatePerSecond = 1.f;
 	tTransformDesc.vScale = { 0.5f, 3.f, 0.5f };
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
@@ -163,18 +176,27 @@ HRESULT CIceSpear::Movement(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	_vec3 vAddPos = m_vMoveDir * m_pTransformCom->Get_Desc().fSpeedPerSecond * _fDeltaTime;
+	_vec3 vAddPos = m_vMoveDir * m_pTransformCom->Get_Desc().fSpeedPerSecond * _fDeltaTime * m_fMoveSpeed;
 	m_pTransformCom->Set_Position(m_pTransformCom->Get_Desc().vPosition + vAddPos);
+
+	if(m_fMoveSpeed <= 0)
+		 m_fMoveSpeed += 2.f * _fDeltaTime;
+	else if (m_fMoveSpeed > 0)
+		m_fMoveSpeed = 5.f;
+
+
 
 	if (m_pTransformCom->Get_Desc().vPosition.y < m_tInstant.vOption.y)
 		m_bDead = true;
 	_matrix matRotation;
 
-	D3DXMatrixRotationAxis(&matRotation, &m_vMoveDir, D3DX_PI / 2.f);
+	//D3DXMatrixRotationAxis(&matRotation, &m_vMoveDir, D3DX_PI / 2.f);
 
-	if (FAILED(m_pTransformCom->Update_Transform_Rotate(&matRotation)))
+	//if (FAILED(m_pTransformCom->Update_Transform_Rotate(&matRotation)))
+	//	return GAMEOBJECT::WARN;
+
+	if (FAILED(m_pTransformCom->Update_Transform()))
 		return GAMEOBJECT::WARN;
-
 
 
 	return S_OK;

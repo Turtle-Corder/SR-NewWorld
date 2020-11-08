@@ -44,6 +44,7 @@ private:
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
 	_float m_fDeadTime = 0.f;
+	_float m_fMoveSpeed = -0.8f;
 	_vec3 m_vMoveDir = {};
 
 	INSTANTIMPACT m_tInstant = {};

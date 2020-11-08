@@ -111,11 +111,13 @@ _bool CSkillSlot_IceSpear::Actual_UseSkill(void * _pArg)
 
 	pImpact->vDirection = pImpact->vOption - pImpact->vPosition;
 
+
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceSpear", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
 	{
 		PRINT_LOG(L"Failed To Spawn Meteor", LOG::DEBUG);
 		return false;
 	}
+
 
 
 	--m_iCanUseCnt;
