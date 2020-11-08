@@ -25,6 +25,7 @@ class CMiniGolem final : public CGameObject
 private:
 	explicit CMiniGolem(LPDIRECT3DDEVICE9 _pDevice);
 	explicit CMiniGolem(const CMiniGolem& _rOther);
+public:
 	virtual ~CMiniGolem() = default;
 
 
@@ -33,7 +34,7 @@ private:
 	//------------------------------------------------------------
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
-	virtual HRESULT Setup_GameObject(void * _pArg) override;
+	virtual HRESULT Setup_GameObject(void * _pArg = nullptr) override;
 
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
@@ -44,12 +45,14 @@ public:
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	static  CMiniGolem* Create(LPDIRECT3DDEVICE9 _pDevice);
 
-	HRESULT Add_Component();
+	void Set_SpawnInfo(_vec3 _vPos, _vec3 _vRot);
+
 
 private:
 	//------------------------------------------------------------
 	// Add Component
 	//------------------------------------------------------------
+	HRESULT Add_Component();
 	HRESULT Add_Component_VIBuffer();
 	HRESULT Add_Component_Transform();
 	HRESULT Add_Component_Texture();

@@ -67,7 +67,7 @@ HRESULT CGolem_Impact::Render_NoneAlpha()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
@@ -145,7 +145,7 @@ HRESULT CGolem_Impact::Add_Component()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CTransform* pGolemTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Golem", L"Com_Transform0");
+	CTransform* pGolemTransform = (CTransform*)pManagement->Get_Component(SCENE_VOLCANIC, L"Layer_Golem", L"Com_Transform0");
 	if (nullptr == pGolemTransform)
 		return E_FAIL;
 

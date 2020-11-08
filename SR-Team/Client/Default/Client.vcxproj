@@ -163,6 +163,7 @@
     <ClInclude Include="..\Headers\DummyTerrain.h" />
     <ClInclude Include="..\Headers\Acorn.h" />
     <ClInclude Include="..\Headers\Explosion.h" />
+    <ClInclude Include="..\Headers\Fire.h" />
     <ClInclude Include="..\Headers\FireCrystal.h" />
     <ClInclude Include="..\Headers\FlowerQuest.h" />
     <ClInclude Include="..\Headers\IceBlast.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="..\Headers\Bomb.h" />
     <ClInclude Include="..\Headers\MainQuest.h" />
     <ClInclude Include="..\Headers\MainQuest_NPC.h" />
+    <ClInclude Include="..\Headers\MiniGolem.h" />
     <ClInclude Include="..\Headers\MpDrift.h" />
     <ClInclude Include="..\Headers\QuestItem_Flower.h" />
     <ClInclude Include="..\Headers\Scene_Room.h" />
@@ -260,6 +262,7 @@
     <ClCompile Include="..\Codes\DummyTerrain.cpp" />
     <ClCompile Include="..\Codes\Acorn.cpp" />
     <ClCompile Include="..\Codes\Explosion.cpp" />
+    <ClCompile Include="..\Codes\Fire.cpp" />
     <ClCompile Include="..\Codes\FireCrystal.cpp" />
     <ClCompile Include="..\Codes\FlowerQuest.cpp" />
     <ClCompile Include="..\Codes\IceBlast.cpp" />
@@ -270,6 +273,7 @@
     <ClCompile Include="..\Codes\Bomb.cpp" />
     <ClCompile Include="..\Codes\MainQuest.cpp" />
     <ClCompile Include="..\Codes\MainQuest_NPC.cpp" />
+    <ClCompile Include="..\Codes\MiniGolem.cpp" />
     <ClCompile Include="..\Codes\MpDrift.cpp" />
     <ClCompile Include="..\Codes\QuestItem_Flower.cpp" />
     <ClCompile Include="..\Codes\Scene_Room.cpp" />

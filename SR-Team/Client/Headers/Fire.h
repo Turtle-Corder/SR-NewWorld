@@ -19,20 +19,23 @@ public:
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
+
 private:
 	HRESULT Add_Component();
-	HRESULT Movement(_float _fDeltaTime);
 	HRESULT IsOnTerrain(_float _fDeltaTime);
+
 public:
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual void Free() override;
 	static CFire* Create(LPDIRECT3DDEVICE9 _pDevice);
 	HRESULT Billboard();
-	HRESULT Dead_Fire(_float _fDeltaTime);
 private:
 	CVIBuffer*		m_pVIBufferCom = nullptr;
 	CTransform*		m_pTransformCom = nullptr;
 	CTexture*		m_pTextureCom = nullptr;
+	CSphereCollider* m_pColliderCom = nullptr;
+
 
 
 	_vec3			m_vStartPos = {};
@@ -44,7 +47,6 @@ private:
 	_bool			m_bDead = false;
 	_bool			m_bStart = false;
 	_uint			m_iTexCnt = 0;
-	_float			m_fBombTime = 0.f;
 	_float			m_fDeadTime = 0.f;
 
 

@@ -334,6 +334,12 @@
     <Filter Include="02.GameObject\07.UI\07. MainQuest">
       <UniqueIdentifier>{5d13e54b-4ed1-4b95-aca4-0b14d14593a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\02MiniGolem">
+      <UniqueIdentifier>{a2d24bfb-0a3b-419c-8dbc-92ba42160d7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\03.Fire">
+      <UniqueIdentifier>{9d93ba74-e774-405c-8253-ad4b134251c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -627,6 +633,12 @@
     <ClInclude Include="..\Headers\MainQuest.h">
       <Filter>02.GameObject\07.UI\07. MainQuest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MiniGolem.h">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\02MiniGolem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Fire.h">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\03.Fire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -904,6 +916,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MainQuest.cpp">
       <Filter>02.GameObject\07.UI\07. MainQuest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MiniGolem.cpp">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\02MiniGolem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Fire.cpp">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\03.Fire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -26,7 +26,7 @@ class CGolem final : public CGameObject
 	enum STATE 
 	{
 		IDLE , MOVE , 
-		ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, ATTACK5, 
+		ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, //ATTACK5, 
 		STATE_DEAD
 	};
 private:
@@ -79,7 +79,7 @@ private:
 	HRESULT Spawn_MonSub();
 
 	HRESULT Create_MiniGolem();
-	HRESULT Spawn_Fire();
+//	HRESULT Spawn_Fire();
 
 
 

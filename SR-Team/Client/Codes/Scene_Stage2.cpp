@@ -22,18 +22,7 @@ HRESULT CScene_Stage2::Setup_Scene()
 	if (FAILED(Setup_Layer_Monster(L"Layer_Monster")))
 		return E_FAIL;
 
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	INSTANTIMPACT tImpact;
-	ZeroMemory(&tImpact, sizeof(INSTANTIMPACT));
-	tImpact.vPosition = { 999.f, 999.f, 999.f };
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_EnergyBolt", SCENE_ICELAND, L"Layer_PlayerAtk", &tImpact)))
-		return E_FAIL;
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Snow", SCENE_ICELAND, L"Layer_MonsterAtk", &tImpact)))
+	if (FAILED(Setup_Layer_Projectile()))
 		return E_FAIL;
 
 	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
@@ -100,6 +89,17 @@ _int CScene_Stage2::Update_Scene(_float _fDeltaTime)
 
 _int CScene_Stage2::LateUpdate_Scene(_float _fDeltaTime)
 {
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return GAMEOBJECT::ERR;
+
+	// Src가 공격자 Dst가 피격자
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_ICELAND, L"Layer_MonsterAtk", L"Layer_Player", L"Com_Collider", L"Com_DmgInfo")))
+		return -1;
+
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_ICELAND, L"Layer_PlayerAtk", L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
+		return -1;
+
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -187,6 +187,25 @@ HRESULT CScene_Stage2::Setup_Layer_Monster_Attack(const wstring & LayerTag)
 	return S_OK;
 }
 
+HRESULT CScene_Stage2::Setup_Layer_Projectile()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact;
+	ZeroMemory(&tImpact, sizeof(INSTANTIMPACT));
+	tImpact.vPosition = { 999.f, 999.f, 999.f };
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_EnergyBolt", SCENE_ICELAND, L"Layer_PlayerAtk", &tImpact)))
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Snow", SCENE_ICELAND, L"Layer_MonsterAtk", &tImpact)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CScene_Stage2::Travel_NextLayers()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -223,7 +242,7 @@ HRESULT CScene_Stage2::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_PlayerItem")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainQuest")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ICELAND, L"Layer_MainQuest")))
 		return E_FAIL;
 
 	if (FAILED(pManagement->Clear_Except(SCENE_ICELAND, SCENE_TOWN)))

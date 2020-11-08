@@ -7,6 +7,12 @@ USING(Client)
 CMiniGolem::CMiniGolem(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
+	for (_uint iCnt = 0; iCnt < MINIGOLEM_END; ++iCnt)
+	{
+		m_pVIBufferCom[iCnt] = nullptr;
+		m_pTransformCom[iCnt] = nullptr;
+		m_pTextureCom[iCnt] = nullptr;
+	}
 }
 
 CMiniGolem::CMiniGolem(const CMiniGolem & _rOther)
@@ -169,13 +175,13 @@ HRESULT CMiniGolem::Add_Component_Texture()
 {
 	TCHAR szComponentTag[][MIN_STR] =
 	{
-		L"Component_Texture_SemiBossBody",
-		L"Component_Texture_SemiBossBody",
-		L"Component_Texture_SemiBossHead",
-		L"Component_Texture_SemiBossPart",
-		L"Component_Texture_SemiBossPart",
-		L"Component_Texture_SemiBossPart",
-		L"Component_Texture_SemiBossPart"
+		L"Component_Texture_BossBody",
+		L"Component_Texture_BossBody",
+		L"Component_Texture_BossHead",
+		L"Component_Texture_BossPart",
+		L"Component_Texture_BossPart",
+		L"Component_Texture_BossPart",
+		L"Component_Texture_BossPart"
 	};
 
 	TCHAR szTexture[MIN_STR] = L"Com_Texture%d";
@@ -188,7 +194,7 @@ HRESULT CMiniGolem::Add_Component_Texture()
 	for (_uint iCnt = 0; iCnt < MINIGOLEM_END; ++iCnt)
 	{
 		StringCchPrintf(szCombine, _countof(szCombine), szTexture, iCnt);
-		if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
+		if (FAILED(CGameObject::Add_Component(SCENE_VOLCANIC, szComponentTag[iCnt], szCombine, (CComponent**)&m_pTextureCom[iCnt])))
 			return E_FAIL;
 	}
 
@@ -290,7 +296,13 @@ HRESULT CMiniGolem::Spawn_GolemImpact()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_GolemImpact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk")))
+	INSTANTIMPACT tImpact;
+	tImpact.pAttacker = this;
+	tImpact.pStatusComp = m_pStatusCom;
+	tImpact.vPosition = m_pTransformCom[MINIGOLEM_BASE]->Get_Desc().vPosition;
+	tImpact.vDirection = m_pTransformCom[MINIGOLEM_BASE]->Get_Look();
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
 
 	m_bCanAttack = false;
@@ -340,4 +352,10 @@ CMiniGolem * CMiniGolem::Create(LPDIRECT3DDEVICE9 _pDevice)
 	}
 
 	return pInstance;
+}
+
+void CMiniGolem::Set_SpawnInfo(_vec3 _vPos, _vec3 _vRot)
+{
+	m_pTransformCom[MINIGOLEM_BASE]->Set_Position(_vPos);
+	m_pTransformCom[MINIGOLEM_BASE]->Set_Rotation(_vRot);
 }

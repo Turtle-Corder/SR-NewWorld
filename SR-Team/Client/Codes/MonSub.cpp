@@ -7,6 +7,13 @@ USING(Client)
 CMonSub::CMonSub(LPDIRECT3DDEVICE9 _pDevice)
 	:CGameObject(_pDevice)
 {
+	for (_uint iCnt = 0; iCnt < MONSUB_END; ++iCnt)
+	{
+		m_pVIBufferCom[iCnt] = nullptr;
+		m_pTransformCom[iCnt] = nullptr;
+		m_pTextureCom[iCnt] = nullptr;
+	}
+
 }
 
 CMonSub::CMonSub(const CMonSub& _rOther)
@@ -36,7 +43,7 @@ _int CMonSub::Update_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::DEAD;
 
 	if (Movement(_fDeltaTime))
-		return 0;
+		return GAMEOBJECT::WARN;
 
 	if (FAILED(m_pTransformCom[MONSUB_BASE]->Update_Transform()))
 		return GAMEOBJECT::WARN;
@@ -252,7 +259,7 @@ HRESULT CMonSub::Move(_float _fDeltaTime)
 		if (nullptr == pManagement)
 			return E_FAIL;
 
-		CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Player", L"Com_Transform0");
+		CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
 
 		if (nullptr == pPlayerTransform)
 			return E_FAIL;
@@ -303,6 +310,10 @@ void CMonSub::Free()
 		Safe_Release(m_pVIBufferCom[iCnt]);
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
+
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pStatusCom);
+	Safe_Release(m_pDmgInfoCom);
 
 	CGameObject::Free();
 }

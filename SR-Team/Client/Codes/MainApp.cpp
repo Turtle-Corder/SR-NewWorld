@@ -1025,7 +1025,7 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
-#pragma Component_Texture_MainQuest
+#pragma region Component_Texture_MainQuest
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_One", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/one%d.png"))))
 		return E_FAIL;

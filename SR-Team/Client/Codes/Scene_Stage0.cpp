@@ -355,7 +355,7 @@ HRESULT CScene_Stage0::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_PlayerItem")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainQuest")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_MainQuest")))
 		return E_FAIL;
 
 	if (FAILED(pManagement->Clear_Except(SCENE_TOWN, (_int)m_ePreLoadSceneID)))

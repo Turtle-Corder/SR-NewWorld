@@ -38,11 +38,11 @@ _int CBomb::Update_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::DEAD;
 
 	if (FAILED(IsOnTerrain(_fDeltaTime)))
-		return E_FAIL;
+		return GAMEOBJECT::WARN;
 
 
 	if (FAILED(Dead_Bomb(_fDeltaTime)))
-		return E_FAIL;
+		return GAMEOBJECT::WARN;
 
 
 	if (FAILED(m_pTransformCom->Update_Transform()))
@@ -54,6 +54,7 @@ _int CBomb::Update_GameObject(_float _fDeltaTime)
 	}
 	else
 		m_pColliderCom->Update_Collider(_vec3(99.f, 99.f, 99.f));
+
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -61,7 +62,7 @@ _int CBomb::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
-		return 0;
+		return GAMEOBJECT::WARN;
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
@@ -75,7 +76,7 @@ HRESULT CBomb::Render_NoneAlpha()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
@@ -155,7 +156,7 @@ HRESULT CBomb::Add_Component_Texture()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Bomb", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_VOLCANIC, L"Component_Texture_Bomb", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -220,7 +221,7 @@ HRESULT CBomb::IsOnTerrain(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Terrain", L"Com_VIBuffer");
+	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Terrain", L"Com_VIBuffer");
 	if (nullptr == pTerrainBuffer)
 		return E_FAIL;
 
