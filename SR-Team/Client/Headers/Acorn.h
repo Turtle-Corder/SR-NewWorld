@@ -35,7 +35,7 @@ private:
 	HRESULT Move(_float _fDeltaTime);
 	HRESULT	Attack(_float _fDeltaTime);
 	HRESULT Update_State();
-	HRESULT Spawn_AcornExplosion(const wstring& LayerTag);
+	HRESULT Spawn_AcornExplosion(const wstring& LayerTag, _int iCnt);
 private:
 	CVIBuffer*			m_pVIBufferCom = nullptr;
 	CTransform*			m_pTransformCom = nullptr;

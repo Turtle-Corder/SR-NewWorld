@@ -101,23 +101,27 @@ HRESULT CAcornExplosion::Add_Component()
 
 	CTransform::TRANSFORM_DESC tTransformDesc;
 
+	_float fRot = 0.f;
+	if (1 == m_tInstant.vOption.x)
+		fRot = 25.f;
+	else if (2 == m_tInstant.vOption.x)
+		fRot = 40.f;
+	else if (3 == m_tInstant.vOption.x)
+		fRot = 55.f;
+	else if (4 == m_tInstant.vOption.x)
+		fRot = 70.f;
+
 	tTransformDesc.vPosition = m_tInstant.vPosition;
-	tTransformDesc.fSpeedPerSecond = 10.f;
+	tTransformDesc.fSpeedPerSecond = 5.f;
+	tTransformDesc.vRotate = { 0.f, D3DXToRadian(fRot * (m_tInstant.vOption.x * m_tInstant.vOption.y)), 0.f };
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
-	tTransformDesc.vScale = { 0.5f , 0.5f , 0.5f };
+	tTransformDesc.vScale = { 0.7f , 0.7f , 0.7f };
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
 
-	m_vDir.x = (_float)(rand() % 5 - 10);
-	m_vDir.y = 0.f;
-	m_vDir.z = (_float)(rand() % 5 - 10);
-
-	if (m_vDir.x == 0 && m_vDir.z == 0)
-	{
-		m_vDir.x = (_float)(rand() % 50 - 100);
-		m_vDir.z = (_float)(rand() % 50 - 100);
-	}
+	m_pTransformCom->Update_Transform();
+	m_vDir = m_pTransformCom->Get_Look();
 	return S_OK;
 }
 
@@ -126,7 +130,7 @@ HRESULT CAcornExplosion::Movement(float _fDeltaTime)
 	_vec3 vMyPos = m_pTransformCom->Get_Desc().vPosition;
 	D3DXVec3Normalize(&m_vDir, &m_vDir);
 
-	vMyPos += m_vDir * (_fDeltaTime * 5.f);
+	vMyPos += m_vDir * (_fDeltaTime * m_pTransformCom->Get_Desc().fSpeedPerSecond);
 	m_pTransformCom->Set_Position(vMyPos);
 
 	return S_OK;
