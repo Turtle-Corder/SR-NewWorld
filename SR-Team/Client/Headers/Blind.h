@@ -40,7 +40,6 @@ private:
 
 
 	_bool				m_bDead = false;
-	_bool				m_bShieldMain_RenderCheck = false;
 	INSTANTIMPACT		m_tImpact = {};
 	_float				m_fMoveTime = 0.f;
 	_float				m_fDeadTime = 0.f;

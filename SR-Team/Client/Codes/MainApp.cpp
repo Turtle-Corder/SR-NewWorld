@@ -490,9 +490,9 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Component_Texture_ThunderStormSphere
+#pragma region Component_Texture_Thunder
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Thunder", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL,
-		L"../Resources/SpellJin%d.png"))))
+		L"../Resources/3D/Layer_PlayerAtk/GameObject_Thunder/PNG/Thunder%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
