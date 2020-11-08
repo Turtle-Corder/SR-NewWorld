@@ -114,7 +114,7 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 			pInven->Get_RewardItem(L"RewardPotion");
 			pInven->Get_RewardItem(L"RewardPotion");
 
-			pInven->Get_RewardItem(L"GolemCore_Red");
+			pInven->Get_RewardItem(L"GolemCore_BrightBlue");
 		}
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
 		{

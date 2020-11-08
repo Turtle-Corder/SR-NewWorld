@@ -1051,17 +1051,29 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Player", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_Player/player_head%d.dds"))))
 		return E_FAIL;
-
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_PlayerHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_Player/player_body%d.dds"))))
 		return E_FAIL;
-
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_PlayerHand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_Player/player_hand%d.dds"))))
 		return E_FAIL;
-
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_PlayerFoot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_Player/player_foot%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Stage2NPC
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Stage2NPC_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/stage2Npc_Head%d.dds"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Stage2NPC_Body", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/stage2Npc_Body%d.dds"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Stage2NPC_Hand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/stage2Npc_Hand%d.dds"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Stage2NPC_Foot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/stage2Npc_Foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 

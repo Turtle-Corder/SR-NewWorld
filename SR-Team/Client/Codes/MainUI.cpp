@@ -226,6 +226,15 @@ int CMainUI::Update_GameObject(float DeltaTime)
 	if (nullptr == pMouse)
 		return GAMEOBJECT::NOEVENT;
 
+	CSkill* pSkill = (CSkill*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainUI", 2);
+	if (pSkill == nullptr)
+		return E_FAIL;
+
+	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
+	if (pInven == nullptr)
+		return E_FAIL;
+
+
 	if (FAILED(Change_SkillIconPos()))
 		return GAMEOBJECT::WARN;
 	if (FAILED(Change_ItemPos()))
@@ -243,6 +252,7 @@ int CMainUI::Update_GameObject(float DeltaTime)
 
 	if (FAILED(Set_SlotItem_Count()))
 		return GAMEOBJECT::WARN;
+
 
 #pragma region Move_MainUI
 	if (pManagement->Key_Down('P'))
@@ -440,8 +450,10 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 				{
 					if (!m_bChange_SkillIconPos)
 					{
+	
 						if (Check_Item_In_Slot())
 						{
+
 							// 초기화
 							m_bRender_GoingItem = false;
 							// 이동 끝
@@ -497,6 +509,7 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 						//	m_pLeftSlotItem[m_iBefore_SkillIconIndex] = nullptr;
 						m_iBefore_SkillIconIndex = -1;
 					}
+					
 				}
 				else
 				{
@@ -514,6 +527,7 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 	{
 		for (_uint i = 0; i < 8; i++)
 		{
+			_int k = 0;
 			// 왼쪽
 			if (!IntersectRect(&rc, &m_tLeftSlotCollRt[i], &m_tGoingItem_CollRt))
 			{
@@ -525,6 +539,10 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 		}
 	}
 
+	//if (m_pMovingItem == nullptr)
+	//{
+	//	pSkill->Set_MovingClear(false);
+	//}
 
 	return S_OK;
 }
@@ -644,6 +662,11 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 			}
 		}
 	}
+
+	//if (m_pMovingItem == nullptr)
+	//{
+	//	pInven->Set_MovingClear(false);
+	//}
 
 	return S_OK;
 }
