@@ -94,7 +94,10 @@ _int CMainQuest::Update_GameObject(_float _fDeltaTime)
 
 	case MAINQUEST_REJECT:
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
+		{
 			m_eSituation = MAINQUEST_END;
+			m_bStartQuest = false;
+		}
 		break;
 
 	case MAINQUEST_REWARD:
@@ -163,11 +166,54 @@ _int CMainQuest::LateUpdate_GameObject(_float _fDeltaTime)
 
 HRESULT CMainQuest::Render_UI()
 {
+	if (m_eSituation != MAINQUEST_END && m_eSituation != MAINQUEST_ON_THE_QUEST && m_eSituation != MAINQUEST_FINISH)
+	{
+		D3DXMATRIX matTrans, matWorld;
+		const D3DXIMAGE_INFO* pTexInfo = m_pTextureWnd[m_eSituation]->Get_TexInfo(0);
+		if (nullptr == pTexInfo)
+			return E_FAIL;
+
+		_vec3 vCenter = { (_float)(pTexInfo->Width >> 1), (_float)(pTexInfo->Height >> 1), 0.f };
+
+		D3DXMatrixTranslation(&matTrans, 950.f, 800.f, 0.f);
+		matWorld = matTrans;
+
+		m_pSprite->SetTransform(&matWorld);
+		m_pSprite->Draw(
+			(LPDIRECT3DTEXTURE9)m_pTextureWnd[m_eSituation]->GetTexture(0),
+			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	}
+
 	return S_OK;
 }
 
 HRESULT CMainQuest::Add_Component()
 {
+	TCHAR szTextureNameTag[][MAX_STR] =
+	{
+		L"Component_Texture_MainQuest_One",
+		L"Component_Texture_MainQuest_Two",
+		L"Component_Texture_MainQuest_Three",
+		L"Component_Texture_MainQuest_Four",
+		L"Component_Texture_MainQuest_Five",
+		L"Component_Texture_MainQuest_Six",
+		L"Component_Texture_MainQuest_Seven",
+		L"Component_Texture_MainQuest_Reject",
+		L"Component_Texture_MainQuest_ing",
+		L"Component_Texture_MainQuest_Reward"
+	};
+	TCHAR szTexture[MIN_STR] = L"Com_TextureWnd%d";
+	TCHAR szCombine[MIN_STR] = L"";
+
+	for (_uint i = 0; i < MAINQUEST_END; i++)
+	{
+		StringCchPrintf(szCombine, _countof(szCombine), szTexture, i);
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szTextureNameTag[i],
+			szCombine, (CComponent**)&m_pTextureWnd[i])))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 

@@ -107,7 +107,7 @@ _bool CSkillSlot_ThunderStorm::Actual_UseSkill(void * _pArg)
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ThunderStormSphere", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
 	{
-		PRINT_LOG(L"Failed To Spawn Meteor", LOG::DEBUG);
+		PRINT_LOG(L"Failed To Spawn GameObject_ThunderStormSphere", LOG::DEBUG);
 		return false;
 	}
 

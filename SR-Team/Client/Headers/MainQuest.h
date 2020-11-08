@@ -15,6 +15,9 @@ public:
 	virtual ~CMainQuest() = default;
 
 public:
+	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
+
+public:
 	// CUIObject을(를) 통해 상속됨
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void * _pArg) override;

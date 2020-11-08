@@ -67,6 +67,10 @@ HRESULT CScene_Room::Setup_Scene()
 	if (FAILED(Setup_Layer_PlayerItem(L"Layer_PlayerItem")))
 		return E_FAIL;
 
+	// ¸ÞÀÎ Äù½ºÆ®
+	if (FAILED(SetUp_Layer_MainQuest(L"Layer_MainQuest")))
+		return E_FAIL;
+
 	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_STAGE0);
 	if (nullptr == m_pPreLoader)
 	{
@@ -335,6 +339,18 @@ HRESULT CScene_Room::Setup_Layer_PlayerItem(const wstring & LayerTag)
 	return S_OK;
 }
 
+HRESULT CScene_Room::SetUp_Layer_MainQuest(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MainQuest", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CScene_Room::Travel_NextLayers()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -369,6 +385,9 @@ HRESULT CScene_Room::Travel_NextLayers()
 		return E_FAIL;
 
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_PlayerItem")))
+		return E_FAIL;
+
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainQuest")))
 		return E_FAIL;
 
 	if (FAILED(pManagement->Clear_Except(SCENE_ROOM, SCENE_TOWN)))
