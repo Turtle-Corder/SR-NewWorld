@@ -38,6 +38,8 @@
 #include "IceBlast.h"
 #include "FireCrystal.h"
 #include "Explosion.h"
+#include "Thunder.h"
+#include "ThunderBox.h"
 
 #include "SkillSlot_Meteor.h"
 #include "SkillSlot_IceSpear.h"
