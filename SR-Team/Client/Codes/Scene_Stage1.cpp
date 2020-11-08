@@ -28,6 +28,9 @@ HRESULT CScene_Stage1::Setup_Scene()
 	if (FAILED(Setup_Layer_Projectile()))
 		return E_FAIL;
 	
+	if (FAILED(Setup_Layer_DropItem()))
+		return E_FAIL;
+
 	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
 	if (nullptr == m_pPreLoader)
 	{
@@ -83,9 +86,21 @@ _int CScene_Stage1::Update_Scene(_float _fDeltaTime)
 
 		return 1;
 	}
+
 	//--------------------------------------------------
 	// TODO : 스테이지 클리어 조건
 	//--------------------------------------------------
+	if (!m_bBossInit)
+	{
+		CGameObject* pClearCheck = pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Monster");
+		if (nullptr == pClearCheck)
+		{
+			_vec3 vPos = { 58.f, 0.f, 20.f };
+
+			pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump", pManagement->Get_CurrentSceneID(), L"Layer_Monster", &vPos);
+			m_bBossInit = true;
+		}
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -101,6 +116,9 @@ _int CScene_Stage1::LateUpdate_Scene(_float _fDeltaTime)
 		return -1;
 
 	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE1, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
+		return -1;
+
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers(SCENE_STAGE1, L"Layer_Player", L"Layer_DropItem", L"Com_Collider", L"Com_DmgInfo")))
 		return -1;
 
 	return GAMEOBJECT::NOEVENT;
@@ -162,58 +180,80 @@ HRESULT CScene_Stage1::Setup_Layer_Environment(const wstring & LayerTag)
 
 HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 {
-	/*
-Slime||0|12.48|33.08|
-Slime||0|7.68|36.88|
-Slime||0|12|40.96|
-Slime||0|18.4|38.2|
-Slime||0|17.08|32.52|
-Slime||0|13.44|28.64|
-Wolf||0|63.44|17.68|
-Wolf||0|66.04|25.04|
-Wolf||0|55.04|25.24|
-Wolf||0|55.6|18.88|
-Wolf||0|61.72|29.76|
-Wolf||0|68.24|20.56|
 
-	*/
+//Slime||0|12.48|33.08|
+//Slime||0|7.68|36.88|
+//Slime||0|12|40.96|
+//Slime||0|18.4|38.2|
+//Slime||0|17.08|32.52|
+//Slime||0|13.44|28.64|
+//Wolf||0|63.44|17.68|
+//Wolf||0|66.04|25.04|
+//Wolf||0|55.04|25.24|
+//Wolf||0|55.6|18.88|
+//Wolf||0|61.72|29.76|
+//Wolf||0|68.24|20.56|
+
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	SLIMEINFO tSlimInfo;
-	ZeroMemory(&tSlimInfo, sizeof(SLIMEINFO));
-
-	tSlimInfo.iCurCount = 1;
-	tSlimInfo.vPos = {12.48f, 0.f, 33.08f };
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+	_vec3 vPos = { 12.48f, 0.f, 33.08f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
 		return E_FAIL;
 
-	_vec3 vSpawnPos = { 7.68f, 0.f, 36.88f };
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Stump", SCENE_STAGE1, LayerTag, &vSpawnPos)))
+	vPos = { 12.f, 0.f, 40.96f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
 		return E_FAIL;
 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vSpawnPos)))
+	//vPos = { 18.4f, 0.f, 38.2f };
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
 	//	return E_FAIL;
 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag)))
+	//vPos = { 13.44f, 0.f, 28.64f };
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
 	//	return E_FAIL;
 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag)))
+	//vPos = { 17.08f, 0.f, 32.52f };
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
 	//	return E_FAIL;
 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag)))
+	//----------------------------------------------------------------------------------------------------
+
+	//SLIMEINFO tSlimInfo;
+	//ZeroMemory(&tSlimInfo, sizeof(SLIMEINFO));
+
+	//tSlimInfo.iCurCount = 1;
+	//tSlimInfo.vPos = { 63.44f, 0.f, 17.68f };
+
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 	//	return E_FAIL;
 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag)))
+	////tSlimInfo.vPos = { 66.04f, 0.f, 25.04f };
+
+	////if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+	////	return E_FAIL;
+
+	//tSlimInfo.vPos = { 55.04f, 0.f, 25.24f };
+
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 	//	return E_FAIL;
 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag)))
+	////tSlimInfo.vPos = { 55.6f, 0.f, 18.88f };
+
+	////if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+	////	return E_FAIL;
+
+	//tSlimInfo.vPos = { 61.72f, 0.f, 29.76f };
+
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 	//	return E_FAIL;
 
+	////tSlimInfo.vPos = { 68.24f, 0.f, 20.56f };
+
+	////if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+	////	return E_FAIL;
 
 
 	return S_OK;
@@ -245,6 +285,23 @@ HRESULT CScene_Stage1::Setup_Layer_Projectile()
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_FOREST, L"GameObject_Slime_Impact", SCENE_FOREST, L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
 	
+	return S_OK;
+}
+
+HRESULT CScene_Stage1::Setup_Layer_DropItem()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	DROPBOX_INFO tBoxInfo;
+	tBoxInfo.vPos = { 999.f, 999.f, 999.f };
+	tBoxInfo.iItemNo = 0;
+	tBoxInfo.bGone = true;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", SCENE_FOREST, L"Layer_DropItem", &tBoxInfo)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

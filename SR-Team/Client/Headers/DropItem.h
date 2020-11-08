@@ -28,6 +28,8 @@ public:
 	virtual int LateUpdate_GameObject(float _fDeltaTime) override;
 	virtual HRESULT Render_OnlyAlpha() override;
 	virtual HRESULT Render_BlendAlpha() override;
+
+	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(float _fDeltaTime);
@@ -37,6 +39,8 @@ private:
 	HRESULT Setting_ItemTexture();
 	HRESULT Floating(_float _fDeltaTime);
 
+	void Update_DeadDelay(_float _fDeltaTime);
+
 public:
 	static CDropItem* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone_GameObject(void * pArg) override;
@@ -45,15 +49,17 @@ private:
 	CVIBuffer*	m_pVIBufferCom[ITEM_END] = {};
 	CTransform*	m_pTransformCom[ITEM_END] = {};
 	CTexture*	m_pTextureCom[ITEM_END] = {};
+	CSphereCollider* m_pColliderCom = nullptr;
 
 
 	_bool		m_bDead = false;
-	_vec3		m_vPos = { 0.f , 0.f , 0.f };
-	_int		m_iRand = 0;
+
+	DROPBOX_INFO m_tBoxInfo;
 
 	_uint		m_iCurFrame = 0;
 
 	_float		m_fTimeFlow = 0.f;
+	_float		m_fDeadTime = 0.f;
 };
 
 END

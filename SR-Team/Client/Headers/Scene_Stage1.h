@@ -39,6 +39,7 @@ private:
 	HRESULT Setup_Layer_Monster_Attack(const wstring& LayerTag);
 
 	HRESULT Setup_Layer_Projectile();
+	HRESULT Setup_Layer_DropItem();
 
 	HRESULT Setup_Layer_NPC(const wstring& LayerTag);
 
@@ -46,6 +47,8 @@ private:
 
 private:
 	CPreLoader* m_pPreLoader = nullptr;
+
+	_bool		m_bBossInit = false;
 };
 
 END

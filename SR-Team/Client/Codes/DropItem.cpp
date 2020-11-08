@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "DamageInfo.h"
+#include "Player.h"
 #include "..\Headers\DropItem.h"
 
 USING(Client)
@@ -21,9 +23,7 @@ HRESULT CDropItem::Setup_GameObject_Prototype()
 HRESULT CDropItem::Setup_GameObject(void * pArg)
 {
 	if(pArg)
-	m_vPos = *(_vec3*)pArg;
-
-	m_iRand = rand() % 10 + 1;
+		m_tBoxInfo = *(DROPBOX_INFO*)pArg;
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
@@ -34,12 +34,7 @@ HRESULT CDropItem::Setup_GameObject(void * pArg)
 int CDropItem::Update_GameObject(float _fDeltaTime)
 {
 	if (m_bDead)
-	{
-		//-------------------------------------------------
-		// 1 => 2 => 4 => Release;
-		//-------------------------------------------------
 		return GAMEOBJECT::DEAD;
-	}
 
 	if (FAILED(Movement(_fDeltaTime)))
 		return 0;
@@ -64,6 +59,8 @@ int CDropItem::LateUpdate_GameObject(float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::WARN;
+
+	Update_DeadDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
 		return GAMEOBJECT::WARN;
@@ -118,38 +115,35 @@ HRESULT CDropItem::Render_BlendAlpha()
 	return S_OK;
 }
 
-HRESULT CDropItem::Add_Component()
+HRESULT CDropItem::Take_Damage(const CComponent * _pDamageComp)
 {
-	TCHAR szName[MAX_PATH] = L"";
-
-	// For.Com_VIBuffer
-	switch (m_iRand)
+	CDamageInfo* pDmgInfo = (CDamageInfo*)_pDamageComp;
+	CPlayer* pPlayer = (CPlayer*)pDmgInfo->Get_Desc().pOwner;
+	if (pPlayer && pPlayer->IsInteraction())
 	{
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-		StringCchPrintf(szName, _countof(szName), 
-			L"Component_Texture_DropDiamond");
-		break;
-	case 6:
-	case 7:
-	case 8:
-	case 9:
-	case 10:
-		StringCchPrintf(szName, _countof(szName),
-			L"Component_Texture_DropRuby");
-		break;
+		m_bDead = true;
 	}
 
+	return S_OK;
+}
+
+HRESULT CDropItem::Add_Component()
+{
+	TCHAR szName[MIN_STR] = L"";
+
+	if (0 == m_tBoxInfo.iItemNo)
+		StringCchPrintf(szName, _countof(szName), L"Component_Texture_DropDiamond");
+	else if (1 == m_tBoxInfo.iItemNo)
+		StringCchPrintf(szName, _countof(szName), L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green");
+
+	// For.Com_VIBuffer
 	CTransform::TRANSFORM_DESC tTransformDesc[ITEM_END];
 
 	tTransformDesc[ITEM_TEXTURE].vPosition = { 0.f , 0.f , 0.01f };
 	tTransformDesc[ITEM_TEXTURE].fSpeedPerSecond = 10.f;
 	tTransformDesc[ITEM_TEXTURE].fRotatePerSecond = D3DXToRadian(90.f);
 
-	tTransformDesc[ITEM_BOX].vPosition = { m_vPos.x , m_vPos.y , m_vPos.z };
+	tTransformDesc[ITEM_BOX].vPosition = m_tBoxInfo.vPos;
 	tTransformDesc[ITEM_BOX].fSpeedPerSecond = 10.f;
 	tTransformDesc[ITEM_BOX].fRotatePerSecond = D3DXToRadian(90.f);
 
@@ -169,17 +163,20 @@ HRESULT CDropItem::Add_Component()
 	//----------------------------------------------------
 	// ITEM_BOX COMPONENT
 	//----------------------------------------------------
-
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer1", (CComponent**)&m_pVIBufferCom[ITEM_BOX])))
 		return E_FAIL;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform1", (CComponent**)&m_pTransformCom[ITEM_BOX], &tTransformDesc[ITEM_BOX])))
 		return E_FAIL;
 
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Translucent_Cube" , L"Com_Texture1", (CComponent**)&m_pTextureCom[ITEM_BOX])))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_DropItem" , L"Com_Texture1", (CComponent**)&m_pTextureCom[ITEM_BOX])))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom[ITEM_BOX]->SetFrameRange(0, 1)))
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = tTransformDesc[ITEM_BOX].vPosition;
+	tColDesc.fRadius = 0.5f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -258,6 +255,16 @@ HRESULT CDropItem::Floating(_float _fDeltaTime)
 	return S_OK;
 }
 
+void CDropItem::Update_DeadDelay(_float _fDeltaTime)
+{
+	if (m_tBoxInfo.bGone)
+	{
+		m_fDeadTime += _fDeltaTime;
+		if(m_fDeadTime >= 8.f)
+			m_bDead = true;
+	}
+}
+
 CDropItem* CDropItem::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (nullptr == pDevice)
@@ -295,6 +302,8 @@ void CDropItem::Free()
 		Safe_Release(m_pVIBufferCom[iCnt]);
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
+
+	Safe_Release(m_pColliderCom);
 
 	CGameObject::Free();
 }

@@ -106,6 +106,8 @@ public:
 	void Active_FireCrystal();
 	void DeActive_FireCrystal();
 
+	_bool IsInteraction();
+
 private:
 	//----------------------------------------------------------------------------------------------------
 	// Add Component
@@ -218,6 +220,7 @@ private:
 	CRaycast*			m_pRaycastCom	= nullptr;
 	CSphereCollider*	m_pColliderCom	= nullptr;
 	CStatus*			m_pStatusCom	= nullptr;
+	CDamageInfo*		m_pDmgInfoCom	= nullptr;
 
 
 	//--------------------------------------------------
@@ -286,6 +289,8 @@ private:
 
 	CFireCrystal*	m_pFireCrystal[3] = { nullptr };
 	_int			m_iActiveFireCrystal = 0;
+
+	_bool			m_bInteraction = false;
 };
 
 END
