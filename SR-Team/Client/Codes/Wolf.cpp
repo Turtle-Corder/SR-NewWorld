@@ -293,6 +293,9 @@ _int CWolf::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
+	
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
 
 	Update_AI();						// 1. 뭘 할지 결정만 한다
 
@@ -455,7 +458,7 @@ HRESULT CWolf::Update_State(_float _fDeltaTime)
 		}
 
 		m_iAnimStep = 0;
-		m_fHurtTimer = 0.f;
+		m_fAnimTimer = 0.f;
 		m_ePreState = m_eCurState;
 	}
 

@@ -148,7 +148,6 @@ private:
 											//--------------------------------------------------
 	_int		m_iAnimStep = 0;
 	_float		m_fAnimTimer = 0.f;
-	_bool		m_bDead = false;
 };
 
 END

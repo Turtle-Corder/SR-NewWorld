@@ -34,9 +34,9 @@ _int CAcorn::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
 	{
-		for (_uint iCnt = 0; iCnt < 25; ++iCnt)
+		for (_uint iCnt = 0; iCnt < 4; ++iCnt)
 		{
-			if (FAILED(Spawn_AcornExplosion(L"Layer_MonsterAtk")))
+			if (FAILED(Spawn_AcornExplosion(L"Layer_MonsterAtk", iCnt)))
 				return E_FAIL;
 		}
 		return GAMEOBJECT::DEAD;
@@ -362,17 +362,19 @@ HRESULT CAcorn::Update_State()
 	return S_OK;
 }
 
-HRESULT CAcorn::Spawn_AcornExplosion(const wstring & LayerTag)
+HRESULT CAcorn::Spawn_AcornExplosion(const wstring & LayerTag, _int iCnt)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
 	INSTANTIMPACT tImpact;
-	tImpact.pAttacker = this;
+	tImpact.pAttacker = m_tInstant.pAttacker;
 	tImpact.pStatusComp = m_pStatusCom;
 	_vec3 vMyPos = m_pTransformCom->Get_Desc().vPosition;
 	tImpact.vPosition = vMyPos;
+	tImpact.vOption.x = m_tInstant.vOption.x;
+	tImpact.vOption.y = (_float)(iCnt + 1);
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_AcornExplosion",pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
 		return E_FAIL;

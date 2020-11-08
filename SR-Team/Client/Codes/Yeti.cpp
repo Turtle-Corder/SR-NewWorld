@@ -47,13 +47,13 @@ int CYeti::Update_GameObject(float _fDeltaTime)
 	if (!m_bActive)
 		return GAMEOBJECT::NOEVENT;
 
-	if (FAILED(Update_State()))
-		return GAMEOBJECT::WARN;
-
 	if (FAILED(Movement(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
 	if (FAILED(Attack(_fDeltaTime)))
+		return GAMEOBJECT::WARN;
+
+	if (FAILED(Update_State()))
 		return GAMEOBJECT::WARN;
 
 	m_pTransformCom[YETI_BASE]->Update_Transform();
@@ -283,7 +283,8 @@ HRESULT CYeti::Moving(float _fDeltaTime)
 
 	float fLength = D3DXVec3Length(&vDir); // 플레이어와의 거리비교
 
-	if (fLength < 5.f)
+	// 공격 거리
+	if (fLength < 3.3f)
 	{
 		LookAtPlayer(_fDeltaTime);
 
@@ -294,7 +295,7 @@ HRESULT CYeti::Moving(float _fDeltaTime)
 		m_pTransformCom[YETI_LEFTLEG]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
 		m_pTransformCom[YETI_RIGHTLEG]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
 	}
-	else
+	else if(fLength < 7.f)
 	{
 		LookAtPlayer(_fDeltaTime);
 
@@ -304,8 +305,10 @@ HRESULT CYeti::Moving(float _fDeltaTime)
 		vPos += vDir * _fDeltaTime;
 		m_eCurState = CYeti::MOVE;
 		m_pTransformCom[YETI_BASE]->Set_Position(vPos);
+		return S_OK;
 	}
 
+	m_eCurState = IDLE;
 	return S_OK;
 }
 
@@ -354,6 +357,25 @@ HRESULT CYeti::Attack(float _fDeltaTime)
 
 HRESULT CYeti::Update_State()
 {
+	if (m_ePreState != m_eCurState)
+	{
+		switch (m_eCurState)
+		{
+		case Client::CYeti::IDLE:
+			m_pTransformCom[YETI_LEFTLEG]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+			m_pTransformCom[YETI_RIGHTLEG]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+			break;
+		case Client::CYeti::MOVE:
+			break;
+		case Client::CYeti::ATTACK:
+			break;
+		case Client::CYeti::DEAD:
+			break;
+		}
+
+		m_eCurState = m_ePreState;
+	}
+
 	return S_OK;
 }
 
