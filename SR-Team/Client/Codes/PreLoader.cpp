@@ -33,6 +33,7 @@
 #include "AcornExplosion.h"
 #include "Wolf.h"
 #include "Wolf_Impact.h"
+#include "Stage2_NPC.h"
 #pragma endregion
 
 USING(Client)
@@ -325,7 +326,7 @@ HRESULT CPreLoader::Load_Resources_Forest()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region GameObject_Stage2NPC
+#pragma region GameObject_Stage1NPC
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Stage1NPC", CStage1_NPC::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
@@ -423,6 +424,11 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 
 #pragma region GameObject_CubeTerrain
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Stage2NPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Stage2NPC", CStage2_NPC::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 

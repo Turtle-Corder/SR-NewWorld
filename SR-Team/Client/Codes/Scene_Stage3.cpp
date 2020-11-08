@@ -205,7 +205,7 @@ HRESULT CScene_Stage3::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_PlayerItem")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainQuest")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_MainQuest")))
 		return E_FAIL;
 
 	if (FAILED(pManagement->Clear_Except(SCENE_VOLCANIC, SCENE_TOWN)))

@@ -233,6 +233,7 @@
     <ClInclude Include="..\Headers\Snail_Impact.h" />
     <ClInclude Include="..\Headers\Snow.h" />
     <ClInclude Include="..\Headers\Stage1_NPC.h" />
+    <ClInclude Include="..\Headers\Stage2_NPC.h" />
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\Stump.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
@@ -327,6 +328,7 @@
     <ClCompile Include="..\Codes\Snail_Impact.cpp" />
     <ClCompile Include="..\Codes\Snow.cpp" />
     <ClCompile Include="..\Codes\Stage1_NPC.cpp" />
+    <ClCompile Include="..\Codes\Stage2_NPC.cpp" />
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\Stump.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />

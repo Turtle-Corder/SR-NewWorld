@@ -334,6 +334,9 @@
     <Filter Include="02.GameObject\07.UI\07. MainQuest">
       <UniqueIdentifier>{5d13e54b-4ed1-4b95-aca4-0b14d14593a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\16. NPC\04. Stage2">
+      <UniqueIdentifier>{8dcf8d3a-5736-4100-8a03-0eacf78a6a5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -627,6 +630,9 @@
     <ClInclude Include="..\Headers\MainQuest.h">
       <Filter>02.GameObject\07.UI\07. MainQuest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Stage2_NPC.h">
+      <Filter>02.GameObject\16. NPC\04. Stage2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -904,6 +910,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MainQuest.cpp">
       <Filter>02.GameObject\07.UI\07. MainQuest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage2_NPC.cpp">
+      <Filter>02.GameObject\16. NPC\04. Stage2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

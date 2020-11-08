@@ -288,7 +288,7 @@ HRESULT CScene_Stage1::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_PlayerItem")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_ROOM, L"Layer_MainQuest")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_FOREST, L"Layer_MainQuest")))
 		return E_FAIL;
 
 	if (FAILED(pManagement->Clear_Except(SCENE_FOREST, SCENE_TOWN)))
