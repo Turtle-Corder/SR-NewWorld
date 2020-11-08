@@ -281,4 +281,16 @@ enum eShopChatWnd_ID
 	SHOPCHAT_FINISH
 };
 
+
+//--------------------------------------------------
+// NPC ID
+//--------------------------------------------------
+enum eNormalNPC_ID
+{
+	STAGE1_NPC,
+	STAGE3_NPC,
+
+	STAGE_NPC_END
+};
+
 #endif

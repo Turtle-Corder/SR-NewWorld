@@ -28,7 +28,7 @@ HRESULT CFlowerQuest::Setup_GameObject_Prototype()
 HRESULT CFlowerQuest::Setup_GameObject(void * _pArg)
 {
 	if (FAILED(Add_Component()))
-		return S_OK;
+		return E_FAIL;
 	
 	m_tQuestWndCollRt.left = 0;
 	m_tQuestWndCollRt.right = 1920;

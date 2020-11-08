@@ -347,6 +347,8 @@ HRESULT CScene_Room::SetUp_Layer_MainQuest(const wstring & LayerTag)
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MainQuest", SCENE_ROOM, LayerTag)))
 		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_NpcWnd", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
 
 	return S_OK;
 }
