@@ -207,6 +207,8 @@ HRESULT CScene_Stage3::Setup_Layer_Projectile()
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_VOLCANIC, L"GameObject_Golem_Impact", SCENE_VOLCANIC, L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CScene_Stage3::Setup_Layer_NPC(const wstring & LayerTag)

@@ -132,11 +132,25 @@ public:
 
 
 	//--------------------------------------------------
-	// 길찾기
+	// 키 입력
 	//--------------------------------------------------
 	_bool Key_Pressing(_int _key);
 	_bool Key_Down(_int _key);
 	_bool Key_Up(_int _key);
+
+
+	//--------------------------------------------------
+	// 사운드
+	//--------------------------------------------------
+	//void PlayBGM(TCHAR* pSoundKey);
+
+	//void PlayUnit(TCHAR* pSoundKey);
+	//void PlayMonster(TCHAR* pSoundKey);
+	//void PlayEffect(TCHAR* pSoundKey);
+	//void PlayUI(TCHAR* pSoundKey);
+
+	//void StopSound(_int iChannel);
+	//void StopAll();
 
 
 public:
