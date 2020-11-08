@@ -28,6 +28,9 @@ HRESULT CScene_Stage2::Setup_Scene()
 	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
 		return E_FAIL;
 
+	if (FAILED(SetUp_Layer_IceLandQuest(L"Layer_IceLandQuest")))
+		return E_FAIL;
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
@@ -220,6 +223,18 @@ HRESULT CScene_Stage2::Setup_Layer_NPC(const wstring & LayerTag)
 		return E_FAIL;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Stage2NPC", SCENE_ICELAND, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Stage2::SetUp_Layer_IceLandQuest(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IcelandQuest", SCENE_ICELAND, LayerTag)))
 		return E_FAIL;
 
 	return S_OK;

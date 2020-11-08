@@ -37,15 +37,17 @@ HRESULT CIceSpear::Setup_GameObject(void* _pArg)
 	_float AngleToXZ, AngleToYZ;
 	_vec3 VecUp = { 0.f, 1.f, 0.f };
 	_vec3 VecZ = { 0.f, 0.f, 1.f };
-	_vec3 VecOnYZ = { 0.f, m_vMoveDir.y, m_vMoveDir.z };
+	_vec3 VecOnXZ = { m_vMoveDir.x, 0, m_vMoveDir.z };
 
-	D3DXVec3Normalize(&VecOnYZ, &VecOnYZ);
+	D3DXVec3Normalize(&VecOnXZ, &VecOnXZ);
  	AngleToXZ = D3DXVec3Dot(&m_vMoveDir, &VecUp);
-	AngleToYZ = D3DXVec3Dot(&VecOnYZ, &VecZ);
+	AngleToYZ = D3DXVec3Dot(&VecOnXZ, &VecZ);
 
 	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_X, acosf(AngleToXZ));
-	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ));
-
+	if(m_vMoveDir.x <= 0)
+		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ));
+	else if(m_vMoveDir.x > 0)
+		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, D3DX_PI-acosf(AngleToYZ));
 	m_pTransformCom->Update_Transform();
 
 	return S_OK;

@@ -65,6 +65,7 @@
 #include "QuestItem_Flower.h"
 #include "MainQuest.h"
 #include "NpcWnd.h"
+#include "IceLandQuest.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -472,6 +473,29 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+
+#pragma region GameObject_ThunderBox
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ThunderStormSphere", CThunderBox::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_ThunderStormSphere
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_ThunderStormSphere", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL,
+		L"../Resources/SpellJin%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Thunder
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Thunder", CThunderStorm::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_ThunderStormSphere
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Thunder", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL,
+		L"../Resources/SpellJin%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region GameObject_IceCystal
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceCrystal", CIceCrystal::Create(m_pDevice))))
 		return E_FAIL;
@@ -654,6 +678,11 @@ HRESULT CMainApp::Setup_EB()
 
 #pragma region GameObject_NpcWnd
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_NpcWnd", CNpcWnd::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_IcelandQuest
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IcelandQuest", CIceLandQuest::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1095,6 +1124,43 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_NormalNpcWnd_Stage3", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/stage3_npc%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_IceLandQuest
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_One", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/one%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_Two", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/two%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_Three", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/three%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_Four", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/four%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_Five", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/five%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_Agree", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/agree%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_Reject", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/reject%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_Reward", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/reward%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_ing", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/inging%d.png"))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_HelpWnd_NoClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/helpwnd_noclear%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_HelpWnd_Clear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_IceQuest/helpwnd_clear%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

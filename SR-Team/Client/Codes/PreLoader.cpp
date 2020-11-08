@@ -37,6 +37,7 @@
 #include "Fire.h"
 #include "Stage2_NPC.h"
 #include "Stage3_NPC.h"
+#include "IceLandQuest.h"
 
 #pragma endregion
 
@@ -398,7 +399,6 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Wolf_Impact", CWolf_Impact::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
-
 
 
 #pragma region Component_Texture_Wolf_Face
