@@ -1,0 +1,5 @@
+GameObject_Slime|GameObject_Monster
+GameObject_Snail|GameObject_Monster
+GameObject_Stump|GameObject_Monster
+GameObject_Wolf|GameObject_Monster
+GameObject_Wolr|GameObject_Monster

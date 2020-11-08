@@ -22,9 +22,11 @@ public:
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Render_BlendAlpha() override;
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 public:
 	static CThunderStorm* Create(LPDIRECT3DDEVICE9 _pDevice);
+	void Check_Dead(_float _DeltaTime);
 	virtual void Free() override;
 private:
 	HRESULT Add_Component();
@@ -37,10 +39,10 @@ private:
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
 	_bool				m_bDead = false;
-	_bool				m_bShieldMain_RenderCheck = false;
 	INSTANTIMPACT		m_tInstant = {};
 	_float				m_fMoveTime = 0.f;
-	_float				m_fDeadTime = 0.f;
+	_float				m_fDeadTime = 1.f;
+	_float				m_fDeadTimer = 0.f;
 };
 
 END

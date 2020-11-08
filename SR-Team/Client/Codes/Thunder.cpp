@@ -7,11 +7,21 @@ USING(Client)
 CThunderStorm::CThunderStorm(LPDIRECT3DDEVICE9 _pDevice)
 	:CGameObject(_pDevice)
 {
+	m_bDead = false;
+	m_tInstant = {};
+	m_fMoveTime = 0.f;
+	m_fDeadTime = 1.f;
+	m_fDeadTimer = 0.f;
 }
 
 CThunderStorm::CThunderStorm(const CThunderStorm & _rOther)
 	: CGameObject(_rOther)
 {
+		m_bDead = false;
+		m_tInstant = {};
+		m_fMoveTime = 0.f;
+		m_fDeadTime = 1.f;
+		m_fDeadTimer = 0.f;
 }
 
 HRESULT CThunderStorm::Setup_GameObject_Prototype()
@@ -41,19 +51,10 @@ _int CThunderStorm::Update_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(SCENE_STAGE0, L"Layer_Player", L"Com_Transform0");
-
-	if (nullptr == pPlayerTransform)
-		return E_FAIL;
-
 	if (FAILED(m_pTransformCom->Update_Transform()))
 		return E_FAIL;
 
-	//m_pTextureCom->Update_Frame(_fDeltaTime, &m_iCurrFrame);
-	//m_fDeadTime += m_iCurrFrame;
-
-	//if (m_fDeadTime >= m_iMaxCnt)
-	//	m_bDead = true;
+	Check_Dead(_fDeltaTime);
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -64,7 +65,7 @@ _int CThunderStorm::LateUpdate_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return 0;
 
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
+	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
 		return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
@@ -88,7 +89,30 @@ HRESULT CThunderStorm::Render_NoneAlpha()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(SCENE_STAGE0, L"Layer_Camera");
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+
+	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->SetTexture(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CThunderStorm::Render_BlendAlpha()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	if (nullptr == pCamera)
 		return E_FAIL;
 
@@ -131,6 +155,14 @@ CThunderStorm * CThunderStorm::Create(LPDIRECT3DDEVICE9 _pDevice)
 	return pInstance;
 }
 
+void CThunderStorm::Check_Dead(_float _DeltaTime)
+{
+	m_fDeadTimer += _DeltaTime;
+	if (m_fDeadTimer > m_fDeadTime)
+		m_bDead = true;
+}
+
+
 void CThunderStorm::Free()
 {
 	Safe_Release(m_pTransformCom);
@@ -147,9 +179,10 @@ HRESULT CThunderStorm::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
 	tTransformDesc.vPosition = m_tInstant.vPosition;
+	tTransformDesc.vPosition.y += 2.f;
 	tTransformDesc.fSpeedPerSecond = 10.f;
-	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
-	tTransformDesc.vScale = { 1.f , 1.f , 1.f };
+	tTransformDesc.fRotatePerSecond = D3DXToRadian(1.f);
+	tTransformDesc.vScale = { 10.f , 10.f , 10.f };
 	//-------------------------------------------------------
 
 	//-------------------------------------------------------
@@ -164,7 +197,7 @@ HRESULT CThunderStorm::Add_Component()
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Thunder", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Thunder", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	// For.Com_Transform
@@ -205,6 +238,9 @@ HRESULT CThunderStorm::Add_Component()
 
 	tDmgInfo.eType = NONE;
 
+
+	m_pTransformCom->Turn(CTransform::AXIS_X, 90.f);
+	m_pTransformCom->Update_Transform();
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;

@@ -1,0 +1,2 @@
+GameObject_Wolf|Layer_Monster
+GameObject_Yeti|Layer_Monster
