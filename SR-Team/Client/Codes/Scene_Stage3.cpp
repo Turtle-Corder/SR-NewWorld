@@ -25,6 +25,13 @@ HRESULT CScene_Stage3::Setup_Scene()
 	if (FAILED(Setup_Layer_Golem(L"Layer_Golem")))
 		return E_FAIL;
 
+	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
+		return E_FAIL;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
 	if (FAILED(Setup_Layer_Projectile()))
 		return E_FAIL;
 
@@ -199,6 +206,16 @@ HRESULT CScene_Stage3::Setup_Layer_Projectile()
 		return E_FAIL;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_VOLCANIC, L"GameObject_Golem_Impact", SCENE_VOLCANIC, L"Layer_MonsterAtk", &tImpact)))
+		return E_FAIL;
+}
+
+HRESULT CScene_Stage3::Setup_Layer_NPC(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE3, L"GameObject_Stage3NPC", SCENE_STAGE3, LayerTag)))
 		return E_FAIL;
 
 	return S_OK;

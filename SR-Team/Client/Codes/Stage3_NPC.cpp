@@ -1,13 +1,12 @@
 #include "stdafx.h"
-#include "..\Headers\Stage1_NPC.h"
+#include "..\Headers\Stage3_NPC.h"
 #include "Player.h"
 #include "NpcWnd.h"
 
 
 USING(Client)
 
-
-CStage1_NPC::CStage1_NPC(LPDIRECT3DDEVICE9 _pDevice)
+CStage3_NPC::CStage3_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
 	for (_uint iCnt = 0; iCnt < PART_END; ++iCnt)
@@ -18,24 +17,24 @@ CStage1_NPC::CStage1_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	}
 }
 
-CStage1_NPC::CStage1_NPC(const CStage1_NPC & _rOther)
+CStage3_NPC::CStage3_NPC(const CStage3_NPC & _rOther)
 	: CGameObject(_rOther)
 {
 }
 
-HRESULT CStage1_NPC::Setup_GameObject_Prototype()
+HRESULT CStage3_NPC::Setup_GameObject_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CStage1_NPC::Setup_GameObject(void * _pArg)
+HRESULT CStage3_NPC::Setup_GameObject(void * _pArg)
 {
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 	return S_OK;
 }
 
-_int CStage1_NPC::Update_GameObject(_float _fDeltaTime)
+_int CStage3_NPC::Update_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagemnet = CManagement::Get_Instance();
 	if (nullptr == pManagemnet)
@@ -63,12 +62,12 @@ _int CStage1_NPC::Update_GameObject(_float _fDeltaTime)
 
 		// NPC에게 말걸기
 		if (fDist <= 5.f)
-			pNpcWnd->Set_NpcID(STAGE1_NPC);
+			pNpcWnd->Set_NpcID(STAGE3_NPC);
 		else
 			pNpcWnd->Set_NpcID(STAGE_NPC_END);
 	}
 
-	if (pNpcWnd->Get_NpcID() == STAGE1_NPC)
+	if (pNpcWnd->Get_NpcID() == STAGE3_NPC)
 	{
 		if (pManagemnet->Key_Down(VK_LBUTTON) || pManagemnet->Key_Down(VK_SPACE))
 			pNpcWnd->Set_NpcID(STAGE_NPC_END);
@@ -80,7 +79,7 @@ _int CStage1_NPC::Update_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-_int CStage1_NPC::LateUpdate_GameObject(_float _fDeltaTime)
+_int CStage3_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagemnet = CManagement::Get_Instance();
 	if (nullptr == pManagemnet)
@@ -92,7 +91,7 @@ _int CStage1_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-HRESULT CStage1_NPC::Render_NoneAlpha()
+HRESULT CStage3_NPC::Render_NoneAlpha()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -115,16 +114,11 @@ HRESULT CStage1_NPC::Render_NoneAlpha()
 			return E_FAIL;
 	}
 
-	if (m_bRenderWnd)
-	{
-
-	}
-	
 
 	return S_OK;
 }
 
-HRESULT CStage1_NPC::Add_Component()
+HRESULT CStage3_NPC::Add_Component()
 {
 	for (_uint i = 0; i < PART_END; i++)
 	{
@@ -143,7 +137,7 @@ HRESULT CStage1_NPC::Add_Component()
 	return S_OK;
 }
 
-HRESULT CStage1_NPC::Add_Component_Transform()
+HRESULT CStage3_NPC::Add_Component_Transform()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc[PART_END];
 	ZeroMemory(tTransformDesc, sizeof(CTransform::TRANSFORM_DESC) * PART_END);
@@ -217,7 +211,7 @@ HRESULT CStage1_NPC::Add_Component_Transform()
 	return S_OK;
 }
 
-HRESULT CStage1_NPC::Add_Component_Texture()
+HRESULT CStage3_NPC::Add_Component_Texture()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (pManagement == nullptr)
@@ -251,34 +245,34 @@ HRESULT CStage1_NPC::Add_Component_Texture()
 	return S_OK;
 }
 
-CStage1_NPC * CStage1_NPC::Create(LPDIRECT3DDEVICE9 _pDevice)
+CStage3_NPC * CStage3_NPC::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
 	if (nullptr == _pDevice)
 		return nullptr;
 
-	CStage1_NPC* pInstance = new CStage1_NPC(_pDevice);
+	CStage3_NPC* pInstance = new CStage3_NPC(_pDevice);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{
-		PRINT_LOG(L"Failed To Create CStage1_NPC", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Create CStage3_NPC", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject * CStage1_NPC::Clone_GameObject(void * _pArg)
+CGameObject * CStage3_NPC::Clone_GameObject(void * _pArg)
 {
-	CStage1_NPC* pInstance = new CStage1_NPC(*this);
+	CStage3_NPC* pInstance = new CStage3_NPC(*this);
 	if (FAILED(pInstance->Setup_GameObject(_pArg)))
 	{
-		PRINT_LOG(L"Failed To Clone CStage1_NPC", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Clone CStage3_NPC", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CStage1_NPC::Free()
+void CStage3_NPC::Free()
 {
 	for (_uint i = 0; i < PART_END; ++i)
 	{
@@ -286,8 +280,6 @@ void CStage1_NPC::Free()
 		Safe_Release(m_pTransformCom[i]);
 		Safe_Release(m_pVIBufferCom[i]);
 	}
-
-	Safe_Release(m_pTextureWnd);
 
 	CGameObject::Free();
 }

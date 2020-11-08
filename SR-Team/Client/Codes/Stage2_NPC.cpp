@@ -1,13 +1,10 @@
 #include "stdafx.h"
-#include "..\Headers\Stage1_NPC.h"
-#include "Player.h"
-#include "NpcWnd.h"
+#include "..\Headers\Stage2_NPC.h"
 
 
 USING(Client)
 
-
-CStage1_NPC::CStage1_NPC(LPDIRECT3DDEVICE9 _pDevice)
+CStage2_NPC::CStage2_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
 	for (_uint iCnt = 0; iCnt < PART_END; ++iCnt)
@@ -18,69 +15,32 @@ CStage1_NPC::CStage1_NPC(LPDIRECT3DDEVICE9 _pDevice)
 	}
 }
 
-CStage1_NPC::CStage1_NPC(const CStage1_NPC & _rOther)
+CStage2_NPC::CStage2_NPC(const CStage2_NPC & _rOther)
 	: CGameObject(_rOther)
 {
 }
 
-HRESULT CStage1_NPC::Setup_GameObject_Prototype()
+HRESULT CStage2_NPC::Setup_GameObject_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CStage1_NPC::Setup_GameObject(void * _pArg)
+HRESULT CStage2_NPC::Setup_GameObject(void * _pArg)
 {
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 	return S_OK;
 }
 
-_int CStage1_NPC::Update_GameObject(_float _fDeltaTime)
+_int CStage2_NPC::Update_GameObject(_float _fDeltaTime)
 {
-	CManagement* pManagemnet = CManagement::Get_Instance();
-	if (nullptr == pManagemnet)
-		return GAMEOBJECT::ERR;
-
-	CPlayer* pPlayer = (CPlayer*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Player");
-	if (nullptr == pPlayer)
-		return GAMEOBJECT::ERR;
-
-	CNpcWnd* pNpcWnd = (CNpcWnd*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_MainQuest", 1);
-	if (nullptr == pNpcWnd)
-		return GAMEOBJECT::ERR;
-
-	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
-		pManagemnet->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
-	// 일정 거리 이하가 되어야 NPC에게 말 걸 수 있음
-	if (pManagemnet->Key_Pressing('G'))
-	{
-		_vec3 vPlayerPos = vPlayerTransform->Get_Desc().vPosition;
-		_vec3 vNpcPos = m_pTransformCom[0]->Get_Desc().vPosition;
-
-		_vec3 vMoveDir = vNpcPos - vPlayerPos;
-		_float fDist = D3DXVec3Length(&vMoveDir);
-
-		// NPC에게 말걸기
-		if (fDist <= 5.f)
-			pNpcWnd->Set_NpcID(STAGE1_NPC);
-		else
-			pNpcWnd->Set_NpcID(STAGE_NPC_END);
-	}
-
-	if (pNpcWnd->Get_NpcID() == STAGE1_NPC)
-	{
-		if (pManagemnet->Key_Down(VK_LBUTTON) || pManagemnet->Key_Down(VK_SPACE))
-			pNpcWnd->Set_NpcID(STAGE_NPC_END);
-	}
-
 	for (_uint i = 0; i < PART_END; i++)
 		m_pTransformCom[i]->Update_Transform();
 
 	return GAMEOBJECT::NOEVENT;
 }
 
-_int CStage1_NPC::LateUpdate_GameObject(_float _fDeltaTime)
+_int CStage2_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagemnet = CManagement::Get_Instance();
 	if (nullptr == pManagemnet)
@@ -92,7 +52,7 @@ _int CStage1_NPC::LateUpdate_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-HRESULT CStage1_NPC::Render_NoneAlpha()
+HRESULT CStage2_NPC::Render_NoneAlpha()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -115,16 +75,11 @@ HRESULT CStage1_NPC::Render_NoneAlpha()
 			return E_FAIL;
 	}
 
-	if (m_bRenderWnd)
-	{
-
-	}
-	
 
 	return S_OK;
 }
 
-HRESULT CStage1_NPC::Add_Component()
+HRESULT CStage2_NPC::Add_Component()
 {
 	for (_uint i = 0; i < PART_END; i++)
 	{
@@ -143,7 +98,7 @@ HRESULT CStage1_NPC::Add_Component()
 	return S_OK;
 }
 
-HRESULT CStage1_NPC::Add_Component_Transform()
+HRESULT CStage2_NPC::Add_Component_Transform()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc[PART_END];
 	ZeroMemory(tTransformDesc, sizeof(CTransform::TRANSFORM_DESC) * PART_END);
@@ -217,7 +172,7 @@ HRESULT CStage1_NPC::Add_Component_Transform()
 	return S_OK;
 }
 
-HRESULT CStage1_NPC::Add_Component_Texture()
+HRESULT CStage2_NPC::Add_Component_Texture()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (pManagement == nullptr)
@@ -251,34 +206,34 @@ HRESULT CStage1_NPC::Add_Component_Texture()
 	return S_OK;
 }
 
-CStage1_NPC * CStage1_NPC::Create(LPDIRECT3DDEVICE9 _pDevice)
+CStage2_NPC * CStage2_NPC::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
 	if (nullptr == _pDevice)
 		return nullptr;
 
-	CStage1_NPC* pInstance = new CStage1_NPC(_pDevice);
+	CStage2_NPC* pInstance = new CStage2_NPC(_pDevice);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{
-		PRINT_LOG(L"Failed To Create CStage1_NPC", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Create CStage2_NPC", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject * CStage1_NPC::Clone_GameObject(void * _pArg)
+CGameObject * CStage2_NPC::Clone_GameObject(void * _pArg)
 {
-	CStage1_NPC* pInstance = new CStage1_NPC(*this);
+	CStage2_NPC* pInstance = new CStage2_NPC(*this);
 	if (FAILED(pInstance->Setup_GameObject(_pArg)))
 	{
-		PRINT_LOG(L"Failed To Clone CStage1_NPC", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Clone CStage2_NPC", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CStage1_NPC::Free()
+void CStage2_NPC::Free()
 {
 	for (_uint i = 0; i < PART_END; ++i)
 	{
@@ -286,8 +241,6 @@ void CStage1_NPC::Free()
 		Safe_Release(m_pTransformCom[i]);
 		Safe_Release(m_pVIBufferCom[i]);
 	}
-
-	Safe_Release(m_pTextureWnd);
 
 	CGameObject::Free();
 }

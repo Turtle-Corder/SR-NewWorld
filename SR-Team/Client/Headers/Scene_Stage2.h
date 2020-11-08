@@ -39,6 +39,8 @@ public:
 
 	HRESULT Setup_Layer_Projectile();
 
+	HRESULT Setup_Layer_NPC(const wstring& LayerTag);
+
 	HRESULT Travel_NextLayers();
 
 

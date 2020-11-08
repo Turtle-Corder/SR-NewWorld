@@ -180,7 +180,7 @@ enum eITEM_SORT
 	CAP, NECKLACE1, TOP, PANTS, SUIT, STAFF1, 
 	EARRING, CLOAK, GLOVES, NECKLACE2, SHOES, STAFF2,
 	ITEMSORT_END, 
-	POTION, SKILL_ICON, QUEST1
+	POTION, SKILL_ICON, QUEST1, MAIN_QUEST
 };
 
 
@@ -279,6 +279,18 @@ enum eShopChatWnd_ID
 	SHOPCHAT_END,
 
 	SHOPCHAT_FINISH
+};
+
+
+//--------------------------------------------------
+// NPC ID
+//--------------------------------------------------
+enum eNormalNPC_ID
+{
+	STAGE1_NPC,
+	STAGE3_NPC,
+
+	STAGE_NPC_END
 };
 
 #endif
