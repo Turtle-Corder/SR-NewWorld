@@ -40,6 +40,8 @@ private:
 	CPreLoader*		m_pPreLoader = nullptr;
 	_bool			m_bReload = false;
 	eSCENE_ID		m_ePreLoadSceneID = SCENE_END;
+
+	_bool			m_bInit = false;
 };
 
 END

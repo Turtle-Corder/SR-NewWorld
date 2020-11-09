@@ -3,6 +3,7 @@
 #include "PreLoader.h"
 #include "Scene_Stage0.h"
 #include "CubeTerrain.h"
+#include "Sound_Manager.h"
 #include "..\Headers\Scene_Stage3.h"
 
 USING(Client)
@@ -50,6 +51,13 @@ _int CScene_Stage3::Update_Scene(_float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return -1;
+
+	if (!m_bInit)
+	{
+		CSoundManager::Get_Instance()->StopSound(CSoundManager::BGM);
+		CSoundManager::Get_Instance()->PlayBGM(L"bgm_volcanic.mp3");
+		m_bInit = true;
+	}
 
 	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
 	{

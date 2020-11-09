@@ -3,6 +3,7 @@
 #include "CubeTerrain.h"
 #include "Player.h"
 #include "Scene_Stage0.h"
+#include "Sound_Manager.h"
 #include "..\Headers\Scene_Stage1.h"
 
 USING(Client)
@@ -46,6 +47,13 @@ _int CScene_Stage1::Update_Scene(_float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return -1;
+
+	if (!m_bInit)
+	{
+		CSoundManager::Get_Instance()->StopSound(CSoundManager::BGM);
+		CSoundManager::Get_Instance()->PlayBGM(L"bgm_room.mp3");
+		m_bInit = true;
+	}
 
 	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
 	{
