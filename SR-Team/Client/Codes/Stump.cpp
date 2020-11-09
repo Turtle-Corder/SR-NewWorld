@@ -398,7 +398,7 @@ HRESULT CStump::Update_AI()
 		// 추적 가능한 거리보다 멀리 있으면 가만히 있는다.
 		//--------------------------------------------------
 		_float fDistance = D3DXVec3Length(&m_vMoveDirection);
-		if (fDistance > m_fFollowDistance)
+		if (fDistance > m_fFollowDistance) //10.f
 		{
 			m_eCurState = IDLE;
 			return S_OK;
@@ -407,7 +407,7 @@ HRESULT CStump::Update_AI()
 		//--------------------------------------------------
 		// 공격 범위 안에 있으므로 공격 한다.
 		//--------------------------------------------------
-		if (m_bCanAttack && fDistance < m_fAttackDistance)
+		if (m_bCanAttack && fDistance < m_fAttackDistance) //5.f
 		{
 			if (m_bCanAttack)
 			{
@@ -420,7 +420,7 @@ HRESULT CStump::Update_AI()
 			return S_OK;
 		}
 
-		if (!m_bCanAttack && fDistance < m_fFollowLimitNear)
+		if (!m_bCanAttack && fDistance < m_fFollowLimitNear) //2.f
 		{
 			m_eCurState = IDLE;
 			return S_OK;
