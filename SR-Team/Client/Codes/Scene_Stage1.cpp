@@ -59,6 +59,15 @@ _int CScene_Stage1::Update_Scene(_float _fDeltaTime)
 		if (FAILED(Respawn_Palyer()))
 			return GAMEOBJECT::WARN;
 
+		_int iCnt = 0;
+		while (true)
+		{
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_CubeTerrain", iCnt++);
+			if (nullptr == pCubeTerrain)	break;
+
+			pCubeTerrain->Set_Active();
+		}
+
 		m_bInit = true;
 	}
 
@@ -75,15 +84,6 @@ _int CScene_Stage1::Update_Scene(_float _fDeltaTime)
 		{
 			PRINT_LOG(L"Failed To Travel Layers in Forest", LOG::CLIENT);
 			return -1;
-		}
-
-		_int iCnt = 0;
-		while (true)
-		{
-			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_CubeTerrain", iCnt++);
-			if (nullptr == pCubeTerrain)	break;
-
-			pCubeTerrain->Set_Active();
 		}
 
 		// 숲 -> 마을 FOREST -> TOWN 단방향

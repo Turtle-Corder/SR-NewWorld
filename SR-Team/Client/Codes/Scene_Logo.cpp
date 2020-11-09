@@ -39,15 +39,6 @@ _int CScene_Logo::Update_Scene(_float _fDeltaTime)
 			return -1;
 		}
 
-		_int iCnt = 0;
-		while (true)
-		{
-			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_CubeTerrain", iCnt++);
-			if (nullptr == pCubeTerrain)	break;
-
-			pCubeTerrain->Set_Active();
-		}
-
 		if (FAILED(pManagement->Change_CurrentScene(SCENE_ROOM, CScene_Room::Create(m_pDevice))))
 		{
 			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);

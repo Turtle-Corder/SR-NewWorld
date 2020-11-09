@@ -86,6 +86,15 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 		if (FAILED(Respawn_Palyer()))
 			return GAMEOBJECT::WARN;
 
+		_int iCnt = 0;
+		while (true)
+		{
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_CubeTerrain", iCnt++);
+			if (nullptr == pCubeTerrain)	break;
+
+			pCubeTerrain->Set_Active();
+		}
+
 		m_bInit = true;
 	}
 
@@ -100,15 +109,6 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 		{
 			PRINT_LOG(L"Failed To Travel Layers in Town", LOG::CLIENT);
 			return -1;
-		}
-
-		_int iCnt = 0;
-		while (true)
-		{
-			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject((_uint)m_ePreLoadSceneID, L"Layer_CubeTerrain", iCnt++);
-			if (nullptr == pCubeTerrain)	break;
-
-			pCubeTerrain->Set_Active();
 		}
 
 		//--------------------------------------------------
