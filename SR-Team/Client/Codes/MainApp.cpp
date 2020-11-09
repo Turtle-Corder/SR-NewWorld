@@ -71,6 +71,7 @@
 #include "NpcWnd.h"
 #include "IceLandQuest.h"
 #include "MeteorPiece.h"
+#include "DamageFloater.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -441,6 +442,16 @@ HRESULT CMainApp::Setup_HK()
 
 #pragma region Component_Texture_Terrain
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Terrain", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/Terrain/Terrain%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_DamageFloat
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_DamageFloat", CDamageFloat::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Damage
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Textrue_Damage", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/2DResource/Damage/damage%d.png", 10))))
 		return E_FAIL;
 #pragma endregion
 
