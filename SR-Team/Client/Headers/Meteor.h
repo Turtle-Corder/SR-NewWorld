@@ -28,7 +28,7 @@ private:
 	HRESULT Add_Component();
 	HRESULT Movement(_float _fDeltaTime);
 	HRESULT FallDown_Meteor(_float _fDeltaTime);
-
+	bool	Make_Pieces();
 public:
 	static CMeteor* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;

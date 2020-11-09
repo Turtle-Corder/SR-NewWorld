@@ -22,9 +22,6 @@
     <Filter Include="01.Scene\99.PreLoader">
       <UniqueIdentifier>{572fc3b8-5f43-4a20-b162-f212e0c81994}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Scene\06.Scene_Stage5">
-      <UniqueIdentifier>{60fbce97-ae77-446a-a86e-098f9246c8fe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Scene\04.Scene_Stage3">
       <UniqueIdentifier>{c2e98aba-ee11-42ae-b3b5-373b0b03ec9d}</UniqueIdentifier>
     </Filter>
@@ -355,6 +352,18 @@
     <Filter Include="02.GameObject\11.Instant_Impact\04.Stump_impact">
       <UniqueIdentifier>{27e1d523-bbf9-4a09-9874-859d61b87332}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces">
+      <UniqueIdentifier>{4590d8f0-d07c-4124-8df2-8786b1c64568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Manager\03.SoundManager">
+      <UniqueIdentifier>{b9bb5755-1e2e-468b-a489-f8eabc2ce1ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\17.RandomBox">
+      <UniqueIdentifier>{2c507375-32f8-47f9-a1de-12cc0e2a5155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Manager\04.RandomBoxManager">
+      <UniqueIdentifier>{2c234526-a32e-44be-92ec-53e773b62855}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -669,6 +678,18 @@
     <ClInclude Include="..\Headers\Stump_Impact.h">
       <Filter>02.GameObject\11.Instant_Impact\04.Stump_impact</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MeteorPiece.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Sound_Manager.h">
+      <Filter>04.Manager\03.SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\RandomBox.h">
+      <Filter>02.GameObject\17.RandomBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\RandomBoxManager.h">
+      <Filter>04.Manager\04.RandomBoxManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -967,6 +988,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stump_Impact.cpp">
       <Filter>02.GameObject\11.Instant_Impact\04.Stump_impact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeteorPiece.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Sound_Manager.cpp">
+      <Filter>04.Manager\03.SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RandomBox.cpp">
+      <Filter>02.GameObject\17.RandomBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RandomBoxManager.cpp">
+      <Filter>04.Manager\04.RandomBoxManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -60,7 +60,10 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 			if (!m_bClear)
 				m_eSituation = FLOWER_ANSWER1;
 			else
+			{
 				m_eSituation = FLOWER_QUEST_END;
+				m_bStartQuest = false;
+			}
 		}
 		if (pManagement->Key_Pressing(VK_ESCAPE))
 		{
@@ -87,14 +90,20 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 	case FLOWER_REQUIRE_QUEST:
 		// 수락
 		if (pManagement->Key_Pressing(VK_RETURN))
+		{
 			m_eSituation = FLOWER_ON_THE_QUEST;	// 퀘스트 하는중
-		else if (pManagement->Key_Down(VK_ESCAPE))
+			m_bStartQuest = false;
+		}
+		else if (pManagement->Key_Pressing(VK_ESCAPE))
 			m_eSituation = FLOWER_REJECT;
 		break;
 
 	case FLOWER_REJECT:
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
+		{
 			m_eSituation = FLOWER_QUEST_END;
+			m_bStartQuest = false;
+		}
 		break;
 
 	//case FLOWER_QUEST_CLEAR:
@@ -114,7 +123,7 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 			pInven->Get_RewardItem(L"RewardPotion");
 			pInven->Get_RewardItem(L"RewardPotion");
 
-			pInven->Get_RewardItem(L"GolemCore_BrightBlue");
+			pInven->Get_RewardItem(L"GolemCore_Blue");
 		}
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
 		{
@@ -151,12 +160,18 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 
 	case FLOWER_QUEST_NOCLEAR:
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
+		{
 			m_eSituation = FLOWER_ON_THE_QUEST;
+			m_bStartQuest = false;
+		}
 		break;
 
 	case FLOWER_FINISH:
 		if (m_bStartQuest)
+		{
 			m_eSituation = FLOWER_GREETINGS;
+			//m_bStartQuest = false;
+		}
 		break;
 
 	default:

@@ -49,6 +49,8 @@ private:
 	CPreLoader* m_pPreLoader = nullptr;
 
 	_bool		m_bBossInit = false;
+
+	_bool		m_bInit = false;
 };
 
 END

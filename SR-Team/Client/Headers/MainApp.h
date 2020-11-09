@@ -36,7 +36,7 @@ public:
 	static CMainApp* Create();
 	virtual void Free() override;
 	
-private:;
+private:
 	CManagement*		m_pManagement	= nullptr;
 	LPDIRECT3DDEVICE9	m_pDevice		= nullptr;
 	LPD3DXSPRITE		m_pSprite		= nullptr;
