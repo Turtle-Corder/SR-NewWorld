@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "MainCamera.h"
 #include "..\Headers\SkillSlot_Meteor.h"
 
 USING(Client)
@@ -101,6 +102,11 @@ _bool CSkillSlot_Meteor::Actual_UseSkill(void* _pArg)
 	// TODO : 메테오 소환, 5개 한방에 소환
 	//--------------------------------------------------
 	_vec3 vBaseSpawnPos = pImpact->vPosition;
+
+
+	CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+
+	pMainCamera->Set_Camera_Wigging(0.7f, 100.f, 1.5f, CMainCamera::WIG_TYPE::DAMPED);
 
 	for (_uint iCnt = 0; iCnt < 5; ++iCnt)
 	{
