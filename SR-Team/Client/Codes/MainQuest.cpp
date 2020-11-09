@@ -44,8 +44,11 @@ _int CMainQuest::Update_GameObject(_float _fDeltaTime)
 	if (pInven == nullptr)
 		return E_FAIL;
 
-	if (FAILED(Check_GolemCore_Count()))
-		return GAMEOBJECT::WARN;
+	if (!m_bClear)
+	{
+		if (FAILED(Check_GolemCore_Count()))
+			return GAMEOBJECT::WARN;
+	}
 
 	switch (m_eSituation)
 	{
@@ -55,7 +58,10 @@ _int CMainQuest::Update_GameObject(_float _fDeltaTime)
 			if (!m_bClear)
 				m_eSituation = MAINQUEST_ASK1;
 			else
+			{
 				m_eSituation = MAINQUEST_END;
+				m_bStartQuest = false;
+			}
 		}
 		if (pManagement->Key_Pressing(VK_ESCAPE))
 		{
@@ -110,7 +116,11 @@ _int CMainQuest::Update_GameObject(_float _fDeltaTime)
 
 	case MAINQUEST_REWARD:
 		// 보상 추가해야함
-		
+		if (!m_bGetReward)
+		{
+			m_bGetReward = true;
+			pInven->Get_RewardItem(L"MagicalStaff");
+		}
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
 		{
 			m_eSituation = MAINQUEST_FINISH;
@@ -124,15 +134,18 @@ _int CMainQuest::Update_GameObject(_float _fDeltaTime)
 		break;
 
 	case MAINQUEST_ON_THE_QUEST:
-		if (4 == pInven->Get_ItemCount(L"Golem"))
+		if (m_bClear)
 			m_bRenderClear = true;
 		if (m_bStartQuest)
 		{
-			if (4 == pInven->Get_ItemCount(L"Golem"))
+			if (m_bClear)
 			{
 				m_bClear = true;
 				m_eSituation = MAINQUEST_REWARD;
-				pInven->Delete_Item(L"Golem");
+				pInven->Delete_Item(L"GolemCore_Red");
+				pInven->Delete_Item(L"GolemCore_Green");
+				pInven->Delete_Item(L"GolemCore_Puple");
+				pInven->Delete_Item(L"GolemCore_Blue");
 				m_bRenderClear = false;
 			}
 			else
@@ -145,12 +158,18 @@ _int CMainQuest::Update_GameObject(_float _fDeltaTime)
 
 	case MAINQUEST_NO_CLEAR:
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
+		{
 			m_eSituation = MAINQUEST_ON_THE_QUEST;
+			m_bStartQuest = false;
+		}
 		break;
 
 	case MAINQUEST_FINISH:
 		if (m_bStartQuest)
+		{
 			m_eSituation = MAINQUEST_GREETINGS;
+			m_bStartQuest = false;
+		}
 		break;
 
 	default:
@@ -241,11 +260,21 @@ HRESULT CMainQuest::Render_HelpWnd()
 			else
 				StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"0");
 
-			D3DXMatrixScaling(&matScale, 2.f, 2.f, 0.f);
+			D3DXMatrixScaling(&matScale, 1.8f, 1.8f, 0.f);
 			if (iIndex == MAIN_STATE_NOCLEAR)
-				D3DXMatrixTranslation(&matTrans, 1722.f, 371.f + (i * 25.f), 0.f);
+			{
+				if (i != PUPLE)
+					D3DXMatrixTranslation(&matTrans, 1715.f, 377.f + (i * 27.f), 0.f);
+				else
+					D3DXMatrixTranslation(&matTrans, 1724.f, 377.f + (i * 27.f), 0.f);
+			}
 			else
-				D3DXMatrixTranslation(&matTrans, 1722.f, 341.f + (i * 25.f), 0.f);
+			{
+				if (i != PUPLE)
+					D3DXMatrixTranslation(&matTrans, 1715.f, 380.f + (i * 27.f), 0.f);
+				else
+					D3DXMatrixTranslation(&matTrans, 1724.f, 380.f + (i * 27.f), 0.f);
+			}
 			matWorld = matScale * matTrans;
 
 			m_pSprite->SetTransform(&matWorld);
@@ -329,18 +358,23 @@ HRESULT CMainQuest::Check_GolemCore_Count()
 		}
 		else if (i == BLUE)
 		{
+			if (1 == pInven->Get_ItemCount(L"GolemCore_Puple"))
+				m_bGetGolemCore[i] = true;
+			else if (0 == pInven->Get_ItemCount(L"GolemCore_Puple"))
+				m_bGetGolemCore[i] = false;
+		}
+		else if (i == PUPLE)
+		{
 			if (1 == pInven->Get_ItemCount(L"GolemCore_Blue"))
 				m_bGetGolemCore[i] = true;
 			else if (0 == pInven->Get_ItemCount(L"GolemCore_Blue"))
 				m_bGetGolemCore[i] = false;
 		}
-		else if (i == BRIGHT_BLUE)
-		{
-			if (1 == pInven->Get_ItemCount(L"GolemCore_BrightBlue"))
-				m_bGetGolemCore[i] = true;
-			else if (0 == pInven->Get_ItemCount(L"GolemCore_BrightBlue"))
-				m_bGetGolemCore[i] = false;
-		}
+
+		if (m_bGetGolemCore[i])
+			m_bClear = true;
+		else
+			m_bClear = false;
 	}
 
 	return S_OK;

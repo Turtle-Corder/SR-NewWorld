@@ -22,10 +22,11 @@ public:
 
 public:
 	_bool Get_StartQuest() { return m_bStartQuest; }
-	eIceQuest_ID Get_FlowerQuestID() { return m_eSituation; }
+	eIceQuest_ID Get_SituationID() { return m_eSituation; }
 
 public:
 	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
+	void Dead_Monster() { ++m_iMonsetDeadCnt; }
 
 public:
 	// CUIObject을(를) 통해 상속됨
@@ -61,6 +62,9 @@ private:
 
 	// 퀘스트 시작할지
 	_bool				m_bStartQuest = false;
+
+	// 몬스터 얼마나 죽였는지
+	_int			m_iMonsetDeadCnt = 0;
 };
 
 END

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Status.h"
 #include "DamageInfo.h"
+#include "IceLandQuest.h"
 #include "..\Headers\Yeti.h"
 
 USING(Client)
@@ -42,7 +43,20 @@ HRESULT CYeti::Setup_GameObject(void * pArg)
 int CYeti::Update_GameObject(float _fDeltaTime)
 {
 	if (m_bDead)
+	{
+		// 처치한 몬스터 수 증가
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
+			return E_FAIL;
+		CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainQuest", 0);
+		if (pIceLandQuest == nullptr)
+			return E_FAIL;
+
+		if (pIceLandQuest->Get_SituationID() == ICEQUEST_ON_THE_QUEST && m_bDead)
+			pIceLandQuest->Dead_Monster();
+
 		return GAMEOBJECT::DEAD;
+	}
 
 	if (!m_bActive)
 		return GAMEOBJECT::NOEVENT;

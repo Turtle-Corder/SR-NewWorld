@@ -2,7 +2,7 @@
 #include "..\Headers\Stage3_NPC.h"
 #include "Player.h"
 #include "NpcWnd.h"
-
+#include "Inventory.h"
 
 USING(Client)
 
@@ -46,6 +46,10 @@ _int CStage3_NPC::Update_GameObject(_float _fDeltaTime)
 
 	CNpcWnd* pNpcWnd = (CNpcWnd*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_MainQuest", 1);
 	if (nullptr == pNpcWnd)
+		return GAMEOBJECT::ERR;
+
+	CInventory* pInven = (CInventory*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_Inventory");
+	if (nullptr == pInven)
 		return GAMEOBJECT::ERR;
 
 	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
