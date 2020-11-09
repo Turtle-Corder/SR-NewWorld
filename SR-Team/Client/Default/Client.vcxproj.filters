@@ -355,6 +355,15 @@
     <Filter Include="04.Manager\03.SoundManager">
       <UniqueIdentifier>{b9bb5755-1e2e-468b-a489-f8eabc2ce1ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\07.IceBlast\02.IceBlastPieces">
+      <UniqueIdentifier>{8faffbca-08fd-478e-a766-3137ee59ff02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\05.IceSpear\00.IceSpear">
+      <UniqueIdentifier>{30342d1c-1bf3-4339-93e6-b5da292190d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\05.IceSpear\01.IceDust">
+      <UniqueIdentifier>{16fa8d64-dd6a-4780-9ab1-1e0516a344b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -603,9 +612,6 @@
     <ClInclude Include="..\Headers\Shop_NPC.h">
       <Filter>02.GameObject\16. NPC\01. Shop</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\IceSpear.h">
-      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Thunder.h">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder</Filter>
     </ClInclude>
@@ -671,6 +677,15 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Sound_Manager.h">
       <Filter>04.Manager\03.SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IceBlastPiece.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\02.IceBlastPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IceSpear.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear\00.IceSpear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IceDust.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear\01.IceDust</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -905,9 +920,6 @@
     <ClCompile Include="..\Codes\Shop_NPC.cpp">
       <Filter>02.GameObject\16. NPC\01. Shop</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\IceSpear.cpp">
-      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Thunder.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder</Filter>
     </ClCompile>
@@ -973,6 +985,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Sound_Manager.cpp">
       <Filter>04.Manager\03.SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceBlastPiece.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\02.IceBlastPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceSpear.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear\00.IceSpear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceDust.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear\01.IceDust</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

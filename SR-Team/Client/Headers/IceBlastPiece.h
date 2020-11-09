@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __ICESPEAR_H__
-#define __ICESPEAR_H__
+#ifndef __ICEPIECE_H__
+#define __ICEPIECE_H__
 
 #include"GameObject.h"
 
@@ -10,12 +10,12 @@ BEGIN(Client)
 class CStatus;
 class CDamageInfo;
 
-class CIceSpear final : public CGameObject
+class CIceBlastPiece final : public CGameObject
 {
 private:
-	explicit CIceSpear(LPDIRECT3DDEVICE9 pDevice);
-	explicit CIceSpear(const CIceSpear& other);
-	virtual ~CIceSpear() = default;
+	explicit CIceBlastPiece(LPDIRECT3DDEVICE9 pDevice);
+	explicit CIceBlastPiece(const CIceBlastPiece& other);
+	virtual ~CIceBlastPiece() = default;
 
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
@@ -27,33 +27,26 @@ public:
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(_float _fDeltaTime);
-	HRESULT Spwan_Dust();
-	void Update_InitDelay(_float _fDeltaTime);
+	HRESULT ParticleMove(_float _fDeltaTime);
 
 public:
-	static CIceSpear* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CIceBlastPiece* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
 	virtual void Free() override;
-	virtual HRESULT Take_Damage(const CComponent* _pDamageComp);
 
 
 private:
 	CVIBuffer*			m_pVIBufferCom = nullptr;
 	CTransform*			m_pTransformCom = nullptr;
 	CTexture*			m_pTextureCom = nullptr;
-	CSphereCollider*	m_pColliderCom = nullptr;
-	CStatus*			m_pStatusComp = nullptr;
-	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
+	_float FlyingTime = 2.f;
 	_float m_fDeadTime = 0.f;
-	_float m_fMoveSpeed = -0.8f;
 	_vec3 m_vMoveDir = {};
-	_float m_fInitTimer = 0.f;
-	_float m_fInitDelay = 0.f;
 
 	INSTANTIMPACT m_tInstant = {};
 };
 
 END
 
-#endif // !__METEOR_H__
+#endif // !__ICEPIECE_H__

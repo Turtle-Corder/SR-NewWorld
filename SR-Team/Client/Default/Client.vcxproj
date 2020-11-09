@@ -167,7 +167,9 @@
     <ClInclude Include="..\Headers\FireCrystal.h" />
     <ClInclude Include="..\Headers\FlowerQuest.h" />
     <ClInclude Include="..\Headers\IceBlast.h" />
+    <ClInclude Include="..\Headers\IceBlastPiece.h" />
     <ClInclude Include="..\Headers\IceCrystal.h" />
+    <ClInclude Include="..\Headers\IceDust.h" />
     <ClInclude Include="..\Headers\IceLandQuest.h" />
     <ClInclude Include="..\Headers\IceSpear.h" />
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
@@ -272,7 +274,9 @@
     <ClCompile Include="..\Codes\FireCrystal.cpp" />
     <ClCompile Include="..\Codes\FlowerQuest.cpp" />
     <ClCompile Include="..\Codes\IceBlast.cpp" />
+    <ClCompile Include="..\Codes\IceBlastPiece.cpp" />
     <ClCompile Include="..\Codes\IceCrystal.cpp" />
+    <ClCompile Include="..\Codes\IceDust.cpp" />
     <ClCompile Include="..\Codes\IceLandQuest.cpp" />
     <ClCompile Include="..\Codes\IceSpear.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />

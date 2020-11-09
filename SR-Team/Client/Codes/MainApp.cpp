@@ -41,6 +41,8 @@
 #include "Explosion.h"
 #include "Thunder.h"
 #include "ThunderBox.h"
+#include "IceBlastPiece.h"
+#include "IceDust.h"
 
 #include "SkillSlot_Meteor.h"
 #include "SkillSlot_IceSpear.h"
@@ -468,8 +470,15 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_IcePiece
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IcePiece", CIceBlastPiece::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
-
+#pragma region GameObject_IceDust
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceDust", CIceDust::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region GameObject_IceSpear
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceSpear", CIceSpear::Create(m_pDevice))))
