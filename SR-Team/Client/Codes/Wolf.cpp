@@ -40,6 +40,8 @@ HRESULT CWolf::Setup_GameObject(void * _pArg)
 	m_tImpact.pAttacker = this;
 	m_tImpact.pStatusComp = m_pStatusCom;
 
+	Set_Active();
+
 	return S_OK;
 }
 
@@ -644,6 +646,7 @@ HRESULT CWolf::Update_Anim_Attack1(_float _fDeltaTime)
 
 		if (2 == m_iAnimStep)
 		{
+			Spawn_Impact();
 			m_eCurState = IDLE;
 			Spawn_Impact();
 			return S_OK;
@@ -717,12 +720,24 @@ HRESULT CWolf::Spawn_Impact()
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
+	
+	INSTANTIMPACT tImpact;
+	tImpact.pAttacker = this;
+	tImpact.pStatusComp = m_pStatusCom;
+	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[WOLF_BASE]->Get_Look());
+	tImpact.vPosition = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
 
-	m_tImpact.vPosition = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition;
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Wolf_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &m_tImpact)))/*여기 StartPos*/
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Wolf_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))/*여기 StartPos*/
 		return E_FAIL;
 
 	m_bCanAttack = false;
+
 	return S_OK;
+}
+
+void CWolf::Set_Active()
+{
+	m_bActive = true;
+	m_eCurState = IDLE;
 }
 

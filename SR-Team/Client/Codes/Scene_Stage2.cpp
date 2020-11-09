@@ -191,7 +191,7 @@ HRESULT CScene_Stage2::Setup_Layer_Monster(const wstring & LayerTag)
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
-	vSpawnPos = { 12.48f, 0.f, 33.08f };
+	vSpawnPos = { /*12.48f, 0.f, 33.08f*/7.68f, 0.f, 44.88f };
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;

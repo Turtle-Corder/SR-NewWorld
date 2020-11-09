@@ -382,6 +382,7 @@ HRESULT CSnail::Attack(_float _fDeltaTime)
 			}
 			else if (vLength <= 0.2f)
 			{
+				Spawn_InstantImpact(L"Layer_MonsterAtk");
 				m_eCurState = ATTACK_END;
 
 			}
@@ -422,6 +423,8 @@ HRESULT CSnail::Spawn_InstantImpact(const wstring & LayerTag)
 	tImpact.pStatusComp = m_pStatusCom;
 	_vec3 BodyPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
 	tImpact.vPosition = BodyPos;
+	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[SNAIL_BODY]->Get_Look());
+	tImpact.vPosition = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
 		return E_FAIL;

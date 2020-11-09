@@ -186,7 +186,7 @@ HRESULT CScene_Stage3::Setup_Layer_Golem(const wstring & LayerTag)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	_vec3 vSpawnPos = { 0.f, 0.f, 0.f };
+	_vec3 vSpawnPos = { 20.f, 0.f, 20.f };
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_VOLCANIC, L"GameObject_Golem", SCENE_VOLCANIC, LayerTag, &vSpawnPos)))
 		return E_FAIL;

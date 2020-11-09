@@ -158,19 +158,27 @@ void CStump::Set_Active()
 
 HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 {
-	m_bDead = true;
+	if (!m_bCanHurt && !_pDamageComp)
+		return S_OK;
 
-	DROPBOX_INFO tBoxInfo;
-	tBoxInfo.vPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
-	tBoxInfo.iItemNo = 1;
-	tBoxInfo.bGone = false;
+	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
 
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
+	if (m_pStatusCom->Get_Status().iHp <= 0)
+	{
+		DROPBOX_INFO tBoxInfo;
+		tBoxInfo.vPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
+		tBoxInfo.iItemNo = 1;
+		tBoxInfo.bGone = false;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_DropItem", &tBoxInfo)))
-		return E_FAIL;
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
+			return E_FAIL;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_DropItem", &tBoxInfo)))
+			return E_FAIL;
+
+		m_bDead = true;
+	}
 
 	return S_OK;
 }
@@ -246,17 +254,17 @@ HRESULT CStump::Add_Component()
 		}
 		else if (iCnt == STUMP_LH)
 		{
-			tTransformDesc[STUMP_LH].vPosition = { 0.f , -3.1f, 0.f };
+			tTransformDesc[STUMP_LH].vPosition = { 0.f , -2.5f, 0.f };
 			tTransformDesc[STUMP_LH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LH].vScale = { 1.5f, 2.5f, 1.5f };
+			tTransformDesc[STUMP_LH].vScale = { 1.5f, 2.f, 1.5f };
 		}
 		else if (iCnt == STUMP_RH)
 		{
-			tTransformDesc[STUMP_RH].vPosition = { 0.f , -3.1f, 0.f };
+			tTransformDesc[STUMP_RH].vPosition = { 0.f , -2.5f, 0.f };
 			tTransformDesc[STUMP_RH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_RH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_RH].vScale = { 1.5f, 2.5f, 1.5f };
+			tTransformDesc[STUMP_RH].vScale = { 1.5f, 2.f, 1.5f };
 		}
 
 		else if (iCnt == STUMP_LEG1)
@@ -339,12 +347,14 @@ HRESULT CStump::Update_State(_float _fDeltaTime)
 		case STATE::ATTACK:
 		{
 			Anim_Reset_Move();
+			m_fAttackDelay = 2.8f;
 			m_bSpawnImpact = true;
 		}
 			break;
 		case STATE::ATTACK1:
 		{
 			Anim_Reset_Move();
+			m_fAttackDelay = 3.3f;
 			m_bSpawnImpact = true;
 		}
 			break;
@@ -397,8 +407,8 @@ HRESULT CStump::Update_AI()
 		//--------------------------------------------------
 		// 추적 가능한 거리보다 멀리 있으면 가만히 있는다.
 		//--------------------------------------------------
-		_float fDistance = D3DXVec3Length(&m_vMoveDirection);
-		if (fDistance > m_fFollowDistance) //10.f
+		m_fDistance = D3DXVec3Length(&m_vMoveDirection);
+		if (m_fDistance > m_fFollowDistance) //10.f
 		{
 			m_eCurState = IDLE;
 			return S_OK;
@@ -407,20 +417,20 @@ HRESULT CStump::Update_AI()
 		//--------------------------------------------------
 		// 공격 범위 안에 있으므로 공격 한다.
 		//--------------------------------------------------
-		if (m_bCanAttack && fDistance < m_fAttackDistance) //5.f
+		if (m_bCanAttack && m_fDistance < m_fAttackDistance) //5.f
 		{
 			if (m_bCanAttack)
 			{
 				_uint iRand = rand() % 100;
-					if (iRand < 45)	m_eCurState = ATTACK1;
-					else if (iRand < 75)m_eCurState = ATTACK;
+					if (iRand < 50)	m_eCurState = ATTACK1;
+					else if (iRand < 100)m_eCurState = ATTACK;
 								
 				return S_OK;
 			}
 			return S_OK;
 		}
 
-		if (!m_bCanAttack && fDistance < m_fFollowLimitNear) //2.f
+		if (!m_bCanAttack && m_fDistance < m_fFollowLimitNear) //2.f
 		{
 			m_eCurState = IDLE;
 			return S_OK;
@@ -459,44 +469,46 @@ HRESULT CStump::IsOnTerrain()
 
 HRESULT CStump::Update_Move(_float _fDeltaTime)
 {
-	if (MOVE != m_eCurState)
-		return S_OK;
-
-	//--------------------------------------------------
-	// 추적 가능한 거리보다 가까이는 있는 경우 이므로 
-	//  추적(MOVE)을 하던 공격(ATTACK)을 하던 방향을 회전시킨다.
-	//--------------------------------------------------
-	_vec3 vLook = m_pTransformCom[STUMP_BASE]->Get_Look();
-	D3DXVec3Normalize(&vLook, &vLook);
-	D3DXVec3Normalize(&m_vMoveDirection, &m_vMoveDirection);
-
-	_float fDot = D3DXVec3Dot(&vLook, &m_vMoveDirection);
-	_float fRad = (_float)acos(fDot);
-
-	_vec3 vMonLeft = {};
-	D3DXVec3Cross(&vMonLeft, &vLook, &_vec3(0.f, 1.f, 0.f));
-
-
-	//--------------------------------------------------
-	// 회전
-	//--------------------------------------------------
-	_float fLimit = D3DXVec3Dot(&vMonLeft, &m_vMoveDirection);
-	if (fabsf(fLimit) > 0.2f)
+	if (MOVE == m_eCurState || m_fDistance < m_fAttackDistance)
 	{
-		if (fLimit > 0)
-			m_pTransformCom[STUMP_BASE]->Turn(CTransform::AXIS_Y, -_fDeltaTime * fRad);
-		else
-			m_pTransformCom[STUMP_BASE]->Turn(CTransform::AXIS_Y, _fDeltaTime * fRad);
+		//--------------------------------------------------
+		// 추적 가능한 거리보다 가까이는 있는 경우 이므로 
+		//  추적(MOVE)을 하던 공격(ATTACK)을 하던 방향을 회전시킨다.
+		//--------------------------------------------------
+		_vec3 vLook = m_pTransformCom[STUMP_BASE]->Get_Look();
+		D3DXVec3Normalize(&vLook, &vLook);
+		D3DXVec3Normalize(&m_vMoveDirection, &m_vMoveDirection);
+
+		_float fDot = D3DXVec3Dot(&vLook, &m_vMoveDirection);
+		_float fRad = (_float)acos(fDot);
+
+		_vec3 vMonLeft = {};
+		D3DXVec3Cross(&vMonLeft, &vLook, &_vec3(0.f, 1.f, 0.f));
+
+
+		//--------------------------------------------------
+		// 회전
+		//--------------------------------------------------
+		_float fLimit = D3DXVec3Dot(&vMonLeft, &m_vMoveDirection);
+		if (fabsf(fLimit) > 0.2f)
+		{
+			if (fLimit > 0)
+				m_pTransformCom[STUMP_BASE]->Turn(CTransform::AXIS_Y, -_fDeltaTime * fRad);
+			else
+				m_pTransformCom[STUMP_BASE]->Turn(CTransform::AXIS_Y, _fDeltaTime * fRad);
+		}
 	}
-
-
 	//--------------------------------------------------
 	// 이동
 	//--------------------------------------------------
-	_vec3 vAddPos = m_vMoveDirection * (_fDeltaTime + _fDeltaTime);
-	m_pTransformCom[STUMP_BASE]->Set_Position(m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition + vAddPos);
-
-	return S_OK;
+	if (MOVE == m_eCurState)
+	{
+		_vec3 vAddPos = m_vMoveDirection * (_fDeltaTime + _fDeltaTime);
+		m_pTransformCom[STUMP_BASE]->Set_Position(m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition + vAddPos);
+		return S_OK;
+	}
+	else
+		return S_OK;
 }
 
 HRESULT CStump::Update_Transform()
@@ -587,6 +599,11 @@ HRESULT CStump::Update_Animation_Attack(_float _fDeltaTime)
 		m_fAnimationTimer = 0.f;
 		++m_iAnimationStep;// = !m_iAnimationStep;
 		//Anim_Reset_Attack();
+		if (m_iAnimationStep == 0)
+		{
+			m_fAttackDelay = 2.8f;
+		}
+
 
 		if (m_iAnimationStep == 4)
 		{
@@ -597,6 +614,8 @@ HRESULT CStump::Update_Animation_Attack(_float _fDeltaTime)
 					if (FAILED(Spawn_Acorn(L"Layer_Effect", iCnt)))
 						return E_FAIL;
 				}
+
+				Spawn_StumpImpact(L"Layer_MonsterAtk");
 
 				CManagement* pManagement = CManagement::Get_Instance();
 				if (nullptr == pManagement)
@@ -620,12 +639,12 @@ HRESULT CStump::Update_Animation_Attack(_float _fDeltaTime)
 	if (m_iAnimationStep <= 2)
 	{
 		m_fAnimationSpeed -= _fDeltaTime;
-		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime * 1.5f * m_fAnimationSpeed);
-		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime* 1.5f * m_fAnimationSpeed);
+		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime * 1.2f * m_fAnimationSpeed);
+		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime* 1.2f * m_fAnimationSpeed);
 	}
 	else if(m_iAnimationStep <= 3)
 	{
-		m_fAnimationSpeed += _fDeltaTime;
+		m_fAnimationSpeed += _fDeltaTime * 1.5f;
 		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, _fDeltaTime * 3.f * m_fAnimationSpeed);
 		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, _fDeltaTime * 3.f * m_fAnimationSpeed);
 	}
@@ -681,7 +700,7 @@ HRESULT CStump::Update_Animation_Attack2(_float _fDeltaTime)
 	}
 	else if (m_iAnimationStep <= 3)
 	{
-		m_pTransformCom[STUMP_BASE]->Turn(CTransform::AXIS_Y, _fDeltaTime * 5.f);
+		m_pTransformCom[STUMP_BASE]->Turn(CTransform::AXIS_Y, _fDeltaTime * 4.5f);
 	}
 
 	return S_OK;
@@ -726,6 +745,8 @@ HRESULT CStump::Spawn_StumpImpact(const wstring& LayerTag)
 	tImpact.pStatusComp = m_pStatusCom;
 	_vec3 BodyPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
 	tImpact.vPosition = BodyPos;
+	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[STUMP_BASE]->Get_Look());
+	tImpact.vPosition = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump_Impact", pManagement->Get_CurrentSceneID(),LayerTag, &tImpact)))
 		return E_FAIL;

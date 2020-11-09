@@ -338,13 +338,14 @@ HRESULT CGolem::Update_AI()
 
 
 		_float	fDistance = D3DXVec3Length(&m_vMoveDirection);
-		if (fDistance > m_fFollowDistance)
+
+		if (fDistance > m_fFollowDistance) //10.f
 		{
 			m_eCurState = CGolem::IDLE;
 			return S_OK;
 		}
 
-		else if (fDistance > m_fAttackDistance)
+		else if (fDistance > m_fAttackDistance) //3.f
 		{
 			m_eCurState = CGolem::MOVE;
 			return S_OK;
@@ -353,11 +354,11 @@ HRESULT CGolem::Update_AI()
 		if (m_bCanAttack)
 		{
 			_uint iRand = rand() % 100;
-			if		(iRand < 45)	m_eCurState = ATTACK1;
-			else if (iRand < 65)	m_eCurState = ATTACK2;
-			else if (iRand < 90)	m_eCurState = ATTACK3;
-			else					m_eCurState = ATTACK4;
-
+			if		(iRand < 20)	m_eCurState = ATTACK1;
+			else if (iRand < 40)	m_eCurState = ATTACK2;
+			else if (iRand < 60)	m_eCurState = ATTACK3;
+			else if (iRand < 80)	m_eCurState = ATTACK4;
+			else if (iRand < 100)	m_eCurState = ATTACK6;
 			return S_OK;
 		}
 	}
@@ -451,24 +452,24 @@ HRESULT CGolem::Update_State()
 			break;
 
 		case CGolem::ATTACK1:
-			m_fAttackDelay = 5.0f;		// 내려찍기
+			m_fAttackDelay = 4.0f;		// 내려찍기
 			break;
 
 		case CGolem::ATTACK2:
-			m_fAttackDelay = 7.f;		// 폭탄
+			m_fAttackDelay = 3.2f;		// 폭탄
 			break;
 
 		case CGolem::ATTACK3:
-			m_fAttackDelay = 5.f;		// 몬스터 생성
+			m_fAttackDelay = 1.5f;		// 몬스터 생성
 			break;
 
 		case CGolem::ATTACK4:
-			m_fAttackDelay = 10.f;		// 분신 소환
+			m_fAttackDelay = 2.f;		// 분신 소환
 			break;
 
-		//case CGolem::ATTACK5:
-		//	m_fAttackDelay = 5.f;		// 불 소환
-		//	break;
+		case CGolem::ATTACK6:
+			m_fAttackDelay = 5.f;		// 불 소환
+			break;
 
 		default:
 			break;
@@ -503,8 +504,8 @@ HRESULT CGolem::Update_Anim(_float _fDeltaTime)
 	case Client::CGolem::ATTACK4:
 		Update_Anim_Attack4(_fDeltaTime);
 		break;
-	//case Client::CGolem::ATTACK5:
-	//	Update_Anim_Attack5(_fDeltaTime);
+	case Client::CGolem::ATTACK6:
+		Update_Anim_Attack6(_fDeltaTime);
 		break;
 	}
 
@@ -591,7 +592,7 @@ HRESULT CGolem::Update_Anim_Attack1(_float _fDeltaTime)
 		return S_OK;
 
 	m_fAnimationTimer += _fDeltaTime;
-	if (m_fAnimationTimer >= 0.6f)
+	if (m_fAnimationTimer >= 0.6f) // 3.6f
 	{
 		m_fAnimationTimer = 0.f;
 		++m_iAnimationStep;
@@ -628,7 +629,7 @@ HRESULT CGolem::Update_Anim_Attack2(_float _fDeltaTime)
 		return S_OK;
 
 	m_fAnimationTimer += _fDeltaTime;
-	if (m_fAnimationTimer >= 0.6f)
+	if (m_fAnimationTimer >= 0.6f) // 3.0f
 	{
 		m_fAnimationTimer = 0.f;
 		++m_iAnimationStep;
@@ -664,7 +665,7 @@ HRESULT CGolem::Update_Anim_Attack2(_float _fDeltaTime)
 
 HRESULT CGolem::Update_Anim_Attack3(_float _fDeltaTime)
 {
-	if (m_eCurState != CGolem::ATTACK3)
+	if (m_eCurState != CGolem::ATTACK3) // 1.2f
 		return S_OK;
 
 	m_fAnimationTimer += _fDeltaTime;
@@ -700,6 +701,68 @@ HRESULT CGolem::Update_Anim_Attack4(_float _fDeltaTime)
 
 	m_bCanAttack = false;
 	m_eCurState = CGolem::IDLE;
+	return S_OK;
+}
+
+HRESULT CGolem::Update_Anim_Attack6(_float _fDeltaTime)
+{
+	if (m_eCurState != CGolem::ATTACK6)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+	if (nullptr == pPlayerTransform)
+		return E_FAIL;
+
+	_vec3 vRootPos = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
+	
+	m_fAnimationTimer += _fDeltaTime;
+	if (m_fAnimationTimer >= 0.6f)
+	{
+		m_fAnimationTimer = 0.f;
+		++m_iAnimationStep;
+
+		if (1 == m_iAnimationStep)
+		{
+			m_vDirection = m_pTransformCom[GOLEM_BASE]->Get_Look();
+			D3DXVec3Normalize(&m_vDirection, &m_vDirection);
+		}
+
+		if (m_iAnimationStep == 3 || m_iAnimationStep == 4)
+		{
+			Spawn_GolemImpact();
+		}
+
+		if (m_iAnimationStep == 5)
+		{
+			m_pTransformCom[GOLEM_BODY]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+			m_pTransformCom[GOLEM_LEFT_ARM]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+			m_pTransformCom[GOLEM_RIGHT_ARM]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+
+			m_bCanAttack = false;
+			m_eCurState = CGolem::IDLE;
+		}
+	}
+
+	if (m_iAnimationStep <= 1)
+	{
+		m_pTransformCom[GOLEM_BODY]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[GOLEM_LEFT_ARM]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[GOLEM_RIGHT_ARM]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[GOLEM_LEFT_ARM]->Turn(CTransform::AXIS_Z, _fDeltaTime);
+		m_pTransformCom[GOLEM_RIGHT_ARM]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
+	}
+	else if (m_iAnimationStep <= 4)
+	{
+		_vec3 vMyPosition = { m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition.x , 0.f , m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition.z };
+		vMyPosition -= m_vDirection * (_fDeltaTime * 5.f);
+		m_pTransformCom[GOLEM_BASE]->Set_Position(vMyPosition);
+	}
+
+
 	return S_OK;
 }
 
@@ -779,7 +842,7 @@ HRESULT CGolem::Spawn_GolemImpact()
 	tImpact.pAttacker = this;
 	tImpact.pStatusComp = m_pStatusCom;
 	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
-	tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
+	tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (tImpact.vDirection * - 1.f);
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
@@ -864,3 +927,18 @@ HRESULT CGolem::Create_MiniGolem()
 //	m_bCanAttack = false;
 //	return S_OK;
 //}
+
+HRESULT CGolem::Take_Damage(const CComponent* _pDamageComp)
+{
+	if (!m_bCanHurt && !_pDamageComp)
+		return S_OK;
+
+	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+
+	if (m_pStatusCom->Get_Status().iHp <= 0)
+	{
+		m_bDead = true;
+	}
+
+	return S_OK;
+}

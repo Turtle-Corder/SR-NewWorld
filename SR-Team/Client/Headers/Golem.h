@@ -26,7 +26,7 @@ class CGolem final : public CGameObject
 	enum STATE 
 	{
 		IDLE , MOVE , 
-		ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, //ATTACK5, 
+		ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, ATTACK6,//ATTACK5, 
 		STATE_DEAD
 	};
 private:
@@ -43,7 +43,7 @@ public:
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual void Free() override;
 	static  CGolem* Create(LPDIRECT3DDEVICE9 _pDevice);
-
+	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 private:
 	HRESULT Add_Component();
 	HRESULT Add_Component_VIBuffer();
@@ -70,6 +70,7 @@ private:
 	HRESULT Update_Anim_Attack3(_float _fDeltaTime);		// 몬스터 생성
 	HRESULT Update_Anim_Attack4(_float _fDeltaTime);		// 분신 소환
 	HRESULT Update_Anim_Attack5(_float _fDeltaTime);		// 불 소환
+	HRESULT Update_Anim_Attack6(_float _fDeltaTime);
 
 	void Update_AttackDelay(_float _fDeltaTime);
 	void Update_HurtDelay(_float _fDeltaTime);
@@ -113,7 +114,7 @@ private:
 	_float			m_fAttackDelay = {};
 	_float			m_fAttackTimer = {};
 	_int			m_iRandAttack = -1;
-
+	_vec3			m_vDirection = {};
 
 	//------------------------------------------------------------
 	// 공격체 
