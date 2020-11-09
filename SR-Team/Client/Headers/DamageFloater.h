@@ -11,7 +11,7 @@ class CDamageFloat final : public CGameObject
 {
 private:
 	explicit CDamageFloat(LPDIRECT3DDEVICE9 _pDevice);
-	explicit CDamageFloat(CONST CDamageFloat& _rOther);
+	explicit CDamageFloat(const CDamageFloat& _rOther);
 	virtual ~CDamageFloat() = default;
 
 public:
@@ -19,12 +19,13 @@ public:
 	virtual HRESULT Setup_GameObject(void * _pArg) override;
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
-	virtual HRESULT Render_NoneAlpha();
-
-	void Set_FloatValue(_int _iFloatValue);
+	virtual HRESULT Render_OnlyAlpha();
 
 private:
 	HRESULT Add_Component();
+
+	HRESULT IsBillboarding();
+	void Update_DeadDelay(_float _fDeltaTime);
 
 public:
 	static CDamageFloat* Create(LPDIRECT3DDEVICE9 _pDevice);
@@ -38,9 +39,9 @@ private:
 
 	FLOATING_INFO		m_tInfo = {};
 	_float				m_fDeadTimer = 0.f;
-	_int				m_iFloatValue = 0;
+	_float				m_fDeadDelay = 3.f;
 
-	_int				m_iMaxDigit = 0;
+	_int				m_iMaxDigit = 1;
 	_int				m_iDigitNum[4] = { 0, };
 };
 

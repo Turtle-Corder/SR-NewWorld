@@ -977,6 +977,24 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 		m_bInteraction = false;
 	}
 
+	else if (pManagement->Key_Down('H'))
+	{
+		// GameObject_DamageFloat
+		CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+		if (nullptr != pCamera)
+		{
+			_vec3 vAddPos = {};
+			memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+			//D3DXVec3Normalize(&vAddPos, &vAddPos);
+
+			FLOATING_INFO tInfo;
+			tInfo.iDamage = 123;
+			tInfo.vSpawnPos = m_pTransformCom[PART_HEAD]->Get_Desc().vPosition + (vAddPos * 2.f);
+			if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo)))
+				PRINT_LOG(L"Failed To Create RandomBox", LOG::CLIENT);
+		}
+	}
+
 	return GAMEOBJECT::NOEVENT;
 }
 
