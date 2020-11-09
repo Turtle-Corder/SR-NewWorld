@@ -121,6 +121,9 @@ HRESULT CDropItem::Take_Damage(const CComponent * _pDamageComp)
 	CPlayer* pPlayer = (CPlayer*)pDmgInfo->Get_Desc().pOwner;
 	if (pPlayer && pPlayer->IsInteraction())
 	{
+		// 여기에 죽기 전에 인벤에 추가
+
+
 		m_bDead = true;
 	}
 

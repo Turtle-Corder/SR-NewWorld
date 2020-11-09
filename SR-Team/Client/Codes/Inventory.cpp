@@ -35,6 +35,9 @@ void CInventory::Use_Potion(ePotion_ID ePotionID)
 		if (pItem->ePotionID == ePotionID)
 		{
 			--pItem->iCnt;
+			// 다 쓰면 아이템 삭제
+			if (pItem->iCnt == 0)
+				Delete_Item(pItem->szItemTag);
 			return;
 		}
 	}
@@ -291,10 +294,10 @@ _int CInventory::Update_GameObject(float DeltaTime)
 			if (FAILED(Move_InventoryWnd()))
 				return GAMEOBJECT::WARN;
 		}
-
-		if (FAILED(Check_ItemCount()))
-			return GAMEOBJECT::ERR;
 	}
+
+	if (FAILED(Check_ItemCount()))
+		return GAMEOBJECT::ERR;
 
 	for (_uint i = 0; i < INVEN_END; ++i)
 		m_pTransformCom[i]->Update_Transform();
@@ -433,7 +436,7 @@ HRESULT CInventory::Check_SellButton()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (pManagement->Key_Pressing(VK_LBUTTON))
+	if (pManagement->Key_Pressing(VK_LBUTTON) && !m_bMovingClear)
 	{
 		CMouse* pMouse = (CMouse*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Mouse");
 		if (nullptr == pMouse)
