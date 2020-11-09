@@ -223,8 +223,8 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
 		return E_FAIL;
 
-	vPos = { 12.f, 0.f, 40.96f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
+	vPos = { 32.f, 0.f, 40.96f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Stump", SCENE_STAGE1, LayerTag, &vPos)))
 		return E_FAIL;
 
 	//vPos = { 18.4f, 0.f, 38.2f };
@@ -274,7 +274,6 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 
 	////if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 	////	return E_FAIL;
-
 
 	return S_OK;
 }

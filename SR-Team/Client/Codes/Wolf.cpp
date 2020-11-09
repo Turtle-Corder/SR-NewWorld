@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DamageInfo.h"
 #include "..\Headers\Wolf.h"
-
+#include "IceLandQuest.h"
 USING(Client)
 
 CWolf::CWolf(LPDIRECT3DDEVICE9 _pDevice)
@@ -105,7 +105,20 @@ HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
 
 	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
 	if (0 >= m_pStatusCom->Get_Status().iHp)
+	{
+		// 처치한 몬스터 수 증가
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
+			return E_FAIL;
+		CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainQuest", 0);
+		if (pIceLandQuest == nullptr)
+			return E_FAIL;
+
+		if (pIceLandQuest->Get_SituationID() == ICEQUEST_ON_THE_QUEST&& m_bDead)
+			pIceLandQuest->Dead_Monster();
+
 		m_bDead = true;
+	}
 
 	m_bCanHurt = true;
 	return S_OK;

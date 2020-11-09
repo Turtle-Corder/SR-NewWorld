@@ -240,7 +240,7 @@ bool CMeteor::Make_Pieces()
 
 
 
-
+	return true;
 }
 
 CMeteor * CMeteor::Create(LPDIRECT3DDEVICE9 pDevice)

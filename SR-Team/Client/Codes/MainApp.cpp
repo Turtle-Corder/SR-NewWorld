@@ -3,6 +3,7 @@
 #include "SkillSlotManager.h"
 #include "ItemSlotManager.h"
 #include "Sound_Manager.h"
+#include "RandomBoxManager.h"
 #include "..\Headers\MainApp.h"
 
 
@@ -752,6 +753,9 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Shop_ShopScrollBar", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_Shop/ScrollBar%d.png"))))
 		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Shop_ClearWnd", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Shop/clear%d.png"))))
+		return E_FAIL;
 
 	// ChatWnd
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Shop_ChatWnd0", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
@@ -918,6 +922,9 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_DiaSword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_Item/diamond_sword%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_MagicalStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/magical_extreme_staff%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1141,11 +1148,11 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Green%d.png"))))
 		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Puple", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Puple%d.png"))))
+		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Blue%d.png"))))
-		return E_FAIL;
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_BrightBlue", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_MainQuest/GolemCore_BrightBlue%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1361,6 +1368,7 @@ void CMainApp::Free()
 	CSkillSlotManager::Destroy_Instance();
 	CItemSlotManager::Destroy_Instance();
 	CSoundManager::Destroy_Instance();
+	CRandomBoxManager::Destroy_Instance();
 
 	Safe_Release(m_pFont);
 	Safe_Release(m_pSprite);

@@ -53,6 +53,8 @@ HRESULT CInventory::Get_ShopItem(const wstring & strItemName)
 	if (nullptr == pItem)
 		return E_FAIL;
 
+	
+
 	for (auto& pItem : m_pInvenList)
 	{
 		// 만약 이미 존재하는 아이템이고
@@ -63,7 +65,8 @@ HRESULT CInventory::Get_ShopItem(const wstring & strItemName)
 			{
 				++pItem->iCnt;
 				m_iGold -= pItem->iPrice;
-				PRINT_LOG(L"상점 아이템 구매 완료", LOG::DEBUG);
+				//PRINT_LOG(L"상점 아이템 구매 완료", LOG::DEBUG);
+				m_bRenderClearWnd = true;
 			}
 			else
 				PRINT_LOG(L"못사", LOG::DEBUG);
@@ -96,7 +99,8 @@ HRESULT CInventory::Get_ShopItem(const wstring & strItemName)
 		m_bIsItemHere[m_iInsertOrder] = true;
 		++m_pInvenList[m_iInsertOrder]->iCnt;
 
-		PRINT_LOG(L"상점 아이템 구매 완료", LOG::DEBUG);
+		//PRINT_LOG(L"상점 아이템 구매 완료", LOG::DEBUG);
+		m_bRenderClearWnd = true;
 		++m_iInsertOrder;
 	}
 
@@ -369,6 +373,15 @@ HRESULT CInventory::Render_UI()
 		if (FAILED(Render_Item()))
 			return E_FAIL;
 	}
+
+	if (m_bRenderClearWnd)
+	{
+		if (FAILED(Render_ClearWnd()))
+			return E_FAIL;
+	}
+
+	if (m_bRenderClearWnd && pManagement->Key_Pressing(VK_RETURN))
+		m_bRenderClearWnd = false;
 
 	return S_OK;
 }
@@ -840,6 +853,23 @@ HRESULT CInventory::Render_Item()
 	return S_OK;
 }
 
+HRESULT CInventory::Render_ClearWnd()
+{
+	_matrix matWorld, matTrans;
+	const D3DXIMAGE_INFO* pTexInfo = m_pTextureClear->Get_TexInfo(0);
+	_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+
+	D3DXMatrixTranslation(&matTrans, WINCX * 0.5f, WINCY * 0.5f, 0.f);
+	matWorld = matTrans;
+
+	m_pSprite->SetTransform(&matWorld);
+	m_pSprite->Draw(
+		(LPDIRECT3DTEXTURE9)m_pTextureClear->GetTexture(0),
+		nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	return S_OK;
+}
+
 HRESULT CInventory::Move_InventoryWnd()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -923,6 +953,11 @@ HRESULT CInventory::Change_AllPos()
 
 HRESULT CInventory::Add_Component()
 {
+	if (FAILED(CGameObject::Add_Component(
+		SCENE_STATIC, L"Component_Texture_Shop_ClearWnd",
+		L"Com_TextureClear", (CComponent**)&m_pTextureClear)))
+		return E_FAIL;
+
 	for (_uint i = 0; i < INVEN_END; ++i)
 	{
 		// 2. Transform
@@ -1058,6 +1093,8 @@ void CInventory::Free()
 		Safe_Delete(pItem);
 	m_pInvenList.clear();
 	//m_pInvenList.swap(m_pInvenList);
+
+	Safe_Release(m_pTextureClear);
 
 	CUIObject::Free();
 }
