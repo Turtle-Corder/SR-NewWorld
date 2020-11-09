@@ -229,7 +229,7 @@ bool CMeteor::Make_Pieces()
 
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Crack", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact.vPosition)))
-			return E_FAIL;
+			return false;
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MeteorPiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact)))
 		{

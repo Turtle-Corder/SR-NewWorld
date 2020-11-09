@@ -310,11 +310,6 @@ HRESULT CPreLoader::Load_Resources_Forest()
 	}
 #pragma endregion
 
-#pragma region GameObject_Crack
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Crack", CCrack::Create(m_pDevice))))
-		return E_FAIL;
-#pragma endregion
-
 #pragma region Component_Texture_Crack
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
 	{
