@@ -361,6 +361,9 @@
     <Filter Include="04.Manager\04.RandomBoxManager">
       <UniqueIdentifier>{2c234526-a32e-44be-92ec-53e773b62855}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\18.DamageFloat">
+      <UniqueIdentifier>{0bd03986-f8be-4edf-bdcd-14828355d3c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -684,6 +687,9 @@
     <ClInclude Include="..\Headers\RandomBoxManager.h">
       <Filter>04.Manager\04.RandomBoxManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\DamageFloater.h">
+      <Filter>02.GameObject\18.DamageFloat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -991,6 +997,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\RandomBoxManager.cpp">
       <Filter>04.Manager\04.RandomBoxManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DamageFloater.cpp">
+      <Filter>02.GameObject\18.DamageFloat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

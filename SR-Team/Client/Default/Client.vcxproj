@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="..\Headers\AcornExplosion.h" />
     <ClInclude Include="..\Headers\Blind.h" />
+    <ClInclude Include="..\Headers\DamageFloater.h" />
     <ClInclude Include="..\Headers\DummyTerrain.h" />
     <ClInclude Include="..\Headers\Acorn.h" />
     <ClInclude Include="..\Headers\Explosion.h" />
@@ -267,6 +268,7 @@
   <ItemGroup>
     <ClCompile Include="..\Codes\AcornExplosion.cpp" />
     <ClCompile Include="..\Codes\Blind.cpp" />
+    <ClCompile Include="..\Codes\DamageFloater.cpp" />
     <ClCompile Include="..\Codes\DummyTerrain.cpp" />
     <ClCompile Include="..\Codes\Acorn.cpp" />
     <ClCompile Include="..\Codes\Explosion.cpp" />
