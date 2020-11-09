@@ -1072,6 +1072,10 @@ HRESULT CMainApp::Setup_EB()
 		L"Component_Texture_FlowerQuest_HelpWnd_NoClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_FlowerQuest2/NOCLEAR_HELPWND%d.png"))))
 		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_FlowerQuest_FlowerGathering_Clear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_FlowerQuest2/clear%d.png"))))
+		return E_FAIL;
 
 	// ·Îµù
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,

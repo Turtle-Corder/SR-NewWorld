@@ -23,6 +23,7 @@ public:
 public:
 	_bool Get_StartQuest() { return m_bStartQuest; }
 	eIceQuest_ID Get_SituationID() { return m_eSituation; }
+	_bool Get_Chart() { return m_bChat; }
 
 public:
 	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
@@ -65,6 +66,9 @@ private:
 
 	// 몬스터 얼마나 죽였는지
 	_int			m_iMonsetDeadCnt = 0;
+
+	// NPC와 대화중인지
+	_bool				m_bChat = false;
 };
 
 END

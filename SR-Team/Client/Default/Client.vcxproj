@@ -185,6 +185,7 @@
     <ClInclude Include="..\Headers\QuestItem_Flower.h" />
     <ClInclude Include="..\Headers\RandomBox.h" />
     <ClInclude Include="..\Headers\RandomBoxManager.h" />
+    <ClInclude Include="..\Headers\RandomBox_Chat.h" />
     <ClInclude Include="..\Headers\RandomBox_Npc.h" />
     <ClInclude Include="..\Headers\Scene_Room.h" />
     <ClInclude Include="..\Headers\Scene_Stage1.h" />
@@ -297,6 +298,7 @@
     <ClCompile Include="..\Codes\QuestItem_Flower.cpp" />
     <ClCompile Include="..\Codes\RandomBox.cpp" />
     <ClCompile Include="..\Codes\RandomBoxManager.cpp" />
+    <ClCompile Include="..\Codes\RandomBox_Chat.cpp" />
     <ClCompile Include="..\Codes\RandomBox_Npc.cpp" />
     <ClCompile Include="..\Codes\Scene_Room.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage1.cpp" />

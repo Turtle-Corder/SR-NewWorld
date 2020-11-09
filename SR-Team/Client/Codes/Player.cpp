@@ -16,6 +16,11 @@
 #include "TerrainBundle.h"
 #include "MainCamera.h"
 #include "RandomBoxManager.h"
+#include "FlowerQuest.h"
+#include "MainQuest.h"
+#include "IceLandQuest.h"
+#include "NpcWnd.h"
+#include "Shop_ChatWnd.h"
 #include "..\Headers\Player.h"
 
 USING(Client)
@@ -816,6 +821,7 @@ HRESULT CPlayer::Raycast_OnMonster(_bool * _pFound, CGameObject** _ppObject)
 //----------------------------------------------------------------------------------------------------
 _int CPlayer::Update_UICheck()
 {
+	_bool bFlowerQuest = false, bNpcWnd = false, bMainQuest = false, bIceLandQuest = false, bShopChat = false;
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -836,7 +842,49 @@ _int CPlayer::Update_UICheck()
 	if (pSkill == nullptr)
 		return GAMEOBJECT::WARN;
 
-	if (pInven->Get_Render() || pShop->Get_Render() || pEquip->Get_Render() || pSkill->Get_Render())
+	if (pManagement->Get_CurrentSceneID() == SCENE_TOWN)
+	{
+		CFlowerQuest* pFlowerQuest = (CFlowerQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_FlowerQuest", 0);
+		if (pFlowerQuest == nullptr)
+			return GAMEOBJECT::WARN;
+		bFlowerQuest = pFlowerQuest->Get_Chart();
+	}
+
+	if (pManagement->Get_CurrentSceneID() == SCENE_FOREST || pManagement->Get_CurrentSceneID() == SCENE_VOLCANIC)
+	{
+		CNpcWnd* pNpcWnd = (CNpcWnd*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainQuest", 1);
+		if (pNpcWnd == nullptr)
+			return GAMEOBJECT::WARN;
+		bNpcWnd = pNpcWnd->Get_Chart();
+	}
+
+	if (pManagement->Get_CurrentSceneID() >= SCENE_STAGE0)
+	{
+		CMainQuest* pMainQuest = (CMainQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainQuest", 0);
+		if (pMainQuest == nullptr)
+			return GAMEOBJECT::WARN;
+		bMainQuest = pMainQuest->Get_Chart();
+	}
+
+	if (pManagement->Get_CurrentSceneID() == SCENE_ICELAND)
+	{
+		CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_IceLandQuest", 0);
+		if (pIceLandQuest == nullptr)
+			return GAMEOBJECT::WARN;
+		bIceLandQuest = pIceLandQuest->Get_Chart();
+	}
+
+	if (pManagement->Get_CurrentSceneID() == SCENE_TOWN)
+	{
+
+		CShop_ChatWnd* pShopChat = (CShop_ChatWnd*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Shop", 1);
+		if (pShopChat == nullptr)
+			return GAMEOBJECT::WARN;
+		bShopChat = pShopChat->Get_Chart();
+	}
+
+	if (pInven->Get_Render() || pShop->Get_Render() || pEquip->Get_Render() || pSkill->Get_Render() ||
+		bFlowerQuest || bNpcWnd || bMainQuest || bIceLandQuest || bShopChat)
 		bShowUI = true;
 	else
 		bShowUI = false;

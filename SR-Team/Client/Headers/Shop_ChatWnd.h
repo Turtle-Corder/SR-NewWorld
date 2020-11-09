@@ -15,6 +15,9 @@ public:
 	virtual ~CShop_ChatWnd() = default;
 
 public:
+	_bool Get_Chart() { return m_bChat; }
+
+public:
 	void Set_StartChat(_bool bCheck) { m_bStartChat = bCheck; }
 
 public:
@@ -37,6 +40,9 @@ private:
 	CTexture*			m_pTextureCom[SHOPCHAT_END] = { nullptr, };
 	eShopChatWnd_ID		m_eSituation = SHOPCHAT_END;
 	_bool				m_bStartChat = false;
+
+	// NPC와 대화중인지
+	_bool				m_bChat = false;
 };
 
 END
