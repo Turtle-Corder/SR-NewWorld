@@ -231,6 +231,11 @@ HRESULT CPreLoader::Load_Resources_Forest()
 		return E_FAIL;
 #pragma region Snail
 
+#pragma region GameObject_Skybox
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region GameObject_Snail
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Snail", CSnail::Create(m_pDevice))))
 		return E_FAIL;

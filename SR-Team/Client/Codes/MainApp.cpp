@@ -577,17 +577,17 @@ HRESULT CMainApp::Setup_YJ()
 #pragma endregion
 
 #pragma region Component_Texture_DropDiamond
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_DropDiamond", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/item/diamond%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_DropDiamond", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE, L"../Resources/item/diamond%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_DropRuby
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_DropRuby", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/item/ruby%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_DropRuby", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE, L"../Resources/item/ruby%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_ironsword
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Dropiron_sword", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/item/iron_sword%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Dropiron_sword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE, L"../Resources/item/iron_sword%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

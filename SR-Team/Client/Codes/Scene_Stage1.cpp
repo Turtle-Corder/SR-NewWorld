@@ -26,6 +26,9 @@ HRESULT CScene_Stage1::Setup_Scene()
 	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
 		return E_FAIL;
 
+	if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
+		return E_FAIL;
+
 	if (FAILED(Setup_Layer_Projectile()))
 		return E_FAIL;
 	
@@ -159,8 +162,17 @@ HRESULT CScene_Stage1::Setup_Layer_AllObject()
 	return S_OK;
 }
 
+
 HRESULT CScene_Stage1::Setup_Layer_Skybox(const wstring & LayerTag)
 {
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Skybox", SCENE_STAGE1, LayerTag)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

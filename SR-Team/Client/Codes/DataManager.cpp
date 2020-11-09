@@ -10,7 +10,7 @@ USING(Client)
 CDataManager::CDataManager(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
-	for (_uint i = 0; i < 23; ++i)
+	for (_uint i = 0; i < 25; ++i)
 	{
 		m_pTextureCom[i] = nullptr;
 		m_pStatCom[i] = nullptr;
@@ -153,7 +153,7 @@ HRESULT CDataManager::Add_Component()
 
 HRESULT CDataManager::Add_Component_Item()
 {
-	for (_uint i = 0; i < 23; ++i)
+	for (_uint i = 0; i < 25; ++i)
 	{
 		// 3. Texture--------------------------------------------------------------
 		TCHAR szTexture[MAX_PATH] = L"";
@@ -227,6 +227,12 @@ HRESULT CDataManager::Add_Component_Item()
 		else if (i == 22)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_BrightBlue");
+		else if (i == 23)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_DropDiamond");
+		else if (i == 24)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_DropRuby");
 
 		StringCchPrintf(szTexture, sizeof(TCHAR) * MAX_PATH,
 			L"Com_Texture%d", i);
@@ -451,6 +457,24 @@ HRESULT CDataManager::Add_Component_Item()
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
 				L"¹àÀº ÆÄ¶õ °ñ·½ÀÇ ÇÙ");
 		}
+		if (i == 23)
+		{
+			pItem->iPrice = 100;
+			pItem->eSort = eITEM_SORT::DROP;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"Diamond");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"´ÙÀÌ¾Æ¸óµå");
+		}
+		if (i == 24)
+		{
+			pItem->iPrice = 100;
+			pItem->eSort = eITEM_SORT::DROP;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"Ruby");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"·çºñ º¸¼®");
+		}
 		m_vItemList.emplace_back(pItem);
 
 
@@ -546,6 +570,12 @@ HRESULT CDataManager::Add_Component_Item()
 		{
 			tStat.iHp = 100;
 			tStat.iMp = 100;
+		}
+		else if (i == 23)
+		{
+		}
+		else if (i == 24)
+		{
 		}
 
 		TCHAR szStat[MAX_PATH] = L"";
@@ -711,7 +741,7 @@ CGameObject * CDataManager::Clone_GameObject(void * pArg)
 
 void CDataManager::Free()
 {
-	for (_uint i = 0; i < 23; ++i)
+	for (_uint i = 0; i < 25; ++i)
 	{
 		Safe_Release(m_pTextureCom[i]);
 		Safe_Release(m_pStatCom[i]);

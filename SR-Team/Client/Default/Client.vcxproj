@@ -175,6 +175,7 @@
     <ClInclude Include="..\Headers\Bomb.h" />
     <ClInclude Include="..\Headers\MainQuest.h" />
     <ClInclude Include="..\Headers\MainQuest_NPC.h" />
+    <ClInclude Include="..\Headers\MeteorPiece.h" />
     <ClInclude Include="..\Headers\MiniGolem.h" />
     <ClInclude Include="..\Headers\MpDrift.h" />
     <ClInclude Include="..\Headers\NpcWnd.h" />
@@ -279,6 +280,7 @@
     <ClCompile Include="..\Codes\Bomb.cpp" />
     <ClCompile Include="..\Codes\MainQuest.cpp" />
     <ClCompile Include="..\Codes\MainQuest_NPC.cpp" />
+    <ClCompile Include="..\Codes\MeteorPiece.cpp" />
     <ClCompile Include="..\Codes\MiniGolem.cpp" />
     <ClCompile Include="..\Codes\MpDrift.cpp" />
     <ClCompile Include="..\Codes\NpcWnd.cpp" />
