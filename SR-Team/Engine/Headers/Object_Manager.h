@@ -26,6 +26,8 @@ public:
 	HRESULT Setup_Object_Manager(_int _iSceneCount);
 	HRESULT Add_GameObject_Prototype(_int _iSceneID, const wstring& _strProtoTypeTag, CGameObject* _pProtoType);
 	HRESULT Add_GameObject_InLayer(_int _iFromSceneID, const wstring& _strProtoTypeTag, _int _iToSceneID, const wstring& _strLayerTag, void* _pArg = nullptr);
+	HRESULT Add_GameObject_InLayer(CGameObject** _pOut, _int _iFromSceneID, const wstring& _strProtoTypeTag, _int _iToSceneID, const wstring& _strLayerTag, void* _pArg = nullptr);
+
 	HRESULT Clear_ForScene(_int _iSceneID);
 
 	// tag를 등록하고 Clear_Except를 하면 등록한 tag의 레이어는 보존한다.

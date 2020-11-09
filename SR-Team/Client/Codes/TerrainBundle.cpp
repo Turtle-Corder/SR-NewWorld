@@ -75,6 +75,14 @@ TERRAININFO CTerrainBundle::Get_TerrainInfo(_vec3 iObjectPos, _uint iFloor)
 	return m_TerrianList[iFloor][iIndex];
 }
 
+CGameObject * CTerrainBundle::ApproachToCubeObject(_vec3 iObjectPos, _uint iFloor)
+{
+	int iIndex = (int)(iObjectPos.x / (float)(m_TerrianList[0][0].iInterval) + (iObjectPos.z / (float)(m_TerrianList[0][0].iInterval)) * m_TerrianList[0][0].iMaxX);
+
+
+	return nullptr;
+}
+
 HRESULT CTerrainBundle::Set_TerrainInfo(_uint iIndex, _uint iFloor, const TERRAININFO & Input)
 {
 

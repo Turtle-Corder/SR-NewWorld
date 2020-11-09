@@ -672,8 +672,6 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uin
 
 		while (true)
 		{
-
-
 			//Cube Info 받기
 			fin.getline(szFloor, MAX_PATH, L'|');
 			fin.getline(szIndex, MAX_PATH, L'|');
@@ -701,7 +699,7 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uin
 			Temp_Info.iMaxZ = ZNumber;
 
 
-			tTileInfo[iIndex].iOpt = 0;
+			tTileInfo[iIndex].iOpt = 0;			// 길 찾으려면 onoff를 넣어줘야?
 			tTileInfo[iIndex].iX = iXIndex;
 			tTileInfo[iIndex].iZ = iZIndex;
 
@@ -710,22 +708,21 @@ HRESULT CPreLoader::Setup_Stage_CubeTerrain(const wstring & LayerTag, const _uin
 			if (fin.eof())
 				break;
 
-
-			((CTerrainBundle*)pManagement->Get_GameObject(iToScene, _T("Layer_TerrainBundle")))->Set_TerrainInfo(iIndex, iFloor, Temp_Info);
-
+			CGameObject* pOut = nullptr;
 
 			if (true == bOnOff)
 			{
-				if (FAILED(pManagement->Add_GameObject_InLayer(iToScene, L"GameObject_CubeTerrain", iToScene, LayerTag, &Temp_Info)))
+				if (FAILED(pManagement->Add_GameObject_InLayer(&pOut, iToScene, L"GameObject_CubeTerrain", iToScene, LayerTag, &Temp_Info)))
 					return E_FAIL;
-
 			}
+
+			Temp_Info.pObj = pOut;
+
+			((CTerrainBundle*)pManagement->Get_GameObject(iToScene, _T("Layer_TerrainBundle")))->Set_TerrainInfo(iIndex, iFloor, Temp_Info);
 
 		}
 
 		pManagement->Set_TileInfo(tTileInfo, XNumber, ZNumber);
-
-
 	}
 
 	else
