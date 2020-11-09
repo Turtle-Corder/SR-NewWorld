@@ -8,6 +8,7 @@
 #include <list>
 #include <queue>
 #include <unordered_map>
+#include <map>
 #include <fstream>
 #include <strsafe.h>
 #include <process.h>

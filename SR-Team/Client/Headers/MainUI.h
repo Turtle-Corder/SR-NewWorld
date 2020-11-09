@@ -37,6 +37,7 @@ public:
 private:
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void * pArg) override;
+
 	virtual int Update_GameObject(float DeltaTime) override;
 	virtual int LateUpdate_GameObject(float DeltaTime) override;
 	virtual HRESULT Render_UI() override;
@@ -95,6 +96,7 @@ private:
 // 퀵슬롯==================================================================
 private:
 	// 현재 이동시키고 있는 아이템 정보
+	INVEN_ITEM*		m_pMovingSkill = nullptr;
 	INVEN_ITEM*		m_pMovingItem = nullptr;
 
 	// 왼쪽, 오른쪽 퀵슬롯 충돌 렉트
@@ -116,8 +118,10 @@ private:
 	RECT			m_tGoingItem_CollRt = { 0, 0, 0, 0 };
 
 	// 퀵슬롯으로 가는 아이템 그릴지 말지
+	_bool			m_bRender_GoingSkill = false;
 	_bool			m_bRender_GoingItem = false;
 	// 퀵슬롯으로 가는 아이템 그릴 텍스처
+	CTexture*		m_pTexture_GoingSkill = nullptr;
 	CTexture*		m_pTexture_GoingItem = nullptr;
 
 	// 퀵슬롯에 그릴 이미지

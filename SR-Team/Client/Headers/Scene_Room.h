@@ -48,6 +48,8 @@ private:
 
 private:
 	CPreLoader*		m_pPreLoader = nullptr;
+
+	_bool			m_bInit = false;
 };
 
 END
