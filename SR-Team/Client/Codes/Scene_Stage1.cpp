@@ -55,6 +55,10 @@ _int CScene_Stage1::Update_Scene(_float _fDeltaTime)
 	{
 		CSoundManager::Get_Instance()->StopSound(CSoundManager::BGM);
 		CSoundManager::Get_Instance()->PlayBGM(L"bgm_room.mp3");
+
+		if (FAILED(Respawn_Palyer()))
+			return GAMEOBJECT::WARN;
+
 		m_bInit = true;
 	}
 
@@ -380,6 +384,25 @@ HRESULT CScene_Stage1::Travel_NextLayers()
 		PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
 		return E_FAIL;
 	}
+
+	return S_OK;
+}
+
+HRESULT CScene_Stage1::Respawn_Palyer()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CTransform* pTransformHead = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+	CTransform* pTransformBody = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform1");
+	if (nullptr == pTransformHead || nullptr == pTransformBody)	return E_FAIL;
+
+	_vec3 vSpawnPos = { 3.f, pTransformHead->Get_Desc().vPosition.y, 3.f };
+	pTransformHead->Set_Position(vSpawnPos);
+
+	vSpawnPos = { 3.f, pTransformBody->Get_Desc().vPosition.y, 3.f };
+	pTransformBody->Set_Position(vSpawnPos);
 
 	return S_OK;
 }
