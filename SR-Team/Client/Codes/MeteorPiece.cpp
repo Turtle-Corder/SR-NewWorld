@@ -33,7 +33,6 @@ HRESULT CMeteorPiece::Setup_GameObject(void* _pArg)
 		return E_FAIL;
 
 	m_vMoveDir = m_tInstant.vDirection;
-	D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
 
 	return S_OK;
 }
@@ -96,9 +95,9 @@ HRESULT CMeteorPiece::Add_Component()
 
 	//시작할위치
 	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x + 0.05f , m_tInstant.vPosition.y , m_tInstant.vPosition.z - 0.05f) };
-	tTransformDesc.fSpeedPerSecond = 10.f;
+	tTransformDesc.fSpeedPerSecond = 1.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(135.f);
-	tTransformDesc.vScale = { 1.2f, 2.3f, 1.2f };
+	tTransformDesc.vScale = { 0.3f, 0.3f, 0.3f };
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
@@ -138,6 +137,7 @@ HRESULT CMeteorPiece::ParticleMove(_float _fDeltaTime)
 		return E_FAIL;
 
 	_vec3 vAddPos = m_vMoveDir * m_pTransformCom->Get_Desc().fSpeedPerSecond * _fDeltaTime;
+	m_vMoveDir.y -= _fDeltaTime * 9.8f;
 	m_pTransformCom->Set_Position(m_pTransformCom->Get_Desc().vPosition + vAddPos);
 
 	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_X, _fDeltaTime * 0.5f);

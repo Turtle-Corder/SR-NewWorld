@@ -355,6 +355,12 @@
     <Filter Include="04.Manager\03.SoundManager">
       <UniqueIdentifier>{b9bb5755-1e2e-468b-a489-f8eabc2ce1ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\17.RandomBox">
+      <UniqueIdentifier>{2c507375-32f8-47f9-a1de-12cc0e2a5155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Manager\04.RandomBoxManager">
+      <UniqueIdentifier>{2c234526-a32e-44be-92ec-53e773b62855}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -672,6 +678,12 @@
     <ClInclude Include="..\Headers\Sound_Manager.h">
       <Filter>04.Manager\03.SoundManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\RandomBox.h">
+      <Filter>02.GameObject\17.RandomBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\RandomBoxManager.h">
+      <Filter>04.Manager\04.RandomBoxManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -973,6 +985,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Sound_Manager.cpp">
       <Filter>04.Manager\03.SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RandomBox.cpp">
+      <Filter>02.GameObject\17.RandomBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RandomBoxManager.cpp">
+      <Filter>04.Manager\04.RandomBoxManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

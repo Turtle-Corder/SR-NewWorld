@@ -28,6 +28,9 @@ HRESULT CDummyTerrain::Setup_GameObject(void * _pArg)
 
 _int CDummyTerrain::Update_GameObject(_float _fDeltaTime)
 {
+	if (FAILED(m_pTransformCom->Update_Transform()))
+		return GAMEOBJECT::ERR;
+
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -37,14 +40,31 @@ _int CDummyTerrain::LateUpdate_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
 
-	if (FAILED(m_pTransformCom->Update_Transform()))
-		return GAMEOBJECT::ERR;
+	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
+		return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
 }
 
 HRESULT CDummyTerrain::Render_NoneAlpha()
 {
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->SetTexture(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
+		return E_FAIL;
+
 	return S_OK;
 }
 

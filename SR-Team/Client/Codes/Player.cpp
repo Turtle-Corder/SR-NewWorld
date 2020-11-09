@@ -12,6 +12,9 @@
 #include "IceCrystal.h"
 #include "FireCrystal.h"
 #include "Mouse.h"
+#include "CubeTerrain.h"
+#include "TerrainBundle.h"
+#include "RandomBoxManager.h"
 #include "..\Headers\Player.h"
 
 USING(Client)
@@ -639,19 +642,54 @@ HRESULT CPlayer::Update_OnTerrain()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
+	//----------------------------------------------------------------------------------------------------
+	// OLD VER.
+
 	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Terrain", L"Com_VIBuffer");
 	if (nullptr == pTerrainBuffer)
 		return E_FAIL;
 
-	//--------------------------------------------------
-	// 머리, 몸통 터레인 위로 조정.
-	//--------------------------------------------------
 	_vec3 vPosition = m_pTransformCom[PART_BODY]->Get_Desc().vPosition;
 	if (pTerrainBuffer->IsOnTerrain(&vPosition))
 	{
 		m_pTransformCom[PART_HEAD]->Set_Position(vPosition + _vec3(0.f, 1.3f, 0.f));
 		m_pTransformCom[PART_BODY]->Set_Position(vPosition + _vec3(0.f, 0.5f, 0.f));
 	}
+
+	//----------------------------------------------------------------------------------------------------
+
+	//// 1. 현재 스테이지의 터레인 번들을 찾아와서
+	//CTerrainBundle* pTrrainBundle = (CTerrainBundle*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_TerrainBundle");
+	//if (nullptr == pTrrainBundle)
+	//	return E_FAIL;
+
+	//_vec3 vPosition = m_pTransformCom[PART_BODY]->Get_Desc().vPosition - _vec3(0.f, 1.5f, 0.f);
+	//
+	//// 2. 인터벌을 알아야 하므로 일단 아무거나 하나 터레인 정보를 얻어온다.
+	//TERRAININFO tTerrainInfo = pTrrainBundle->Get_TerrainInfo(_vec3(0.f, 0.f, 0.f), 0);
+	//_int iFloor = (_int)(vPosition.y / tTerrainInfo.iInterval);
+
+	//// 3. 내 x, z좌표중 제일 아래있는 층을 찾아본다.
+	//tTerrainInfo.pObj = nullptr;
+	//_int iCnt = 0;
+	//for (iCnt = 0; iCnt < 16; ++iCnt)
+	//{
+	//	tTerrainInfo = pTrrainBundle->Get_TerrainInfo(vPosition, iCnt);
+	//	if (tTerrainInfo.pObj)
+	//		break;
+	//}
+	//
+	//// 4. 없으면 건너뜀
+	//if (tTerrainInfo.pObj)
+	//	iFloor = tTerrainInfo.iFloor;
+
+	//// 4. 터레인이 있다면 x, z만 남긴다.
+	//vPosition = { vPosition.x, 0.f, vPosition.z };
+
+	//// 5. 높이 보정을 해준다. (형변환 필요 없이 현재 층을 알기 때문에 강제 보정한다. / 자연스럽게 타고 싶으면 평면 태우기)
+	//
+	//m_pTransformCom[PART_HEAD]->Set_Position(vPosition + _vec3(0.f, 1.5f, 0.f) + _vec3(0.f, (_float)(iFloor * tTerrainInfo.iInterval), 0.f));
+	//m_pTransformCom[PART_BODY]->Set_Position(vPosition + _vec3(0.f, 0.8f, 0.f) + _vec3(0.f, (_float)(iFloor * tTerrainInfo.iInterval), 0.f));
 
 	return S_OK;
 }
@@ -898,12 +936,25 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 
 
 	//--------------------------------------------------
-	// Space : Jump
+	// gatcha☆
 	//--------------------------------------------------
 	else if (pManagement->Key_Down(VK_SPACE))
 	{
-		//if(VALIDATE_MOVE >= m_eCurState)
-		//	m_eCurState = JUMP;
+		wstring strGatcha;
+		CRandomBoxManager::Get_Instance()->Gatcha_PotionBox(strGatcha);
+		
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr != pManagement)
+		{
+			DROPBOX_INFO tBoxInfo;
+			tBoxInfo.iItemNo = -1;
+			tBoxInfo.vPos = m_pTransformCom[PART_BODY]->Get_Desc().vPosition;
+			tBoxInfo.vPos += { (_float)((rand() % 10 - 5) * 0.1f), 0.f, (_float)((rand() % 10 - 5) * 0.1f) };
+
+			StringCchCopy(tBoxInfo.szItemTag, _countof(tBoxInfo.szItemTag), strGatcha.c_str());
+			if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_DropItem", &tBoxInfo)))
+				PRINT_LOG(L"Failed To Create RandomBox", LOG::CLIENT);
+		}
 	}
 
 	//--------------------------------------------------

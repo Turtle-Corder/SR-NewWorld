@@ -3,6 +3,7 @@
 #include "SkillSlotManager.h"
 #include "ItemSlotManager.h"
 #include "Sound_Manager.h"
+#include "RandomBoxManager.h"
 #include "..\Headers\MainApp.h"
 
 
@@ -67,6 +68,7 @@
 #include "MainQuest.h"
 #include "NpcWnd.h"
 #include "IceLandQuest.h"
+#include "MeteorPiece.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -462,6 +464,13 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_MeteorPiece
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_MeteorPiece", CMeteorPiece::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+
+
 
 #pragma region GameObject_IceSpear
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceSpear", CIceSpear::Create(m_pDevice))))
@@ -506,6 +515,7 @@ HRESULT CMainApp::Setup_YJ()
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceBlast", CIceBlast::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
+
 
 #pragma region Component_Texture_IceBlast
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceBlast", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
@@ -1346,6 +1356,7 @@ void CMainApp::Free()
 	CSkillSlotManager::Destroy_Instance();
 	CItemSlotManager::Destroy_Instance();
 	CSoundManager::Destroy_Instance();
+	CRandomBoxManager::Destroy_Instance();
 
 	Safe_Release(m_pFont);
 	Safe_Release(m_pSprite);

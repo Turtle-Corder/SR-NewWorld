@@ -2,6 +2,7 @@
 #include "..\Headers\Meteor.h"
 #include "Status.h"
 #include "DamageInfo.h"
+#include "MainCamera.h"
 
 USING(Client)
 
@@ -40,9 +41,8 @@ HRESULT CMeteor::Setup_GameObject(void* _pArg)
 int CMeteor::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
-	{
 		return GAMEOBJECT::DEAD;
-	}
+	
 
 	if (FAILED(Movement(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
@@ -64,7 +64,12 @@ int CMeteor::LateUpdate_GameObject(_float _fDeltaTime)
 
 	m_fDeadTime += _fDeltaTime;
 	if (m_fDeadTime >= 3.f)
+	{
+		CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+		Make_Pieces();
+		pMainCamera->Set_Camera_Wigging(0.7f, 100.f, 1.5f, CMainCamera::WIG_TYPE::DAMPED);
 		m_bDead = true;
+	}
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return  GAMEOBJECT::WARN;
@@ -183,7 +188,12 @@ HRESULT CMeteor::FallDown_Meteor(_float _fDeltaTime)
 
 
 	if (m_pTransformCom->Get_Desc().vPosition.y < m_tInstant.vOption.y)
+	{
+		CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+		Make_Pieces();
+		pMainCamera->Set_Camera_Wigging(0.7f, 100.f, 1.5f, CMainCamera::WIG_TYPE::DAMPED);
 		m_bDead = true;
+	}
 
 	return S_OK;
 }
@@ -209,13 +219,17 @@ bool CMeteor::Make_Pieces()
 
 	for (_uint i = 0; i < 15; i++)
 	{
-		_vec3 RandomPostionSelect = { (_float)(rand() % 4 - 2), 0.f ,(_float)(rand() % 4) - 2 };
+		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 3.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
 
 		pImpact.pAttacker = nullptr;
 		pImpact.pStatusComp = nullptr;
 		pImpact.vPosition = m_pTransformCom->Get_Desc().vPosition;
 		pImpact.vDirection = RandomPostionSelect;
 		pImpact.vOption = RandomPostionSelect + m_pTransformCom->Get_Desc().vPosition;
+
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Crack", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact.vPosition)))
+			return E_FAIL;
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MeteorPiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact)))
 		{
@@ -226,7 +240,7 @@ bool CMeteor::Make_Pieces()
 
 
 
-
+	return true;
 }
 
 CMeteor * CMeteor::Create(LPDIRECT3DDEVICE9 pDevice)

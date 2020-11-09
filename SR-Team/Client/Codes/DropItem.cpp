@@ -130,10 +130,18 @@ HRESULT CDropItem::Take_Damage(const CComponent * _pDamageComp)
 		if (nullptr == pInven)
 			return GAMEOBJECT::WARN;
 
-		if (m_tBoxInfo.iItemNo == 0)
-			pInven->Get_RewardItem(L"Diamond");
-		else if (m_tBoxInfo.iItemNo == 1)
-			pInven->Get_RewardItem(L"GolemCore_Green");
+		if (-1 != m_tBoxInfo.iItemNo)
+		{
+			if (m_tBoxInfo.iItemNo == 0)
+				pInven->Get_RewardItem(L"Diamond");
+			else if (m_tBoxInfo.iItemNo == 1)
+				pInven->Get_RewardItem(L"GolemCore_Green");
+		}
+		else
+		{
+			pInven->Get_RewardItem(m_tBoxInfo.szItemTag);
+		}
+
 
 		m_bDead = true;
 	}
@@ -145,10 +153,18 @@ HRESULT CDropItem::Add_Component()
 {
 	TCHAR szName[MIN_STR] = L"";
 
-	if (0 == m_tBoxInfo.iItemNo)
-		StringCchPrintf(szName, _countof(szName), L"Component_Texture_DropDiamond");
-	else if (1 == m_tBoxInfo.iItemNo)
-		StringCchPrintf(szName, _countof(szName), L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green");
+	if (-1 == m_tBoxInfo.iItemNo)
+	{
+		StringCchPrintf(szName, _countof(szName), m_tBoxInfo.szItemTag);
+	}
+	else
+	{
+		if (0 == m_tBoxInfo.iItemNo)
+			StringCchPrintf(szName, _countof(szName), L"Component_Texture_DropDiamond");
+		else if (1 == m_tBoxInfo.iItemNo)
+			StringCchPrintf(szName, _countof(szName), L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green");
+	}
+
 
 	// For.Com_VIBuffer
 	CTransform::TRANSFORM_DESC tTransformDesc[ITEM_END];

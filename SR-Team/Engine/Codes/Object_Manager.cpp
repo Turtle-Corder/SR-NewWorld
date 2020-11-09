@@ -103,6 +103,44 @@ HRESULT CObject_Manager::Add_GameObject_InLayer(_int _iFromSceneID, const wstrin
 	return S_OK;
 }
 
+HRESULT CObject_Manager::Add_GameObject_InLayer(CGameObject ** _pOut, _int _iFromSceneID, const wstring & _strProtoTypeTag, _int _iToSceneID, const wstring & _strLayerTag, void * _pArg)
+{
+	if (0 > _iFromSceneID || 0 > _iToSceneID ||
+		m_iSceneCount <= _iFromSceneID || m_iSceneCount <= _iToSceneID)
+		return E_FAIL;
+
+	if (nullptr == m_pGameObjects || nullptr == m_pLayers)
+		return E_FAIL;
+
+	auto iter_find = m_pGameObjects[_iFromSceneID].find(_strProtoTypeTag);
+	if (m_pGameObjects[_iFromSceneID].end() == iter_find)
+	{
+		PRINT_LOG(_strProtoTypeTag.c_str(), LOG::ENGINE);
+		PRINT_LOG(L"Prototype Not Found", LOG::ENGINE);
+		return E_FAIL;
+	}
+
+	CGameObject* pClone = iter_find->second->Clone_GameObject(_pArg);
+	if (nullptr == pClone)
+		return E_FAIL;
+
+	auto iter_find_Layer = m_pLayers[_iToSceneID].find(_strLayerTag);
+	if (m_pLayers[_iToSceneID].end() == iter_find_Layer)
+	{
+		CLayer* pLayer = CLayer::Create();
+		m_pLayers[_iToSceneID].emplace(_strLayerTag, pLayer);
+	}
+
+	if (FAILED(m_pLayers[_iToSceneID][_strLayerTag]->Add_GameObject_InLayer(pClone)))
+	{
+		Safe_Release(pClone);
+		return E_FAIL;
+	}
+
+	*_pOut = pClone;
+	return S_OK;
+}
+
 HRESULT CObject_Manager::Clear_ForScene(_int _iSceneID)
 {
 	if (0 > _iSceneID || m_iSceneCount <= _iSceneID)
