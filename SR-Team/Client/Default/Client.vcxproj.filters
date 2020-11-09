@@ -349,11 +349,23 @@
     <Filter Include="02.GameObject\07.UI\08. IceLand">
       <UniqueIdentifier>{c3857be8-47a4-4dcc-aaa2-dab19128d78e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\11.Instant_Impact\04.Stump_impact">
+      <UniqueIdentifier>{27e1d523-bbf9-4a09-9874-859d61b87332}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces">
       <UniqueIdentifier>{4590d8f0-d07c-4124-8df2-8786b1c64568}</UniqueIdentifier>
     </Filter>
     <Filter Include="04.Manager\03.SoundManager">
       <UniqueIdentifier>{b9bb5755-1e2e-468b-a489-f8eabc2ce1ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\07.IceBlast\02.IceBlastPieces">
+      <UniqueIdentifier>{8faffbca-08fd-478e-a766-3137ee59ff02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\05.IceSpear\00.IceSpear">
+      <UniqueIdentifier>{30342d1c-1bf3-4339-93e6-b5da292190d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\05.IceSpear\01.IceDust">
+      <UniqueIdentifier>{16fa8d64-dd6a-4780-9ab1-1e0516a344b8}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\17.RandomBox">
       <UniqueIdentifier>{2c507375-32f8-47f9-a1de-12cc0e2a5155}</UniqueIdentifier>
@@ -363,6 +375,9 @@
     </Filter>
     <Filter Include="02.GameObject\18.DamageFloat">
       <UniqueIdentifier>{0bd03986-f8be-4edf-bdcd-14828355d3c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\07. RandomBox_Npc">
+      <UniqueIdentifier>{8de7d053-b594-41f7-8bb5-eccfaf6f90a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -612,9 +627,6 @@
     <ClInclude Include="..\Headers\Shop_NPC.h">
       <Filter>02.GameObject\16. NPC\01. Shop</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\IceSpear.h">
-      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Thunder.h">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder</Filter>
     </ClInclude>
@@ -675,11 +687,23 @@
     <ClInclude Include="..\Headers\IceLandQuest.h">
       <Filter>02.GameObject\07.UI\08. IceLand</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Stump_Impact.h">
+      <Filter>02.GameObject\11.Instant_Impact\04.Stump_impact</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\MeteorPiece.h">
       <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Sound_Manager.h">
       <Filter>04.Manager\03.SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IceBlastPiece.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\02.IceBlastPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IceSpear.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear\00.IceSpear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IceDust.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear\01.IceDust</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\RandomBox.h">
       <Filter>02.GameObject\17.RandomBox</Filter>
@@ -689,6 +713,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\DamageFloater.h">
       <Filter>02.GameObject\18.DamageFloat</Filter>
+ </ClInclude>
+    <ClInclude Include="..\Headers\RandomBox_Npc.h">
+      <Filter>02.GameObject\16. NPC\07. RandomBox_Npc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -923,9 +950,6 @@
     <ClCompile Include="..\Codes\Shop_NPC.cpp">
       <Filter>02.GameObject\16. NPC\01. Shop</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\IceSpear.cpp">
-      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Thunder.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\04.Thunder\01.Thunder</Filter>
     </ClCompile>
@@ -986,11 +1010,23 @@
     <ClCompile Include="..\Codes\IceLandQuest.cpp">
       <Filter>02.GameObject\07.UI\08. IceLand</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Stump_Impact.cpp">
+      <Filter>02.GameObject\11.Instant_Impact\04.Stump_impact</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\MeteorPiece.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Sound_Manager.cpp">
       <Filter>04.Manager\03.SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceBlastPiece.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\07.IceBlast\02.IceBlastPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceSpear.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear\00.IceSpear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IceDust.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\05.IceSpear\01.IceDust</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\RandomBox.cpp">
       <Filter>02.GameObject\17.RandomBox</Filter>
@@ -1000,6 +1036,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DamageFloater.cpp">
       <Filter>02.GameObject\18.DamageFloat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RandomBox_Npc.cpp">
+      <Filter>02.GameObject\16. NPC\07. RandomBox_Npc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

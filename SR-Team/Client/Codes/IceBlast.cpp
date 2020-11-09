@@ -25,7 +25,7 @@ HRESULT CIceBlast::Setup_GameObject(void * _pArg)
 	if (_pArg)
 	{
 		m_tImpact = *(INSTANTIMPACT*)_pArg;
-		m_fInitDelay *= m_tImpact.vOption.x;
+		m_fInitDelay *= m_tImpact.vOption.x * 0.1f;
 	}
 
 	if (FAILED(Add_Component()))
@@ -44,10 +44,19 @@ _int CIceBlast::Update_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::NOEVENT;
 
 	// falldown
-	_vec3 vAddPos = _vec3(0.f, -1.f, 0.f) * m_pTransformComp->Get_Desc().fSpeedPerSecond * _fDeltaTime;
+	_vec3 vAddPos = _vec3(0.f, 2.5f, 0.f) * m_pTransformComp->Get_Desc().fSpeedPerSecond * _fDeltaTime;
 	m_pTransformComp->Set_Position(m_pTransformComp->Get_Desc().vPosition + vAddPos);
-	if (m_pTransformComp->Get_Desc().vPosition.y < m_tImpact.vPosition.y)
+	if (m_pTransformComp->Get_Desc().vPosition.y > 14.f)
 		m_bDead = true;
+
+	if (m_pTransformComp->Get_Desc().vPosition.y > 0.f && m_pTransformComp->Get_Desc().vPosition.y < 1.f)
+		Make_Pieces();
+
+	m_fScale -= _fDeltaTime * 2.f;
+
+	_vec3 vScale = { m_fScale , m_fScale  ,m_fScale };
+
+	m_pTransformComp->Set_Scale(vScale);
 
 	m_pTransformComp->Update_Transform();
 
@@ -101,10 +110,10 @@ HRESULT CIceBlast::Render_NoneAlpha()
 HRESULT CIceBlast::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vPosition = { m_tImpact.vPosition.x, m_tImpact.vPosition.y + 14.f ,m_tImpact.vPosition.z};
+	tTransformDesc.vPosition = { m_tImpact.vPosition.x, m_tImpact.vPosition.y - 12.f ,m_tImpact.vPosition.z};
 
-	_float fScale = m_tImpact.vOption.x;
-	tTransformDesc.vScale = { 1.f, 1.f, 1.f };
+	m_fScale = m_tImpact.vOption.y;
+	tTransformDesc.vScale = { m_fScale, m_fScale, m_fScale };
 	tTransformDesc.vRotate = { D3DXToRadian(_float(rand()%90)), D3DXToRadian(_float(rand() % 90)), D3DXToRadian(_float(rand() % 90)) };
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
@@ -180,6 +189,51 @@ void CIceBlast::Update_DeadDelay(_float _fDeltaTime)
 			m_bDead = true;
 	}
 }
+
+
+HRESULT CIceBlast::Make_Pieces()
+{
+	INSTANTIMPACT pImpact;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return false;
+
+	//Option에 도착을 미리 지정해서 들고오자.
+	//Direction은 이동방향
+	//Pos는 시작위치.
+
+
+
+
+	//--------------------------------------------------
+	// TODO : 실제 메테오조각 소환
+	//--------------------------------------------------
+	for (_uint i = 0; i < 3 ;i++)
+	{
+		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
+
+		pImpact.pAttacker = nullptr;
+		pImpact.pStatusComp = nullptr;
+		pImpact.vPosition = m_pTransformComp->Get_Desc().vPosition;
+		pImpact.vDirection = RandomPostionSelect;
+		pImpact.vOption = RandomPostionSelect + m_pTransformComp->Get_Desc().vPosition;
+
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Crack", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact.vPosition)))
+			return E_FAIL;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IcePiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact)))
+		{
+			PRINT_LOG(L"Failed To Spawn IcePieces", LOG::DEBUG);
+			return false;
+		}
+	}
+
+}
+
+
+
 
 CGameObject * CIceBlast::Clone_GameObject(void * _pArg)
 {

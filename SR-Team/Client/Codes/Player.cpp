@@ -14,6 +14,7 @@
 #include "Mouse.h"
 #include "CubeTerrain.h"
 #include "TerrainBundle.h"
+#include "MainCamera.h"
 #include "RandomBoxManager.h"
 #include "..\Headers\Player.h"
 
@@ -157,6 +158,12 @@ HRESULT CPlayer::Take_Damage(const CComponent* _pDamageComp)
 		return S_OK;
 
 	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+
+
+	CManagement* pManagement = CManagement::Get_Instance();
+
+	CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	pMainCamera->Set_Camera_Wigging(0.7f, 70.f, 1.5f, CMainCamera::WIG_TYPE::DAMPED);
 
 	//if (0 >= m_pStatusCom->Get_Status().iHp)
 	//	PRINT_LOG(L"¾Æ¾æ", LOG::CLIENT);

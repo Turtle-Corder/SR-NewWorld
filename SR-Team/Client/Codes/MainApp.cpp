@@ -42,6 +42,8 @@
 #include "Explosion.h"
 #include "Thunder.h"
 #include "ThunderBox.h"
+#include "IceBlastPiece.h"
+#include "IceDust.h"
 
 #include "SkillSlot_Meteor.h"
 #include "SkillSlot_IceSpear.h"
@@ -469,8 +471,15 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_IcePiece
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IcePiece", CIceBlastPiece::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
-
+#pragma region GameObject_IceDust
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceDust", CIceDust::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region GameObject_IceSpear
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceSpear", CIceSpear::Create(m_pDevice))))
@@ -744,6 +753,9 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Shop_ShopScrollBar", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_Shop/ScrollBar%d.png"))))
 		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Shop_ClearWnd", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Shop/clear%d.png"))))
+		return E_FAIL;
 
 	// ChatWnd
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Shop_ChatWnd0", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
@@ -910,6 +922,9 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_DiaSword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_Item/diamond_sword%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_MagicalStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/magical_extreme_staff%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1133,11 +1148,11 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Green%d.png"))))
 		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Puple", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Puple%d.png"))))
+		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Blue%d.png"))))
-		return E_FAIL;
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_BrightBlue", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_MainQuest/GolemCore_BrightBlue%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

@@ -48,6 +48,7 @@ typedef struct tagInstantImpact
 	_vec3			vPosition = {};
 	_vec3			vDirection = {};
 	_vec3			vOption = {};
+	_float			fOption = 0.f;
 	CGameObject*	pTarget = nullptr;
 }INSTANTIMPACT;
 

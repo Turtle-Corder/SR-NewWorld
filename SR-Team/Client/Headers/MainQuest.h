@@ -16,7 +16,7 @@ public:
 	};
 	enum GOLEM_SORT
 	{
-		RED, GREEN, BLUE, BRIGHT_BLUE, GOLEM_SORT_END
+		RED, GREEN, BLUE, PUPLE, GOLEM_SORT_END
 	};
 
 public:

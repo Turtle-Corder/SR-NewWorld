@@ -171,7 +171,8 @@ _int CEquip::Update_GameObject(_float _fDeltaTime)
 
 	for (_int i = 0; i < ITEMSORT_END; i++)
 	{
-		m_pTransformItem[i]->Update_Transform();
+		if(nullptr != m_pTransformItem[i])
+			m_pTransformItem[i]->Update_Transform();
 	}
 
 	return GAMEOBJECT::NOEVENT;

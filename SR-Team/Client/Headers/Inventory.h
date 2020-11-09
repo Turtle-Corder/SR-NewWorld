@@ -119,6 +119,7 @@ private:
 	// 아이템을 그리는 함수
 	// ------------------------------------------------------------------
 	HRESULT Render_Item();
+	HRESULT Render_ClearWnd();
 
 // 움직임 관련 함수
 private:
@@ -211,6 +212,11 @@ private:
 	
 private:
 	_bool				m_bMovingClear = false;
+
+private:
+	// 구매 완료 이미지
+	CTexture*		m_pTextureClear = nullptr;
+	_bool			m_bRenderClearWnd = false;
 };
 
 END

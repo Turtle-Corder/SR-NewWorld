@@ -168,7 +168,9 @@
     <ClInclude Include="..\Headers\FireCrystal.h" />
     <ClInclude Include="..\Headers\FlowerQuest.h" />
     <ClInclude Include="..\Headers\IceBlast.h" />
+    <ClInclude Include="..\Headers\IceBlastPiece.h" />
     <ClInclude Include="..\Headers\IceCrystal.h" />
+    <ClInclude Include="..\Headers\IceDust.h" />
     <ClInclude Include="..\Headers\IceLandQuest.h" />
     <ClInclude Include="..\Headers\IceSpear.h" />
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
@@ -183,6 +185,7 @@
     <ClInclude Include="..\Headers\QuestItem_Flower.h" />
     <ClInclude Include="..\Headers\RandomBox.h" />
     <ClInclude Include="..\Headers\RandomBoxManager.h" />
+    <ClInclude Include="..\Headers\RandomBox_Npc.h" />
     <ClInclude Include="..\Headers\Scene_Room.h" />
     <ClInclude Include="..\Headers\Scene_Stage1.h" />
     <ClInclude Include="..\Headers\Scene_Stage2.h" />
@@ -246,6 +249,7 @@
     <ClInclude Include="..\Headers\Stage3_NPC.h" />
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\Stump.h" />
+    <ClInclude Include="..\Headers\Stump_Impact.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
     <ClInclude Include="..\Headers\TerrainBundle.h" />
     <ClInclude Include="..\Headers\ThunderBox.h" />
@@ -276,7 +280,9 @@
     <ClCompile Include="..\Codes\FireCrystal.cpp" />
     <ClCompile Include="..\Codes\FlowerQuest.cpp" />
     <ClCompile Include="..\Codes\IceBlast.cpp" />
+    <ClCompile Include="..\Codes\IceBlastPiece.cpp" />
     <ClCompile Include="..\Codes\IceCrystal.cpp" />
+    <ClCompile Include="..\Codes\IceDust.cpp" />
     <ClCompile Include="..\Codes\IceLandQuest.cpp" />
     <ClCompile Include="..\Codes\IceSpear.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />
@@ -291,6 +297,7 @@
     <ClCompile Include="..\Codes\QuestItem_Flower.cpp" />
     <ClCompile Include="..\Codes\RandomBox.cpp" />
     <ClCompile Include="..\Codes\RandomBoxManager.cpp" />
+    <ClCompile Include="..\Codes\RandomBox_Npc.cpp" />
     <ClCompile Include="..\Codes\Scene_Room.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage1.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage2.cpp" />
@@ -351,6 +358,7 @@
     <ClCompile Include="..\Codes\Stage3_NPC.cpp" />
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\Stump.cpp" />
+    <ClCompile Include="..\Codes\Stump_Impact.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainBundle.cpp" />
     <ClCompile Include="..\Codes\ThunderBox.cpp" />

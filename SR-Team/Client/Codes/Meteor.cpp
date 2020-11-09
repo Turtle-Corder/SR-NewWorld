@@ -107,7 +107,7 @@ HRESULT CMeteor::Add_Component()
 	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x + 0.05f , m_tInstant.vPosition.y , m_tInstant.vPosition.z - 0.05f) };
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(135.f);
-	tTransformDesc.vScale = { 1.2f, 2.3f, 1.2f };
+	tTransformDesc.vScale = { 3.6f, 4.5f, 3.6f };
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
@@ -219,7 +219,7 @@ bool CMeteor::Make_Pieces()
 
 	for (_uint i = 0; i < 15; i++)
 	{
-		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 3.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
+		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
 
 		pImpact.pAttacker = nullptr;
 		pImpact.pStatusComp = nullptr;

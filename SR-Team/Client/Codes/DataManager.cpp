@@ -10,7 +10,7 @@ USING(Client)
 CDataManager::CDataManager(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
-	for (_uint i = 0; i < 25; ++i)
+	for (_uint i = 0; i < 26; ++i)
 	{
 		m_pTextureCom[i] = nullptr;
 		m_pStatCom[i] = nullptr;
@@ -153,7 +153,7 @@ HRESULT CDataManager::Add_Component()
 
 HRESULT CDataManager::Add_Component_Item()
 {
-	for (_uint i = 0; i < 25; ++i)
+	for (_uint i = 0; i < 26; ++i)
 	{
 		// 3. Texture--------------------------------------------------------------
 		TCHAR szTexture[MAX_PATH] = L"";
@@ -223,16 +223,19 @@ HRESULT CDataManager::Add_Component_Item()
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green");
 		else if (i == 21)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
-				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue");
+				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Puple");
 		else if (i == 22)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
-				L"Component_Texture_MainQuest_HelpWnd_GolemCore_BrightBlue");
+				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue");
 		else if (i == 23)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
 				L"Component_Texture_DropDiamond");
 		else if (i == 24)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
 				L"Component_Texture_DropRuby");
+		else if (i == 25)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_Item_MagicalStaff");
 
 		StringCchPrintf(szTexture, sizeof(TCHAR) * MAX_PATH,
 			L"Com_Texture%d", i);
@@ -444,18 +447,18 @@ HRESULT CDataManager::Add_Component_Item()
 			pItem->iPrice = 100;
 			pItem->eSort = eITEM_SORT::MAIN_QUEST;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"GolemCore_Blue");
+				L"%s", L"GolemCore_Puple");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
-				L"ÆÄ¶õ °ñ·½ÀÇ ÇÙ");
+				L"º¸¶ó»ö °ñ·½ÀÇ ÇÙ");
 		}
 		if (i == 22)
 		{
 			pItem->iPrice = 100;
 			pItem->eSort = eITEM_SORT::MAIN_QUEST;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"GolemCore_BrightBlue");
+				L"%s", L"GolemCore_Blue");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
-				L"¹àÀº ÆÄ¶õ °ñ·½ÀÇ ÇÙ");
+				L"ÆÄ¶õ °ñ·½ÀÇ ÇÙ");
 		}
 		if (i == 23)
 		{
@@ -474,6 +477,15 @@ HRESULT CDataManager::Add_Component_Item()
 				L"%s", L"Ruby");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
 				L"·çºñ º¸¼®");
+		}
+		if (i == 25)
+		{
+			pItem->iPrice = 1000;
+			pItem->eSort = eITEM_SORT::STAFF1;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"MagicalStaff");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"¸¶¹ý ½ºÅÂÇÁ");
 		}
 		m_vItemList.emplace_back(pItem);
 
@@ -576,6 +588,12 @@ HRESULT CDataManager::Add_Component_Item()
 		}
 		else if (i == 24)
 		{
+		}
+		else if (i == 25)
+		{
+			tStat.iMaxAtt = 500;
+			tStat.iMinAtt = 50;
+			tStat.iCriticalRate = 60;
 		}
 
 		TCHAR szStat[MAX_PATH] = L"";
@@ -741,7 +759,7 @@ CGameObject * CDataManager::Clone_GameObject(void * pArg)
 
 void CDataManager::Free()
 {
-	for (_uint i = 0; i < 25; ++i)
+	for (_uint i = 0; i < 26; ++i)
 	{
 		Safe_Release(m_pTextureCom[i]);
 		Safe_Release(m_pStatCom[i]);

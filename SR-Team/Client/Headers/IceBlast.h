@@ -27,6 +27,7 @@ private:
 
 	void Update_InitDelay(_float _fDeltaTime);
 	void Update_DeadDelay(_float _fDeltaTime);
+	HRESULT Make_Pieces();
 public:
 	virtual CGameObject* Clone_GameObject(void* _pArg) override;
 	virtual void Free() override;
@@ -49,7 +50,7 @@ private:
 
 	_float			m_fInitTimer = 0.f;
 	_float			m_fInitDelay = 1.f;
-								 
+	_float			m_fScale = 0.f;
 	_float			m_fDeadTimer = 0.f;
 	_float			m_fDeadDelay = 5.f;
 };

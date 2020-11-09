@@ -23,6 +23,7 @@
 #include "TerrainBundle.h"
 #include "Snail_Impact.h"
 #include "Slime_Impact.h"
+#include "Stump_Impact.h"
 #include "Wand.h"
 #include "Skybox.h"
 #include "FlowerQuest_NPC.h"
@@ -38,7 +39,6 @@
 #include "Stage2_NPC.h"
 #include "Stage3_NPC.h"
 #include "IceLandQuest.h"
-
 #pragma endregion
 
 USING(Client)
@@ -137,11 +137,6 @@ HRESULT CPreLoader::Load_Resources_Town()
 
 #pragma region GameObject_Snail_Impact
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region GameObject_Stump
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Stump", CStump::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
@@ -338,6 +333,11 @@ HRESULT CPreLoader::Load_Resources_Forest()
 
 #pragma region GameObject_Acorn
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Stump_Impact
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Stump_Impact", CStump_Impact::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 

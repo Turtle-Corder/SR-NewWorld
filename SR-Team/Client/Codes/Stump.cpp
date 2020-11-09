@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Stump.h"
 #include "DamageInfo.h"
+#include "MainCamera.h"
 USING(Client)
 
 CStump::CStump(LPDIRECT3DDEVICE9 _pDevice)
@@ -33,7 +34,7 @@ HRESULT CStump::Setup_GameObject(void * _pArg)
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
-
+	m_fAnimationSpeed = 1.9f;
 	Set_Active();
 
 	return S_OK;
@@ -53,9 +54,11 @@ _int CStump::Update_GameObject(_float _fDeltaTime)
 
 	IsOnTerrain();
 
-	Attack(_fDeltaTime);
+	//Attack(_fDeltaTime);
 
-	Update_State();
+	Update_Animation(_fDeltaTime);
+
+	Update_State(_fDeltaTime);
 
 	Update_Transform();
 
@@ -243,17 +246,17 @@ HRESULT CStump::Add_Component()
 		}
 		else if (iCnt == STUMP_LH)
 		{
-			tTransformDesc[STUMP_LH].vPosition = { -3.2f , -0.3f, 0.f };
+			tTransformDesc[STUMP_LH].vPosition = { 0.f , -3.1f, 0.f };
 			tTransformDesc[STUMP_LH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LH].vScale = { 1.5f, 4.f, 1.5f };
+			tTransformDesc[STUMP_LH].vScale = { 1.5f, 2.5f, 1.5f };
 		}
 		else if (iCnt == STUMP_RH)
 		{
-			tTransformDesc[STUMP_RH].vPosition = { 3.2f , -0.3f, 0.f };
+			tTransformDesc[STUMP_RH].vPosition = { 0.f , -3.1f, 0.f };
 			tTransformDesc[STUMP_RH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_RH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_RH].vScale = { 1.5f, 4.f, 1.5f };
+			tTransformDesc[STUMP_RH].vScale = { 1.5f, 2.5f, 1.5f };
 		}
 
 		else if (iCnt == STUMP_LEG1)
@@ -321,24 +324,56 @@ HRESULT CStump::Add_Component()
 	return S_OK;
 }
 
-HRESULT CStump::Update_State()
+HRESULT CStump::Update_State(_float _fDeltaTime)
 {
 	if (m_ePreState != m_eCurState)
 	{
 		switch (m_eCurState)
 		{
 		case STATE::IDLE:
+			Anim_Reset_Move();
+			Anim_Reset_Attack();
 			break;
 		case STATE::MOVE:
 			break;
 		case STATE::ATTACK:
+		{
+			Anim_Reset_Move();
+			m_bSpawnImpact = true;
+		}
+			break;
+		case STATE::ATTACK1:
+		{
+			Anim_Reset_Move();
+			m_bSpawnImpact = true;
+		}
 			break;
 		}
 
-		m_iAnimStep = 0;
-		m_fAnimTimer = 0.f;
+		m_iAnimationStep = 0;
+		m_fAnimationTimer = 0.f;
 		m_ePreState = m_eCurState;
 	}
+	return S_OK;
+}
+
+HRESULT CStump::Anim_Reset_Move()
+{
+	m_pTransformCom[STUMP_LSHD]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[STUMP_RSHD]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[STUMP_LEG1]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[STUMP_LEG2]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[STUMP_LEG3]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[STUMP_LEG4]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+
+	return S_OK;
+}
+
+HRESULT CStump::Anim_Reset_Attack()
+{
+	m_pTransformCom[STUMP_LSHD]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+	m_pTransformCom[STUMP_RSHD]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+
 	return S_OK;
 }
 
@@ -374,7 +409,14 @@ HRESULT CStump::Update_AI()
 		//--------------------------------------------------
 		if (m_bCanAttack && fDistance < m_fAttackDistance)
 		{
-			m_eCurState = ATTACK;
+			if (m_bCanAttack)
+			{
+				_uint iRand = rand() % 100;
+					if (iRand < 45)	m_eCurState = ATTACK1;
+					else if (iRand < 75)m_eCurState = ATTACK;
+								
+				return S_OK;
+			}
 			return S_OK;
 		}
 
@@ -451,7 +493,7 @@ HRESULT CStump::Update_Move(_float _fDeltaTime)
 	//--------------------------------------------------
 	// ÀÌµ¿
 	//--------------------------------------------------
-	_vec3 vAddPos = m_vMoveDirection * _fDeltaTime;
+	_vec3 vAddPos = m_vMoveDirection * (_fDeltaTime + _fDeltaTime);
 	m_pTransformCom[STUMP_BASE]->Set_Position(m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition + vAddPos);
 
 	return S_OK;
@@ -465,36 +507,186 @@ HRESULT CStump::Update_Transform()
 	{
 		m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[STUMP_BASE]->Get_Desc().matWorld);		//(m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld));
 	}
+	
+	for (_uint iCnt = STUMP_LH; iCnt < STUMP_LEG1; ++iCnt)
+	{
+		m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[iCnt - 2]->Get_Desc().matWorld);
+	}
 
 	return S_OK;
 }
 
-HRESULT CStump::Attack(_float _fDeltaTime)
+HRESULT CStump::Update_Animation(_float _fDeltaTime)
+{
+	switch (m_eCurState)
+	{
+	case Client::CStump::IDLE:
+		break;
+	case Client::CStump::MOVE:
+		Update_Animation_Move(_fDeltaTime);
+		break;
+	case Client::CStump::ATTACK:
+		Update_Animation_Attack(_fDeltaTime);
+		break;
+	case Client::CStump::ATTACK1:
+		Update_Animation_Attack2(_fDeltaTime);
+		break;
+	default:
+		break;
+	}
+
+	return S_OK;
+}
+
+HRESULT CStump::Update_Animation_Move(_float _fDeltaTime)
+{
+	if (m_eCurState != CStump::MOVE)
+		return S_OK;
+
+	m_fAnimationTimer += _fDeltaTime;
+
+	if (m_fAnimationTimer >= 0.4f)
+	{
+		m_fAnimationTimer = 0.f;
+		m_iAnimationStep = !m_iAnimationStep;
+		Anim_Reset_Move();
+	}
+
+	if (m_iAnimationStep)
+	{
+		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, _fDeltaTime);
+		m_pTransformCom[STUMP_LEG1]->Turn(CTransform::AXIS_X, _fDeltaTime);
+		m_pTransformCom[STUMP_LEG2]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[STUMP_LEG3]->Turn(CTransform::AXIS_X, _fDeltaTime);
+		m_pTransformCom[STUMP_LEG4]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+	}
+	else
+	{
+		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, _fDeltaTime);
+		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[STUMP_LEG1]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[STUMP_LEG2]->Turn(CTransform::AXIS_X, _fDeltaTime);
+		m_pTransformCom[STUMP_LEG3]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[STUMP_LEG4]->Turn(CTransform::AXIS_X, _fDeltaTime);
+	}
+
+
+	return S_OK;
+}
+
+HRESULT CStump::Update_Animation_Attack(_float _fDeltaTime)
 {
 	if (m_eCurState != CStump::ATTACK)
 		return S_OK;
 
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
+	m_fAnimationTimer += _fDeltaTime;
 
-	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
-
-	if (nullptr == pPlayerTransform)
-		return E_FAIL;
-
-	if (m_bCanAttack)
+	if (m_fAnimationTimer >= 0.5f)
 	{
-		for (_uint iCnt = 0; iCnt < 4; ++iCnt)
+		m_fAnimationTimer = 0.f;
+		++m_iAnimationStep;// = !m_iAnimationStep;
+		//Anim_Reset_Attack();
+
+		if (m_iAnimationStep == 4)
 		{
-			if (FAILED(Spawn_Acorn(L"Layer_Effect", iCnt)))
-				return E_FAIL;
+			if (m_bCanAttack)
+			{
+				for (_uint iCnt = 0; iCnt < 4; ++iCnt)
+				{
+					if (FAILED(Spawn_Acorn(L"Layer_Effect", iCnt)))
+						return E_FAIL;
+				}
+
+				CManagement* pManagement = CManagement::Get_Instance();
+				if (nullptr == pManagement)
+					return E_FAIL;
+
+				CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+				if (nullptr == pCamera)
+					return E_FAIL;
+
+				pCamera->Set_Camera_Wigging(0.7f, 100.f, 1.5f, CMainCamera::WIG_TYPE::DAMPED);
+
+				Anim_Reset_Attack();
+				m_bCanAttack = false;
+				m_fAttackDelay = 2.1f;
+				m_eCurState = CStump::IDLE;
+				m_fAnimationSpeed = 1.9f;
+			}
 		}
-		m_bCanAttack = false;
-		m_eCurState = CStump::IDLE;
 	}
+
+	if (m_iAnimationStep <= 2)
+	{
+		m_fAnimationSpeed -= _fDeltaTime;
+		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime * 1.5f * m_fAnimationSpeed);
+		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime* 1.5f * m_fAnimationSpeed);
+	}
+	else if(m_iAnimationStep <= 3)
+	{
+		m_fAnimationSpeed += _fDeltaTime;
+		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, _fDeltaTime * 3.f * m_fAnimationSpeed);
+		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, _fDeltaTime * 3.f * m_fAnimationSpeed);
+	}
+
 	return S_OK;
 }
+
+HRESULT CStump::Update_Animation_Attack2(_float _fDeltaTime)
+{
+	if (m_eCurState != CStump::ATTACK1)
+		return S_OK;
+
+	m_fAnimationTimer += _fDeltaTime;
+
+	if (m_fAnimationTimer >= 0.6f)
+	{
+		m_fAnimationTimer = 0.f;
+		++m_iAnimationStep;
+						   
+		if (m_bSpawnImpact && m_iAnimationStep == 2)
+		{
+			Spawn_StumpImpact(L"Layer_MonsterAtk");
+			CManagement* pManagement = CManagement::Get_Instance();
+			if (nullptr == pManagement)
+				return E_FAIL;
+
+			CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+			if (nullptr == pCamera)
+				return E_FAIL;
+
+			pCamera->Set_Camera_Wigging(0.7f, 100.f, 1.8f, CMainCamera::WIG_TYPE::HARMONIC);
+			m_bSpawnImpact = false;
+		}
+
+		if (m_iAnimationStep == 5)
+		{
+			if (m_bCanAttack)
+			{
+				Anim_Reset_Attack();
+				m_bCanAttack = false;
+				m_eCurState = CStump::IDLE;
+			}
+		}
+	}
+
+	if (m_iAnimationStep <= 1)
+	{
+		//m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X , -_fDeltaTime);
+		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
+		//m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_Z, _fDeltaTime);
+		//m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime* 1.5f);
+	}
+	else if (m_iAnimationStep <= 3)
+	{
+		m_pTransformCom[STUMP_BASE]->Turn(CTransform::AXIS_Y, _fDeltaTime * 5.f);
+	}
+
+	return S_OK;
+}
+
 
 HRESULT CStump::Spawn_Acorn(const wstring & LayerTag, _uint _iCount)
 {
@@ -523,12 +715,30 @@ HRESULT CStump::Spawn_Acorn(const wstring & LayerTag, _uint _iCount)
 	return S_OK;
 }
 
+HRESULT CStump::Spawn_StumpImpact(const wstring& LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact;
+	tImpact.pAttacker = this;
+	tImpact.pStatusComp = m_pStatusCom;
+	_vec3 BodyPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
+	tImpact.vPosition = BodyPos;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump_Impact", pManagement->Get_CurrentSceneID(),LayerTag, &tImpact)))
+		return E_FAIL;
+	//Layer_MonsterAtk
+	return S_OK;
+}
+
 void CStump::Update_AttackDelay(_float _fDeltaTime)
 {
 	if (!m_bCanAttack)
 	{
 		m_fAttackTimer += _fDeltaTime;
-		if (m_fAttackTimer >= 6.f)
+		if (m_fAttackTimer >= m_fAttackDelay)
 		{
 			m_fAttackTimer = 0.f;
 			m_bCanAttack = true;

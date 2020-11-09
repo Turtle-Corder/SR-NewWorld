@@ -55,10 +55,10 @@ HRESULT CScene_Room::Setup_Scene()
 	if (FAILED(Setup_Layer_UI(L"Layer_MainUI")))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Layer_Inventory(L"Layer_Inventory")))
+	if (FAILED(SetUp_Layer_Shop(L"Layer_Shop")))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Layer_Shop(L"Layer_Shop")))
+	if (FAILED(SetUp_Layer_Inventory(L"Layer_Inventory")))
 		return E_FAIL;
 
 	if (FAILED(Setup_Layer_PlayerSkill(L"Layer_PlayerSkill")))
