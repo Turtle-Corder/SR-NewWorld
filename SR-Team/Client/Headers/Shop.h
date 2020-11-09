@@ -70,6 +70,7 @@ private:
 	// 상점에 있는 아이템들을 그리는 함수
 	// ------------------------------------------------------------------
 	HRESULT Render_ShopItem();
+	HRESULT Render_ClearWnd();
 
 public:
 	static CShop* Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
@@ -115,7 +116,9 @@ private:
 	RECT			m_tScrollBarRt = {};
 	int				m_iStartIndex = 0;
 
-
+	// 구매 완료 이미지
+	CTexture*		m_pTextureClear = nullptr;
+	_bool			m_bRenderClearWnd = false;
 };
 
 END
