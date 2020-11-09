@@ -87,12 +87,6 @@ int CMouse::Update_GameObject(float _fDeltaTime)
 	GetCursorPos(&m_tPoint);
 	ScreenToClient(g_hWnd, &m_tPoint);
 
-	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-	{
-		_int iRand = rand() % (_int)STATE::STATE_END;
-		Change_State((STATE)iRand);
-	}
-
 	m_pTransformComp[KIND::ACTUAL]->Set_Position(_vec3( (_float)m_tPoint.x, (_float)m_tPoint.y, 0.f ));
 	m_pTransformComp[KIND::ACTUAL]->Update_Transform();
 

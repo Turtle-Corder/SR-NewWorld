@@ -2,6 +2,7 @@
 #include "Scene_Logo.h"
 #include "SkillSlotManager.h"
 #include "ItemSlotManager.h"
+#include "Sound_Manager.h"
 #include "..\Headers\MainApp.h"
 
 
@@ -1341,6 +1342,7 @@ void CMainApp::Free()
 {
 	CSkillSlotManager::Destroy_Instance();
 	CItemSlotManager::Destroy_Instance();
+	CSoundManager::Destroy_Instance();
 
 	Safe_Release(m_pFont);
 	Safe_Release(m_pSprite);

@@ -44,3 +44,7 @@
 #endif
 
 #endif // _DEBUG
+
+#include <io.h>
+#include "fmod.h"
+#pragma comment (lib, "fmodex_vc.lib")

@@ -22,9 +22,6 @@
     <Filter Include="01.Scene\99.PreLoader">
       <UniqueIdentifier>{572fc3b8-5f43-4a20-b162-f212e0c81994}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Scene\06.Scene_Stage5">
-      <UniqueIdentifier>{60fbce97-ae77-446a-a86e-098f9246c8fe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Scene\04.Scene_Stage3">
       <UniqueIdentifier>{c2e98aba-ee11-42ae-b3b5-373b0b03ec9d}</UniqueIdentifier>
     </Filter>
@@ -352,6 +349,9 @@
     <Filter Include="02.GameObject\07.UI\08. IceLand">
       <UniqueIdentifier>{c3857be8-47a4-4dcc-aaa2-dab19128d78e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Manager\03.SoundManager">
+      <UniqueIdentifier>{b9bb5755-1e2e-468b-a489-f8eabc2ce1ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -663,6 +663,9 @@
     <ClInclude Include="..\Headers\IceLandQuest.h">
       <Filter>02.GameObject\07.UI\08. IceLand</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Sound_Manager.h">
+      <Filter>04.Manager\03.SoundManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -958,6 +961,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\IceLandQuest.cpp">
       <Filter>02.GameObject\07.UI\08. IceLand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Sound_Manager.cpp">
+      <Filter>04.Manager\03.SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
