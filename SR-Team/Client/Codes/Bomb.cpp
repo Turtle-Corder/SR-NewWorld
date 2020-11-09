@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Bomb.h"
 #include "DamageInfo.h"
-
+#include "MainCamera.h"
 USING(Client)
 
 CBomb::CBomb(LPDIRECT3DDEVICE9 _pDevice)
@@ -297,6 +297,19 @@ HRESULT CBomb::Dead_Bomb(_float _fDeltaTime)
 	if (m_iAnimationStep >= 5)
 	{
 		m_iTexCnt = 2;
+
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
+			return E_FAIL;
+
+		CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+		if (nullptr == pCamera)
+			return E_FAIL;
+
+		pCamera->Set_Camera_Wigging(0.7f, 100.f, 1.f, CMainCamera::WIG_TYPE::HARMONIC);
+
+
+
 		m_pTransformCom->Set_Scale(_vec3(3.f, 3.f, 3.f));
 	}
 	else if (0 == m_iAnimationStep % 2)
