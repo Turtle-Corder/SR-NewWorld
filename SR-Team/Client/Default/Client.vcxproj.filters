@@ -352,6 +352,9 @@
     <Filter Include="02.GameObject\07.UI\08. IceLand">
       <UniqueIdentifier>{c3857be8-47a4-4dcc-aaa2-dab19128d78e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\11.Instant_Impact\04.Stump_impact">
+      <UniqueIdentifier>{27e1d523-bbf9-4a09-9874-859d61b87332}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -663,6 +666,9 @@
     <ClInclude Include="..\Headers\IceLandQuest.h">
       <Filter>02.GameObject\07.UI\08. IceLand</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Stump_Impact.h">
+      <Filter>02.GameObject\11.Instant_Impact\04.Stump_impact</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -958,6 +964,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\IceLandQuest.cpp">
       <Filter>02.GameObject\07.UI\08. IceLand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stump_Impact.cpp">
+      <Filter>02.GameObject\11.Instant_Impact\04.Stump_impact</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
