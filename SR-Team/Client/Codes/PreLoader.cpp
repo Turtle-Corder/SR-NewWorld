@@ -85,6 +85,16 @@ HRESULT CPreLoader::Load_Resources_Room()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Crack
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ROOM, L"GameObject_Crack", CCrack::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Component_Texture_Crack
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ROOM, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
+	{
+	}
+#pragma endregion
+
 	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 99)))
 		return E_FAIL;
 
@@ -100,6 +110,20 @@ HRESULT CPreLoader::Load_Resources_Town()
 	//----------------------------------------------------------------------------------------------------
 	// GameObject
 	//----------------------------------------------------------------------------------------------------
+
+
+#pragma region GameObject_Crack
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Crack", CCrack::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Crack
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
+	{
+	}
+#pragma endregion
+
+
 
 #pragma region GameObject_Skybox
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
@@ -231,6 +255,19 @@ HRESULT CPreLoader::Load_Resources_Forest()
 		return E_FAIL;
 #pragma region Snail
 
+	
+#pragma region GameObject_Crack
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Crack", CCrack::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Crack
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
+	{
+	}
+#pragma endregion
+
+
 #pragma region GameObject_Skybox
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
 		return E_FAIL;
@@ -278,12 +315,12 @@ HRESULT CPreLoader::Load_Resources_Forest()
 	}
 #pragma endregion
 
-#pragma region GameObject_Slime
+#pragma region GameObject_Crack
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Crack", CCrack::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Component_Texture_Translucent_Cube
+#pragma region Component_Texture_Crack
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
 	{
 	}
@@ -360,6 +397,19 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 		return E_FAIL;
 
 #pragma region Yeti
+
+
+#pragma region GameObject_Crack
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Crack", CCrack::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Crack
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
+	{
+	}
+#pragma endregion
+
 
 #pragma region GameObject_Yeti
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Yeti", CYeti::Create(m_pDevice))))
@@ -459,6 +509,19 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
+
+
+
+#pragma region GameObject_Crack
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Crack", CCrack::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Crack
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
+	{
+	}
+#pragma endregion
 
 #pragma region GameObject_Golem
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Golem", CGolem::Create(m_pDevice))))
