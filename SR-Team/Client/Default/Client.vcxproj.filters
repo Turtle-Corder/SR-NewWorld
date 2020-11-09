@@ -352,6 +352,9 @@
     <Filter Include="02.GameObject\07.UI\08. IceLand">
       <UniqueIdentifier>{c3857be8-47a4-4dcc-aaa2-dab19128d78e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces">
+      <UniqueIdentifier>{4590d8f0-d07c-4124-8df2-8786b1c64568}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -663,6 +666,9 @@
     <ClInclude Include="..\Headers\IceLandQuest.h">
       <Filter>02.GameObject\07.UI\08. IceLand</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MeteorPiece.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -958,6 +964,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\IceLandQuest.cpp">
       <Filter>02.GameObject\07.UI\08. IceLand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeteorPiece.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Pieces</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

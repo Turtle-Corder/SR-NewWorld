@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __METEOR_H__
-#define __METEOR_H__
+#ifndef __METEORPIECE_H__
+#define __METEORPIECE_H__
 
 #include"GameObject.h"
 
@@ -10,12 +10,12 @@ BEGIN(Client)
 class CStatus;
 class CDamageInfo;
 
-class CMeteor final : public CGameObject
+class CMeteorPiece final : public CGameObject
 {
 private:
-	explicit CMeteor(LPDIRECT3DDEVICE9 pDevice);
-	explicit CMeteor(const CMeteor& other);
-	virtual ~CMeteor() = default;
+	explicit CMeteorPiece(LPDIRECT3DDEVICE9 pDevice);
+	explicit CMeteorPiece(const CMeteorPiece& other);
+	virtual ~CMeteorPiece() = default;
 
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
@@ -27,10 +27,10 @@ public:
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(_float _fDeltaTime);
-	HRESULT FallDown_Meteor(_float _fDeltaTime);
-	bool	Make_Pieces();
+	HRESULT ParticleMove(_float _fDeltaTime);
+
 public:
-	static CMeteor* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CMeteorPiece* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
 	virtual void Free() override;
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp);
@@ -40,10 +40,8 @@ private:
 	CVIBuffer*			m_pVIBufferCom = nullptr;
 	CTransform*			m_pTransformCom = nullptr;
 	CTexture*			m_pTextureCom = nullptr;
-	CSphereCollider*	m_pColliderCom = nullptr;
-	CStatus*			m_pStatusComp = nullptr;
-	CDamageInfo*		m_pDmgInfoCom = nullptr;
-	
+
+	_float FlyingTime = 2.f;
 	_float m_fDeadTime = 0.f;
 	_vec3 m_vMoveDir = {};
 
