@@ -79,6 +79,7 @@ typedef struct tagDropBoxInitInfo
 {
 	_vec3	vPos;
 	_int	iItemNo;
+	WCHAR	szItemTag[MIN_STR];
 	_bool	bGone;
 } DROPBOX_INFO;
 

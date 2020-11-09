@@ -3,6 +3,7 @@
 #include "SkillSlotManager.h"
 #include "ItemSlotManager.h"
 #include "Sound_Manager.h"
+#include "RandomBoxManager.h"
 #include "..\Headers\MainApp.h"
 
 
@@ -1343,6 +1344,7 @@ void CMainApp::Free()
 	CSkillSlotManager::Destroy_Instance();
 	CItemSlotManager::Destroy_Instance();
 	CSoundManager::Destroy_Instance();
+	CRandomBoxManager::Destroy_Instance();
 
 	Safe_Release(m_pFont);
 	Safe_Release(m_pSprite);

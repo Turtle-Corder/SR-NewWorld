@@ -14,6 +14,7 @@
 #include "Mouse.h"
 #include "CubeTerrain.h"
 #include "TerrainBundle.h"
+#include "RandomBoxManager.h"
 #include "..\Headers\Player.h"
 
 USING(Client)
@@ -935,12 +936,25 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 
 
 	//--------------------------------------------------
-	// Space : Jump
+	// gatcha¡Ù
 	//--------------------------------------------------
 	else if (pManagement->Key_Down(VK_SPACE))
 	{
-		//if(VALIDATE_MOVE >= m_eCurState)
-		//	m_eCurState = JUMP;
+		wstring strGatcha;
+		CRandomBoxManager::Get_Instance()->Gatcha_PotionBox(strGatcha);
+		
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr != pManagement)
+		{
+			DROPBOX_INFO tBoxInfo;
+			tBoxInfo.iItemNo = -1;
+			tBoxInfo.vPos = m_pTransformCom[PART_BODY]->Get_Desc().vPosition;
+			tBoxInfo.vPos += { (_float)((rand() % 10 - 5) * 0.1f), 0.f, (_float)((rand() % 10 - 5) * 0.1f) };
+
+			StringCchCopy(tBoxInfo.szItemTag, _countof(tBoxInfo.szItemTag), strGatcha.c_str());
+			if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_DropItem", &tBoxInfo)))
+				PRINT_LOG(L"Failed To Create RandomBox", LOG::CLIENT);
+		}
 	}
 
 	//--------------------------------------------------
