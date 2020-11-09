@@ -32,7 +32,7 @@ public:
 
 	//자기가 서있는 위치에 대한 Index를 계산하고 해당 Info를 얻어감.
 	TERRAININFO Get_TerrainInfo(_vec3 iObjectPos, _uint iFloor);
-
+	CGameObject* ApproachToCubeObject(_vec3 iObjectPos, _uint iFloor);
 	//로딩중 세팅용
 	HRESULT Set_TerrainInfo(_uint iIndex, _uint iFloor, const TERRAININFO& Input );
 

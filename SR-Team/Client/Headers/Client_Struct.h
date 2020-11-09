@@ -21,6 +21,7 @@ typedef struct tagInvenItem
 
 typedef struct tagTerrainInfo
 {
+	CGameObject* pObj;
 	_int iFloor;
 	_int iIndex;
 	_int iTextureID;

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DamageInfo.h"
 #include "Player.h"
+#include "Inventory.h"
 #include "..\Headers\DropItem.h"
 
 USING(Client)
@@ -122,7 +123,17 @@ HRESULT CDropItem::Take_Damage(const CComponent * _pDamageComp)
 	if (pPlayer && pPlayer->IsInteraction())
 	{
 		// 여기에 죽기 전에 인벤에 추가
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
+			return GAMEOBJECT::WARN;
+		CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
+		if (nullptr == pInven)
+			return GAMEOBJECT::WARN;
 
+		if (m_tBoxInfo.iItemNo == 0)
+			pInven->Get_RewardItem(L"Diamond");
+		else if (m_tBoxInfo.iItemNo == 1)
+			pInven->Get_RewardItem(L"GolemCore_Green");
 
 		m_bDead = true;
 	}

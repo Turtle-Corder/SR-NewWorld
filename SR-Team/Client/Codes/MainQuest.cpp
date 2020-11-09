@@ -243,9 +243,9 @@ HRESULT CMainQuest::Render_HelpWnd()
 
 			D3DXMatrixScaling(&matScale, 2.f, 2.f, 0.f);
 			if (iIndex == MAIN_STATE_NOCLEAR)
-				D3DXMatrixTranslation(&matTrans, 1730.f, 357.f + (i * 27.f), 0.f);
+				D3DXMatrixTranslation(&matTrans, 1722.f, 371.f + (i * 25.f), 0.f);
 			else
-				D3DXMatrixTranslation(&matTrans, 1730.f, 327.f + (i * 27.f), 0.f);
+				D3DXMatrixTranslation(&matTrans, 1722.f, 341.f + (i * 25.f), 0.f);
 			matWorld = matScale * matTrans;
 
 			m_pSprite->SetTransform(&matWorld);
