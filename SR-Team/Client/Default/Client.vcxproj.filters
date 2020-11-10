@@ -382,6 +382,9 @@
     <Filter Include="02.GameObject\16. NPC\07. RandomBox_Npc\00. RandomBox_Chat">
       <UniqueIdentifier>{960d9dcb-f475-43c3-8fc9-4507cd659f51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano">
+      <UniqueIdentifier>{57da47be-0299-49dd-8370-f60d3b518963}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -723,6 +726,9 @@
     <ClInclude Include="..\Headers\RandomBox_Chat.h">
       <Filter>02.GameObject\16. NPC\07. RandomBox_Npc\00. RandomBox_Chat</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MeteorVolcano.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1048,6 +1054,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\RandomBox_Chat.cpp">
       <Filter>02.GameObject\16. NPC\07. RandomBox_Npc\00. RandomBox_Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeteorVolcano.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
