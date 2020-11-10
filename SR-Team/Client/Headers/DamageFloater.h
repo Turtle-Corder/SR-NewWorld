@@ -20,7 +20,6 @@ public:
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_OnlyAlpha();
-
 private:
 	HRESULT Add_Component();
 
@@ -39,7 +38,7 @@ private:
 
 	FLOATING_INFO		m_tInfo = {};
 	_float				m_fDeadTimer = 0.f;
-	_float				m_fDeadDelay = 3.f;
+	_float				m_fDeadDelay = 1.5f;
 	_vec3				m_VecAddRandomPos = {};
 	_int				m_iMaxDigit = 1;
 	_int				m_iDigitNum[4] = { 0, };
