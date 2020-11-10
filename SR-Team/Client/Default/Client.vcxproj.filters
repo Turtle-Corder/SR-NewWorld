@@ -385,6 +385,9 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano">
       <UniqueIdentifier>{57da47be-0299-49dd-8370-f60d3b518963}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion\00.FloatingFire">
+      <UniqueIdentifier>{5fc8ce58-77b3-4f39-9a21-246fd4970051}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -729,6 +732,9 @@
     <ClInclude Include="..\Headers\MeteorVolcano.h">
       <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\FloatingFire.h">
+      <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion\00.FloatingFire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1057,6 +1063,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MeteorVolcano.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FloatingFire.cpp">
+      <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion\00.FloatingFire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -38,10 +38,10 @@ HRESULT CScene_Stage0::Setup_Scene()
 	//--------------------------------------------------
 	// ²É Äù½ºÆ®
 	//--------------------------------------------------
-	if (FAILED(Setup_Layer_FlowerQuest(L"Layer_FlowerQuest")))
+	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
 		return E_FAIL;
 
-	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
+	if (FAILED(Setup_Layer_FlowerQuest(L"Layer_FlowerQuest")))
 		return E_FAIL;
 
 	eSCENE_ID ePreLoadScene = SCENE_STAGE1;
@@ -311,6 +311,8 @@ HRESULT CScene_Stage0::Setup_Layer_FlowerQuest(const wstring & LayerTag)
 		return E_FAIL;
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_QuestItemFlower", SCENE_STAGE0, LayerTag)))
 		return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_RandomBoxChat", SCENE_STAGE0, LayerTag)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -354,10 +356,10 @@ HRESULT CScene_Stage0::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_MainUI")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Inventory")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Shop")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Shop")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Inventory")))
 		return E_FAIL;
 
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Wand")))

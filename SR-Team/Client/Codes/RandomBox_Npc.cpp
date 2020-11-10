@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\RandomBox_Npc.h"
 #include "Player.h"
-
+#include "RandomBox_Chat.h"
 
 USING(Client)
 
@@ -45,6 +45,10 @@ _int CRandomBox_Npc::Update_GameObject(_float _fDeltaTime)
 	if (nullptr == pPlayer)
 		return GAMEOBJECT::ERR;
 
+	CRandomBox_Chat* pRandomBoxChat = (CRandomBox_Chat*)pManagemnet->Get_GameObject(pManagemnet->Get_CurrentSceneID(), L"Layer_FlowerQuest", 2);
+	if (nullptr == pRandomBoxChat)
+		return GAMEOBJECT::ERR;
+
 	CTransform* vPlayerTransform = (CTransform*)pManagemnet->Get_Component(
 		pManagemnet->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
 
@@ -58,10 +62,10 @@ _int CRandomBox_Npc::Update_GameObject(_float _fDeltaTime)
 		_float fDist = D3DXVec3Length(&vMoveDir);
 
 		// NPC에게 말걸기
-		//if (fDist <= 5.f)
-		//	pIceQuest->Set_StartQuest(true);
-		//else
-		//	pIceQuest->Set_StartQuest(false);
+		if (fDist <= 5.f)
+			pRandomBoxChat->Set_StartChat(true);
+		else
+			pRandomBoxChat->Set_StartChat(false);
 	}
 
 	for (_uint i = 0; i < PART_END; i++)

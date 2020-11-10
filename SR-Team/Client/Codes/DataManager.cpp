@@ -160,13 +160,13 @@ HRESULT CDataManager::Add_Component_Item()
 		TCHAR szTextureName[MAX_PATH] = L"";
 		if (i == 0)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
-				L"Component_Texture_Item_GoldenSword");
+				L"Component_Texture_Item_MagicalRageStaff");
 		else if (i == 1)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
-				L"Component_Texture_Item_IronSword");
+				L"Component_Texture_Item_AngleWingStaff");
 		else if (i == 2)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
-				L"Component_Texture_Item_DiaSword");
+				L"Component_Texture_Item_WarriorStaff");
 		else if (i == 3)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
 				L"Component_Texture_Item_BlackDress");
@@ -253,27 +253,27 @@ HRESULT CDataManager::Add_Component_Item()
 			pItem->eSort = eITEM_SORT::STAFF1;
 			pItem->iPrice = 200;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"GoldSword");
+				L"%s", L"Magical_Rate_Staff");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
-				L"금색 검");
+				L"분노의 지팡이");
 		}
 		if (i == 1)
 		{
 			pItem->eSort = eITEM_SORT::STAFF1;
 			pItem->iPrice = 100;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"IronSword");
+				L"%s", L"Angle_Wing_Staff");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
-				L"철 검");
+				L"천사의 지팡이");
 		}
 		if (i == 2)
 		{
 			pItem->iPrice = 300;
 			pItem->eSort = eITEM_SORT::STAFF1;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"DiaSword");
+				L"%s", L"Warrior_Staff");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
-				L"다이아 검");
+				L"강한 지팡이");
 		}
 		if (i == 3)
 		{

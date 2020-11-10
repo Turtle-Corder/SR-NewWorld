@@ -234,76 +234,77 @@ int CMainUI::Update_GameObject(float DeltaTime)
 	if (pInven == nullptr)
 		return E_FAIL;
 
-
-	if (FAILED(Change_SkillIconPos()))
-		return GAMEOBJECT::WARN;
-	if (FAILED(Change_ItemPos()))
-		return GAMEOBJECT::WARN;
-
-	if (m_bRender_GoingItem)
+	if (!m_bRenderItemAlarm && !m_bRenderSkillAlarm)
 	{
-		if (FAILED(Move_To_QuickSlot()))
+		if (FAILED(Change_SkillIconPos()))
 			return GAMEOBJECT::WARN;
-		if (FAILED(Check_RightQuickSlot_Item()))
+		if (FAILED(Change_ItemPos()))
 			return GAMEOBJECT::WARN;
-	}
-	else if (m_bRender_GoingSkill)
-	{
-		if (FAILED(Move_To_QuickSlot()))
-			return GAMEOBJECT::WARN;
-		if (FAILED(Check_LeftQuickSlot_Item()))
-			return GAMEOBJECT::WARN;
-	}
 
-	if (FAILED(Set_SlotItem_Count()))
-		return GAMEOBJECT::WARN;
+		if (m_bRender_GoingItem)
+		{
+			if (FAILED(Move_To_QuickSlot()))
+				return GAMEOBJECT::WARN;
+			if (FAILED(Check_RightQuickSlot_Item()))
+				return GAMEOBJECT::WARN;
+		}
+		else if (m_bRender_GoingSkill)
+		{
+			if (FAILED(Move_To_QuickSlot()))
+				return GAMEOBJECT::WARN;
+			if (FAILED(Check_LeftQuickSlot_Item()))
+				return GAMEOBJECT::WARN;
+		}
+
+		if (FAILED(Set_SlotItem_Count()))
+			return GAMEOBJECT::WARN;
 
 
 #pragma region Move_MainUI
-	if (pManagement->Key_Down('P'))
-	{
-		for (_uint i = 0; i < MAINUI_END; ++i)
-			m_pTransformCom[i]->Set_Position(m_pTransformCom[i]->Get_Desc().vPosition - _vec3(0.f, 10.f, 0.f));
-		for (_uint i = 0; i < 8; ++i)
+		if (pManagement->Key_Down('P'))
 		{
-			m_pTransformLeftSlot[i]->Set_Position(m_pTransformLeftSlot[i]->Get_Desc().vPosition - _vec3(0.f, 10.f, 0.f));
-			m_pTransformRightSlot[i]->Set_Position(m_pTransformRightSlot[i]->Get_Desc().vPosition - _vec3(0.f, 10.f, 0.f));
+			for (_uint i = 0; i < MAINUI_END; ++i)
+				m_pTransformCom[i]->Set_Position(m_pTransformCom[i]->Get_Desc().vPosition - _vec3(0.f, 10.f, 0.f));
+			for (_uint i = 0; i < 8; ++i)
+			{
+				m_pTransformLeftSlot[i]->Set_Position(m_pTransformLeftSlot[i]->Get_Desc().vPosition - _vec3(0.f, 10.f, 0.f));
+				m_pTransformRightSlot[i]->Set_Position(m_pTransformRightSlot[i]->Get_Desc().vPosition - _vec3(0.f, 10.f, 0.f));
+			}
 		}
-	}
 
-	if (pManagement->Key_Down('L'))
-	{
-		for (_uint i = 0; i < MAINUI_END; ++i)
-			m_pTransformCom[i]->Set_Position(m_pTransformCom[i]->Get_Desc().vPosition + _vec3(0.f, 10.f, 0.f));
-		for (_uint i = 0; i < 8; ++i)
+		if (pManagement->Key_Down('L'))
 		{
-			m_pTransformLeftSlot[i]->Set_Position(m_pTransformLeftSlot[i]->Get_Desc().vPosition + _vec3(0.f, 10.f, 0.f));
-			m_pTransformRightSlot[i]->Set_Position(m_pTransformRightSlot[i]->Get_Desc().vPosition + _vec3(0.f, 10.f, 0.f));
+			for (_uint i = 0; i < MAINUI_END; ++i)
+				m_pTransformCom[i]->Set_Position(m_pTransformCom[i]->Get_Desc().vPosition + _vec3(0.f, 10.f, 0.f));
+			for (_uint i = 0; i < 8; ++i)
+			{
+				m_pTransformLeftSlot[i]->Set_Position(m_pTransformLeftSlot[i]->Get_Desc().vPosition + _vec3(0.f, 10.f, 0.f));
+				m_pTransformRightSlot[i]->Set_Position(m_pTransformRightSlot[i]->Get_Desc().vPosition + _vec3(0.f, 10.f, 0.f));
+			}
 		}
-	}
 
-	for (_uint i = 0; i < MAINUI_END; ++i)
-		m_pTransformCom[i]->Update_Transform();
-	for (_uint i = 0; i < 8; i++)
-	{
-		m_pTransformLeftSlot[i]->Update_Transform();
-		m_pTransformRightSlot[i]->Update_Transform();
+		for (_uint i = 0; i < MAINUI_END; ++i)
+			m_pTransformCom[i]->Update_Transform();
+		for (_uint i = 0; i < 8; i++)
+		{
+			m_pTransformLeftSlot[i]->Update_Transform();
+			m_pTransformRightSlot[i]->Update_Transform();
 
-		_vec3 vLeftPos = m_pTransformLeftSlot[i]->Get_Desc().vPosition;
-		_vec3 vRightPos = m_pTransformRightSlot[i]->Get_Desc().vPosition;
+			_vec3 vLeftPos = m_pTransformLeftSlot[i]->Get_Desc().vPosition;
+			_vec3 vRightPos = m_pTransformRightSlot[i]->Get_Desc().vPosition;
 
-		m_tLeftSlotCollRt[i].left = (LONG)(vLeftPos.x - 35.f);
-		m_tLeftSlotCollRt[i].right = (LONG)(vLeftPos.x + 35.f);
-		m_tLeftSlotCollRt[i].top = (LONG)(vLeftPos.y - 35.f);
-		m_tLeftSlotCollRt[i].bottom = (LONG)(vLeftPos.y + 35.f);
+			m_tLeftSlotCollRt[i].left = (LONG)(vLeftPos.x - 35.f);
+			m_tLeftSlotCollRt[i].right = (LONG)(vLeftPos.x + 35.f);
+			m_tLeftSlotCollRt[i].top = (LONG)(vLeftPos.y - 35.f);
+			m_tLeftSlotCollRt[i].bottom = (LONG)(vLeftPos.y + 35.f);
 
-		m_tRightSlotCollRt[i].left = (LONG)(vRightPos.x - 35.f);
-		m_tRightSlotCollRt[i].right = (LONG)(vRightPos.x + 35.f);
-		m_tRightSlotCollRt[i].top = (LONG)(vRightPos.y - 35.f);
-		m_tRightSlotCollRt[i].bottom = (LONG)(vRightPos.y + 35.f);
-	}
+			m_tRightSlotCollRt[i].left = (LONG)(vRightPos.x - 35.f);
+			m_tRightSlotCollRt[i].right = (LONG)(vRightPos.x + 35.f);
+			m_tRightSlotCollRt[i].top = (LONG)(vRightPos.y - 35.f);
+			m_tRightSlotCollRt[i].bottom = (LONG)(vRightPos.y + 35.f);
+		}
 #pragma endregion
-
+	}
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -402,6 +403,8 @@ HRESULT CMainUI::Render_UI()
 	if (FAILED(Render_Item_GoingToQuickSlot()))
 		return E_FAIL;
 	if (FAILED(Render_QuickSlot_Item()))
+		return E_FAIL;
+	if (FAILED(Render_AlarmWnd()))
 		return E_FAIL;
 
 	return S_OK;
@@ -702,7 +705,8 @@ _bool CMainUI::Check_Item_In_Slot()
 			// 현재 퀵슬롯에 같은 이름의 아이템이 있으면
 			if (!wcscmp(m_pMovingSkill->szItemTag, m_pLeftSlotItem[i]->szItemTag))
 			{
-				PRINT_LOG(L"이미 장착하고 있는 스킬", LOG::CLIENT);
+				//PRINT_LOG(L"이미 장착하고 있는 스킬", LOG::CLIENT);
+				m_bRenderSkillAlarm = true;
 				m_pMovingSkill = nullptr;
 				m_pTexture_GoingSkill = nullptr;
 				return false;
@@ -713,7 +717,8 @@ _bool CMainUI::Check_Item_In_Slot()
 			// 현재 퀵슬롯에 같은 이름의 아이템이 있으면
 			if (!wcscmp(m_pMovingItem->szItemTag, m_pRightSlotItem[i]->szItemTag))
 			{
-				PRINT_LOG(L"이미 장착하고 있는 아이템", LOG::CLIENT);
+				//PRINT_LOG(L"이미 장착하고 있는 아이템", LOG::CLIENT);
+				m_bRenderItemAlarm = true;
 				m_pMovingItem = nullptr;
 				m_pTexture_GoingItem = nullptr;
 				return false;
@@ -941,6 +946,50 @@ HRESULT CMainUI::Render_QuickSlot_Item()
 	return S_OK;
 }
 
+HRESULT CMainUI::Render_AlarmWnd()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (pManagement == nullptr)
+		return E_FAIL;
+
+	if (m_bRenderItemAlarm)
+	{
+		_matrix matTrans, matWorld;
+		const D3DXIMAGE_INFO* pTexInfo = m_pTextureItemAlarm->Get_TexInfo(0);
+		_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+
+		D3DXMatrixTranslation(&matTrans, WINCX * 0.5f, WINCY * 0.5f, 0.f);
+		matWorld = matTrans;
+
+		m_pSprite->SetTransform(&matWorld);
+		m_pSprite->Draw(
+			(LPDIRECT3DTEXTURE9)m_pTextureItemAlarm->GetTexture(0),
+			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+		if (pManagement->Key_Pressing(VK_RETURN))
+			m_bRenderItemAlarm = false;
+	}
+	else if (m_bRenderSkillAlarm)
+	{
+		_matrix matTrans, matWorld;
+		const D3DXIMAGE_INFO* pTexInfo = m_pTextureSkillAlarm->Get_TexInfo(0);
+		_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+
+		D3DXMatrixTranslation(&matTrans, WINCX * 0.5f, WINCY * 0.5f, 0.f);
+		matWorld = matTrans;
+
+		m_pSprite->SetTransform(&matWorld);
+		m_pSprite->Draw(
+			(LPDIRECT3DTEXTURE9)m_pTextureSkillAlarm->GetTexture(0),
+			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+		if (pManagement->Key_Pressing(VK_RETURN))
+			m_bRenderSkillAlarm = false;
+	}
+
+	return S_OK;
+}
+
 HRESULT CMainUI::Change_SkillIconPos()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -1096,6 +1145,16 @@ HRESULT CMainUI::Add_Component()
 		L"Com_EmptyItemTexture", (CComponent**)&m_pEmptyTexture)))
 		return E_FAIL;
 
+	if (FAILED(CGameObject::Add_Component(
+		SCENE_STATIC, L"Component_Texture_MainUI_EquipItem",
+		L"Com_TextureItemAlarm", (CComponent**)&m_pTextureItemAlarm)))
+		return E_FAIL;
+
+	if (FAILED(CGameObject::Add_Component(
+		SCENE_STATIC, L"Component_Texture_MainUI_EquipSkill",
+		L"Com_TextureSkillAlarm", (CComponent**)&m_pTextureSkillAlarm)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -1130,6 +1189,9 @@ void CMainUI::Free()
 {
 	Safe_Release(m_pEmptyTexture);
 	Safe_Release(m_pTexture_GoingItem);
+
+	Safe_Release(m_pTextureItemAlarm);
+	Safe_Release(m_pTextureSkillAlarm);
 
 	for (_uint i = 0; i < MAINUI_END; ++i)
 	{
