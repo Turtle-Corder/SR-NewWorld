@@ -10,7 +10,7 @@ USING(Client)
 CDataManager::CDataManager(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
-	for (_uint i = 0; i < 26; ++i)
+	for (_uint i = 0; i < 28; ++i)
 	{
 		m_pTextureCom[i] = nullptr;
 		m_pStatCom[i] = nullptr;
@@ -153,7 +153,7 @@ HRESULT CDataManager::Add_Component()
 
 HRESULT CDataManager::Add_Component_Item()
 {
-	for (_uint i = 0; i < 26; ++i)
+	for (_uint i = 0; i < 28; ++i)
 	{
 		// 3. Texture--------------------------------------------------------------
 		TCHAR szTexture[MAX_PATH] = L"";
@@ -236,6 +236,12 @@ HRESULT CDataManager::Add_Component_Item()
 		else if (i == 25)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
 				L"Component_Texture_Item_MagicalStaff");
+		else if (i == 26)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_ItemBox_Potion");
+		else if (i == 27)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_ItemBox_Equip");
 
 		StringCchPrintf(szTexture, sizeof(TCHAR) * MAX_PATH,
 			L"Com_Texture%d", i);
@@ -487,6 +493,24 @@ HRESULT CDataManager::Add_Component_Item()
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
 				L"마법 스태프");
 		}
+		if (i == 26)
+		{
+			pItem->iPrice = 500;
+			pItem->eSort = eITEM_SORT::RANDOM_POTION;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"Potion_Box");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"물약 상자");
+		}
+		if (i == 27)
+		{
+			pItem->iPrice = 500;
+			pItem->eSort = eITEM_SORT::RANDOM_EQUIP;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"Equip_Box");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"장비 상자");
+		}
 		m_vItemList.emplace_back(pItem);
 
 
@@ -594,6 +618,12 @@ HRESULT CDataManager::Add_Component_Item()
 			tStat.iMaxAtt = 500;
 			tStat.iMinAtt = 50;
 			tStat.iCriticalRate = 60;
+		}
+		else if (i == 26)
+		{
+		}
+		else if (i == 27)
+		{
 		}
 
 		TCHAR szStat[MAX_PATH] = L"";
@@ -759,7 +789,7 @@ CGameObject * CDataManager::Clone_GameObject(void * pArg)
 
 void CDataManager::Free()
 {
-	for (_uint i = 0; i < 26; ++i)
+	for (_uint i = 0; i < 28; ++i)
 	{
 		Safe_Release(m_pTextureCom[i]);
 		Safe_Release(m_pStatCom[i]);

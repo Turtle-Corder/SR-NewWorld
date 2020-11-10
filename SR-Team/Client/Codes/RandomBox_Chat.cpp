@@ -159,14 +159,18 @@ _int CRandomBox_Chat::Update_GameObject(_float _fDeltaTime)
 	case RANDOMBOX_OPEN:
 		if (m_eSelectedBox == POTION_BOX)
 		{
-			if (FAILED(Getcha_PotionBox()))
-				return GAMEOBJECT::WARN;
+			pInven->Get_RewardItem(L"Potion_Box");
+			//if (FAILED(Getcha_PotionBox()))
+			//	return GAMEOBJECT::WARN;
 		}
 		else if (m_eSelectedBox == EQUIP_BOX)
 		{
-			if (FAILED(Getcha_EquipBox()))
-				return GAMEOBJECT::WARN;
+			pInven->Get_RewardItem(L"Equip_Box");
+			//if (FAILED(Getcha_EquipBox()))
+			//	return GAMEOBJECT::WARN;
 		}
+		pInven->Set_Gold(-500);
+		m_eSituation = RANDOMBOX_GET;
 		break;
 
 	case RANDOMBOX_GET:
