@@ -13,37 +13,37 @@ private:
 	virtual ~CFloatingFire() = default;
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
-	virtual HRESULT Setup_GameObject(void* _pArg) override;
-	virtual int Update_GameObject(_float _fDeltaTime) override;
-	virtual int LateUpdate_GameObject(_float _fDeltaTime) override;
-	virtual HRESULT Render_OnlyAlpha() override;
+	virtual HRESULT Setup_GameObject(void* pArg) override;
+	virtual _int Update_GameObject(_float _fDeltaTime) override;
+	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_BlendAlpha() override;
+
+
 private:
 	HRESULT Add_Component();
 	void Update_DeadDelay(_float _fDeltaTime);
-	void Update_Scale(_float _fDeltaTime);
 
 public:
-	static CFloatingFire* Create(LPDIRECT3DDEVICE9 _pDevice);
-	virtual CGameObject * Clone_GameObject(void * _pArg) override;
+	static CFloatingFire* Create(LPDIRECT3DDEVICE9 pDevice);
+	virtual CGameObject * Clone_GameObject(void * pArg) override;
 	virtual void Free() override;
 
 private:
-	CVIBuffer*	m_pVIBufferCom = nullptr;
-	CTransform*	m_pTransformCom = nullptr;
-	CTexture*	m_pTextureCom = nullptr;
+	CVIBuffer*	m_pVIBufferComp = nullptr;
+	CTransform*	m_pTransformComp = nullptr;
+	CTexture*	m_pTextureComp = nullptr;
 
+	bool			m_bDead = false;
 	INSTANTIMPACT	m_tImpact = {};
+	_vec3			m_vDir = {};
+
 	_uint			m_iCurrFrame = 0;
 	_float			m_fDeadTimer = 0.f;
 	_float			m_fDeadDelay = 10.f;
-
-	_float			m_fScaleMin = 2.f;
-	_float			m_fScaleMax = 4.f;
-	_bool			m_bScaleUp = true;
-
-	_float			m_fScaleTimer = 0.f;
-	_float			m_fScaleSpeed = 1.f;
+	_float			m_fAngle = 0.f;
+	_float			m_fCircleRange = 0.f;
+	_float			m_fInitDelay = 10.f;
+	_float			m_fInitTimer = 0.f;
 };
 
 END
