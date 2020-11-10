@@ -114,11 +114,20 @@ HRESULT CDamageFloat::Add_Component()
 	// Transform
 	//--------------------------------------------------
 	CTransform::TRANSFORM_DESC tTransformDesc[4];
+	CManagement* pManagement = CManagement::Get_Instance();
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	_vec3 vTermTest = pCamera->Get_Desc().vEye - pCamera->Get_Desc().vAt;
+	
+	D3DXVec3Normalize(&vTermTest, &vTermTest);
+
+	vTermTest.y = 0;
 	_vec3 vInitSacle = { 1.f, 1.f, 1.f };	
-	_vec3 vTerm = { 0.f, 0.f, 1.f };
+	//_vec3 vTerm = { 0.7f, 0.f, 1.f };
+
+	_vec3 vTerm = { vTermTest.z, 0.f, -vTermTest.x };
 	for (_int iCnt = 0; iCnt < m_iMaxDigit; ++iCnt)
 	{
-		tTransformDesc[iCnt].vPosition = m_tInfo.vSpawnPos + vTerm * (_float)iCnt;
+		tTransformDesc[iCnt].vPosition = m_tInfo.vSpawnPos + vTerm * (_float)iCnt * 1.3f;
 		tTransformDesc[iCnt].vScale = vInitSacle;
 		tTransformDesc[iCnt].fSpeedPerSecond = 5.f;
 
@@ -179,21 +188,21 @@ HRESULT CDamageFloat::IsBillboarding()
 	//	m_pTransformCom[iCnt]->Set_WorldMatrix(matBillY * matWorld);
 	//}
 
-	//D3DXMATRIX matBill;
-	//D3DXMatrixIdentity(&matBill);
+	D3DXMATRIX matBill;
+	D3DXMatrixIdentity(&matBill);
 
-	//// 뷰행렬의 모든 회전정보를 얻어옴.
-	//memcpy(&matBill.m[0][0], &pView->m[0][0], sizeof(D3DXVECTOR3));
-	//memcpy(&matBill.m[1][0], &pView->m[1][0], sizeof(D3DXVECTOR3));
-	//memcpy(&matBill.m[2][0], &pView->m[2][0], sizeof(D3DXVECTOR3));
-	//
-	//D3DXMatrixInverse(&matBill, nullptr, &matBill);
+	// 뷰행렬의 모든 회전정보를 얻어옴.
+	memcpy(&matBill.m[0][0], &pView->m[0][0], sizeof(D3DXVECTOR3));
+	memcpy(&matBill.m[1][0], &pView->m[1][0], sizeof(D3DXVECTOR3));
+	memcpy(&matBill.m[2][0], &pView->m[2][0], sizeof(D3DXVECTOR3));
+	
+	D3DXMatrixInverse(&matBill, nullptr, &matBill);
 
-	//for (_int iCnt = 0; iCnt < m_iMaxDigit; ++iCnt)
-	//{
-	//	D3DXMATRIX matWorld = m_pTransformCom[iCnt]->Get_Desc().matWorld;
-	//	m_pTransformCom[iCnt]->Set_WorldMatrix(matBill * matWorld);
-	//}
+	for (_int iCnt = 0; iCnt < m_iMaxDigit; ++iCnt)
+	{
+		D3DXMATRIX matWorld = m_pTransformCom[iCnt]->Get_Desc().matWorld;
+		m_pTransformCom[iCnt]->Set_WorldMatrix(matBill * matWorld);
+	}
 
 	return S_OK;
 }
