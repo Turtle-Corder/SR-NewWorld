@@ -385,8 +385,22 @@
     <Filter Include="02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano">
       <UniqueIdentifier>{57da47be-0299-49dd-8370-f60d3b518963}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
+    <Filter Include="02.GameObject\05.Monster\05.Stump\00.Rubble">
+      <UniqueIdentifier>{6eef30ca-41a3-41bf-a3a0-6e8875fa952c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\00.Bomb\00.Bomb_Residue">
+      <UniqueIdentifier>{16f99087-a319-4aa2-af8e-732f02a245ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\06.Wolf\00.Blood">
+      <UniqueIdentifier>{9be2a3d5-7aab-48e4-a99a-4254e07a4c48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.Monster\00.Snail\00.Dash_Piece">
+      <UniqueIdentifier>{55eda012-278c-45c7-b06e-341e433bff1c}</UniqueIdentifier>
+=======
     <Filter Include="02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion\00.FloatingFire">
       <UniqueIdentifier>{5fc8ce58-77b3-4f39-9a21-246fd4970051}</UniqueIdentifier>
+>>>>>>> f35043556428bedd1b7ff1f8cd2dde6dded1be6b
     </Filter>
     <Filter Include="02.GameObject\06.Projectile\00.Player\02.MpDrift\00.MpDriftDust">
       <UniqueIdentifier>{c4d2c949-e179-4dea-81b2-d370630481bf}</UniqueIdentifier>
@@ -735,8 +749,22 @@
     <ClInclude Include="..\Headers\MeteorVolcano.h">
       <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano</Filter>
     </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="..\Headers\Rubble.h">
+      <Filter>02.GameObject\05.Monster\05.Stump\00.Rubble</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bomb_Residue.h">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\00.Bomb\00.Bomb_Residue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Blood.h">
+      <Filter>02.GameObject\05.Monster\06.Wolf\00.Blood</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Dash_Piece.h">
+      <Filter>02.GameObject\05.Monster\00.Snail\00.Dash_Piece</Filter>
+=======
     <ClInclude Include="..\Headers\FloatingFire.h">
       <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion\00.FloatingFire</Filter>
+>>>>>>> f35043556428bedd1b7ff1f8cd2dde6dded1be6b
     </ClInclude>
     <ClInclude Include="..\Headers\MpDriftDust.h">
       <Filter>02.GameObject\06.Projectile\00.Player\02.MpDrift\00.MpDriftDust</Filter>
@@ -1070,8 +1098,22 @@
     <ClCompile Include="..\Codes\MeteorVolcano.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\01.Meteor\Meteor_Volcano</Filter>
     </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="..\Codes\Rubble.cpp">
+      <Filter>02.GameObject\05.Monster\05.Stump\00.Rubble</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bomb_Residue.cpp">
+      <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\00.Bomb\00.Bomb_Residue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Blood.cpp">
+      <Filter>02.GameObject\05.Monster\06.Wolf\00.Blood</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Dash_Piece.cpp">
+      <Filter>02.GameObject\05.Monster\00.Snail\00.Dash_Piece</Filter>
+=======
     <ClCompile Include="..\Codes\FloatingFire.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\08.Explosion\00.Explosion\00.FloatingFire</Filter>
+>>>>>>> f35043556428bedd1b7ff1f8cd2dde6dded1be6b
     </ClCompile>
     <ClCompile Include="..\Codes\MpDriftDust.cpp">
       <Filter>02.GameObject\06.Projectile\00.Player\02.MpDrift\00.MpDriftDust</Filter>

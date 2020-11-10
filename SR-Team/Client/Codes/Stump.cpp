@@ -48,7 +48,7 @@ _int CStump::Update_GameObject(_float _fDeltaTime)
 	if (!m_bActive)
 		return GAMEOBJECT::NOEVENT;
 
-	Update_AI(); 
+	Update_AI();
 
 	Update_Move(_fDeltaTime);
 
@@ -254,17 +254,17 @@ HRESULT CStump::Add_Component()
 		}
 		else if (iCnt == STUMP_LH)
 		{
-			tTransformDesc[STUMP_LH].vPosition = { 0.f , -2.5f, 0.f };
+			tTransformDesc[STUMP_LH].vPosition = { 0.f , -1.8f, 0.f };
 			tTransformDesc[STUMP_LH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_LH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_LH].vScale = { 1.5f, 2.f, 1.5f };
+			tTransformDesc[STUMP_LH].vScale = { 1.f, 1.5f, 1.f };
 		}
 		else if (iCnt == STUMP_RH)
 		{
-			tTransformDesc[STUMP_RH].vPosition = { 0.f , -2.5f, 0.f };
+			tTransformDesc[STUMP_RH].vPosition = { 0.f , -1.8f, 0.f };
 			tTransformDesc[STUMP_RH].fSpeedPerSecond = 10.f;
 			tTransformDesc[STUMP_RH].fRotatePerSecond = D3DXToRadian(90.f);
-			tTransformDesc[STUMP_RH].vScale = { 1.5f, 2.f, 1.5f };
+			tTransformDesc[STUMP_RH].vScale = { 1.f, 1.5f, 1.f };
 		}
 
 		else if (iCnt == STUMP_LEG1)
@@ -350,14 +350,14 @@ HRESULT CStump::Update_State(_float _fDeltaTime)
 			m_fAttackDelay = 2.8f;
 			m_bSpawnImpact = true;
 		}
-			break;
+		break;
 		case STATE::ATTACK1:
 		{
 			Anim_Reset_Move();
 			m_fAttackDelay = 3.3f;
 			m_bSpawnImpact = true;
 		}
-			break;
+		break;
 		}
 
 		m_iAnimationStep = 0;
@@ -422,9 +422,9 @@ HRESULT CStump::Update_AI()
 			if (m_bCanAttack)
 			{
 				_uint iRand = rand() % 100;
-					if (iRand < 50)	m_eCurState = ATTACK1;
-					else if (iRand < 100)m_eCurState = ATTACK;
-								
+				if (iRand < 50)	m_eCurState = ATTACK1;
+				else if (iRand < 100)m_eCurState = ATTACK;
+
 				return S_OK;
 			}
 			return S_OK;
@@ -519,7 +519,7 @@ HRESULT CStump::Update_Transform()
 	{
 		m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[STUMP_BASE]->Get_Desc().matWorld);		//(m_pTransformCom[WOLF_BASE]->Get_Desc().matWorld));
 	}
-	
+
 	for (_uint iCnt = STUMP_LH; iCnt < STUMP_LEG1; ++iCnt)
 	{
 		m_pTransformCom[iCnt]->Update_Transform(m_pTransformCom[iCnt - 2]->Get_Desc().matWorld);
@@ -598,7 +598,7 @@ HRESULT CStump::Update_Animation_Attack(_float _fDeltaTime)
 	{
 		m_fAnimationTimer = 0.f;
 		++m_iAnimationStep;// = !m_iAnimationStep;
-		//Anim_Reset_Attack();
+						   //Anim_Reset_Attack();
 		if (m_iAnimationStep == 0)
 		{
 			m_fAttackDelay = 2.8f;
@@ -616,6 +616,7 @@ HRESULT CStump::Update_Animation_Attack(_float _fDeltaTime)
 				}
 
 				Spawn_StumpImpact(L"Layer_MonsterAtk");
+				Make_Rubble();
 
 				CManagement* pManagement = CManagement::Get_Instance();
 				if (nullptr == pManagement)
@@ -642,7 +643,7 @@ HRESULT CStump::Update_Animation_Attack(_float _fDeltaTime)
 		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime * 1.2f * m_fAnimationSpeed);
 		m_pTransformCom[STUMP_RSHD]->Turn(CTransform::AXIS_X, -_fDeltaTime* 1.2f * m_fAnimationSpeed);
 	}
-	else if(m_iAnimationStep <= 3)
+	else if (m_iAnimationStep <= 3)
 	{
 		m_fAnimationSpeed += _fDeltaTime * 1.5f;
 		m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X, _fDeltaTime * 3.f * m_fAnimationSpeed);
@@ -663,7 +664,7 @@ HRESULT CStump::Update_Animation_Attack2(_float _fDeltaTime)
 	{
 		m_fAnimationTimer = 0.f;
 		++m_iAnimationStep;
-						   
+
 		if (m_bSpawnImpact && m_iAnimationStep == 2)
 		{
 			Spawn_StumpImpact(L"Layer_MonsterAtk");
@@ -748,9 +749,29 @@ HRESULT CStump::Spawn_StumpImpact(const wstring& LayerTag)
 	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[STUMP_BASE]->Get_Look());
 	tImpact.vPosition = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump_Impact", pManagement->Get_CurrentSceneID(),LayerTag, &tImpact)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
 		return E_FAIL;
 	//Layer_MonsterAtk
+	return S_OK;
+}
+
+HRESULT CStump::Make_Rubble()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact;
+	for (_uint i = 0; i < 15; i++)
+	{
+		_vec3 RandomPostion = { (_float)(rand() % 30 - 15), 0.f ,(_float)(rand() % 30 - 15) };
+
+		tImpact.vPosition = RandomPostion + m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Rubble", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 

@@ -160,7 +160,10 @@
   <ItemGroup>
     <ClInclude Include="..\Headers\AcornExplosion.h" />
     <ClInclude Include="..\Headers\Blind.h" />
+    <ClInclude Include="..\Headers\Blood.h" />
+    <ClInclude Include="..\Headers\Bomb_Residue.h" />
     <ClInclude Include="..\Headers\DamageFloater.h" />
+    <ClInclude Include="..\Headers\Dash_Piece.h" />
     <ClInclude Include="..\Headers\DummyTerrain.h" />
     <ClInclude Include="..\Headers\Acorn.h" />
     <ClInclude Include="..\Headers\Explosion.h" />
@@ -190,6 +193,7 @@
     <ClInclude Include="..\Headers\RandomBoxManager.h" />
     <ClInclude Include="..\Headers\RandomBox_Chat.h" />
     <ClInclude Include="..\Headers\RandomBox_Npc.h" />
+    <ClInclude Include="..\Headers\Rubble.h" />
     <ClInclude Include="..\Headers\Scene_Room.h" />
     <ClInclude Include="..\Headers\Scene_Stage1.h" />
     <ClInclude Include="..\Headers\Scene_Stage2.h" />
@@ -276,7 +280,10 @@
   <ItemGroup>
     <ClCompile Include="..\Codes\AcornExplosion.cpp" />
     <ClCompile Include="..\Codes\Blind.cpp" />
+    <ClCompile Include="..\Codes\Blood.cpp" />
+    <ClCompile Include="..\Codes\Bomb_Residue.cpp" />
     <ClCompile Include="..\Codes\DamageFloater.cpp" />
+    <ClCompile Include="..\Codes\Dash_Piece.cpp" />
     <ClCompile Include="..\Codes\DummyTerrain.cpp" />
     <ClCompile Include="..\Codes\Acorn.cpp" />
     <ClCompile Include="..\Codes\Explosion.cpp" />
@@ -306,6 +313,7 @@
     <ClCompile Include="..\Codes\RandomBoxManager.cpp" />
     <ClCompile Include="..\Codes\RandomBox_Chat.cpp" />
     <ClCompile Include="..\Codes\RandomBox_Npc.cpp" />
+    <ClCompile Include="..\Codes\Rubble.cpp" />
     <ClCompile Include="..\Codes\Scene_Room.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage1.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage2.cpp" />

@@ -23,10 +23,10 @@ class CGolem final : public CGameObject
 		GOLEM_RIGHT_LEG,
 		GOLEM_END
 	};
-	enum STATE 
+	enum STATE
 	{
-		IDLE , MOVE , 
-		ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, ATTACK6,//ATTACK5, 
+		IDLE, MOVE,
+		ATTACK1, ATTACK2, ATTACK3, ATTACK4, ATTACK6,//ATTACK5, 
 		STATE_DEAD
 	};
 private:
@@ -79,11 +79,13 @@ private:
 	HRESULT Spawn_Bomb();
 	HRESULT Spawn_MonSub();
 
+	HRESULT Make_Pieces();
+
 	HRESULT Create_MiniGolem();
-//	HRESULT Spawn_Fire();
+	//	HRESULT Spawn_Fire();
 
 
-
+	HRESULT Phatton();
 private:
 	CVIBuffer*			m_pVIBufferCom[GOLEM_END] = {};
 	CTransform*			m_pTransformCom[GOLEM_END] = {};
@@ -146,6 +148,11 @@ private:
 	_bool			m_bDead = false;
 
 	CMiniGolem*		m_pMiniGolem[5] = { nullptr, };
+
+	_uint			m_iPattonCnt = 0;
+	_float			m_fMoveSpeed = 2.f;
+	_bool			m_bMiniGolem_SetPosition = false;
+	_bool			m_OneCheck = false;
 };
 
 END

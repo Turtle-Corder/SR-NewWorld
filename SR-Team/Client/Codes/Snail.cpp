@@ -375,17 +375,26 @@ HRESULT CSnail::Attack(_float _fDeltaTime)
 
 		if (m_eCurState == CSnail::ATTACK_START)
 		{
-			if (vLength >= 0.2f)
-			{
-				vMyPos += vDirection * (_fDeltaTime * 6.f);
-				m_pTransformCom[SNAIL_BODY]->Set_Position(vMyPos);
-			}
-			else if (vLength <= 0.2f)
+			if (vLength <= 0.2f)
 			{
 				Spawn_InstantImpact(L"Layer_MonsterAtk");
 				m_eCurState = ATTACK_END;
 
+				return S_OK;
 			}
+			else if (vLength >= 0.2f)
+			{
+				m_fDashPaticle_CreateTime += _fDeltaTime;
+				vMyPos += vDirection * (_fDeltaTime * 6.f);
+				m_pTransformCom[SNAIL_BODY]->Set_Position(vMyPos);
+
+				if (m_fDashPaticle_CreateTime >= 0.1f)
+				{
+					Make_DashPaticle();
+					m_fDashPaticle_CreateTime = 0.f;
+				}
+
+			}	
 			//if (vLength > 2.5f)
 		}
 		else if (m_eCurState == ATTACK_END)
@@ -427,6 +436,21 @@ HRESULT CSnail::Spawn_InstantImpact(const wstring & LayerTag)
 	tImpact.vPosition = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Snail_Impact", pManagement->Get_CurrentSceneID(), LayerTag, &tImpact)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CSnail::Make_DashPaticle()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact;
+	tImpact.vPosition = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Dash_Piece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))/*¿©±â StartPos*/
 		return E_FAIL;
 
 	return S_OK;
