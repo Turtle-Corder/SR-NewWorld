@@ -341,18 +341,19 @@ HRESULT CGolem::Update_AI()
 		_float	fDistance = D3DXVec3Length(&m_vMoveDirection);
 
 
-		if (fDistance > m_fFollowDistance) //10.f
+		if (fDistance > m_fFollowDistance && !m_OneCheck) //10.f
 		{
 			m_eCurState = CGolem::IDLE;
+			m_OneCheck = true;
 			return S_OK;
 
 		}
-
 		else if (fDistance > m_fAttackDistance) //3.f
 		{
 			m_eCurState = CGolem::MOVE;
 			return S_OK;
 		}
+
 
 		if (m_bCanAttack)
 		{
@@ -390,6 +391,7 @@ HRESULT CGolem::Update_Move(_float _fDeltaTime)
 			else
 				m_pTransformCom[GOLEM_BASE]->Turn(CTransform::AXIS_Y, _fDeltaTime * fRad);
 		}
+
 	}
 
 	if (m_eCurState == CGolem::MOVE)

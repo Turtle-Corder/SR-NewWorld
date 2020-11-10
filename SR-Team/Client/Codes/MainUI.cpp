@@ -10,6 +10,7 @@
 #include "..\Headers\MainUI.h"
 #include "Mouse.h"
 #include "Skill.h"
+#include "Sound_Manager.h"
 
 USING(Client)
 
@@ -481,6 +482,8 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 
 							m_pMovingSkill = nullptr;
 
+							CSoundManager::Get_Instance()->PlayUI(L"Drag.wav");
+
 							return S_OK;
 						}
 					}
@@ -523,6 +526,8 @@ HRESULT CMainUI::Check_LeftQuickSlot_Item()
 						//if (m_pLeftSlotItem[m_iBefore_SkillIconIndex])
 						//	m_pLeftSlotItem[m_iBefore_SkillIconIndex] = nullptr;
 						m_iBefore_SkillIconIndex = -1;
+
+						CSoundManager::Get_Instance()->PlayUI(L"Drag.wav");
 					}
 					
 				}
@@ -608,7 +613,7 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 									return E_FAIL;
 							m_pMovingItem = nullptr;
 
-			
+							CSoundManager::Get_Instance()->PlayUI(L"Drag.wav");
 						}
 					}
 
@@ -655,6 +660,8 @@ HRESULT CMainUI::Check_RightQuickSlot_Item()
 						//if (m_pLeftSlotItem[m_iBefore_SkillIconIndex])
 						//	m_pLeftSlotItem[m_iBefore_SkillIconIndex] = nullptr;
 						m_iBefore_ItemIndex = -1;
+
+						CSoundManager::Get_Instance()->PlayUI(L"Drag.wav");
 					
 					}
 				}

@@ -101,6 +101,8 @@ private:
 	// ------------------------------------------------------------------
 	HRESULT Check_EquipItem();
 
+private:
+	HRESULT Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag);
 
 // 아이템 퀵슬롯으로 이동
 private:
@@ -122,6 +124,7 @@ private:
 	HRESULT Render_Item();
 	HRESULT Render_ClearWnd();
 
+
 // 움직임 관련 함수
 private:
 	// ------------------------------------------------------------------
@@ -133,7 +136,8 @@ private:
 	// 인벤에 있는 아이템들도 그만큼 움직여준다
 	// ------------------------------------------------------------------
 	HRESULT Change_AllPos();
-	
+
+
 private:
 	HRESULT Add_Component();
 	HRESULT Add_Component_Item();

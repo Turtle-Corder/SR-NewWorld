@@ -4,6 +4,7 @@
 
 #include "DataManager.h"
 #include "Player.h"
+#include "Sound_Manager.h"
 USING(Client)
 
 
@@ -150,7 +151,10 @@ _int CEquip::Update_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::WARN;
 
 	if (pManagement->Key_Down('U'))
+	{
+		CSoundManager::Get_Instance()->PlayUI(L"OpenWnd.wav");
 		m_bRender = !m_bRender;
+	}
 
 	if (FAILED(Count_Stat()))
 		return GAMEOBJECT::WARN;

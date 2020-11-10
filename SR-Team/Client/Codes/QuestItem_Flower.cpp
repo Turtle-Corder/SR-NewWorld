@@ -4,6 +4,7 @@
 #include "FlowerQuest.h"
 #include "Player.h"
 #include "Inventory.h"
+#include "Sound_Manager.h"
 USING(Client)
 
 
@@ -85,6 +86,8 @@ _int CQuestItem_Flower::Update_GameObject(_float _fDeltaTime)
 				++m_iGatheringFlowerCnt;
 				pInven->Get_RewardItem(L"flower");
 				m_bRenderClearWnd = true;
+
+				CSoundManager::Get_Instance()->PlayUI(L"Gathering_Flower.wav");
 				//PRINT_LOG(L"²É È¹µæ", LOG::CLIENT);
 			}
 		}
