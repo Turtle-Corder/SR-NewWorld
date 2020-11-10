@@ -1,16 +1,16 @@
 #pragma once
-#ifndef __EXPLOSION_H__
-#define __EXPLOSION_H__
+#ifndef __FLOATINGFIRE_H__
+#define __FLOATINGFIRE_H__
 
 USING(Engine)
 BEGIN(Client)
 
-class CExplosion final : public CGameObject
+class CFloatingFire final : public CGameObject
 {
 private:
-	explicit CExplosion(LPDIRECT3DDEVICE9 _pDevice);
-	explicit CExplosion(const CExplosion& _rOther);
-	virtual ~CExplosion() = default;
+	explicit CFloatingFire(LPDIRECT3DDEVICE9 _pDevice);
+	explicit CFloatingFire(const CFloatingFire& _rOther);
+	virtual ~CFloatingFire() = default;
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void* _pArg) override;
@@ -24,7 +24,7 @@ private:
 	void Update_Scale(_float _fDeltaTime);
 
 public:
-	static CExplosion* Create(LPDIRECT3DDEVICE9 _pDevice);
+	static CFloatingFire* Create(LPDIRECT3DDEVICE9 _pDevice);
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual void Free() override;
 

@@ -18,7 +18,7 @@ public:
 	virtual int Update_GameObject(float _fDeltaTime) override;
 	virtual int LateUpdate_GameObject(float _fDeltaTime) override;
 	virtual HRESULT Render_OnlyAlpha() override;
-
+	virtual HRESULT Render_BlendAlpha() override;
 private:
 	HRESULT Add_Component();
 	void Update_DeadDelay(float _fDeltaTime);
@@ -27,6 +27,8 @@ public:
 	static CMpDrift* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
 	virtual void Free() override;
+
+	HRESULT Make_Pieces();
 
 private:
 	CVIBuffer*	m_pVIBufferCom = nullptr;

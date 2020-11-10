@@ -40,6 +40,10 @@
 #include "Stage3_NPC.h"
 #include "IceLandQuest.h"
 #include "RandomBox_Npc.h"
+#include "Rubble.h"
+#include "Bomb_Residue.h"
+#include "Blood.h"
+#include "Dash_Piece.h"
 #pragma endregion
 
 USING(Client)
@@ -138,6 +142,11 @@ HRESULT CPreLoader::Load_Resources_Town()
 
 #pragma region GameObject_Snail_Impact
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Snail_Impact", CSnail_Impact::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Dash_Piece
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_Dash_Piece", CDash_Piece::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
@@ -284,6 +293,11 @@ HRESULT CPreLoader::Load_Resources_Forest()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Dash_Piece
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Dash_Piece", CDash_Piece::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region Component_Texture_SnailBody
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
 	{
@@ -294,7 +308,15 @@ HRESULT CPreLoader::Load_Resources_Forest()
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
 	{
 	}
+
+#pragma region Component_Texture_Dash_Piece
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Dash_Piece", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Dash_Piece%d.dds"))))
+		return E_FAIL;
 #pragma endregion
+
+#pragma endregion
+
+
 
 #pragma endregion
 
@@ -334,6 +356,11 @@ HRESULT CPreLoader::Load_Resources_Forest()
 
 #pragma region GameObject_Acorn
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Acorn", CAcorn::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Rubble
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Rubble", CRubble::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
@@ -456,6 +483,10 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Blood
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Blood", CBlood::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region Component_Texture_Wolf_Face
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Wolf_Face", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Wolf_Face%d.dds"))))
@@ -487,6 +518,10 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Component_Texture_Blood
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_ICELAND, L"Component_Texture_Blood", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Blood%d.dds"))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region GameObject_CubeTerrain
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))
@@ -546,6 +581,11 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 
 #pragma region GameObject_Bomb
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Bomb", CBomb::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Bomb_Residue
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Bomb_Residue", CBomb_Residue::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
