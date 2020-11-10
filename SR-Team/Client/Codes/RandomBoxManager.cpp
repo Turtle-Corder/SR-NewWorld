@@ -24,11 +24,11 @@ void CRandomBoxManager::Initialize()
 		return;
 	}
 
-	//if (FAILED(Setup_EquipBox()))
-	//{
-	//	PRINT_LOG(L"Failed To EquipBox Setup", LOG::CLIENT);
-	//	return;
-	//}
+	if (FAILED(Setup_EquipBox()))
+	{
+		PRINT_LOG(L"Failed To EquipBox Setup", LOG::CLIENT);
+		return;
+	}
 }
 
 void CRandomBoxManager::Release()
@@ -82,16 +82,16 @@ _bool CRandomBoxManager::Setup_EquipBox()
 	if (nullptr == m_pEquipBox)
 		return false;
 
-	if (!m_pEquipBox->Add_Item(L"", 20))	return false;
-	if (!m_pEquipBox->Add_Item(L"", 20))	return false;
+	if (!m_pEquipBox->Add_Item(L"Component_Texture_Item_MagicalStaff", 20))	return false;
+	if (!m_pEquipBox->Add_Item(L"Component_Texture_Item_AquaGloves", 20))	return false;
 
-	if (!m_pEquipBox->Add_Item(L"", 10))	return false;
-	if (!m_pEquipBox->Add_Item(L"n", 10))	return false;
+	if (!m_pEquipBox->Add_Item(L"Component_Texture_Item_PupleDress", 10))	return false;
+	if (!m_pEquipBox->Add_Item(L"Component_Texture_Item_BalrogWings", 10))	return false;
 
 	// 10, 30, 50 : 무조건 10번째, 30번째, 50번째에 뽑힌다
-	if (!m_pEquipBox->Add_Item(L"", 1, 10))	return false;
-	if (!m_pEquipBox->Add_Item(L"", 1, 30))	return false;
-	if (!m_pEquipBox->Add_Item(L"", 1, 50))	return false;
+	if (!m_pEquipBox->Add_Item(L"Component_Texture_Item_PupleDress", 1, 10))	return false;
+	if (!m_pEquipBox->Add_Item(L"Component_Texture_Item_BalrogWings", 1, 30))	return false;
+	if (!m_pEquipBox->Add_Item(L"Component_Texture_Item_MagicalStaff", 1, 50))	return false;
 
 	return true;
 }

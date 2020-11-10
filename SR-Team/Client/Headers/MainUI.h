@@ -64,6 +64,7 @@ private:
 	HRESULT Render_Item_GoingToQuickSlot();
 	// 퀵슬롯에 있는 아이템을 그리는 함수
 	HRESULT Render_QuickSlot_Item();
+	HRESULT Render_AlarmWnd();
 
 
 private:
@@ -139,6 +140,12 @@ private:
 	// 퀵슬롯 내에서 스킬 아이콘/아이템을 옮기기 전 인덱스
 	_int			m_iBefore_SkillIconIndex = -1;
 	_int			m_iBefore_ItemIndex = -1;
+
+	// 장착중이라고 알려주는 메세지
+	CTexture*		m_pTextureItemAlarm = nullptr;
+	CTexture*		m_pTextureSkillAlarm = nullptr;
+	_bool			m_bRenderItemAlarm = false;
+	_bool			m_bRenderSkillAlarm = false;
 };
 END
 

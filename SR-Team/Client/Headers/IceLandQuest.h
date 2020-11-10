@@ -24,10 +24,11 @@ public:
 	_bool Get_StartQuest() { return m_bStartQuest; }
 	eIceQuest_ID Get_SituationID() { return m_eSituation; }
 	_bool Get_Chart() { return m_bChat; }
+	_bool Get_StartDeadCnt() { return m_bStartDeadCnt; }
 
 public:
 	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
-	void Dead_Monster() { ++m_iMonsetDeadCnt; }
+	void Dead_Monster();
 
 public:
 	// CUIObject을(를) 통해 상속됨
@@ -65,6 +66,7 @@ private:
 	_bool				m_bStartQuest = false;
 
 	// 몬스터 얼마나 죽였는지
+	_bool			m_bStartDeadCnt = false;
 	_int			m_iMonsetDeadCnt = 0;
 
 	// NPC와 대화중인지

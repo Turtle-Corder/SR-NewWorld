@@ -214,7 +214,6 @@ HRESULT CShop::Buy_Item(_uint iIndexJ, _uint iIndexI)
 	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
 	pInven->Get_ShopItem(strName);
 
-
 	return S_OK;
 }
 
@@ -327,20 +326,20 @@ HRESULT CShop::Add_Component_ShopItem()
 		if (i == 0)
 		{
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"GoldSword");
-			wsprintf(szItemTextureName, L"Component_Texture_Item_GoldenSword");
+				L"%s", L"Magical_Rate_Staff");
+			wsprintf(szItemTextureName, L"Component_Texture_Item_MagicalRageStaff");
 		}
 		else if (i == 1)
 		{
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"IronSword");
-			wsprintf(szItemTextureName, L"Component_Texture_Item_IronSword");
+				L"%s", L"Angle_Wing_Staff");
+			wsprintf(szItemTextureName, L"Component_Texture_Item_AngleWingStaff");
 		}
 		else if (i == 2)
 		{
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
-				L"%s", L"DiaSword");
-			wsprintf(szItemTextureName, L"Component_Texture_Item_DiaSword");
+				L"%s", L"Warrior_Staff");
+			wsprintf(szItemTextureName, L"Component_Texture_Item_WarriorStaff");
 		}
 		else if (i == 3)
 		{

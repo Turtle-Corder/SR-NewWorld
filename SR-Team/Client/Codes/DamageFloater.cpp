@@ -34,7 +34,7 @@ HRESULT CDamageFloat::Setup_GameObject(void * _pArg)
 	m_iDigitNum[0] = iDamage % 10;
 	iDamage /= 10;
 
-	vAddRandomDir = { (_float)(rand() % 10) , (_float)(rand() % 10) ,(_float)(rand() % 10) };
+	m_VecAddRandomPos = { 1.f, 10.f , 2.f };
 
 	for (_int iCnt = 1; iCnt < 4; ++iCnt)
 	{ 
@@ -44,6 +44,7 @@ HRESULT CDamageFloat::Setup_GameObject(void * _pArg)
 
 		iDamage /= 10;
 	}
+
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
@@ -56,13 +57,12 @@ _int CDamageFloat::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
-	vAddRandomDir.y -= 9.8f * _fDeltaTime;
+	m_VecAddRandomPos.y -= 20.f * _fDeltaTime;
 
 
 	for (_int iCnt = 0; iCnt < m_iMaxDigit; ++iCnt)
 	{
-		_vec3 vAddPos = _vec3(0.f, 1.f, 0.f) * m_pTransformCom[iCnt]->Get_Desc().fSpeedPerSecond * _fDeltaTime;
-		m_pTransformCom[iCnt]->Set_Position(m_pTransformCom[iCnt]->Get_Desc().vPosition + vAddPos);
+		m_pTransformCom[iCnt]->Set_Position(m_pTransformCom[iCnt]->Get_Desc().vPosition + m_VecAddRandomPos * _fDeltaTime);
 		m_pTransformCom[iCnt]->Update_Transform();
 	}
 
@@ -85,6 +85,8 @@ _int CDamageFloat::LateUpdate_GameObject(_float _fDeltaTime)
 
 	return GAMEOBJECT::NOEVENT;
 }
+
+
 
 HRESULT CDamageFloat::Render_OnlyAlpha()
 {
@@ -110,6 +112,7 @@ HRESULT CDamageFloat::Render_OnlyAlpha()
 
 	return S_OK;
 }
+
 
 HRESULT CDamageFloat::Add_Component()
 {

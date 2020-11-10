@@ -72,6 +72,7 @@
 #include "IceLandQuest.h"
 #include "MeteorPiece.h"
 #include "DamageFloater.h"
+#include "RandomBox_Chat.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -455,6 +456,16 @@ HRESULT CMainApp::Setup_HK()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Component_Texture_Flinch
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Textrue_Flinch", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Flinch%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Decal
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Textrue_Decal", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE, L"../Resources/LowHp%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
 	return S_OK;
 }
 
@@ -717,6 +728,11 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_RandomBoxChat
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_RandomBoxChat", CRandomBox_Chat::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+#pragma endregion
+
 // UNDONE : Quest Prototype
 //#pragma region GameObject_Quest1
 //	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Quest1", CQuest1::Create(m_pDevice, m_pSprite, m_pFont))))
@@ -753,6 +769,14 @@ HRESULT CMainApp::Setup_EB()
 	// 쿨타임
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainUI_Time", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainUI/empty%d.png"))))
+		return E_FAIL;
+
+	// 장착중인 스킬/아이템
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainUI_EquipSkill", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainUI/equip_skill%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainUI_EquipItem", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainUI/equip_item%d.png"))))
 		return E_FAIL;
 
 #pragma endregion
@@ -925,14 +949,14 @@ HRESULT CMainApp::Setup_EB()
 #pragma endregion
 
 #pragma region Staff
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_GoldenSword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_Item/golden_sword%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_MagicalRageStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/magical_rage_staff%d.png"))))
 		return E_FAIL;
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_IronSword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_Item/iron_sword%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_AngleWingStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/angle_wing_staff%d.png"))))
 		return E_FAIL;
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_DiaSword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_Item/diamond_sword%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_WarriorStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/murpagoth_warrior_staff%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_MagicalStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_Item/magical_extreme_staff%d.png"))))
@@ -1214,6 +1238,54 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceQuest_HelpWnd_Clear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_IceQuest/helpwnd_clear%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_RandomBoxChat
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_Greeting", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/greeting%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_Ask1", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/ask%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_Ask1_Reject", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/ask_reject%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_Ask1_Agree", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/ask_agree%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_Ask2", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/askk%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_Ask2_Reject", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/askk_reject%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_Ask2_Agree", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/askk_agree%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_Final", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/final%d.png"))))
+		return E_FAIL;
+
+	// 박스
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_PotionBox", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/potion_box%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_EquipBox", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/equip_box%d.png"))))
+		return E_FAIL;
+
+	// 박스 정보
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_PotionBoxInfo", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/potion_info%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_EquipBoxInfo", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/equip_info%d.png"))))
+		return E_FAIL;
+
+	// 구매 알림 윈도우
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_RandomBoxChat_ClearWnd", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_RandomBoxNPC/clear%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

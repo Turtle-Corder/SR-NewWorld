@@ -316,4 +316,27 @@ enum eIceQuest_ID
 };
 
 
+//--------------------------------------------------
+// 랜덤박스 ChatWnd 상황
+//--------------------------------------------------
+enum eRandomBoxChatWnd_ID
+{
+	RANDOMBOX_GREETINGS,
+	RANDOMBOX_ASK1,
+	RANDOMBOX_ASK1_REJECT,
+	RANDOMBOX_ASK1_AGREE,
+	RANDOMBOX_ASK2,
+	RANDOMBOX_ASK2_REJECT,
+	RANDOMBOX_ASK2_AGREE,
+	RANDOMBOX_FINAL,
+	RANDOMBOX_END,
+
+	RANDOMBOX_FINISH,
+
+	RANDOMBOX_SHOW_SORT,
+	RANDOMBOX_OPEN,
+	RANDOMBOX_GET
+};
+
+
 #endif
