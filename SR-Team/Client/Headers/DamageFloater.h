@@ -41,6 +41,8 @@ private:
 	_float				m_fDeadTimer = 0.f;
 	_float				m_fDeadDelay = 3.f;
 
+	_vec3				vAddRandomDir = {};
+
 	_int				m_iMaxDigit = 1;
 	_int				m_iDigitNum[4] = { 0, };
 };

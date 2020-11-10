@@ -34,6 +34,8 @@ HRESULT CDamageFloat::Setup_GameObject(void * _pArg)
 	m_iDigitNum[0] = iDamage % 10;
 	iDamage /= 10;
 
+	vAddRandomDir = { (_float)(rand() % 10) , (_float)(rand() % 10) ,(_float)(rand() % 10) };
+
 	for (_int iCnt = 1; iCnt < 4; ++iCnt)
 	{ 
 		m_iDigitNum[iCnt] = iDamage % 10;
@@ -53,6 +55,9 @@ _int CDamageFloat::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
+
+	vAddRandomDir.y -= 9.8f * _fDeltaTime;
+
 
 	for (_int iCnt = 0; iCnt < m_iMaxDigit; ++iCnt)
 	{
@@ -114,6 +119,7 @@ HRESULT CDamageFloat::Add_Component()
 	// Transform
 	//--------------------------------------------------
 	CTransform::TRANSFORM_DESC tTransformDesc[4];
+	//Camera Vector È¹µæ
 	CManagement* pManagement = CManagement::Get_Instance();
 	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	_vec3 vTermTest = pCamera->Get_Desc().vEye - pCamera->Get_Desc().vAt;
@@ -122,9 +128,9 @@ HRESULT CDamageFloat::Add_Component()
 
 	vTermTest.y = 0;
 	_vec3 vInitSacle = { 1.f, 1.f, 1.f };	
-	//_vec3 vTerm = { 0.7f, 0.f, 1.f };
-
 	_vec3 vTerm = { vTermTest.z, 0.f, -vTermTest.x };
+	//
+
 	for (_int iCnt = 0; iCnt < m_iMaxDigit; ++iCnt)
 	{
 		tTransformDesc[iCnt].vPosition = m_tInfo.vSpawnPos + vTerm * (_float)iCnt * 1.3f;
