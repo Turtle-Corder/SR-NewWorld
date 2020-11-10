@@ -152,6 +152,7 @@ private:
 	_uint			m_iPattonCnt = 0;
 	_float			m_fMoveSpeed = 2.f;
 	_bool			m_bMiniGolem_SetPosition = false;
+	_bool			m_OneCheck = false;
 };
 
 END

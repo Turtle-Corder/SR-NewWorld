@@ -340,10 +340,18 @@ HRESULT CGolem::Update_AI()
 
 		_float	fDistance = D3DXVec3Length(&m_vMoveDirection);
 
-		if (fDistance > m_fFollowDistance) //10.f
+
+		if (m_OneCheck)
+		{
+			m_eCurState = CGolem::MOVE;
+			return S_OK;
+		}
+		if (fDistance > m_fFollowDistance && !m_OneCheck) //10.f
 		{
 			m_eCurState = CGolem::IDLE;
+			m_OneCheck = true;
 			return S_OK;
+
 		}
 
 		else if (fDistance > m_fAttackDistance) //3.f
@@ -448,11 +456,11 @@ HRESULT CGolem::Update_State()
 			break;
 
 		case CGolem::ATTACK1:
-			m_fAttackDelay = 3.7f;		// ³»·ÁÂï±â
+			m_fAttackDelay = 2.f;		// ³»·ÁÂï±â
 			break;
 
 		case CGolem::ATTACK2:
-			m_fAttackDelay = 3.1f;		// ÆøÅº
+			m_fAttackDelay = 2.f;		// ÆøÅº
 			break;
 
 		case CGolem::ATTACK3:
@@ -881,9 +889,9 @@ HRESULT CGolem::Spawn_Bomb()
 	tImpact.pAttacker = this;
 	tImpact.pStatusComp = m_pStatusCom;
 
-	for (_uint iCnt = 0; iCnt < 6; ++iCnt)
+	for (_uint iCnt = 0; iCnt < 12; ++iCnt)
 	{
-		_float fX = (_float)(rand() % 4 + 4); _float fZ = (_float)(rand() % 4 + 4);
+		_float fX = (_float)(rand() % 6 + 1); _float fZ = (_float)(rand() % 6 + 1);
 
 		_uint iRandX = rand() % 2;
 		_uint iRandZ = rand() % 2;
