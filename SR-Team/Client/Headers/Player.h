@@ -208,6 +208,7 @@ private:
 
 	void Update_HurtDelay(_float _fDeltaTime);
 
+	void Update_DecalAlpha(_float _fDelatTime);
 
 
 private:
@@ -222,6 +223,7 @@ private:
 	CTransform*			m_pTransformCom[PART_END];
 	CTexture*			m_pTextureCom[PART_END];
 	CTexture*			m_pFlinchTexCom = nullptr;
+	CTexture*			m_pDecalTexCom	= nullptr;
 	CRaycast*			m_pRaycastCom	= nullptr;
 	CSphereCollider*	m_pColliderCom	= nullptr;
 	CStatus*			m_pStatusCom	= nullptr;
@@ -307,8 +309,12 @@ private:
 
 	_bool			m_bFlinch = false;
 	_float			m_fFlinchTimer = 0.f;
-	_float			m_fFlinchDealy = 1.f;
+	_float			m_fFlinchDealy = 0.1f;
 
+	_bool			m_bDecalOn = false;
+	_bool			m_bDecalDir = false;
+	_float			m_fCurDecalAlpha = 0.f;
+	_float			m_fDecalAlpha = 3.f;
 };
 
 END

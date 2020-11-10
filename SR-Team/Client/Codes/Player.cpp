@@ -127,18 +127,32 @@ _int CPlayer::LateUpdate_GameObject(_float _fDeltaTime)
 	if (FAILED(pManagemnet->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
 
+	Update_AtkDelay(_fDeltaTime);
+	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
+	Update_DecalAlpha(_fDeltaTime);
+
 	if (m_bFlinch)
 	{
-		Update_FlinchDelay();
-
 		if (FAILED(pManagemnet->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
 			return GAMEOBJECT::WARN;
 	}
 
-	// todo : low hp
+	_float fHPPercent = (_float)m_pStatusCom->Get_Status().iHp / (_float)m_pStatusCom->Get_Status().iMaxHp;
+	if (0.2f > fHPPercent)
+	{
+		if (!m_bDecalOn)
+		{
+			m_fCurDecalAlpha = 255.f;
+			m_bDecalDir = true;
+		}
 
-	
-	Update_AtkDelay(_fDeltaTime);
+		m_bDecalOn = true;
+		if (FAILED(pManagemnet->Add_RendererList(CRenderer::RENDER_UI, this)))
+			return GAMEOBJECT::WARN;
+	}
+	else
+		m_bDecalOn = false;
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -198,26 +212,25 @@ HRESULT CPlayer::Render_BlendAlpha()
 
 HRESULT CPlayer::Render_UI()
 {
-	//CManagement* pManagement = CManagement::Get_Instance();
-	//if (nullptr == pManagement)
-	//	return E_FAIL;
+	if (!m_bDecalOn)
+		return S_OK;
 
+	const D3DXIMAGE_INFO* pTexInfo = m_pDecalTexCom->Get_TexInfo(0);
+	if (nullptr == pTexInfo)
+		return E_FAIL;
 
-	//CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-	//if (nullptr == pCamera)
-	//	return E_FAIL;
+	_vec3 vCenter = { (_float)(pTexInfo->Width >> 1), (_float)(pTexInfo->Height >> 1), 0.f };
 
-	//for (_uint iCnt = PART_START; iCnt < PART_END; ++iCnt)
-	//{
-	//	if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
-	//		return E_FAIL;
+	_matrix matTrans;
+	D3DXMatrixIdentity(&matTrans);
+	D3DXMatrixTranslation(&matTrans, (_float)(WINCX >> 1), (_float)(WINCY >> 1), 0.f);
 
-	//	if (FAILED(m_pTextureCom[iCnt]->SetTexture(0)))
-	//		return E_FAIL;
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
 
-	//	if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
-	//		return E_FAIL;
-	//}
+	pManagement->Get_Sprite()->SetTransform(&matTrans);
+	pManagement->Get_Sprite()->Draw((LPDIRECT3DTEXTURE9)m_pDecalTexCom->GetTexture(0), nullptr, &vCenter, nullptr, D3DCOLOR_ARGB((_int)(m_fCurDecalAlpha), 255, 255, 255));
 
 	return S_OK;
 }
@@ -494,6 +507,9 @@ HRESULT CPlayer::Add_Component_Texture()
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
 		return E_FAIL;
 
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Decal", L"Com_TexDecal", (CComponent**)&m_pDecalTexCom)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -646,6 +662,7 @@ void CPlayer::Free()
 	}
 
 	Safe_Release(m_pFlinchTexCom);
+	Safe_Release(m_pDecalTexCom);
 
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pRaycastCom);
@@ -1104,15 +1121,19 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 			_vec3 vAddPos = {};
 			memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
 			//D3DXVec3Normalize(&vAddPos, &vAddPos);
-			vAddPos.x = vAddPos.z = 0;
-
 
 			FLOATING_INFO tInfo;
-			tInfo.iDamage = 512;
-			tInfo.vSpawnPos = m_pTransformCom[PART_HEAD]->Get_Desc().vPosition ;
+			tInfo.iDamage = 123;
+			tInfo.vSpawnPos = m_pTransformCom[PART_HEAD]->Get_Desc().vPosition + (vAddPos * 2.f);
 			if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo)))
 				PRINT_LOG(L"Failed To Create RandomBox", LOG::CLIENT);
 		}
+	}
+
+	else if (pManagement->Key_Down('B'))
+	{
+		if (!m_bFlinch)
+			m_bFlinch = true;
 	}
 
 	return GAMEOBJECT::NOEVENT;
@@ -1665,6 +1686,57 @@ void CPlayer::Update_AtkDelay(_float _fDeltaTime)
 		{
 			m_bCanNormalAtk = true;
 			m_fAtkDelayCounter = 0.f;
+		}
+	}
+}
+
+void CPlayer::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
+		}
+	}
+}
+
+void CPlayer::Update_HurtDelay(_float _fDeltaTime)
+{
+	if (!m_bCanHurt)
+	{
+		m_fHurtTimer += _fDeltaTime;
+		if (m_fHurtTimer >= m_fHurtDealy)
+		{
+			m_fHurtTimer = 0.f;
+			m_bCanHurt = true;
+		}
+	}
+}
+
+void CPlayer::Update_DecalAlpha(_float _fDelatTime)
+{
+	if (!m_bDecalOn)
+		return;
+
+	if (!m_bDecalDir)
+	{
+		m_fCurDecalAlpha += m_fDecalAlpha;
+		if (m_fCurDecalAlpha >= 255.f)
+		{
+			m_fCurDecalAlpha = 255.f;
+			m_bDecalDir = !m_bDecalDir;
+		}
+	}
+	else
+	{
+		m_fCurDecalAlpha -= m_fDecalAlpha;
+		if (m_fCurDecalAlpha <= 0.f)
+		{
+			m_fCurDecalAlpha = 0.f;
+			m_bDecalDir = !m_bDecalDir;
 		}
 	}
 }
