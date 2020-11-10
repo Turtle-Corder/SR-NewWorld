@@ -56,6 +56,19 @@ _int CScene_Stage2::Update_Scene(_float _fDeltaTime)
 	{
 		CSoundManager::Get_Instance()->StopSound(CSoundManager::BGM);
 		CSoundManager::Get_Instance()->PlayBGM(L"bgm_iceland.mp3");
+
+		if (FAILED(Respawn_Palyer()))
+			return GAMEOBJECT::WARN;
+
+		_int iCnt = 0;
+		while (true)
+		{
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_CubeTerrain", iCnt++);
+			if (nullptr == pCubeTerrain)	break;
+
+			pCubeTerrain->Set_Active();
+		}
+
 		m_bInit = true;
 	}
 
@@ -72,15 +85,6 @@ _int CScene_Stage2::Update_Scene(_float _fDeltaTime)
 		{
 			PRINT_LOG(L"Failed To Travel Layers in Iceland", LOG::CLIENT);
 			return -1;
-		}
-
-		_int iCnt = 0;
-		while (true)
-		{
-			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_CubeTerrain", iCnt++);
-			if (nullptr == pCubeTerrain)	break;
-
-			pCubeTerrain->Set_Active();
 		}
 
 		// 얼음 -> 마을 ICELAND -> TOWN 단방향
@@ -187,7 +191,7 @@ HRESULT CScene_Stage2::Setup_Layer_Monster(const wstring & LayerTag)
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
-	vSpawnPos = { 12.48f, 0.f, 33.08f };
+	vSpawnPos = { /*12.48f, 0.f, 33.08f*/7.68f, 0.f, 44.88f };
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
@@ -292,6 +296,25 @@ HRESULT CScene_Stage2::Travel_NextLayers()
 		PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
 		return E_FAIL;
 	}
+
+	return S_OK;
+}
+
+HRESULT CScene_Stage2::Respawn_Palyer()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CTransform* pTransformHead = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+	CTransform* pTransformBody = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform1");
+	if (nullptr == pTransformHead || nullptr == pTransformBody)	return E_FAIL;
+
+	_vec3 vSpawnPos = { 3.f, pTransformHead->Get_Desc().vPosition.y, 3.f };
+	pTransformHead->Set_Position(vSpawnPos);
+
+	vSpawnPos = { 3.f, pTransformBody->Get_Desc().vPosition.y, 3.f };
+	pTransformBody->Set_Position(vSpawnPos);
 
 	return S_OK;
 }

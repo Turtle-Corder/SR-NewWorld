@@ -131,7 +131,11 @@ HRESULT CShop_ChatWnd::Render_UI()
 		m_pSprite->Draw(
 			(LPDIRECT3DTEXTURE9)m_pTextureCom[m_eSituation]->GetTexture(0),
 			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+		m_bChat = true;
 	}
+	else
+		m_bChat = false;
 	return S_OK;
 }
 

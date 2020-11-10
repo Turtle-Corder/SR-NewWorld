@@ -25,7 +25,12 @@ class CGolem final : public CGameObject
 	};
 	enum STATE 
 	{
+<<<<<<< HEAD
 		IDLE , MOVE , ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, ATTACK6, //ATTACK5, 
+=======
+		IDLE , MOVE , 
+		ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, ATTACK6,//ATTACK5, 
+>>>>>>> 97638b2b4b9316ae9c2fa1aacfd7e5d747aa24f3
 		STATE_DEAD
 	};
 	enum AXIS {X , Y , Z};
@@ -43,7 +48,7 @@ public:
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual void Free() override;
 	static  CGolem* Create(LPDIRECT3DDEVICE9 _pDevice);
-
+	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 private:
 	HRESULT Add_Component();
 	HRESULT Add_Component_VIBuffer();
@@ -114,7 +119,7 @@ private:
 	_float			m_fAttackDelay = {};
 	_float			m_fAttackTimer = {};
 	_int			m_iRandAttack = -1;
-
+	_vec3			m_vDirection = {};
 
 	//------------------------------------------------------------
 	// °ø°ÝÃ¼ 

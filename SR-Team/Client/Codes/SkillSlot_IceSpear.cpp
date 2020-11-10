@@ -104,21 +104,29 @@ _bool CSkillSlot_IceSpear::Actual_UseSkill(void * _pArg)
 	//--------------------------------------------------
 	// TODO : 아이스 스피어 소환
 	//--------------------------------------------------
+
 	pImpact->vOption = pImpact->vPosition;
 
-	pImpact->vPosition = ((CTransform*)(pImpact->pAttacker->Get_Component(L"Com_Transform0")))->Get_Desc().vPosition;
-	pImpact->vPosition.y += 2.5f;
-
-	pImpact->vDirection = pImpact->vOption - pImpact->vPosition;
-
-
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceSpear", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
+	for (_uint i = 0; i < 7; i++)
 	{
-		PRINT_LOG(L"Failed To Spawn Meteor", LOG::DEBUG);
-		return false;
+
+		pImpact->vPosition = ((CTransform*)(pImpact->pAttacker->Get_Component(L"Com_Transform0")))->Get_Desc().vPosition;
+		pImpact->vPosition.y += 2.5f;
+
+		pImpact->vPosition += { (_float)(rand() % 6 - 3), (_float)(rand()%3) -1.5f , (_float)(rand() % 6 - 3)};
+
+		pImpact->vDirection = pImpact->vOption - pImpact->vPosition;
+
+
+		pImpact->fOption = (_float)i * 0.1f;
+
+			if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceSpear", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
+			{
+				PRINT_LOG(L"Failed To Spawn Meteor", LOG::DEBUG);
+				return false;
+			}
+
 	}
-
-
 
 	--m_iCanUseCnt;
 	return true;

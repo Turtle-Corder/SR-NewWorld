@@ -123,7 +123,7 @@ _int CFlowerQuest::Update_GameObject(_float _fDeltaTime)
 			pInven->Get_RewardItem(L"RewardPotion");
 			pInven->Get_RewardItem(L"RewardPotion");
 
-			pInven->Get_RewardItem(L"GolemCore_Blue");
+			pInven->Get_RewardItem(L"GolemCore_Puple");
 		}
 		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
 		{
@@ -212,7 +212,10 @@ HRESULT CFlowerQuest::Render_UI()
 			(LPDIRECT3DTEXTURE9)m_pTextureWnd[m_eSituation]->GetTexture(0),
 			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
+		m_bChat = true;
 	}
+	else
+		m_bChat = false;
 
 	if (FAILED(Render_HelpWnd()))
 		return E_FAIL;

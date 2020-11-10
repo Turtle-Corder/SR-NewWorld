@@ -178,6 +178,8 @@ HRESULT CShop::Render_UI()
 
 HRESULT CShop::Check_BuyItem()
 {
+
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -190,10 +192,12 @@ HRESULT CShop::Check_BuyItem()
 	{
 		for (_int i = 0; i < 4; ++i)
 		{
-			if (pManagement->Key_Pressing(VK_LBUTTON))
+			if (PtInRect(&m_tItemTextureRt[j][i], pMouse->Get_Point()))
 			{
-				if (PtInRect(&m_tItemTextureRt[j][i], pMouse->Get_Point()))
+				if (pManagement->Key_Down(VK_LBUTTON))
+				{
 					Buy_Item(j, i);
+				}
 			}
 		}
 	}
@@ -209,6 +213,7 @@ HRESULT CShop::Buy_Item(_uint iIndexJ, _uint iIndexI)
 	CManagement* pManagement = CManagement::Get_Instance();
 	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
 	pInven->Get_ShopItem(strName);
+
 
 	return S_OK;
 }
@@ -286,6 +291,11 @@ HRESULT CShop::Add_Component()
 			szTexture, (CComponent**)&m_pTextureCom[i])))
 			return E_FAIL;
 	}
+
+	if (FAILED(CGameObject::Add_Component(
+		SCENE_STATIC, L"Component_Texture_Shop_ClearWnd",
+		L"Com_TextureClear", (CComponent**)&m_pTextureClear)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -496,6 +506,23 @@ HRESULT CShop::Render_ShopItem()
 	return S_OK;
 }
 
+HRESULT CShop::Render_ClearWnd()
+{
+	_matrix matWorld, matTrans;
+	const D3DXIMAGE_INFO* pTexInfo = m_pTextureClear->Get_TexInfo(0);
+	_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+
+	D3DXMatrixTranslation(&matTrans, WINCX * 0.5f, WINCY * 0.5f, 0.f);
+	matWorld = matTrans;
+
+	m_pSprite->SetTransform(&matWorld);
+	m_pSprite->Draw(
+		(LPDIRECT3DTEXTURE9)m_pTextureClear->GetTexture(0),
+		nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	return S_OK;
+}
+
 CShop * CShop::Create(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont)
 {
 	if (nullptr == _pDevice)
@@ -541,6 +568,8 @@ void CShop::Free()
 	for (auto& pItem : m_vShopItem)
 		Safe_Delete(pItem);
 	m_vShopItem.clear();
+
+	Safe_Release(m_pTextureClear);
 
 	CUIObject::Free();
 }

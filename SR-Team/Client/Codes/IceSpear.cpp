@@ -34,20 +34,27 @@ HRESULT CIceSpear::Setup_GameObject(void* _pArg)
 	m_vMoveDir = m_tInstant.vDirection;
 	D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
 
+	m_fInitTimer = 0.f;
+	m_fInitDelay = m_tInstant.fOption;
+
 	_float AngleToXZ, AngleToYZ;
-	_vec3 VecUp = { 0.f, 1.f, 0.f };
-	_vec3 VecZ = { 0.f, 0.f, 1.f };
-	_vec3 VecOnXZ = { m_vMoveDir.x, 0, m_vMoveDir.z };
+	_vec3 VecUp		=	{ 0.f, 1.f, 0.f };
+	_vec3 VecZ		=	{ 0.f, 0.f, 1.f };
+	_vec3 VecOnXZ	=	{ m_vMoveDir.x, 0, m_vMoveDir.z };
 
 	D3DXVec3Normalize(&VecOnXZ, &VecOnXZ);
  	AngleToXZ = D3DXVec3Dot(&m_vMoveDir, &VecUp);
-	AngleToYZ = D3DXVec3Dot(&VecOnXZ, &VecZ);
 
 	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_X, acosf(AngleToXZ));
-	if(m_vMoveDir.x <= 0)
-		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ));
-	else if(m_vMoveDir.x > 0)
-		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, D3DX_PI-acosf(AngleToYZ));
+
+
+	AngleToYZ = D3DXVec3Dot(&VecOnXZ, &VecZ);
+
+	if (m_vMoveDir.x <= 0)
+		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ));//버그 없음
+	else if (m_vMoveDir.x > 0)
+		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, acosf(AngleToYZ));
+
 	m_pTransformCom->Update_Transform();
 
 	return S_OK;
@@ -55,21 +62,33 @@ HRESULT CIceSpear::Setup_GameObject(void* _pArg)
 
 int CIceSpear::Update_GameObject(_float _fDeltaTime)
 {
+
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
-	if (FAILED(Movement(_fDeltaTime)))
-		return GAMEOBJECT::WARN;
+		if (FAILED(Movement(_fDeltaTime)))
+			return GAMEOBJECT::WARN;
+
+		if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
+			return GAMEOBJECT::WARN;
+	
+		if (FAILED(Spwan_Dust()))
+			return GAMEOBJECT::WARN;
 
 	
-	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
-		return GAMEOBJECT::WARN;
-
 	return GAMEOBJECT::NOEVENT;
 }
 
 int CIceSpear::LateUpdate_GameObject(_float _fDeltaTime)
 {
+	Update_InitDelay(_fDeltaTime);
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -203,6 +222,37 @@ HRESULT CIceSpear::Movement(_float _fDeltaTime)
 
 	return S_OK;
 }
+
+HRESULT CIceSpear::Spwan_Dust()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+
+	_vec3 vPos = m_pTransformCom->Get_Desc().vPosition;
+
+	vPos.x += (_float)(rand() % 100 - 50) * 0.01f;
+	vPos.y += (_float)(rand() % 100 - 50) * 0.01f;
+	vPos.z += (_float)(rand() % 100 - 50) * 0.01f;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceDust", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &vPos)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+
+void CIceSpear::Update_InitDelay(_float _fDeltaTime)
+{
+	if (!IsActive())
+	{
+		m_fInitTimer += _fDeltaTime;
+		if (m_fInitTimer >= m_fInitDelay)
+			Set_Active();
+	}
+}
+
 
 CIceSpear * CIceSpear::Create(LPDIRECT3DDEVICE9 pDevice)
 {

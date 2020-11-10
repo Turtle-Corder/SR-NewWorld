@@ -55,22 +55,58 @@ _int CStump_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
-		return 0;
+		return GAMEOBJECT::WARN;
 
+	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
+		return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
+}
+
+HRESULT CStump_Impact::Render_NoneAlpha()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->SetTexture(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CStump_Impact::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vPosition = m_tInstant.vPosition;
+	_vec3 vGolemLook = _vec3(m_tInstant.vDirection.x, 0.f, m_tInstant.vDirection.z);
+	D3DXVec3Normalize(&vGolemLook, &vGolemLook);
+	_vec3 vPosition = { m_tInstant.vPosition.x , 0.f, m_tInstant.vPosition.z };
+	vPosition += vGolemLook * 3.f;
+	tTransformDesc.vPosition = vPosition;
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
 	tTransformDesc.vScale = { 10.f , 5.f , 10.f };
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
+		return E_FAIL;
+
+
+	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Stump_Head", L"Com_Texture", (CComponent**)&m_pTextureCom))) ////积己 肮荐
+		return E_FAIL;
+
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom))) //积己 肮荐
 		return E_FAIL;
 
 
@@ -142,6 +178,8 @@ HRESULT CStump_Impact::Take_Damage(const CComponent * _pDamageComp)
 
 void CStump_Impact::Free()
 {
+	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);

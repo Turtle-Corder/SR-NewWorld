@@ -20,6 +20,7 @@ public:
 	virtual HRESULT Setup_GameObject(void * _pArg) override;
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
+	virtual HRESULT Render_NoneAlpha() override;
 private:
 	HRESULT Add_Component();
 public:
@@ -28,6 +29,8 @@ public:
 	virtual void Free() override;
 	static CStump_Impact* Create(LPDIRECT3DDEVICE9 _pDevice);
 private:
+	CVIBuffer*			m_pVIBufferCom = nullptr;
+	CTexture*			m_pTextureCom = nullptr;
 	CTransform*			m_pTransformCom = nullptr;
 	CSphereCollider*	m_pColliderCom = nullptr;
 	CStatus*			m_pStatusCom = nullptr;

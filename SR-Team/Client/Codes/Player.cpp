@@ -14,7 +14,13 @@
 #include "Mouse.h"
 #include "CubeTerrain.h"
 #include "TerrainBundle.h"
+#include "MainCamera.h"
 #include "RandomBoxManager.h"
+#include "FlowerQuest.h"
+#include "MainQuest.h"
+#include "IceLandQuest.h"
+#include "NpcWnd.h"
+#include "Shop_ChatWnd.h"
 #include "..\Headers\Player.h"
 
 USING(Client)
@@ -157,6 +163,12 @@ HRESULT CPlayer::Take_Damage(const CComponent* _pDamageComp)
 		return S_OK;
 
 	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+
+
+	CManagement* pManagement = CManagement::Get_Instance();
+
+	CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	pMainCamera->Set_Camera_Wigging(0.7f, 70.f, 1.5f, CMainCamera::WIG_TYPE::DAMPED);
 
 	//if (0 >= m_pStatusCom->Get_Status().iHp)
 	//	PRINT_LOG(L"¾Æ¾æ", LOG::CLIENT);
@@ -809,6 +821,7 @@ HRESULT CPlayer::Raycast_OnMonster(_bool * _pFound, CGameObject** _ppObject)
 //----------------------------------------------------------------------------------------------------
 _int CPlayer::Update_UICheck()
 {
+	_bool bFlowerQuest = false, bNpcWnd = false, bMainQuest = false, bIceLandQuest = false, bShopChat = false;
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -829,7 +842,49 @@ _int CPlayer::Update_UICheck()
 	if (pSkill == nullptr)
 		return GAMEOBJECT::WARN;
 
-	if (pInven->Get_Render() || pShop->Get_Render() || pEquip->Get_Render() || pSkill->Get_Render())
+	if (pManagement->Get_CurrentSceneID() == SCENE_TOWN)
+	{
+		CFlowerQuest* pFlowerQuest = (CFlowerQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_FlowerQuest", 0);
+		if (pFlowerQuest == nullptr)
+			return GAMEOBJECT::WARN;
+		bFlowerQuest = pFlowerQuest->Get_Chart();
+	}
+
+	if (pManagement->Get_CurrentSceneID() == SCENE_FOREST || pManagement->Get_CurrentSceneID() == SCENE_VOLCANIC)
+	{
+		CNpcWnd* pNpcWnd = (CNpcWnd*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainQuest", 1);
+		if (pNpcWnd == nullptr)
+			return GAMEOBJECT::WARN;
+		bNpcWnd = pNpcWnd->Get_Chart();
+	}
+
+	if (pManagement->Get_CurrentSceneID() >= SCENE_STAGE0)
+	{
+		CMainQuest* pMainQuest = (CMainQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainQuest", 0);
+		if (pMainQuest == nullptr)
+			return GAMEOBJECT::WARN;
+		bMainQuest = pMainQuest->Get_Chart();
+	}
+
+	if (pManagement->Get_CurrentSceneID() == SCENE_ICELAND)
+	{
+		CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_IceLandQuest", 0);
+		if (pIceLandQuest == nullptr)
+			return GAMEOBJECT::WARN;
+		bIceLandQuest = pIceLandQuest->Get_Chart();
+	}
+
+	if (pManagement->Get_CurrentSceneID() == SCENE_TOWN)
+	{
+
+		CShop_ChatWnd* pShopChat = (CShop_ChatWnd*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Shop", 1);
+		if (pShopChat == nullptr)
+			return GAMEOBJECT::WARN;
+		bShopChat = pShopChat->Get_Chart();
+	}
+
+	if (pInven->Get_Render() || pShop->Get_Render() || pEquip->Get_Render() || pSkill->Get_Render() ||
+		bFlowerQuest || bNpcWnd || bMainQuest || bIceLandQuest || bShopChat)
 		bShowUI = true;
 	else
 		bShowUI = false;
@@ -968,6 +1023,26 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 	else if (pManagement->Key_Up('G'))
 	{
 		m_bInteraction = false;
+	}
+
+	else if (pManagement->Key_Down('H'))
+	{
+		// GameObject_DamageFloat
+		CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+		if (nullptr != pCamera)
+		{
+			_vec3 vAddPos = {};
+			memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+			//D3DXVec3Normalize(&vAddPos, &vAddPos);
+			vAddPos.x = vAddPos.z = 0;
+
+
+			FLOATING_INFO tInfo;
+			tInfo.iDamage = 512;
+			tInfo.vSpawnPos = m_pTransformCom[PART_HEAD]->Get_Desc().vPosition ;
+			if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo)))
+				PRINT_LOG(L"Failed To Create RandomBox", LOG::CLIENT);
+		}
 	}
 
 	return GAMEOBJECT::NOEVENT;

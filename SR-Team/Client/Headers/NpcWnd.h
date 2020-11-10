@@ -16,6 +16,7 @@ public:
 
 public:
 	eNormalNPC_ID Get_NpcID() { return m_eNpcID; }
+	_bool Get_Chart() { return m_bChat; }
 
 public:
 	void Set_NpcID(eNormalNPC_ID eID) { m_eNpcID = eID; }
@@ -39,6 +40,9 @@ public:
 private:
 	CTexture*		m_pTextureCom[STAGE_NPC_END] = { nullptr, };
 	eNormalNPC_ID	m_eNpcID = STAGE_NPC_END;
+
+	// NPC와 대화중인지
+	_bool				m_bChat = false;
 };
 
 END

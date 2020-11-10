@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="..\Headers\AcornExplosion.h" />
     <ClInclude Include="..\Headers\Blind.h" />
+    <ClInclude Include="..\Headers\DamageFloater.h" />
     <ClInclude Include="..\Headers\DummyTerrain.h" />
     <ClInclude Include="..\Headers\Acorn.h" />
     <ClInclude Include="..\Headers\Explosion.h" />
@@ -167,7 +168,9 @@
     <ClInclude Include="..\Headers\FireCrystal.h" />
     <ClInclude Include="..\Headers\FlowerQuest.h" />
     <ClInclude Include="..\Headers\IceBlast.h" />
+    <ClInclude Include="..\Headers\IceBlastPiece.h" />
     <ClInclude Include="..\Headers\IceCrystal.h" />
+    <ClInclude Include="..\Headers\IceDust.h" />
     <ClInclude Include="..\Headers\IceLandQuest.h" />
     <ClInclude Include="..\Headers\IceSpear.h" />
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
@@ -176,12 +179,15 @@
     <ClInclude Include="..\Headers\MainQuest.h" />
     <ClInclude Include="..\Headers\MainQuest_NPC.h" />
     <ClInclude Include="..\Headers\MeteorPiece.h" />
+    <ClInclude Include="..\Headers\MeteorVolcano.h" />
     <ClInclude Include="..\Headers\MiniGolem.h" />
     <ClInclude Include="..\Headers\MpDrift.h" />
     <ClInclude Include="..\Headers\NpcWnd.h" />
     <ClInclude Include="..\Headers\QuestItem_Flower.h" />
     <ClInclude Include="..\Headers\RandomBox.h" />
     <ClInclude Include="..\Headers\RandomBoxManager.h" />
+    <ClInclude Include="..\Headers\RandomBox_Chat.h" />
+    <ClInclude Include="..\Headers\RandomBox_Npc.h" />
     <ClInclude Include="..\Headers\Scene_Room.h" />
     <ClInclude Include="..\Headers\Scene_Stage1.h" />
     <ClInclude Include="..\Headers\Scene_Stage2.h" />
@@ -268,6 +274,7 @@
   <ItemGroup>
     <ClCompile Include="..\Codes\AcornExplosion.cpp" />
     <ClCompile Include="..\Codes\Blind.cpp" />
+    <ClCompile Include="..\Codes\DamageFloater.cpp" />
     <ClCompile Include="..\Codes\DummyTerrain.cpp" />
     <ClCompile Include="..\Codes\Acorn.cpp" />
     <ClCompile Include="..\Codes\Explosion.cpp" />
@@ -275,7 +282,9 @@
     <ClCompile Include="..\Codes\FireCrystal.cpp" />
     <ClCompile Include="..\Codes\FlowerQuest.cpp" />
     <ClCompile Include="..\Codes\IceBlast.cpp" />
+    <ClCompile Include="..\Codes\IceBlastPiece.cpp" />
     <ClCompile Include="..\Codes\IceCrystal.cpp" />
+    <ClCompile Include="..\Codes\IceDust.cpp" />
     <ClCompile Include="..\Codes\IceLandQuest.cpp" />
     <ClCompile Include="..\Codes\IceSpear.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />
@@ -284,12 +293,15 @@
     <ClCompile Include="..\Codes\MainQuest.cpp" />
     <ClCompile Include="..\Codes\MainQuest_NPC.cpp" />
     <ClCompile Include="..\Codes\MeteorPiece.cpp" />
+    <ClCompile Include="..\Codes\MeteorVolcano.cpp" />
     <ClCompile Include="..\Codes\MiniGolem.cpp" />
     <ClCompile Include="..\Codes\MpDrift.cpp" />
     <ClCompile Include="..\Codes\NpcWnd.cpp" />
     <ClCompile Include="..\Codes\QuestItem_Flower.cpp" />
     <ClCompile Include="..\Codes\RandomBox.cpp" />
     <ClCompile Include="..\Codes\RandomBoxManager.cpp" />
+    <ClCompile Include="..\Codes\RandomBox_Chat.cpp" />
+    <ClCompile Include="..\Codes\RandomBox_Npc.cpp" />
     <ClCompile Include="..\Codes\Scene_Room.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage1.cpp" />
     <ClCompile Include="..\Codes\Scene_Stage2.cpp" />

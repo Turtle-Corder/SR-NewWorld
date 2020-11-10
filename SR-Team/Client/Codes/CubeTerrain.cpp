@@ -62,6 +62,9 @@ _int CCubeTerrain::LateUpdate_GameObject(_float _fDeltaTime)
 
 HRESULT CCubeTerrain::Render_NoneAlpha()
 {
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;

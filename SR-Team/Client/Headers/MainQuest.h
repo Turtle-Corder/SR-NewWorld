@@ -16,13 +16,16 @@ public:
 	};
 	enum GOLEM_SORT
 	{
-		RED, GREEN, BLUE, BRIGHT_BLUE, GOLEM_SORT_END
+		RED, GREEN, BLUE, PUPLE, GOLEM_SORT_END
 	};
 
 public:
 	explicit CMainQuest(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont);
 	explicit CMainQuest(const CMainQuest& other);
 	virtual ~CMainQuest() = default;
+
+public:
+	_bool Get_Chart() { return m_bChat; }
 
 public:
 	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
@@ -63,6 +66,9 @@ private:
 	_bool			m_bGetReward = false;
 	_bool			m_bStartQuest = false;
 	_bool			m_bRenderClear = false;
+
+	// NPC와 대화중인지
+	_bool				m_bChat = false;
 };
 
 

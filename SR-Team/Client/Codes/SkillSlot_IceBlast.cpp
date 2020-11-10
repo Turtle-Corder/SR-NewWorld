@@ -102,10 +102,16 @@ _bool CSkillSlot_IceBlast::Actual_UseSkill(void * _pArg)
 	if (nullptr == pManagement)
 		return false;
 
-	for (_uint iCnt = 0; iCnt < iStackCnt; ++iCnt)
+	for (_uint iCnt = 0; iCnt < iStackCnt * 50; ++iCnt)
 	{
 		if (pImpact)
+		{
 			pImpact->vOption.x = (_float)iCnt;
+			pImpact->vOption.y = (_float)iStackCnt * 2.f;
+		}
+
+		_vec3 vCircleVector = { cos((_float)iCnt * 0.8f), 0.f, sin((_float)iCnt) * 0.8f };
+		pImpact->vPosition += vCircleVector;
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceBlast", pManagement->Get_CurrentSceneID(), L"Layer_PlayerAtk", pImpact)))
 		{

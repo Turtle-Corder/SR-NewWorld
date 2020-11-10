@@ -24,6 +24,7 @@ public:
 public:
 	_bool Get_StartQuest() { return m_bStartQuest; }
 	eFlowerQuest_ID Get_FlowerQuestID() { return m_eSituation; }
+	_bool Get_Chart() { return m_bChat; }
 
 public:
 	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
@@ -64,6 +65,9 @@ private:
 
 	// 퀘스트 시작할지
 	_bool				m_bStartQuest = false;
+
+	// NPC와 대화중인지
+	_bool				m_bChat = false;
 };
 
 END

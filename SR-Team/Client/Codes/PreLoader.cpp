@@ -39,6 +39,7 @@
 #include "Stage2_NPC.h"
 #include "Stage3_NPC.h"
 #include "IceLandQuest.h"
+#include "RandomBox_Npc.h"
 #pragma endregion
 
 USING(Client)
@@ -152,6 +153,11 @@ HRESULT CPreLoader::Load_Resources_Town()
 
 #pragma region GameObject_MainQuestNPC
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_MainQuestNPC", CMainQuest_NPC::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_RandomBoxNPC
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_TOWN, L"GameObject_RandomBoxNPC", CRandomBox_Npc::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
@@ -308,11 +314,6 @@ HRESULT CPreLoader::Load_Resources_Forest()
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/TranslucentCube%d.dds", 2))))
 	{
 	}
-#pragma endregion
-
-#pragma region GameObject_Crack
-	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Crack", CCrack::Create(m_pDevice))))
-		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_Crack

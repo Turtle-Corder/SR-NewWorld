@@ -71,7 +71,7 @@ _int CQuestItem_Flower::Update_GameObject(_float _fDeltaTime)
 	// 2. ²É¹ç ¾È¿¡ ÀÖ¾î¾ß ÇÑ´Ù
 	if (vPlayerPos.x <= 8.f && vPlayerPos.z <= 40.f && !m_bGatheringFlower && pFlowerQuest->Get_FlowerQuestID() == FLOWER_ON_THE_QUEST)
 	{
-		if (pManagement->Key_Pressing('G'))
+		if (pManagement->Key_Pressing('G') && !m_bRenderClearWnd)
 		{
 			m_fGatheringTime += _fDeltaTime;
 			m_bRenderLoadingBar = true;
@@ -84,7 +84,8 @@ _int CQuestItem_Flower::Update_GameObject(_float _fDeltaTime)
 				m_bRenderLoadingBar = false;
 				++m_iGatheringFlowerCnt;
 				pInven->Get_RewardItem(L"flower");
-				PRINT_LOG(L"²É È¹µæ", LOG::CLIENT);
+				m_bRenderClearWnd = true;
+				//PRINT_LOG(L"²É È¹µæ", LOG::CLIENT);
 			}
 		}
 	}
@@ -108,6 +109,10 @@ HRESULT CQuestItem_Flower::Render_UI()
 {
 	_matrix matTrans, matWorld;
 
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return GAMEOBJECT::ERR;
+
 	if (m_bRenderLoadingBar)
 	{
 		// ·Îµù¹Ù ¹è°æ
@@ -129,6 +134,24 @@ HRESULT CQuestItem_Flower::Render_UI()
 
 		RECT rc = { 0, 0, (LONG)(pTexInfo->Width * fProgress), (LONG)pTexInfo->Height };
 		m_pSprite->Draw((LPDIRECT3DTEXTURE9)m_pTextureLoading[1]->GetTexture(0), &rc, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	}
+
+	if (m_bRenderClearWnd)
+	{
+		const D3DXIMAGE_INFO* pTexInfoWnd = m_pTextureLoading[0]->Get_TexInfo(0);
+		_vec3 vCenter = { pTexInfoWnd->Width * 0.5f, pTexInfoWnd->Height * 0.5f, 0.f };
+
+		D3DXMatrixTranslation(&matTrans, WINCX * 0.5f, WINCY * 0.5f, 0.f);
+		matWorld = matTrans;
+		m_pSprite->SetTransform(&matWorld);
+
+		m_pSprite->Draw(
+			(LPDIRECT3DTEXTURE9)m_pTextureClearWnd->GetTexture(0),
+			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(100, 255, 255, 255));
+
+		if (pManagement->Key_Pressing(VK_RETURN))
+			m_bRenderClearWnd = false;
 	}
 
 	return S_OK;
@@ -151,6 +174,10 @@ HRESULT CQuestItem_Flower::Add_Component()
 			szCombine, (CComponent**)&m_pTextureLoading[i])))
 			return E_FAIL;
 	}
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_FlowerQuest_FlowerGathering_Clear",
+		L"Com_TextureClearWnd", (CComponent**)&m_pTextureClearWnd)))
+		return E_FAIL;
 
 
 	return S_OK;
@@ -190,6 +217,8 @@ void CQuestItem_Flower::Free()
 		Safe_Release(m_pTransformLoading[i]);
 		Safe_Release(m_pTextureLoading[i]);
 	}
+
+	Safe_Release(m_pTextureClearWnd);
 
 	CUIObject::Free();
 }

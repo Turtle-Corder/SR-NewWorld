@@ -27,6 +27,8 @@ public:
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(_float _fDeltaTime);
+	HRESULT Spwan_Dust();
+	void Update_InitDelay(_float _fDeltaTime);
 
 public:
 	static CIceSpear* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -46,6 +48,8 @@ private:
 	_float m_fDeadTime = 0.f;
 	_float m_fMoveSpeed = -0.8f;
 	_vec3 m_vMoveDir = {};
+	_float m_fInitTimer = 0.f;
+	_float m_fInitDelay = 0.f;
 
 	INSTANTIMPACT m_tInstant = {};
 };

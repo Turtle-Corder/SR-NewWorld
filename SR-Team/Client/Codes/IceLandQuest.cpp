@@ -42,6 +42,13 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 	if (pInven == nullptr)
 		return E_FAIL;
 
+	// 치트 -> 나중에 수정해야 함
+	if (pManagement->Key_Pressing('V'))
+	{
+		pInven->Get_RewardItem(L"GolemCore_Red");
+		m_iMonsetDeadCnt = 10;
+	}
+
 	switch (m_eSituation)
 	{
 	case ICEQUEST_ASK1:
@@ -50,7 +57,10 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 			if (!m_bClear)
 				m_eSituation = ICEQUEST_ANSWER1;
 			else
+			{
 				m_eSituation = ICEQUEST_END;
+				m_bStartQuest = false;
+			}
 		}
 		if (pManagement->Key_Pressing(VK_ESCAPE))
 		{
@@ -125,11 +135,11 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 		break;
 
 	case ICEQUEST_ON_THE_QUEST:
-		if (/*완료조건*/0)
+		if (10 == m_iMonsetDeadCnt)
 			m_bRenderClear = true;
 		if (m_bStartQuest)
 		{
-			if (/*완료조건*/0)
+			if (10 == m_iMonsetDeadCnt)
 			{
 				m_bClear = true;
 				m_eSituation = ICEQUEST_REWARD;
@@ -145,7 +155,10 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 
 	case ICEQUEST_FINISH:
 		if (m_bStartQuest)
+		{
 			m_eSituation = ICEQUEST_ASK1;
+			m_bStartQuest = false;
+		}
 		break;
 
 	case ICEQUEST_REAL_FINISH:
@@ -188,7 +201,10 @@ HRESULT CIceLandQuest::Render_UI()
 			(LPDIRECT3DTEXTURE9)m_pTextureWnd[m_eSituation]->GetTexture(0),
 			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
+		m_bChat = true;
 	}
+	else
+		m_bChat = false;
 
 	if (FAILED(Render_HelpWnd()))
 		return E_FAIL;
@@ -225,18 +241,19 @@ HRESULT CIceLandQuest::Render_HelpWnd()
 			(LPDIRECT3DTEXTURE9)m_pTextureHelp[iIndex]->GetTexture(0),
 			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-		//// 처치한 몬스터 수 출력
+		// 처치한 몬스터 수 출력
+		StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"%d", m_iMonsetDeadCnt);
 
-		//D3DXMatrixScaling(&matScale, 2.8f, 2.8f, 0.f);
-		//if (iIndex == ICEQUEST_NOCLEAR)
-		//	D3DXMatrixTranslation(&matTrans, 1565.f, 220.f, 0.f);
-		//else
-		//	D3DXMatrixTranslation(&matTrans, 1565.f, 190.f, 0.f);
-		//matWorld = matScale * matTrans;
+		D3DXMatrixScaling(&matScale, 2.3f, 2.3f, 0.f);
+		if (iIndex == ICEQUEST_NOCLEAR)
+			D3DXMatrixTranslation(&matTrans, 1730.f, 231.f, 0.f);
+		else
+			D3DXMatrixTranslation(&matTrans, 1719.f, 195.f, 0.f);
+		matWorld = matScale * matTrans;
 
-		//m_pSprite->SetTransform(&matWorld);
-		//m_pFont->DrawTextW(m_pSprite, szBuff, lstrlen(szBuff),
-		//	nullptr, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+		m_pSprite->SetTransform(&matWorld);
+		m_pFont->DrawTextW(m_pSprite, szBuff, lstrlen(szBuff),
+			nullptr, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
 
 	}
 

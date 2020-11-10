@@ -48,6 +48,7 @@ typedef struct tagInstantImpact
 	_vec3			vPosition = {};
 	_vec3			vDirection = {};
 	_vec3			vOption = {};
+	_float			fOption = 0.f;
 	CGameObject*	pTarget = nullptr;
 }INSTANTIMPACT;
 
@@ -82,6 +83,12 @@ typedef struct tagDropBoxInitInfo
 	WCHAR	szItemTag[MIN_STR];
 	_bool	bGone;
 } DROPBOX_INFO;
+
+typedef struct tagFloatingInfo
+{
+	_vec3 vSpawnPos;
+	_int iDamage;
+} FLOATING_INFO;
 
 //----------------------------
 // 
