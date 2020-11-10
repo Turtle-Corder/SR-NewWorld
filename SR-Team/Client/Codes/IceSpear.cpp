@@ -38,23 +38,22 @@ HRESULT CIceSpear::Setup_GameObject(void* _pArg)
 	m_fInitDelay = m_tInstant.fOption;
 
 	_float AngleToXZ, AngleToYZ;
-	_vec3 VecUp = { 0.f, 1.f, 0.f };
-	_vec3 VecZ = { 0.f, 0.f, 1.f };
-	_vec3 VecOnXZ = { m_vMoveDir.x, 0, m_vMoveDir.z };
+	_vec3 VecUp		=	{ 0.f, 1.f, 0.f };
+	_vec3 VecZ		=	{ 0.f, 0.f, 1.f };
+	_vec3 VecOnXZ	=	{ m_vMoveDir.x, 0, m_vMoveDir.z };
 
 	D3DXVec3Normalize(&VecOnXZ, &VecOnXZ);
  	AngleToXZ = D3DXVec3Dot(&m_vMoveDir, &VecUp);
-	AngleToYZ = D3DXVec3Dot(&VecOnXZ, &VecZ);
 
 	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_X, acosf(AngleToXZ));
 
-	if(m_vMoveDir.x <= 0)
-		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ));
-	else if(m_vMoveDir.x > 0 && m_vMoveDir.z > 0)
-		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ) + D3DX_PI/2.f);
-	else if (m_vMoveDir.x > 0 && m_vMoveDir.z <= 0)
-		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ) - D3DX_PI / 2.f);
 
+	AngleToYZ = D3DXVec3Dot(&VecOnXZ, &VecZ);
+
+	if (m_vMoveDir.x <= 0)
+		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, -acosf(AngleToYZ));//버그 없음
+	else if (m_vMoveDir.x > 0)
+		m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, acosf(AngleToYZ));
 
 	m_pTransformCom->Update_Transform();
 
