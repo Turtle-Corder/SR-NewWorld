@@ -18,6 +18,11 @@ CIceLandQuest::CIceLandQuest(const CIceLandQuest & other)
 {
 }
 
+void CIceLandQuest::Dead_Monster()
+{
+	m_iMonsetDeadCnt += 1;
+}
+
 HRESULT CIceLandQuest::Setup_GameObject_Prototype()
 {
 	return S_OK;
@@ -42,12 +47,12 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 	if (pInven == nullptr)
 		return E_FAIL;
 
-	// 치트 -> 나중에 수정해야 함
-	if (pManagement->Key_Pressing('V'))
-	{
-		pInven->Get_RewardItem(L"GolemCore_Red");
-		m_iMonsetDeadCnt = 10;
-	}
+	//// 치트 -> 나중에 수정해야 함
+	//if (pManagement->Key_Pressing('V'))
+	//{
+	//	pInven->Get_RewardItem(L"GolemCore_Red");
+	//	m_iMonsetDeadCnt = 10;
+	//}
 
 	switch (m_eSituation)
 	{
@@ -87,7 +92,10 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 	case ICEQUEST_ASK_QUEST:
 		// 수락
 		if (pManagement->Key_Pressing(VK_RETURN))
+		{
 			m_eSituation = ICEQUEST_AGREE;	// 퀘스트 하는중
+			m_bStartDeadCnt = true;
+		}
 		else if (pManagement->Key_Pressing(VK_ESCAPE))
 			m_eSituation = ICEQUEST_REJECT;
 		break;
@@ -109,6 +117,7 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 		break;
 
 	case ICEQUEST_REWARD:
+		m_bStartDeadCnt = false;
 		if (!m_bGetReward)
 		{
 			m_bGetReward = true;
@@ -246,9 +255,9 @@ HRESULT CIceLandQuest::Render_HelpWnd()
 
 		D3DXMatrixScaling(&matScale, 2.3f, 2.3f, 0.f);
 		if (iIndex == ICEQUEST_NOCLEAR)
-			D3DXMatrixTranslation(&matTrans, 1730.f, 231.f, 0.f);
+			D3DXMatrixTranslation(&matTrans, 1730.f, 232.f, 0.f);
 		else
-			D3DXMatrixTranslation(&matTrans, 1719.f, 195.f, 0.f);
+			D3DXMatrixTranslation(&matTrans, 1719.f, 196.f, 0.f);
 		matWorld = matScale * matTrans;
 
 		m_pSprite->SetTransform(&matWorld);

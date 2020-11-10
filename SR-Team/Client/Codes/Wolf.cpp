@@ -112,11 +112,11 @@ HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
 		CManagement* pManagement = CManagement::Get_Instance();
 		if (nullptr == pManagement)
 			return E_FAIL;
-		CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_MainQuest", 0);
+		CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_IceLandQuest", 0);
 		if (pIceLandQuest == nullptr)
 			return E_FAIL;
 
-		if (pIceLandQuest->Get_SituationID() == ICEQUEST_ON_THE_QUEST&& m_bDead)
+		if (pIceLandQuest->Get_StartDeadCnt())
 			pIceLandQuest->Dead_Monster();
 
 		m_bDead = true;
