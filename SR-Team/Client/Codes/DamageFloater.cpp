@@ -34,6 +34,8 @@ HRESULT CDamageFloat::Setup_GameObject(void * _pArg)
 	m_iDigitNum[0] = iDamage % 10;
 	iDamage /= 10;
 
+	m_VecAddRandomPos = { 1.f, 10.f , 2.f };
+
 	for (_int iCnt = 1; iCnt < 4; ++iCnt)
 	{ 
 		m_iDigitNum[iCnt] = iDamage % 10;
@@ -42,6 +44,7 @@ HRESULT CDamageFloat::Setup_GameObject(void * _pArg)
 
 		iDamage /= 10;
 	}
+
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
@@ -54,10 +57,12 @@ _int CDamageFloat::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
+	m_VecAddRandomPos.y -= 20.f * _fDeltaTime;
+
+
 	for (_int iCnt = 0; iCnt < m_iMaxDigit; ++iCnt)
 	{
-		_vec3 vAddPos = _vec3(0.f, 1.f, 0.f) * m_pTransformCom[iCnt]->Get_Desc().fSpeedPerSecond * _fDeltaTime;
-		m_pTransformCom[iCnt]->Set_Position(m_pTransformCom[iCnt]->Get_Desc().vPosition + vAddPos);
+		m_pTransformCom[iCnt]->Set_Position(m_pTransformCom[iCnt]->Get_Desc().vPosition + m_VecAddRandomPos * _fDeltaTime);
 		m_pTransformCom[iCnt]->Update_Transform();
 	}
 
@@ -80,6 +85,8 @@ _int CDamageFloat::LateUpdate_GameObject(_float _fDeltaTime)
 
 	return GAMEOBJECT::NOEVENT;
 }
+
+
 
 HRESULT CDamageFloat::Render_OnlyAlpha()
 {
@@ -106,6 +113,7 @@ HRESULT CDamageFloat::Render_OnlyAlpha()
 	return S_OK;
 }
 
+
 HRESULT CDamageFloat::Add_Component()
 {
 	TCHAR szName[MIN_STR] = L"";
@@ -114,6 +122,7 @@ HRESULT CDamageFloat::Add_Component()
 	// Transform
 	//--------------------------------------------------
 	CTransform::TRANSFORM_DESC tTransformDesc[4];
+	//Camera Vector È¹µæ
 	CManagement* pManagement = CManagement::Get_Instance();
 	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	_vec3 vTermTest = pCamera->Get_Desc().vEye - pCamera->Get_Desc().vAt;
@@ -122,9 +131,9 @@ HRESULT CDamageFloat::Add_Component()
 
 	vTermTest.y = 0;
 	_vec3 vInitSacle = { 1.f, 1.f, 1.f };	
-	//_vec3 vTerm = { 0.7f, 0.f, 1.f };
-
 	_vec3 vTerm = { vTermTest.z, 0.f, -vTermTest.x };
+	//
+
 	for (_int iCnt = 0; iCnt < m_iMaxDigit; ++iCnt)
 	{
 		tTransformDesc[iCnt].vPosition = m_tInfo.vSpawnPos + vTerm * (_float)iCnt * 1.3f;
