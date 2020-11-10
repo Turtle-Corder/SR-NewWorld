@@ -1,4 +1,7 @@
 #include "stdafx.h"
+#include "..\Headers\FloatingFire.h"
+
+#include "stdafx.h"
 #include "Player.h"
 #include "..\Headers\Explosion.h"
 
@@ -10,12 +13,12 @@ CExplosion::CExplosion(LPDIRECT3DDEVICE9 _pDevice)
 }
 
 CExplosion::CExplosion(const CExplosion & _rOther)
-	:CGameObject(_rOther)
+	: CGameObject(_rOther)
 	, m_fDeadDelay(_rOther.m_fDeadDelay)
 	, m_fScaleSpeed(_rOther.m_fScaleSpeed)
 	, m_fScaleMin(_rOther.m_fScaleMin)
 	, m_fScaleMax(_rOther.m_fScaleMax)
-{ 
+{
 }
 
 HRESULT CExplosion::Setup_GameObject_Prototype()
@@ -128,7 +131,7 @@ HRESULT CExplosion::Render_BlendAlpha()
 	if (FAILED(m_pTextureCom->SetTexture(m_iCurrFrame)))
 		return E_FAIL;
 
-/*
+	/*
 	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TFACTOR);

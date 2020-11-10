@@ -166,6 +166,7 @@
     <ClInclude Include="..\Headers\Explosion.h" />
     <ClInclude Include="..\Headers\Fire.h" />
     <ClInclude Include="..\Headers\FireCrystal.h" />
+    <ClInclude Include="..\Headers\FloatingFire.h" />
     <ClInclude Include="..\Headers\FlowerQuest.h" />
     <ClInclude Include="..\Headers\IceBlast.h" />
     <ClInclude Include="..\Headers\IceBlastPiece.h" />
@@ -280,6 +281,7 @@
     <ClCompile Include="..\Codes\Explosion.cpp" />
     <ClCompile Include="..\Codes\Fire.cpp" />
     <ClCompile Include="..\Codes\FireCrystal.cpp" />
+    <ClCompile Include="..\Codes\FloatingFire.cpp" />
     <ClCompile Include="..\Codes\FlowerQuest.cpp" />
     <ClCompile Include="..\Codes\IceBlast.cpp" />
     <ClCompile Include="..\Codes\IceBlastPiece.cpp" />
