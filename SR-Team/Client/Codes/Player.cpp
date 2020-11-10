@@ -1104,10 +1104,12 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 			_vec3 vAddPos = {};
 			memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
 			//D3DXVec3Normalize(&vAddPos, &vAddPos);
+			vAddPos.x = vAddPos.z = 0;
+
 
 			FLOATING_INFO tInfo;
-			tInfo.iDamage = 123;
-			tInfo.vSpawnPos = m_pTransformCom[PART_HEAD]->Get_Desc().vPosition + (vAddPos * 2.f);
+			tInfo.iDamage = 512;
+			tInfo.vSpawnPos = m_pTransformCom[PART_HEAD]->Get_Desc().vPosition ;
 			if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo)))
 				PRINT_LOG(L"Failed To Create RandomBox", LOG::CLIENT);
 		}
