@@ -761,6 +761,14 @@ HRESULT CMainApp::Setup_EB()
 		L"../Resources/Sprite/Layer_MainUI/empty%d.png"))))
 		return E_FAIL;
 
+	// 장착중인 스킬/아이템
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainUI_EquipSkill", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainUI/equip_skill%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainUI_EquipItem", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainUI/equip_item%d.png"))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Component_Textures_Shop
@@ -931,14 +939,14 @@ HRESULT CMainApp::Setup_EB()
 #pragma endregion
 
 #pragma region Staff
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_GoldenSword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_Item/golden_sword%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_MagicalRageStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/magical_rage_staff%d.png"))))
 		return E_FAIL;
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_IronSword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_Item/iron_sword%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_AngleWingStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/angle_wing_staff%d.png"))))
 		return E_FAIL;
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_DiaSword", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
-		L"../Resources/Sprite/Layer_Item/diamond_sword%d.png"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_WarriorStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/murpagoth_warrior_staff%d.png"))))
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_MagicalStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_Item/magical_extreme_staff%d.png"))))
