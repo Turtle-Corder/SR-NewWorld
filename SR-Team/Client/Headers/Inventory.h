@@ -53,6 +53,7 @@ public:
 	// ------------------------------------------------------------------
 	HRESULT Delete_Item(const wstring& strItemName);
 	HRESULT Get_RewardItem(const wstring& strItemName);
+	void Set_Gold(_int iGold) { m_iGold += iGold; }
 
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
