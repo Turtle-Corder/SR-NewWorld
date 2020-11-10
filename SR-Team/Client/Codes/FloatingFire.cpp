@@ -1,18 +1,16 @@
 #include "stdafx.h"
+#include "Player.h"
 #include "..\Headers\FloatingFire.h"
 
-#include "stdafx.h"
-#include "Player.h"
-#include "..\Headers\Explosion.h"
 
 USING(Client)
 
-CExplosion::CExplosion(LPDIRECT3DDEVICE9 _pDevice)
+CFloatingFire::CFloatingFire(LPDIRECT3DDEVICE9 _pDevice)
 	:CGameObject(_pDevice)
 {
 }
 
-CExplosion::CExplosion(const CExplosion & _rOther)
+CFloatingFire::CFloatingFire(const CFloatingFire & _rOther)
 	: CGameObject(_rOther)
 	, m_fDeadDelay(_rOther.m_fDeadDelay)
 	, m_fScaleSpeed(_rOther.m_fScaleSpeed)
@@ -21,12 +19,12 @@ CExplosion::CExplosion(const CExplosion & _rOther)
 {
 }
 
-HRESULT CExplosion::Setup_GameObject_Prototype()
+HRESULT CFloatingFire::Setup_GameObject_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CExplosion::Setup_GameObject(void * _pArg)
+HRESULT CFloatingFire::Setup_GameObject(void * _pArg)
 {
 	if (_pArg)
 	{
@@ -40,7 +38,7 @@ HRESULT CExplosion::Setup_GameObject(void * _pArg)
 	return S_OK;
 }
 
-int CExplosion::Update_GameObject(_float _fDeltaTime)
+int CFloatingFire::Update_GameObject(_float _fDeltaTime)
 {
 	CPlayer* pPlayer = (CPlayer*)m_tImpact.pAttacker;
 
@@ -75,7 +73,7 @@ int CExplosion::Update_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-int CExplosion::LateUpdate_GameObject(_float _fDeltaTime)
+int CFloatingFire::LateUpdate_GameObject(_float _fDeltaTime)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -91,7 +89,7 @@ int CExplosion::LateUpdate_GameObject(_float _fDeltaTime)
 	return GAMEOBJECT::NOEVENT;
 }
 
-HRESULT CExplosion::Render_OnlyAlpha()
+HRESULT CFloatingFire::Render_OnlyAlpha()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -115,7 +113,7 @@ HRESULT CExplosion::Render_OnlyAlpha()
 	return S_OK;
 }
 
-HRESULT CExplosion::Render_BlendAlpha()
+HRESULT CFloatingFire::Render_BlendAlpha()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -145,7 +143,7 @@ HRESULT CExplosion::Render_BlendAlpha()
 	return S_OK;
 }
 
-HRESULT CExplosion::Add_Component()
+HRESULT CFloatingFire::Add_Component()
 {
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_RectTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
@@ -178,7 +176,7 @@ HRESULT CExplosion::Add_Component()
 }
 
 
-void CExplosion::Update_DeadDelay(_float _fDeltaTime)
+void CFloatingFire::Update_DeadDelay(_float _fDeltaTime)
 {
 	m_fDeadTimer += _fDeltaTime;
 
@@ -186,7 +184,7 @@ void CExplosion::Update_DeadDelay(_float _fDeltaTime)
 		m_bDead = true;
 }
 
-void CExplosion::Update_Scale(_float _fDeltaTime)
+void CFloatingFire::Update_Scale(_float _fDeltaTime)
 {
 	if (m_fScaleMax == m_pTransformCom->Get_Desc().vScale.x)
 	{
@@ -205,12 +203,12 @@ void CExplosion::Update_Scale(_float _fDeltaTime)
 	//}
 }
 
-CExplosion * CExplosion::Create(LPDIRECT3DDEVICE9 _pDevice)
+CFloatingFire * CFloatingFire::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
 	if (nullptr == _pDevice)
 		return nullptr;
 
-	CExplosion* pInstance = new CExplosion(_pDevice);
+	CFloatingFire* pInstance = new CFloatingFire(_pDevice);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Failed To Create CExplosion", LOG::CLIENT);
@@ -220,9 +218,9 @@ CExplosion * CExplosion::Create(LPDIRECT3DDEVICE9 _pDevice)
 	return pInstance;
 }
 
-CGameObject * CExplosion::Clone_GameObject(void * _pArg)
+CGameObject * CFloatingFire::Clone_GameObject(void * _pArg)
 {
-	CExplosion* pInstance = new CExplosion(*this);
+	CFloatingFire* pInstance = new CFloatingFire(*this);
 	if (FAILED(pInstance->Setup_GameObject(_pArg)))
 	{
 		PRINT_LOG(L"Failed To Clone CExplosion", LOG::CLIENT);
@@ -232,7 +230,7 @@ CGameObject * CExplosion::Clone_GameObject(void * _pArg)
 	return pInstance;
 }
 
-void CExplosion::Free()
+void CFloatingFire::Free()
 {
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
