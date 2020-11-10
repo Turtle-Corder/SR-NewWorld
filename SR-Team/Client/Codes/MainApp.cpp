@@ -33,6 +33,7 @@
 #include "EnergyBolt.h"
 #include "Meteor.h"
 #include "MpDrift.h"
+#include "MpDriftDust.h"
 #include "IceSpear.h"
 #include "Shield.h"
 #include "Blind.h"
@@ -544,6 +545,11 @@ HRESULT CMainApp::Setup_YJ()
 
 #pragma region GameObject_IceBlast
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_IceBlast", CIceBlast::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_MpDriftDust
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_MpDriftDust", CMpDriftDust::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 

@@ -220,9 +220,6 @@ HRESULT CIceBlast::Make_Pieces()
 		pImpact.vOption = RandomPostionSelect + m_pTransformComp->Get_Desc().vPosition;
 
 
-		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Crack", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact.vPosition)))
-			return E_FAIL;
-
 		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IcePiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact)))
 		{
 			PRINT_LOG(L"Failed To Spawn IcePieces", LOG::DEBUG);
