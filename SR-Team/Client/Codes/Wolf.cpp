@@ -641,17 +641,18 @@ HRESULT CWolf::Update_Anim_Attack1(_float _fDeltaTime)
 	m_fAnimTimer += _fDeltaTime;
 	m_fBloodCreateTime += _fDeltaTime;
 
+	if (m_fBloodCreateTime >= 0.2f && 5 != m_iAnimStep)
+	{
+		Make_Blood();
+		m_fBloodCreateTime = 0.f;
+	}
+
 	if (m_fAnimTimer >= 0.4f)
 	{
 		m_fAnimTimer = 0.f;
 		++m_iAnimStep;
 		Anim_Reset_Attack();
 
-		if (m_fBloodCreateTime >= 0.2f && 5 != m_iAnimStep)
-		{
-			Make_Blood();
-			m_fBloodCreateTime = 0.f;
-		}
 
 		if (5 == m_iAnimStep)
 		{

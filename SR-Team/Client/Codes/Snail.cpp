@@ -375,7 +375,14 @@ HRESULT CSnail::Attack(_float _fDeltaTime)
 
 		if (m_eCurState == CSnail::ATTACK_START)
 		{
-			if (vLength >= 0.2f)
+			if (vLength <= 0.2f)
+			{
+				Spawn_InstantImpact(L"Layer_MonsterAtk");
+				m_eCurState = ATTACK_END;
+
+				return S_OK;
+			}
+			else if (vLength >= 0.2f)
 			{
 				m_fDashPaticle_CreateTime += _fDeltaTime;
 				vMyPos += vDirection * (_fDeltaTime * 6.f);
@@ -387,14 +394,7 @@ HRESULT CSnail::Attack(_float _fDeltaTime)
 					m_fDashPaticle_CreateTime = 0.f;
 				}
 
-			}
-			else if (vLength <= 0.2f)
-			{
-				Spawn_InstantImpact(L"Layer_MonsterAtk");
-				m_eCurState = ATTACK_END;
-			}
-			else
-				m_eCurState = ATTACK_END;
+			}	
 			//if (vLength > 2.5f)
 		}
 		else if (m_eCurState == ATTACK_END)

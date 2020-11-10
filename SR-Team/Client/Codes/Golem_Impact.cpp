@@ -90,6 +90,7 @@ HRESULT CGolem_Impact::Add_Component()
 	D3DXVec3Normalize(&vGolemLook, &vGolemLook);
 	_vec3 vPosition = { m_tInstant.vPosition.x , 0.f, m_tInstant.vPosition.z };
 	vPosition -= vGolemLook * 3.f;
+
 	tTransformDesc.vPosition = vPosition;
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);

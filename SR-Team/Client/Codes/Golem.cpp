@@ -341,15 +341,9 @@ HRESULT CGolem::Update_AI()
 		_float	fDistance = D3DXVec3Length(&m_vMoveDirection);
 
 
-		if (m_OneCheck)
-		{
-			m_eCurState = CGolem::MOVE;
-			return S_OK;
-		}
-		if (fDistance > m_fFollowDistance && !m_OneCheck) //10.f
+		if (fDistance > m_fFollowDistance) //10.f
 		{
 			m_eCurState = CGolem::IDLE;
-			m_OneCheck = true;
 			return S_OK;
 
 		}
@@ -937,11 +931,18 @@ HRESULT CGolem::Make_Pieces()
 
 	INSTANTIMPACT tImpact = {};
 
+	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
+
+
 	for (_uint i = 0; i < 25; i++)
 	{
 		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
+		_vec3 vGolemLook = _vec3(tImpact.vDirection.x, 0.f, tImpact.vDirection.z);
+		D3DXVec3Normalize(&vGolemLook, &vGolemLook);
+		_vec3 vPosition = { tImpact.vPosition.x , 0.f, tImpact.vPosition.z };
+		vPosition -= vGolemLook * 3.f;
 
-		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
+		tImpact.vPosition = vPosition;
 		tImpact.vDirection = RandomPostionSelect;
 		tImpact.vOption = RandomPostionSelect + m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
 
