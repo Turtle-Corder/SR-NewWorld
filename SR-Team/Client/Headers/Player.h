@@ -24,7 +24,7 @@ public:
 
 		JUMP, 
 		ATTACK, 
-		SKILL, 
+		SKILL,
 		DEAD,
 		STATE_END 
 	};
@@ -83,6 +83,8 @@ public:
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Render_BlendAlpha() override;
+	virtual HRESULT Render_UI() override;
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 
 public:
@@ -202,8 +204,11 @@ private:
 
 	void Update_AtkDelay(_float _fDeltaTime);
 
-	//void Update_BuffTime(_float _fDeltaTime);
+	void Update_FlinchDelay(_float _fDeltaTime);
 
+	void Update_HurtDelay(_float _fDeltaTime);
+
+	void Update_DecalAlpha(_float _fDelatTime);
 
 
 private:
@@ -217,6 +222,8 @@ private:
 	CVIBuffer*			m_pVIBufferCom[PART_END];
 	CTransform*			m_pTransformCom[PART_END];
 	CTexture*			m_pTextureCom[PART_END];
+	CTexture*			m_pFlinchTexCom = nullptr;
+	CTexture*			m_pDecalTexCom	= nullptr;
 	CRaycast*			m_pRaycastCom	= nullptr;
 	CSphereCollider*	m_pColliderCom	= nullptr;
 	CStatus*			m_pStatusCom	= nullptr;
@@ -291,6 +298,23 @@ private:
 	_int			m_iActiveFireCrystal = 0;
 
 	_bool			m_bInteraction = false;
+
+
+	//--------------------------------------------------
+	// ÇÇ°Ý
+	//--------------------------------------------------
+	_bool			m_bCanHurt = false;
+	_float			m_fHurtTimer = 0.f;
+	_float			m_fHurtDealy = 1.f;
+
+	_bool			m_bFlinch = false;
+	_float			m_fFlinchTimer = 0.f;
+	_float			m_fFlinchDealy = 0.1f;
+
+	_bool			m_bDecalOn = false;
+	_bool			m_bDecalDir = false;
+	_float			m_fCurDecalAlpha = 0.f;
+	_float			m_fDecalAlpha = 3.f;
 };
 
 END

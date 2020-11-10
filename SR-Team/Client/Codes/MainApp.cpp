@@ -456,6 +456,16 @@ HRESULT CMainApp::Setup_HK()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Component_Texture_Flinch
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Textrue_Flinch", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Flinch%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Decal
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Textrue_Decal", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE, L"../Resources/LowHp%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
 	return S_OK;
 }
 
