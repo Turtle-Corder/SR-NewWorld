@@ -42,6 +42,8 @@ HRESULT CDamageFloat::Setup_GameObject(void * _pArg)
 
 		iDamage /= 10;
 	}
+	m_VecAddRandomPos
+
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
