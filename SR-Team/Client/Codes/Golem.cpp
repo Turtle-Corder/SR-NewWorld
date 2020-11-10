@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MiniGolem.h"
 #include "DamageInfo.h"
+#include "MainCamera.h"
 #include "..\Headers\Golem.h"
 
 USING(Client)
@@ -356,8 +357,8 @@ HRESULT CGolem::Update_AI()
 			if		(iRand < 45)	m_eCurState = ATTACK1;
 			else if (iRand < 65)	m_eCurState = ATTACK2;
 			else if (iRand < 90)	m_eCurState = ATTACK3;
-			else					m_eCurState = ATTACK4;
-
+			else if (iRand < 95)	m_eCurState = ATTACK4;
+			/*else if (iRand < 100)	m_eCurState = ATTACK6;*/
 			return S_OK;
 		}
 	}
@@ -398,7 +399,7 @@ HRESULT CGolem::Update_Move(_float _fDeltaTime)
 		//--------------------------------------------------
 		// 이동 하는 곳
 		//--------------------------------------------------
-		_vec3 vAddPos = m_vMoveDirection * _fDeltaTime;
+		_vec3 vAddPos = m_vMoveDirection * _fDeltaTime * 2.f;
 		m_pTransformCom[GOLEM_BASE]->Set_Position(m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + vAddPos);
 	}
 
@@ -470,6 +471,12 @@ HRESULT CGolem::Update_State()
 		//	m_fAttackDelay = 5.f;		// 불 소환
 		//	break;
 
+		case CGolem::ATTACK6:
+		{
+			m_fAttackDelay = 5.f;
+			Anim_Reset_Attack();
+		}// 불 소환
+			break;
 		default:
 			break;
 		}
@@ -503,8 +510,8 @@ HRESULT CGolem::Update_Anim(_float _fDeltaTime)
 	case Client::CGolem::ATTACK4:
 		Update_Anim_Attack4(_fDeltaTime);
 		break;
-	//case Client::CGolem::ATTACK5:
-	//	Update_Anim_Attack5(_fDeltaTime);
+	case Client::CGolem::ATTACK6:
+		Update_Anim_Attack6(_fDeltaTime);
 		break;
 	}
 
@@ -536,7 +543,7 @@ HRESULT CGolem::Update_Anim_Move(_float _fDeltaTime)
 
 	m_fAnimationTimer += _fDeltaTime;
 
-	if (m_fAnimationTimer >= 0.3f)
+	if (m_fAnimationTimer >= 0.5f)
 	{
 		m_fAnimationTimer = 0.f;
 		m_iAnimationStep = !m_iAnimationStep;
@@ -561,7 +568,7 @@ HRESULT CGolem::Update_Anim_Move(_float _fDeltaTime)
 	return S_OK;
 }
 
-HRESULT CGolem::Update_Anim_Attack_Hand(_float _fDeltaTime)
+HRESULT CGolem::Update_Anim_Attack_Hand(_float _fDeltaTime , AXIS _eAxis)
 {
 	_vec3 vLHPosition = m_pTransformCom[GOLEM_LEFT_ARM]->Get_Desc().vPosition;
 	_vec3 vRHPosition = m_pTransformCom[GOLEM_RIGHT_ARM]->Get_Desc().vPosition;
@@ -576,8 +583,16 @@ HRESULT CGolem::Update_Anim_Attack_Hand(_float _fDeltaTime)
 
 	m_fAnimationPlayTime += _fDeltaTime * 0.1f;
 
-	vLHPosition.y -= m_fAnimationPlayTime;
-	vRHPosition.y -= m_fAnimationPlayTime;
+	if (_eAxis == CGolem::Y)
+	{
+		vLHPosition.y -= m_fAnimationPlayTime;
+		vRHPosition.y -= m_fAnimationPlayTime;
+	}
+	else if (_eAxis == CGolem::Z)
+	{
+		vLHPosition.z -= m_fAnimationPlayTime;
+		vRHPosition.z -= m_fAnimationPlayTime;
+	}
 
 	m_pTransformCom[GOLEM_LEFT_ARM]->Set_Position(_vec3(vLHPosition.x, vLHPosition.y, vLHPosition.z));
 	m_pTransformCom[GOLEM_RIGHT_ARM]->Set_Position(_vec3(vRHPosition.x, vRHPosition.y, vRHPosition.z));
@@ -597,7 +612,19 @@ HRESULT CGolem::Update_Anim_Attack1(_float _fDeltaTime)
 		++m_iAnimationStep;
 
 		if (5 == m_iAnimationStep)
+		{
+			CManagement* pManagement = CManagement::Get_Instance();
+			if (nullptr == pManagement)
+				return E_FAIL;
+
+			CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+			if (nullptr == pCamera)
+				return E_FAIL;
+
+			pCamera->Set_Camera_Wigging(0.7f, 100.f, 1.f, CMainCamera::WIG_TYPE::HARMONIC);
+
 			Spawn_GolemImpact();
+		}
 		else if (6 == m_iAnimationStep)
 			m_eCurState = CGolem::IDLE;
 	}
@@ -650,7 +677,7 @@ HRESULT CGolem::Update_Anim_Attack2(_float _fDeltaTime)
 	}
 	else if (m_iAnimationStep <= 2)
 	{
-		Update_Anim_Attack_Hand(_fDeltaTime);
+		Update_Anim_Attack_Hand(_fDeltaTime , AXIS::Y);
 	}
 	else if (m_iAnimationStep == 4)
 	{
@@ -667,19 +694,55 @@ HRESULT CGolem::Update_Anim_Attack3(_float _fDeltaTime)
 	if (m_eCurState != CGolem::ATTACK3)
 		return S_OK;
 
-	m_fAnimationTimer += _fDeltaTime;
+	//m_fAnimationTimer += _fDeltaTime;
+	//if (m_fAnimationTimer >= 0.6f)
+	//{
+	//	m_fAnimationTimer = 0.f;
+	//	++m_iAnimationStep;
+
+	//	if (1 == m_iAnimationStep)
+	//		Spawn_MonSub();
+
+	//	if (m_iAnimationStep == 2)
+	//		m_eCurState = CGolem::IDLE;
+	//}
+		m_fAnimationTimer += _fDeltaTime;
+
 	if (m_fAnimationTimer >= 0.6f)
 	{
 		m_fAnimationTimer = 0.f;
 		++m_iAnimationStep;
 
-		if (1 == m_iAnimationStep)
+		if (m_iAnimationStep == 1)
+		{
+			m_fAnimationPlayTime = 0.f;
 			Spawn_MonSub();
-
-		if (m_iAnimationStep == 2)
+		}
+		else if (m_iAnimationStep == 2)
+			m_fAnimationPlayTime = 0.f;
+		else if (m_iAnimationStep == 3)
+			Spawn_Bomb();
+		else if (m_iAnimationStep == 5)
 			m_eCurState = CGolem::IDLE;
 	}
 
+	if (m_iAnimationStep <= 1)
+	{
+		Anim_Reset_Attack();
+		m_pTransformCom[GOLEM_BODY]->Turn(CTransform::AXIS_X, -_fDeltaTime * 0.1f);
+	}
+	else if (m_iAnimationStep <= 2)
+	{
+//		Update_Anim_Attack_Hand(_fDeltaTime);
+	}
+	else if (m_iAnimationStep == 4)
+	{
+		m_pTransformCom[GOLEM_BODY]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
+		m_pTransformCom[GOLEM_LEFT_ARM]->Set_Position(m_fAnimationLHPosition);
+		m_pTransformCom[GOLEM_RIGHT_ARM]->Set_Position(m_fAnimationRHPosition);
+	}
+	
+	
 	return S_OK;
 }
 
@@ -700,6 +763,37 @@ HRESULT CGolem::Update_Anim_Attack4(_float _fDeltaTime)
 
 	m_bCanAttack = false;
 	m_eCurState = CGolem::IDLE;
+	return S_OK;
+}
+
+HRESULT CGolem::Update_Anim_Attack6(_float _fDeltaTime)
+{
+	if (m_eCurState != CGolem::ATTACK6)
+		return S_OK;
+
+	m_fAnimationTimer += _fDeltaTime;
+	if (m_fAnimationTimer >= 0.6f)
+	{
+		m_fAnimationTimer = 0.f;
+		++m_iAnimationStep;
+
+		if (2 == m_iAnimationStep)
+		{
+			Spawn_GolemImpact();
+		}
+		//else if (4 == m_iAnimationStep)
+		//	Spawn_GolemImpact();
+		else if (6 == m_iAnimationStep)
+			m_eCurState = CGolem::IDLE;
+	}
+
+	if (m_iAnimationStep <= 1)
+	{
+		//Anim_Reset_Attack();
+		m_pTransformCom[GOLEM_LEFT_ARM]->Turn(CTransform::AXIS_X, -_fDeltaTime);
+		m_pTransformCom[GOLEM_RIGHT_ARM]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
+	}
+
 	return S_OK;
 }
 

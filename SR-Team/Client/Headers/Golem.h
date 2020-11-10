@@ -25,10 +25,10 @@ class CGolem final : public CGameObject
 	};
 	enum STATE 
 	{
-		IDLE , MOVE , 
-		ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, //ATTACK5, 
+		IDLE , MOVE , ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, ATTACK6, //ATTACK5, 
 		STATE_DEAD
 	};
+	enum AXIS {X , Y , Z};
 private:
 	explicit CGolem(LPDIRECT3DDEVICE9 _pDevice);
 	explicit CGolem(const CGolem& _rOther);
@@ -64,12 +64,13 @@ private:
 	HRESULT Anim_Reset_Attack();
 
 	HRESULT Update_Anim_Move(_float _fDeltaTime);
-	HRESULT Update_Anim_Attack_Hand(_float _fDeltaTime);
+	HRESULT Update_Anim_Attack_Hand(_float _fDeltaTime , AXIS _eAxis);
 	HRESULT Update_Anim_Attack1(_float _fDeltaTime);		// 내려찍기
 	HRESULT Update_Anim_Attack2(_float _fDeltaTime);		// 폭탄
 	HRESULT Update_Anim_Attack3(_float _fDeltaTime);		// 몬스터 생성
 	HRESULT Update_Anim_Attack4(_float _fDeltaTime);		// 분신 소환
 	HRESULT Update_Anim_Attack5(_float _fDeltaTime);		// 불 소환
+	HRESULT Update_Anim_Attack6(_float _fDeltaTime);
 
 	void Update_AttackDelay(_float _fDeltaTime);
 	void Update_HurtDelay(_float _fDeltaTime);
@@ -145,6 +146,7 @@ private:
 	_bool			m_bDead = false;
 
 	CMiniGolem*		m_pMiniGolem[5] = { nullptr, };
+	AXIS			m_eAxis; 
 };
 
 END
