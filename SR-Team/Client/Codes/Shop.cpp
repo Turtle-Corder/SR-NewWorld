@@ -3,6 +3,7 @@
 #include "UICamera.h"
 #include "Inventory.h"
 #include "Mouse.h"
+#include "Sound_Manager.h"
 #include "..\Headers\Shop.h"
 
 USING(Client)
@@ -107,7 +108,10 @@ int CShop::Update_GameObject(float DeltaTime)
 		return GAMEOBJECT::ERR;
 
 	if ((pManagement->Key_Down('O')))
+	{
+		CSoundManager::Get_Instance()->PlayUI(L"OpenWnd.wav");
 		m_bRender = !m_bRender;
+	}
 
 	if (m_bRender)
 	{

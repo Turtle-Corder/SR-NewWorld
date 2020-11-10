@@ -290,6 +290,8 @@ HRESULT CBomb::Dead_Bomb(_float _fDeltaTime)
 		if (6 == m_iAnimationStep)
 		{
 			m_bDead = true;
+
+			Make_Bomb_Residue();
 			return S_OK;
 		}
 	}
@@ -319,4 +321,27 @@ HRESULT CBomb::Dead_Bomb(_float _fDeltaTime)
 
 
 	return S_OK;
+}
+
+HRESULT CBomb::Make_Bomb_Residue()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact;
+
+	for (_uint i = 0; i < 25; i++)
+	{
+		_vec3 RandomPostion = { (_float)(rand() % 30 - 15), 0.f ,(_float)(rand() % 30 - 15) };
+
+		tImpact.vPosition = m_pTransformCom->Get_Desc().vPosition;
+		_vec3 vDirection = RandomPostion + m_pTransformCom->Get_Desc().vPosition;
+		D3DXVec3Normalize(&tImpact.vDirection, &vDirection);
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Bomb_Residue", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
+			return E_FAIL;
+	}
+
+	return E_NOTIMPL;
 }

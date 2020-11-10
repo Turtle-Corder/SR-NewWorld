@@ -1,30 +1,31 @@
 #pragma once
-#ifndef __FLOATINGFIRE_H__
-#define __FLOATINGFIRE_H__
+#ifndef __MP_DRIFTDUST_H__
+#define __MP_DRIFTDUST_H__
 
+#include "GameObject.h"
 USING(Engine)
 BEGIN(Client)
 
-class CFloatingFire final : public CGameObject
+class CMpDriftDust final : public CGameObject
 {
 private:
-	explicit CFloatingFire(LPDIRECT3DDEVICE9 _pDevice);
-	explicit CFloatingFire(const CFloatingFire& _rOther);
-	virtual ~CFloatingFire() = default;
+	explicit CMpDriftDust(LPDIRECT3DDEVICE9 _pDevice);
+	explicit CMpDriftDust(const CMpDriftDust& _rOther);
+	virtual ~CMpDriftDust() = default;
 public:
 	virtual HRESULT Setup_GameObject_Prototype() override;
 	virtual HRESULT Setup_GameObject(void* pArg) override;
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
-	virtual HRESULT Render_BlendAlpha() override;
-
+	virtual HRESULT Render_NoneAlpha() override;
 
 private:
 	HRESULT Add_Component();
+	void Update_InitDelay(_float _fDeltaTime);
 	void Update_DeadDelay(_float _fDeltaTime);
 
 public:
-	static CFloatingFire* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CMpDriftDust* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
 	virtual void Free() override;
 
@@ -48,4 +49,4 @@ private:
 
 END
 
-#endif // !__EXPLOSION_H__
+#endif //__MP_DRIFT_H__

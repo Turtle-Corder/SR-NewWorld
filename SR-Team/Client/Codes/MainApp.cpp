@@ -33,6 +33,7 @@
 #include "EnergyBolt.h"
 #include "Meteor.h"
 #include "MpDrift.h"
+#include "MpDriftDust.h"
 #include "IceSpear.h"
 #include "Shield.h"
 #include "Blind.h"
@@ -553,6 +554,11 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_MpDriftDust
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_MpDriftDust", CMpDriftDust::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 
 #pragma region Component_Texture_IceBlast
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_IceBlast", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
@@ -1018,6 +1024,15 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Item_PupleDress", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_Item/puple_dress%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_ItemBox
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_ItemBox_Potion", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/potion_box%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_ItemBox_Equip", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Item/equip_box%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

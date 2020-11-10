@@ -3,6 +3,7 @@
 #include "..\Headers\Skill.h"
 
 #include "MainUI.h"
+#include "Sound_Manager.h"
 USING(Client)
 
 
@@ -82,7 +83,10 @@ _int CSkill::Update_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::ERR;
 
 	if (pManagement->Key_Down('Y'))
+	{
+		CSoundManager::Get_Instance()->PlayUI(L"OpenWnd.wav");
 		m_bRender = !m_bRender;
+	}
 
 	if (m_bRender)
 	{

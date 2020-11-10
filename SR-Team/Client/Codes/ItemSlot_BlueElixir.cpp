@@ -3,7 +3,7 @@
 #include "Equip.h"
 #include "Inventory.h"
 #include "Player.h"
-
+#include "Sound_Manager.h"
 
 USING(Client)
 
@@ -99,6 +99,9 @@ _bool CItemSlot_BlueElixir::Actual_UseItem()
 
 	// 인벤에서 포션 아이템 개수 감소
 	pInven->Use_Potion(BLUE_ELIXIR);
+
+	// 사운드
+	CSoundManager::Get_Instance()->PlayUI(L"PotionDrug.wav");
 
 	return true;
 }

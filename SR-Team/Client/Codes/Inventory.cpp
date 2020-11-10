@@ -4,7 +4,9 @@
 #include "Equip.h"
 #include "MainUI.h"
 #include "Mouse.h"
+#include "RandomBoxManager.h"
 #include "..\Headers\Inventory.h"
+#include "Sound_Manager.h"
 
 USING(Client)
 
@@ -103,6 +105,8 @@ HRESULT CInventory::Get_ShopItem(const wstring & strItemName)
 		m_bRenderClearWnd = true;
 		++m_iInsertOrder;
 	}
+
+	CSoundManager::Get_Instance()->PlayUI(L"Buy_Item.wav");
 
 	return S_OK;
 }
@@ -262,7 +266,10 @@ _int CInventory::Update_GameObject(float DeltaTime)
 
 	// 인벤 on/off
 	if ((pManagement->Key_Down('I')))
+	{
+		CSoundManager::Get_Instance()->PlayUI(L"OpenWnd.wav");
 		m_bRender = !m_bRender;
+	}
 
 	if (m_bRender)
 	{
@@ -480,6 +487,8 @@ HRESULT CInventory::Check_SellButton()
 					return E_FAIL;
 
 				PRINT_LOG(L"아이템 판매 시작.", LOG::DEBUG);
+
+				CSoundManager::Get_Instance()->PlayUI(L"Sell_Item.wav");
 			}
 		}
 	}
@@ -652,10 +661,62 @@ HRESULT CInventory::Check_EquipItem()
 
 				}
 			}
+			else if (pManagement->Key_Pressing(VK_LBUTTON))
+			{
+				if (m_pInvenList[iIndex]->eSort == RANDOM_POTION || m_pInvenList[iIndex]->eSort == RANDOM_EQUIP)
+				{
+					if (FAILED(Open_RandomBox(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag)))
+						return E_FAIL;
+				}
+			}
 		}
 	}
 	return S_OK;
 }
+
+HRESULT CInventory::Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag)
+{
+	wstring strGetcha;
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
+	if (pInven == nullptr)
+		return E_FAIL;
+
+	if (eSort == RANDOM_POTION)
+		CRandomBoxManager::Get_Instance()->Gatcha_PotionBox(strGetcha);
+	else if (eSort == RANDOM_EQUIP)
+		CRandomBoxManager::Get_Instance()->Gatcha_EquipBox(strGetcha);
+
+	if (pManagement != nullptr)
+	{
+		if (strGetcha == L"Component_Texture_Item_RedPotion")
+			strGetcha = L"RedPotion";
+		else if (strGetcha == L"Component_Texture_Item_BluePotion")
+			strGetcha = L"BluePotion";
+		else if (strGetcha == L"Component_Texture_Item_RedElixir")
+			strGetcha = L"RedElixir";
+		else if (strGetcha == L"Component_Texture_Item_BlueElixir")
+			strGetcha = L"BlueElixir";
+
+		if (strGetcha == L"Component_Texture_Item_MagicalStaff")
+			strGetcha = L"MagicalStaff";
+		else if (strGetcha == L"Component_Texture_Item_AquaGloves")
+			strGetcha = L"AquaGloves";
+		else if (strGetcha == L"Component_Texture_Item_PupleDress")
+			strGetcha = L"PupleDress";
+		else if (strGetcha == L"Component_Texture_Item_BalrogWings")
+			strGetcha = L"BalrogWings";
+
+		Get_RewardItem(strGetcha);
+		Delete_Item(strNameTag);
+		
+	}
+	return S_OK;
+}
+
 
 HRESULT CInventory::Move_To_QuickSlot()
 {
@@ -769,7 +830,7 @@ HRESULT CInventory::Render_Item()
 					_vec3 vPos = m_pTransformItem[iIndex]->Get_Desc().vPosition;
 
 					// 변경
-					D3DXMatrixScaling(&matScale, 2.5f, 2.5f, 0.f);
+					D3DXMatrixScaling(&matScale, 1.9f, 1.9f, 0.f);
 					D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, 0.f);
 					matWorld = matScale * matTrans;
 
