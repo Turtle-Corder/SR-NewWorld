@@ -58,12 +58,12 @@ int CExplosion::Update_GameObject(_float _fDeltaTime)
 		if (pTransform)
 			matParent = pTransform->Get_Desc().matWorld;
 	}
-
+/*
 	_float fScale = m_pTransformCom->Get_Desc().vScale.x;
 	if (m_bScaleUp)	fScale = min(fScale + _fDeltaTime * m_fScaleSpeed, m_fScaleMax);
 	else			fScale = max(fScale - _fDeltaTime * m_fScaleSpeed, m_fScaleMin);
 
-	m_pTransformCom->Set_Scale(_vec3(fScale, fScale, fScale));
+	m_pTransformCom->Set_Scale(_vec3(fScale, fScale, fScale));*/
 	if (FAILED(m_pTransformCom->Update_Transform(matParent)))
 		return GAMEOBJECT::WARN;
 
@@ -81,7 +81,7 @@ int CExplosion::LateUpdate_GameObject(_float _fDeltaTime)
 	Update_DeadDelay(_fDeltaTime);
 	Update_Scale(_fDeltaTime);
 
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_ONLYALPHA, this)))
+	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
 		return  GAMEOBJECT::WARN;
 
 
@@ -89,6 +89,28 @@ int CExplosion::LateUpdate_GameObject(_float _fDeltaTime)
 }
 
 HRESULT CExplosion::Render_OnlyAlpha()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->SetTexture(m_iCurrFrame)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CExplosion::Render_BlendAlpha()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)

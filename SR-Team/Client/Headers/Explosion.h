@@ -17,7 +17,7 @@ public:
 	virtual int Update_GameObject(_float _fDeltaTime) override;
 	virtual int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_OnlyAlpha() override;
-
+	virtual HRESULT Render_BlendAlpha() override;
 private:
 	HRESULT Add_Component();
 	void Update_DeadDelay(_float _fDeltaTime);
