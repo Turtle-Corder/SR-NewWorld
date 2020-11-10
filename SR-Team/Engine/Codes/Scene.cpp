@@ -27,3 +27,7 @@ _int CScene::LateUpdate_Scene(_float _fDeltaTime)
 {
 	return 0;
 }
+
+void CScene::Set_SceneEvent(_int _iEventNo)
+{
+}

@@ -351,4 +351,7 @@
       <Filter>01.Utillity\09.KeyManager</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>

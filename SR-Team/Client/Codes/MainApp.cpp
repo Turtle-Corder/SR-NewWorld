@@ -73,6 +73,7 @@
 #include "MeteorPiece.h"
 #include "DamageFloater.h"
 #include "RandomBox_Chat.h"
+#include "EventTrigger.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -463,6 +464,11 @@ HRESULT CMainApp::Setup_HK()
 
 #pragma region Component_Texture_Decal
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Textrue_Decal", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE, L"../Resources/LowHp%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Decal
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Trigger", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/trigger%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 

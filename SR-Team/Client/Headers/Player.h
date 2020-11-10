@@ -314,7 +314,7 @@ private:
 	_bool			m_bDecalOn = false;
 	_bool			m_bDecalDir = false;
 	_float			m_fCurDecalAlpha = 0.f;
-	_float			m_fDecalAlpha = 3.f;
+	_float			m_fDecalAlpha = 20.f;
 };
 
 END

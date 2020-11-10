@@ -90,6 +90,12 @@ typedef struct tagFloatingInfo
 	_int iDamage;
 } FLOATING_INFO;
 
+typedef struct tagEventInfo
+{
+	_vec3 vSpawnPos;
+	_int iEventNo;
+} EVENT_INFO;
+
 //----------------------------
 // 
 //----------------------------

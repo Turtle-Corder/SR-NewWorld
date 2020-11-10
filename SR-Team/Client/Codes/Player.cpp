@@ -21,6 +21,7 @@
 #include "IceLandQuest.h"
 #include "NpcWnd.h"
 #include "Shop_ChatWnd.h"
+#include "DummyTerrain.h"
 #include "..\Headers\Player.h"
 
 USING(Client)
@@ -744,30 +745,36 @@ HRESULT CPlayer::Update_OnTerrain()
 	//----------------------------------------------------------------------------------------------------
 	// OLD VER.
 
-	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Terrain", L"Com_VIBuffer");
+	CDummyTerrain* pDummyTerrain = (CDummyTerrain*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Terrain");
+	if (nullptr == pDummyTerrain)
+		return E_FAIL;
+
+	CVIBuffer_TerrainTexture* pTerrainBuffer = (CVIBuffer_TerrainTexture*)pDummyTerrain->Get_Component(L"Com_VIBuffer");
 	if (nullptr == pTerrainBuffer)
+		return E_FAIL;
+
+	CTransform* pTransform = (CTransform*)pDummyTerrain->Get_Component(L"Com_Transform");
+	if (nullptr == pTransform)
 		return E_FAIL;
 
 	_vec3 vPosition = m_pTransformCom[PART_BODY]->Get_Desc().vPosition;
 	if (pTerrainBuffer->IsOnTerrain(&vPosition))
 	{
-		m_pTransformCom[PART_HEAD]->Set_Position(vPosition + _vec3(0.f, 1.3f, 0.f));
-		m_pTransformCom[PART_BODY]->Set_Position(vPosition + _vec3(0.f, 0.5f, 0.f));
+		_vec3 vTerrainHeight = { 0.f, pTransform->Get_Desc().vPosition.y, 0.f };
+		m_pTransformCom[PART_HEAD]->Set_Position(vPosition + vTerrainHeight + _vec3(0.f, 1.3f, 0.f));
+		m_pTransformCom[PART_BODY]->Set_Position(vPosition + vTerrainHeight + _vec3(0.f, 0.5f, 0.f));
 	}
 
 	//----------------------------------------------------------------------------------------------------
-
 	//// 1. 현재 스테이지의 터레인 번들을 찾아와서
 	//CTerrainBundle* pTrrainBundle = (CTerrainBundle*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_TerrainBundle");
 	//if (nullptr == pTrrainBundle)
 	//	return E_FAIL;
-
 	//_vec3 vPosition = m_pTransformCom[PART_BODY]->Get_Desc().vPosition - _vec3(0.f, 1.5f, 0.f);
 	//
 	//// 2. 인터벌을 알아야 하므로 일단 아무거나 하나 터레인 정보를 얻어온다.
 	//TERRAININFO tTerrainInfo = pTrrainBundle->Get_TerrainInfo(_vec3(0.f, 0.f, 0.f), 0);
 	//_int iFloor = (_int)(vPosition.y / tTerrainInfo.iInterval);
-
 	//// 3. 내 x, z좌표중 제일 아래있는 층을 찾아본다.
 	//tTerrainInfo.pObj = nullptr;
 	//_int iCnt = 0;
@@ -781,10 +788,8 @@ HRESULT CPlayer::Update_OnTerrain()
 	//// 4. 없으면 건너뜀
 	//if (tTerrainInfo.pObj)
 	//	iFloor = tTerrainInfo.iFloor;
-
 	//// 4. 터레인이 있다면 x, z만 남긴다.
 	//vPosition = { vPosition.x, 0.f, vPosition.z };
-
 	//// 5. 높이 보정을 해준다. (형변환 필요 없이 현재 층을 알기 때문에 강제 보정한다. / 자연스럽게 타고 싶으면 평면 태우기)
 	//
 	//m_pTransformCom[PART_HEAD]->Set_Position(vPosition + _vec3(0.f, 1.5f, 0.f) + _vec3(0.f, (_float)(iFloor * tTerrainInfo.iInterval), 0.f));
@@ -1733,9 +1738,9 @@ void CPlayer::Update_DecalAlpha(_float _fDelatTime)
 	else
 	{
 		m_fCurDecalAlpha -= m_fDecalAlpha;
-		if (m_fCurDecalAlpha <= 0.f)
+		if (m_fCurDecalAlpha <= 100.f)
 		{
-			m_fCurDecalAlpha = 0.f;
+			m_fCurDecalAlpha = 100.f;
 			m_bDecalDir = !m_bDecalDir;
 		}
 	}

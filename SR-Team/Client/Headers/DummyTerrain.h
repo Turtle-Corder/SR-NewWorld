@@ -36,6 +36,8 @@ private:
 	CVIBuffer*	m_pVIBufferCom = nullptr;
 	CTexture*	m_pTextureCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
+
+	_bool		m_bRefresh = false;
 };
 
 END

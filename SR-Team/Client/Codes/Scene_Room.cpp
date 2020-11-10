@@ -196,7 +196,9 @@ HRESULT CScene_Room::Setup_Layer_Terrain(const wstring & LayerTag)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DummyTerrain", SCENE_ROOM, LayerTag)))
+	_bool bRefresh = true;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DummyTerrain", SCENE_ROOM, LayerTag, &bRefresh)))
 		return E_FAIL;
 
 	return S_OK;

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "MainCamera.h"
+#include "DamageInfo.h"
+#include "Player.h"
 #include "..\Headers\EventTrigger.h"
 
 
@@ -22,22 +24,13 @@ HRESULT CEventTrigger::Setup_GameObject_Prototype()
 
 HRESULT CEventTrigger::Setup_GameObject(void * _pArg)
 {
-	vector<void*> GetVector;
-	_vec3 vPos;
-
 	if (_pArg)
-	{
-		GetVector = (*(vector<void*>*)(_pArg));
-		vPos = (*(_vec3*)GetVector[0]);
-		m_eEventName = (*(EVENT_NUM*)GetVector[1]);
+		m_tInfo = *(EVENT_INFO*)_pArg;
+	else
+		ZeroMemory(&m_tInfo, sizeof(EVENT_INFO));
 
-		if (m_eEventName >= EVENT_NUM::EVENT_END)
-			return E_FAIL;
-	}
-
-	if (FAILED(Add_Component(vPos)))
+	if (FAILED(Add_Component()))
 		return E_FAIL;
-
 
 	return S_OK;
 }
@@ -88,29 +81,32 @@ HRESULT CEventTrigger::Render_NoneAlpha()
 	return S_OK;
 }
 
-HRESULT CEventTrigger::Add_Component()
+HRESULT CEventTrigger::Take_Damage(const CComponent * _pDamageComp)
 {
+	CDamageInfo* pDamageInfo = (CDamageInfo*)_pDamageComp;
+	if (nullptr == pDamageInfo)
+		return E_FAIL;
+
+	CPlayer* pPlayer = (CPlayer*)pDamageInfo->Get_Desc().pOwner;
+	if (pPlayer || pPlayer->IsInteraction())
+	{
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
+			return E_FAIL;
+
+//		pManagement->Get_
+	}
+
 
 	return S_OK;
 }
 
-HRESULT CEventTrigger::Add_Component(_vec3 _vPos)
+HRESULT CEventTrigger::Add_Component()
 {
-	_vec3 vPositon_Body = _vPos + _vec3(0.f, 0.5f, 0.f);
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vPosition = vPositon_Body;
+	ZeroMemory(&tTransformDesc, sizeof(CTransform::TRANSFORM_DESC));
+	tTransformDesc.vPosition = m_tInfo.vSpawnPos;
 
-
-
-	//--------------------------------------------------
-	// Collider
-	//--------------------------------------------------
-	CSphereCollider::COLLIDER_DESC tColDesc;
-	tColDesc.vPosition = m_pTransformCom->Get_Desc().vPosition;
-	tColDesc.fRadius = 1.f;
-
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
-		return E_FAIL;
 
 	//VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
@@ -118,7 +114,7 @@ HRESULT CEventTrigger::Add_Component(_vec3 _vPos)
 
 
 	//For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, L"Component_Texture_Translucent_Cube", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Trigger", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 
@@ -127,49 +123,32 @@ HRESULT CEventTrigger::Add_Component(_vec3 _vPos)
 		return E_FAIL;
 
 
+	//--------------------------------------------------
+	// Collider
+	//--------------------------------------------------
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = tTransformDesc.vPosition;
+	tColDesc.fRadius = 1.f;
+
+	//Collider
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CEventTrigger::Collision_Check()
+HRESULT CEventTrigger::Floating(_float _fDeltaTime)
 {
-	CManagement* pManagement = CManagement::Get_Instance();
+	m_fTimeFlow += _fDeltaTime;
 
-	if (nullptr == pManagement)
-		return E_FAIL;
+	if (m_fTimeFlow >= D3DX_PI)
+		m_fTimeFlow = 0;
 
-	switch (m_eEventName)
-	{
-	case Client::CEventTrigger::PORTAL:
+	_vec3 Temp = m_pTransformCom->Get_Desc().vPosition;
 
+	Temp.y = sinf(m_fTimeFlow);
 
-		//대충 이런식으로 여기에 씬이동시키는 함수를 소환
-		break;
-
-
-	case Client::CEventTrigger::TWODIMENVIEW:
-	{
-		CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-		if (nullptr == pCamera)
-			return E_FAIL;
-
-		pCamera->Set_Camera_Mode(CMainCamera::CAMERA_VIEWMODE::CAMERA_2D_X);
-	}
-		break;
-
-	case Client::CEventTrigger::THREEDIMENVIEW:
-	{
-		CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-		if (nullptr == pCamera)
-			return E_FAIL;
-
-		pCamera->Set_Camera_Mode(CMainCamera::CAMERA_VIEWMODE::CAMERA_3D);
-	}
-		break;
-
-	default:
-		break;
-	}
+	m_pTransformCom->Set_Position(Temp);
 
 	return S_OK;
 }
@@ -203,10 +182,10 @@ CGameObject * CEventTrigger::Clone_GameObject(void * pArg)
 
 void CEventTrigger::Free()
 {
-		Safe_Release(m_pTransformCom);
-		Safe_Release(m_pVIBufferCom);
-		Safe_Release(m_pTextureCom);
-	
+	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pColliderCom);
 
 	CGameObject::Free();
 }

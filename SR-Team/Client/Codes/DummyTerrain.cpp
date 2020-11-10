@@ -20,8 +20,17 @@ HRESULT CDummyTerrain::Setup_GameObject_Prototype()
 
 HRESULT CDummyTerrain::Setup_GameObject(void * _pArg)
 {
+	if (_pArg)
+		m_bRefresh = *(_bool*)_pArg;
+
 	if (FAILED(Add_Component()))
 		return E_FAIL;
+
+	if (m_bRefresh)
+	{
+		m_pTransformCom->Set_Position(_vec3(0.f, 2.f, 0.f));
+		m_pTransformCom->Update_Transform();
+	}
 
 	return S_OK;
 }

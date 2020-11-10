@@ -13,6 +13,11 @@ _int CScene_Manager::Get_CurrentSceneID()
 	return m_iCurrentSceneID;
 }
 
+CScene * CScene_Manager::GetCurrentScene()
+{
+	return m_pCurrentScene;
+}
+
 HRESULT CScene_Manager::Change_CurrentScene(_int _iSceneID, CScene * pCurrentScene)
 {
 	if (nullptr == pCurrentScene)

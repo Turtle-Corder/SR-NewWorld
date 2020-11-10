@@ -17,6 +17,8 @@ public:
 	virtual _int Update_Scene(_float _fDeltaTime) = 0;
 	virtual _int LateUpdate_Scene(_float _fDeltaTime) = 0;
 
+	virtual void Set_SceneEvent(_int _iEventNo);
+
 public:
 	virtual void Free(void) override;
 

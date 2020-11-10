@@ -17,6 +17,7 @@ private:
 
 public:
 	_int Get_CurrentSceneID();
+	CScene* GetCurrentScene();
 
 public:
 	HRESULT Change_CurrentScene(_int _iSceneID, CScene* pCurrentScene);

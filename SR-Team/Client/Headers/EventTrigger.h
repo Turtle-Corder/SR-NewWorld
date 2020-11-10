@@ -22,38 +22,29 @@ private:
 	virtual int LateUpdate_GameObject(float DeltaTime) override;
 	virtual HRESULT Render_NoneAlpha() override;
 
-	enum EVENT_NUM
-	{
-		PORTAL, TWODIMENVIEW, THREEDIMENVIEW, EVENT_END
-	};
+	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 
 
 private:
 	virtual HRESULT Add_Component();
-	HRESULT Add_Component(_vec3 _vPos);
 
-	HRESULT Collision_Check();
+	HRESULT Floating(_float _fDeltaTime);
 
 public:
 	static CEventTrigger* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
 	virtual void Free() override;
 
-
-
 private:
-	CVIBuffer*	m_pVIBufferCom = nullptr;
-	CTransform*	m_pTransformCom = nullptr;
-	CTexture*	m_pTextureCom = nullptr;
-	CSphereCollider*  m_pColliderCom = nullptr;
-	CBoxCollider* m_pBoxCollider = nullptr;
+	CVIBuffer*			m_pVIBufferCom = nullptr;
+	CTransform*			m_pTransformCom = nullptr;
+	CTexture*			m_pTextureCom = nullptr;
+	CSphereCollider*	m_pColliderCom = nullptr;
 
-	EVENT_NUM m_eEventName;
+	_float		m_fTimeFlow = 0.f;
 
+	EVENT_INFO	m_tInfo;
 };
-
-
-
 
 END
 

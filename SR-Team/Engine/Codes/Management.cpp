@@ -414,6 +414,14 @@ _int CManagement::Get_CurrentSceneID()
 	return m_pScene_Manager->Get_CurrentSceneID();
 }
 
+CScene * CManagement::Get_CurrentScene()
+{
+	if(nullptr == m_pScene_Manager)
+		return nullptr;
+
+	return m_pScene_Manager->GetCurrentScene();
+}
+
 CGameObject * CManagement::Get_GameObject(_int _iSceneID, const wstring & _strLayerTag, _uint _iIndex)
 {
 	if (nullptr == m_pObject_Manager)
