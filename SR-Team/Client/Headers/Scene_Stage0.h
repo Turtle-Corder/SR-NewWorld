@@ -36,6 +36,8 @@ private:
 
 	HRESULT Travel_NextLayers();
 	
+	HRESULT Respawn_Palyer();
+
 private:
 	CPreLoader*		m_pPreLoader = nullptr;
 	_bool			m_bReload = false;

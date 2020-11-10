@@ -42,21 +42,21 @@ _int CGolem_Impact::Update_GameObject(_float _fDeltaTime)
 	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
 		return GAMEOBJECT::WARN;
 
+	m_fDeadTime += _fDeltaTime;
+	if (m_fDeadTime >= 1.f)
+		m_bDead = true;
+
 	return GAMEOBJECT::NOEVENT;
 }
 
 _int CGolem_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 {
-	m_fDeadTime += _fDeltaTime;
-	if (m_fDeadTime >= 1.f)
-		m_bDead = true;
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
-		return 0;
+		return GAMEOBJECT::WARN;
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
-		return 0;
+		return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
 }

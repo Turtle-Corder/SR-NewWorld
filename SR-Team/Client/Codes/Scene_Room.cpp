@@ -92,6 +92,16 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 	{
 		CSoundManager::Get_Instance()->StopSound(CSoundManager::BGM);
 		CSoundManager::Get_Instance()->PlayBGM(L"bgm_room.mp3");
+
+		_int iCnt = 0;
+		while (true)
+		{
+			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_CubeTerrain", iCnt++);
+			if (nullptr == pCubeTerrain)	break;
+
+			pCubeTerrain->Set_Active();
+		}
+
 		m_bInit = true;
 	}
 
@@ -111,15 +121,6 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 		{
 			PRINT_LOG(L"Failed To Travel Layers in Room", LOG::CLIENT);
 			return -1;
-		}
-
-		_int iCnt = 0;
-		while (true)
-		{
-			CCubeTerrain* pCubeTerrain = (CCubeTerrain*)pManagement->Get_GameObject(SCENE_TOWN, L"Layer_CubeTerrain", iCnt++);
-			if (nullptr == pCubeTerrain)	break;
-
-			pCubeTerrain->Set_Active();
 		}
 
 		// 무조건 방 -> 마을 단방향 ROOM -> TOWN

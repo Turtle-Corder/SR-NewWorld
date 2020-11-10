@@ -37,7 +37,7 @@ public:
 	virtual int Update_GameObject(float _fDeltaTime) override;
 	virtual int LateUpdate_GameObject(float _fDeltaTime) override;
 	virtual HRESULT Render_NoneAlpha() override;
-
+	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 private:
 	HRESULT Add_Component();
 	HRESULT Movement(float _fDeltaTime);
@@ -56,12 +56,20 @@ public:
 
 	virtual void Set_Active() override;
 
+	HRESULT Update_HurtDelay(_float _fDeltaTime);
+
 private:
-	CVIBuffer*		m_pVIBufferCom[YETI_END];
-	CTransform*		m_pTransformCom[YETI_END];
-	CTexture*		m_pTextureCom[YETI_END];
-	CStatus*		m_pStatusCom = nullptr;
+	CVIBuffer*			m_pVIBufferCom[YETI_END];
+	CTransform*			m_pTransformCom[YETI_END];
+	CTexture*			m_pTextureCom[YETI_END];
+	CSphereCollider*	m_pColliderCom = nullptr;
+	CStatus*			m_pStatusCom = nullptr;
+	CDamageInfo*		m_pDmgInfoCom = nullptr;
 	
+
+	_bool		m_bCanHurt = true;			// 피격 가능 or 불가능
+	_float		m_fHurtDelay = 5.f;			// 피격 가능한 딜레이
+	_float		m_fHurtTimer = 0.f;
 
 	_bool		m_bJump = false;
 	_float		m_fJumpPower = 5.f;

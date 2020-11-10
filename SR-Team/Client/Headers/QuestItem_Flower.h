@@ -46,6 +46,9 @@ private:
 	_float			m_fGatheringTime = 0.f;
 	_bool			m_bGatheringFlower = false;
 	_int			m_iGatheringFlowerCnt = 0;
+
+	_bool			m_bRenderClearWnd = false;
+	CTexture*		m_pTextureClearWnd = nullptr;
 };
 
 END

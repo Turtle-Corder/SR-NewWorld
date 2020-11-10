@@ -92,8 +92,8 @@ private:
 	_vec3		m_vSpawnPos = {};
 	_vec3		m_vMoveDirection = {};		// 이동할 or 쳐다 볼 방향
 	_float		m_fFollowDistance = 10.f;	// 추적 가능한 거리
-	_float		m_fFollowLimitNear = 2.f;
-	_float		m_fAttackDistance = 5.f;	// 공격 가능한 거리
+	_float		m_fFollowLimitNear = 4.f;
+	_float		m_fAttackDistance = 4.f;	// 공격 가능한 거리
 
 
 	//--------------------------------------------------
@@ -106,6 +106,7 @@ private:
 	INSTANTIMPACT	m_tImpact = {};
 	_bool		m_bSpawnImpact = false;
 
+	_float		m_fDistance = 0.f;
 	//--------------------------------------------------
 	// 피격
 	//--------------------------------------------------

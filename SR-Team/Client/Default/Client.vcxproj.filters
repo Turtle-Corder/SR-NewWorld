@@ -373,8 +373,14 @@
     <Filter Include="04.Manager\04.RandomBoxManager">
       <UniqueIdentifier>{2c234526-a32e-44be-92ec-53e773b62855}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\18.DamageFloat">
+      <UniqueIdentifier>{0bd03986-f8be-4edf-bdcd-14828355d3c8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\16. NPC\07. RandomBox_Npc">
       <UniqueIdentifier>{8de7d053-b594-41f7-8bb5-eccfaf6f90a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16. NPC\07. RandomBox_Npc\00. RandomBox_Chat">
+      <UniqueIdentifier>{960d9dcb-f475-43c3-8fc9-4507cd659f51}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -708,8 +714,14 @@
     <ClInclude Include="..\Headers\RandomBoxManager.h">
       <Filter>04.Manager\04.RandomBoxManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\DamageFloater.h">
+      <Filter>02.GameObject\18.DamageFloat</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\RandomBox_Npc.h">
       <Filter>02.GameObject\16. NPC\07. RandomBox_Npc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\RandomBox_Chat.h">
+      <Filter>02.GameObject\16. NPC\07. RandomBox_Npc\00. RandomBox_Chat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1028,8 +1040,14 @@
     <ClCompile Include="..\Codes\RandomBoxManager.cpp">
       <Filter>04.Manager\04.RandomBoxManager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\DamageFloater.cpp">
+      <Filter>02.GameObject\18.DamageFloat</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\RandomBox_Npc.cpp">
       <Filter>02.GameObject\16. NPC\07. RandomBox_Npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RandomBox_Chat.cpp">
+      <Filter>02.GameObject\16. NPC\07. RandomBox_Npc\00. RandomBox_Chat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

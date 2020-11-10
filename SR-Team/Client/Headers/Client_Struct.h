@@ -84,6 +84,12 @@ typedef struct tagDropBoxInitInfo
 	_bool	bGone;
 } DROPBOX_INFO;
 
+typedef struct tagFloatingInfo
+{
+	_vec3 vSpawnPos;
+	_int iDamage;
+} FLOATING_INFO;
+
 //----------------------------
 // 
 //----------------------------

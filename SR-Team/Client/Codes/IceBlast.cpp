@@ -230,6 +230,7 @@ HRESULT CIceBlast::Make_Pieces()
 		}
 	}
 
+	return true;
 }
 
 

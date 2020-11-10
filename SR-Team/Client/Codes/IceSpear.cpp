@@ -239,6 +239,8 @@ HRESULT CIceSpear::Spwan_Dust()
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_IceDust", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &vPos)))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 

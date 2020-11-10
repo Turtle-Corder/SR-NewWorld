@@ -37,14 +37,14 @@ _int CWolf_Impact::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
+	if (FAILED(m_pTransformCom->Update_Transform()))
+		return GAMEOBJECT::WARN;
+
 	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
 		return GAMEOBJECT::WARN;
 
-	if (FAILED(m_pTransformCom->Update_Transform()))
-		return 0;
-
 	m_fDeadTime += _fDeltaTime;
-	if (m_fDeadTime >= 0.5f)
+	if (m_fDeadTime >= 2.f)
 		m_bDead = true;
 
 	return GAMEOBJECT::NOEVENT;
@@ -87,7 +87,11 @@ HRESULT CWolf_Impact::Render_NoneAlpha()
 HRESULT CWolf_Impact::Add_Component()
 {
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vPosition = m_tInstant.vPosition;
+	_vec3 vGolemLook = _vec3(m_tInstant.vDirection.x, 0.f, m_tInstant.vDirection.z);
+	D3DXVec3Normalize(&vGolemLook, &vGolemLook);
+	_vec3 vPosition = { m_tInstant.vPosition.x , 0.f, m_tInstant.vPosition.z };
+	vPosition += vGolemLook * 3.f;
+	tTransformDesc.vPosition = vPosition;
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
 	tTransformDesc.vScale = { 2.f , 2.f , 2.f };
@@ -150,7 +154,7 @@ CGameObject * CWolf_Impact::Clone_GameObject(void * _pArg)
 	CWolf_Impact* pInstance = new CWolf_Impact(*this);
 	if (FAILED(pInstance->Setup_GameObject(_pArg)))
 	{
-		PRINT_LOG(L"Failed To Create Snail_Impact Clone", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Create CWolf_Impact Clone", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 
@@ -162,7 +166,7 @@ HRESULT CWolf_Impact::Take_Damage(const CComponent * _pDamageComp)
 	if (!_pDamageComp)
 		return E_FAIL;
 
-	m_bDead = true;
+	//m_bDead = true;
 
 	return S_OK;
 }
@@ -187,7 +191,7 @@ CWolf_Impact * CWolf_Impact::Create(LPDIRECT3DDEVICE9 _pDevice)
 	CWolf_Impact* pInstance = new CWolf_Impact(_pDevice);
 	if (FAILED(pInstance->Setup_GameObject_Prototype()))
 	{
-		PRINT_LOG(L"Failed To Create Snail_Impact", LOG::CLIENT);
+		PRINT_LOG(L"Failed To Create CWolf_Impact", LOG::CLIENT);
 		Safe_Release(pInstance);
 	}
 

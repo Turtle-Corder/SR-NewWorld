@@ -78,6 +78,7 @@ int CYeti::Update_GameObject(float _fDeltaTime)
 	if (FAILED(Setting_Part(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
+	m_pColliderCom->Update_Collider(m_pTransformCom[YETI_BASE]->Get_Desc().vPosition);
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -87,6 +88,9 @@ int CYeti::LateUpdate_GameObject(float _fDeltaTime)
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
+
+	if (FAILED(Update_HurtDelay(_fDeltaTime)))
+		return GAMEOBJECT::WARN;
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
@@ -115,6 +119,22 @@ HRESULT CYeti::Render_NoneAlpha()
 		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
 			return E_FAIL;
 	}
+
+	return S_OK;
+}
+
+HRESULT CYeti::Take_Damage(const CComponent* _pDamageComp)
+{
+	if (!m_bCanHurt && !_pDamageComp)
+		return S_OK;
+
+	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	
+	if (m_pStatusCom->Get_Status().iHp <= 0)
+	{
+		m_bDead = true;
+	}
+
 
 	return S_OK;
 }
@@ -220,14 +240,35 @@ HRESULT CYeti::Add_Component()
 			return E_FAIL;
 
 	}
-		CStatus::STAT tStat;
-		tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
-		tStat.iDef = 50;
-		tStat.iHp = 100;			tStat.iMp = 100;
-		tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
-			return E_FAIL;
+	CStatus::STAT tStat;
+	tStat.iCriticalRate = 20;	tStat.iCriticalChance = 10;
+	tStat.iDef = 50;
+	tStat.iHp = 100;			tStat.iMp = 100;
+	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
+		return E_FAIL;
+
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = m_pTransformCom[YETI_BASE]->Get_Desc().vPosition;
+	tColDesc.fRadius = 0.5f * 2.f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
+
+	CDamageInfo::DAMAGE_DESC tDmgInfo;
+	tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMinAtt;
+	tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+	tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
+	tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
+	tDmgInfo.pOwner = this;
+
+	tDmgInfo.eType = eELEMENTAL_TYPE::ICE;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -471,7 +512,9 @@ void CYeti::Free()
 		Safe_Release(m_pTextureCom[iAll]);
 	}
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
+	Safe_Release(m_pDmgInfoCom);
 
 	CGameObject::Free();
 }
@@ -557,4 +600,19 @@ void CYeti::Set_Active()
 {
 	m_bActive = true;
 	m_eCurState = IDLE;
+}
+
+HRESULT CYeti::Update_HurtDelay(_float _fDeltaTime)
+{
+	if (!m_bCanHurt)
+	{
+		m_fHurtTimer += _fDeltaTime;
+		if (m_fHurtTimer >= m_fHurtDelay)
+		{
+			m_fHurtTimer = 0.f;
+			m_bCanHurt = true;
+		}
+	}
+
+	return S_OK;
 }

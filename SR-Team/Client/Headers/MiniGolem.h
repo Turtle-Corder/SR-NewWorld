@@ -98,7 +98,7 @@ private:
 	_float				m_fAttackTime = 0.f;
 
 	_float				m_fDisappearTime = 0.f;
-	_float				m_fDisappearDelay = 7.f;
+	_float				m_fDisappearDelay = 3.f;
 };
 
 END

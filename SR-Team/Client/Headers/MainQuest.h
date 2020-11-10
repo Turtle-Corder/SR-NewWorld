@@ -25,6 +25,9 @@ public:
 	virtual ~CMainQuest() = default;
 
 public:
+	_bool Get_Chart() { return m_bChat; }
+
+public:
 	void Set_StartQuest(_bool bStart) { m_bStartQuest = bStart; }
 
 public:
@@ -63,6 +66,9 @@ private:
 	_bool			m_bGetReward = false;
 	_bool			m_bStartQuest = false;
 	_bool			m_bRenderClear = false;
+
+	// NPC와 대화중인지
+	_bool				m_bChat = false;
 };
 
 

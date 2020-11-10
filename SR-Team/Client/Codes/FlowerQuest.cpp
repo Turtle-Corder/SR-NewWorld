@@ -212,7 +212,10 @@ HRESULT CFlowerQuest::Render_UI()
 			(LPDIRECT3DTEXTURE9)m_pTextureWnd[m_eSituation]->GetTexture(0),
 			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
+		m_bChat = true;
 	}
+	else
+		m_bChat = false;
 
 	if (FAILED(Render_HelpWnd()))
 		return E_FAIL;

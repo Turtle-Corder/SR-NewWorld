@@ -37,6 +37,8 @@ _int CSnail_Impact::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
+	m_pTransformCom->Update_Transform();
+
 	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
 		return GAMEOBJECT::WARN;
 
@@ -49,16 +51,53 @@ _int CSnail_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 	if (m_fDeadTime >= 1.f)
 		m_bDead = true;
 
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return GAMEOBJECT::WARN;
+
+	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
+		return GAMEOBJECT::WARN;
+
 	return GAMEOBJECT::NOEVENT;
+}
+
+HRESULT CSnail_Impact::Render_NoneAlpha()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->SetTexture(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CSnail_Impact::Add_Component()
 {
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
 	CTransform::TRANSFORM_DESC tTransformDesc;
-	tTransformDesc.vPosition = { m_tInstant.vPosition };
+	_vec3 vGolemLook = _vec3(m_tInstant.vDirection.x, 0.f, m_tInstant.vDirection.z);
+	D3DXVec3Normalize(&vGolemLook, &vGolemLook);
+	_vec3 vPosition = { m_tInstant.vPosition.x , 0.f, m_tInstant.vPosition.z };
+	vPosition += vGolemLook * 1.f;
+	tTransformDesc.vPosition = vPosition;
 	tTransformDesc.fSpeedPerSecond = 10.f;
 	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
-	tTransformDesc.vScale = { 0.5f , 0.5f , 0.5f };
+	tTransformDesc.vScale = { 1.f , 1.f , 1.f };
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
@@ -66,6 +105,14 @@ HRESULT CSnail_Impact::Add_Component()
 	CSphereCollider::COLLIDER_DESC tColDesc;
 	tColDesc.vPosition = tTransformDesc.vPosition;
 	tColDesc.fRadius = 0.7f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom))) //积己 肮荐
+		return E_FAIL;
+
+
+	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_SnailHead", L"Com_Texture", (CComponent**)&m_pTextureCom))) ////积己 肮荐
+		return E_FAIL;
+
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
 		return E_FAIL;
