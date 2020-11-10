@@ -127,6 +127,17 @@ _int CPlayer::LateUpdate_GameObject(_float _fDeltaTime)
 	if (FAILED(pManagemnet->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
 
+	if (m_bFlinch)
+	{
+		Update_FlinchDelay();
+
+		if (FAILED(pManagemnet->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return GAMEOBJECT::WARN;
+	}
+
+	// todo : low hp
+
+	
 	Update_AtkDelay(_fDeltaTime);
 
 	return GAMEOBJECT::NOEVENT;
@@ -153,6 +164,60 @@ HRESULT CPlayer::Render_NoneAlpha()
 		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
 			return E_FAIL;
 	}
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_uint iCnt = PART_START; iCnt < PART_END; ++iCnt)
+	{
+		if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Render_UI()
+{
+	//CManagement* pManagement = CManagement::Get_Instance();
+	//if (nullptr == pManagement)
+	//	return E_FAIL;
+
+
+	//CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	//if (nullptr == pCamera)
+	//	return E_FAIL;
+
+	//for (_uint iCnt = PART_START; iCnt < PART_END; ++iCnt)
+	//{
+	//	if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+	//		return E_FAIL;
+
+	//	if (FAILED(m_pTextureCom[iCnt]->SetTexture(0)))
+	//		return E_FAIL;
+
+	//	if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+	//		return E_FAIL;
+	//}
 
 	return S_OK;
 }
@@ -426,6 +491,9 @@ HRESULT CPlayer::Add_Component_Texture()
 			return E_FAIL;
 	}
 
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -576,6 +644,8 @@ void CPlayer::Free()
 		Safe_Release(m_pTransformCom[i]);
 		Safe_Release(m_pVIBufferCom[i]);
 	}
+
+	Safe_Release(m_pFlinchTexCom);
 
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pRaycastCom);
