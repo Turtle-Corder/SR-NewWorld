@@ -354,20 +354,7 @@ HRESULT CGolem::Update_AI()
 
 		if (m_bCanAttack)
 		{
-			_uint iRand = rand() % 100;
-<<<<<<< HEAD
-			if		(iRand < 45)	m_eCurState = ATTACK1;
-			else if (iRand < 65)	m_eCurState = ATTACK2;
-			else if (iRand < 90)	m_eCurState = ATTACK3;
-			else if (iRand < 95)	m_eCurState = ATTACK4;
-			/*else if (iRand < 100)	m_eCurState = ATTACK6;*/
-=======
-			if		(iRand < 20)	m_eCurState = ATTACK1;
-			else if (iRand < 40)	m_eCurState = ATTACK2;
-			else if (iRand < 60)	m_eCurState = ATTACK3;
-			else if (iRand < 80)	m_eCurState = ATTACK4;
-			else if (iRand < 100)	m_eCurState = ATTACK6;
->>>>>>> 97638b2b4b9316ae9c2fa1aacfd7e5d747aa24f3
+			Phatton();
 			return S_OK;
 		}
 	}
@@ -408,7 +395,7 @@ HRESULT CGolem::Update_Move(_float _fDeltaTime)
 		//--------------------------------------------------
 		// 이동 하는 곳
 		//--------------------------------------------------
-		_vec3 vAddPos = m_vMoveDirection * _fDeltaTime * 2.f;
+		_vec3 vAddPos = m_vMoveDirection * (_fDeltaTime * m_fMoveSpeed);
 		m_pTransformCom[GOLEM_BASE]->Set_Position(m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + vAddPos);
 	}
 
@@ -461,32 +448,23 @@ HRESULT CGolem::Update_State()
 			break;
 
 		case CGolem::ATTACK1:
-			m_fAttackDelay = 4.0f;		// 내려찍기
+			m_fAttackDelay = 3.7f;		// 내려찍기
 			break;
 
 		case CGolem::ATTACK2:
-			m_fAttackDelay = 3.2f;		// 폭탄
+			m_fAttackDelay = 3.1f;		// 폭탄
 			break;
 
 		case CGolem::ATTACK3:
-			m_fAttackDelay = 1.5f;		// 몬스터 생성
+			m_fAttackDelay = 1.3f;		// 몬스터 생성
 			break;
 
 		case CGolem::ATTACK4:
-			m_fAttackDelay = 2.f;		// 분신 소환
+			m_fAttackDelay = 1.9f;		// 분신 소환
 			break;
 
 		case CGolem::ATTACK6:
-			m_fAttackDelay = 5.f;		// 불 소환
-			break;
-
-		case CGolem::ATTACK6:
-		{
-			m_fAttackDelay = 5.f;
-			Anim_Reset_Attack();
-		}// 불 소환
-			break;
-		default:
+			m_fAttackDelay = 3.1f;		// 불 소환
 			break;
 		}
 
@@ -552,7 +530,7 @@ HRESULT CGolem::Update_Anim_Move(_float _fDeltaTime)
 
 	m_fAnimationTimer += _fDeltaTime;
 
-	if (m_fAnimationTimer >= 0.5f)
+	if (m_fAnimationTimer >= 0.3f)
 	{
 		m_fAnimationTimer = 0.f;
 		m_iAnimationStep = !m_iAnimationStep;
@@ -577,7 +555,7 @@ HRESULT CGolem::Update_Anim_Move(_float _fDeltaTime)
 	return S_OK;
 }
 
-HRESULT CGolem::Update_Anim_Attack_Hand(_float _fDeltaTime , AXIS _eAxis)
+HRESULT CGolem::Update_Anim_Attack_Hand(_float _fDeltaTime)
 {
 	_vec3 vLHPosition = m_pTransformCom[GOLEM_LEFT_ARM]->Get_Desc().vPosition;
 	_vec3 vRHPosition = m_pTransformCom[GOLEM_RIGHT_ARM]->Get_Desc().vPosition;
@@ -592,16 +570,8 @@ HRESULT CGolem::Update_Anim_Attack_Hand(_float _fDeltaTime , AXIS _eAxis)
 
 	m_fAnimationPlayTime += _fDeltaTime * 0.1f;
 
-	if (_eAxis == CGolem::Y)
-	{
-		vLHPosition.y -= m_fAnimationPlayTime;
-		vRHPosition.y -= m_fAnimationPlayTime;
-	}
-	else if (_eAxis == CGolem::Z)
-	{
-		vLHPosition.z -= m_fAnimationPlayTime;
-		vRHPosition.z -= m_fAnimationPlayTime;
-	}
+	vLHPosition.y -= m_fAnimationPlayTime;
+	vRHPosition.y -= m_fAnimationPlayTime;
 
 	m_pTransformCom[GOLEM_LEFT_ARM]->Set_Position(_vec3(vLHPosition.x, vLHPosition.y, vLHPosition.z));
 	m_pTransformCom[GOLEM_RIGHT_ARM]->Set_Position(_vec3(vRHPosition.x, vRHPosition.y, vRHPosition.z));
@@ -615,6 +585,7 @@ HRESULT CGolem::Update_Anim_Attack1(_float _fDeltaTime)
 		return S_OK;
 
 	m_fAnimationTimer += _fDeltaTime;
+
 	if (m_fAnimationTimer >= 0.6f) // 3.6f
 	{
 		m_fAnimationTimer = 0.f;
@@ -622,20 +593,12 @@ HRESULT CGolem::Update_Anim_Attack1(_float _fDeltaTime)
 
 		if (5 == m_iAnimationStep)
 		{
-			CManagement* pManagement = CManagement::Get_Instance();
-			if (nullptr == pManagement)
-				return E_FAIL;
-
-			CMainCamera* pCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-			if (nullptr == pCamera)
-				return E_FAIL;
-
-			pCamera->Set_Camera_Wigging(0.7f, 100.f, 1.f, CMainCamera::WIG_TYPE::HARMONIC);
-
 			Spawn_GolemImpact();
+			Make_Pieces();
 		}
-		else if (6 == m_iAnimationStep)
+		else if(m_iAnimationStep == 6)
 			m_eCurState = CGolem::IDLE;
+
 	}
 
 	if (m_iAnimationStep <= 1)
@@ -671,10 +634,12 @@ HRESULT CGolem::Update_Anim_Attack2(_float _fDeltaTime)
 
 		if (m_iAnimationStep == 1)
 			m_fAnimationPlayTime = 0.f;
+
 		else if (m_iAnimationStep == 2)
+		{
 			m_fAnimationPlayTime = 0.f;
-		else if (m_iAnimationStep == 3)
 			Spawn_Bomb();
+		}
 		else if (m_iAnimationStep == 5)
 			m_eCurState = CGolem::IDLE;
 	}
@@ -686,7 +651,7 @@ HRESULT CGolem::Update_Anim_Attack2(_float _fDeltaTime)
 	}
 	else if (m_iAnimationStep <= 2)
 	{
-		Update_Anim_Attack_Hand(_fDeltaTime , AXIS::Y);
+		Update_Anim_Attack_Hand(_fDeltaTime);
 	}
 	else if (m_iAnimationStep == 4)
 	{
@@ -703,55 +668,19 @@ HRESULT CGolem::Update_Anim_Attack3(_float _fDeltaTime)
 	if (m_eCurState != CGolem::ATTACK3) // 1.2f
 		return S_OK;
 
-	//m_fAnimationTimer += _fDeltaTime;
-	//if (m_fAnimationTimer >= 0.6f)
-	//{
-	//	m_fAnimationTimer = 0.f;
-	//	++m_iAnimationStep;
-
-	//	if (1 == m_iAnimationStep)
-	//		Spawn_MonSub();
-
-	//	if (m_iAnimationStep == 2)
-	//		m_eCurState = CGolem::IDLE;
-	//}
-		m_fAnimationTimer += _fDeltaTime;
-
+	m_fAnimationTimer += _fDeltaTime;
 	if (m_fAnimationTimer >= 0.6f)
 	{
 		m_fAnimationTimer = 0.f;
 		++m_iAnimationStep;
 
-		if (m_iAnimationStep == 1)
-		{
-			m_fAnimationPlayTime = 0.f;
+		if (1 == m_iAnimationStep)
 			Spawn_MonSub();
-		}
-		else if (m_iAnimationStep == 2)
-			m_fAnimationPlayTime = 0.f;
-		else if (m_iAnimationStep == 3)
-			Spawn_Bomb();
-		else if (m_iAnimationStep == 5)
+
+		if (m_iAnimationStep == 2)
 			m_eCurState = CGolem::IDLE;
 	}
 
-	if (m_iAnimationStep <= 1)
-	{
-		Anim_Reset_Attack();
-		m_pTransformCom[GOLEM_BODY]->Turn(CTransform::AXIS_X, -_fDeltaTime * 0.1f);
-	}
-	else if (m_iAnimationStep <= 2)
-	{
-//		Update_Anim_Attack_Hand(_fDeltaTime);
-	}
-	else if (m_iAnimationStep == 4)
-	{
-		m_pTransformCom[GOLEM_BODY]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
-		m_pTransformCom[GOLEM_LEFT_ARM]->Set_Position(m_fAnimationLHPosition);
-		m_pTransformCom[GOLEM_RIGHT_ARM]->Set_Position(m_fAnimationRHPosition);
-	}
-	
-	
 	return S_OK;
 }
 
@@ -759,19 +688,44 @@ HRESULT CGolem::Update_Anim_Attack4(_float _fDeltaTime)
 {
 	if (m_eCurState != CGolem::ATTACK4)
 		return S_OK;
-	
-	_vec3 vRootPos = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
-	for (_uint iCnt = 0; iCnt < 5; ++iCnt)
-	{
-		_vec3 vPos = { (rand() % 40 - 20) * 0.3f, 0.f, (rand() % 20 - 20) * 0.3f };
-		_vec3 vRot = { 0.f, D3DXToRadian(rand() % 360), 0.f };
 
-		m_pMiniGolem[iCnt]->Set_SpawnInfo(vRootPos + vPos, vRot);
-		m_pMiniGolem[iCnt]->Set_Active();
+	_vec3 vRootPos = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
+
+	m_fAnimationTimer += _fDeltaTime;
+	if (m_fAnimationTimer >= 0.6f)
+	{
+			m_fAnimationTimer = 0.f;
+			++m_iAnimationStep;
+
+			if (m_iAnimationStep == 1)
+				m_bMiniGolem_SetPosition = true;
+			if(m_iAnimationStep == 3)
+			m_eCurState = CGolem::IDLE;
 	}
 
-	m_bCanAttack = false;
-	m_eCurState = CGolem::IDLE;
+	if (m_iAnimationStep == 2)
+	{
+		if (m_bMiniGolem_SetPosition)
+		{
+			for (_uint iCnt = 0; iCnt < 5; ++iCnt)
+			{
+				_vec3 vPos = { (rand() % 40 - 20) * 0.3f, 0.f, (rand() % 20 - 20) * 0.3f };
+				_vec3 vRot = { 0.f, D3DXToRadian(rand() % 360), 0.f };
+
+				_vec3 vPosition = vRootPos + vPos;
+
+				if (vPosition.x <= 0.f)
+					vPosition.x = (_float)(rand() % 20);
+				else if (vPosition.z <= 0.f)
+					vPosition.z = (_float)(rand() % 20);
+
+				m_pMiniGolem[iCnt]->Set_SpawnInfo(vPosition, vRot);
+				m_pMiniGolem[iCnt]->Set_Active();
+			}
+			m_bMiniGolem_SetPosition = false;
+		}
+	}
+
 	return S_OK;
 }
 
@@ -780,8 +734,6 @@ HRESULT CGolem::Update_Anim_Attack6(_float _fDeltaTime)
 	if (m_eCurState != CGolem::ATTACK6)
 		return S_OK;
 
-<<<<<<< HEAD
-=======
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
@@ -791,33 +743,17 @@ HRESULT CGolem::Update_Anim_Attack6(_float _fDeltaTime)
 		return E_FAIL;
 
 	_vec3 vRootPos = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
-	
->>>>>>> 97638b2b4b9316ae9c2fa1aacfd7e5d747aa24f3
+
 	m_fAnimationTimer += _fDeltaTime;
 	if (m_fAnimationTimer >= 0.6f)
 	{
 		m_fAnimationTimer = 0.f;
 		++m_iAnimationStep;
 
-<<<<<<< HEAD
-		if (2 == m_iAnimationStep)
-		{
-			Spawn_GolemImpact();
-		}
-		//else if (4 == m_iAnimationStep)
-		//	Spawn_GolemImpact();
-		else if (6 == m_iAnimationStep)
-			m_eCurState = CGolem::IDLE;
-=======
 		if (1 == m_iAnimationStep)
 		{
 			m_vDirection = m_pTransformCom[GOLEM_BASE]->Get_Look();
 			D3DXVec3Normalize(&m_vDirection, &m_vDirection);
-		}
-
-		if (m_iAnimationStep == 3 || m_iAnimationStep == 4)
-		{
-			Spawn_GolemImpact();
 		}
 
 		if (m_iAnimationStep == 5)
@@ -826,20 +762,12 @@ HRESULT CGolem::Update_Anim_Attack6(_float _fDeltaTime)
 			m_pTransformCom[GOLEM_LEFT_ARM]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
 			m_pTransformCom[GOLEM_RIGHT_ARM]->Set_Rotation(_vec3(0.f, 0.f, 0.f));
 
-			m_bCanAttack = false;
 			m_eCurState = CGolem::IDLE;
 		}
->>>>>>> 97638b2b4b9316ae9c2fa1aacfd7e5d747aa24f3
 	}
 
 	if (m_iAnimationStep <= 1)
 	{
-<<<<<<< HEAD
-		//Anim_Reset_Attack();
-		m_pTransformCom[GOLEM_LEFT_ARM]->Turn(CTransform::AXIS_X, -_fDeltaTime);
-		m_pTransformCom[GOLEM_RIGHT_ARM]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
-	}
-=======
 		m_pTransformCom[GOLEM_BODY]->Turn(CTransform::AXIS_X, -_fDeltaTime);
 		m_pTransformCom[GOLEM_LEFT_ARM]->Turn(CTransform::AXIS_X, -_fDeltaTime);
 		m_pTransformCom[GOLEM_RIGHT_ARM]->Turn(CTransform::AXIS_X, -_fDeltaTime);
@@ -851,9 +779,9 @@ HRESULT CGolem::Update_Anim_Attack6(_float _fDeltaTime)
 		_vec3 vMyPosition = { m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition.x , 0.f , m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition.z };
 		vMyPosition -= m_vDirection * (_fDeltaTime * 5.f);
 		m_pTransformCom[GOLEM_BASE]->Set_Position(vMyPosition);
+		Spawn_GolemImpact();
 	}
 
->>>>>>> 97638b2b4b9316ae9c2fa1aacfd7e5d747aa24f3
 
 	return S_OK;
 }
@@ -934,7 +862,7 @@ HRESULT CGolem::Spawn_GolemImpact()
 	tImpact.pAttacker = this;
 	tImpact.pStatusComp = m_pStatusCom;
 	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
-	tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (tImpact.vDirection * - 1.f);
+	tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
@@ -955,7 +883,16 @@ HRESULT CGolem::Spawn_Bomb()
 
 	for (_uint iCnt = 0; iCnt < 6; ++iCnt)
 	{
-		_float fX = (_float)(rand() % 8 - 4); _float fZ = (_float)(rand() % 8 - 4);
+		_float fX = (_float)(rand() % 4 + 4); _float fZ = (_float)(rand() % 4 + 4);
+
+		_uint iRandX = rand() % 2;
+		_uint iRandZ = rand() % 2;
+
+		if (iRandX == 0)
+			fX *= -1.f;
+		if (iRandZ == 0)
+			fZ *= -1.f;
+
 		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + _vec3(fX, 0.f, fZ);
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Bomb", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
@@ -984,17 +921,94 @@ HRESULT CGolem::Spawn_MonSub()
 	return S_OK;
 }
 
+HRESULT CGolem::Make_Pieces()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact = {};
+
+	for (_uint i = 0; i < 25; i++)
+	{
+		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
+
+		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
+		tImpact.vDirection = RandomPostionSelect;
+		tImpact.vOption = RandomPostionSelect + m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MeteorPiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
+		{
+			PRINT_LOG(L"Failed To Spawn MeteorPieces", LOG::DEBUG);
+			return false;
+		}
+	}
+
+}
+
 HRESULT CGolem::Create_MiniGolem()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	for (_uint iCnt = 0; iCnt < 5; ++iCnt) 
+	for (_uint iCnt = 0; iCnt < 5; ++iCnt)
 	{
 		m_pMiniGolem[iCnt] = CMiniGolem::Create(m_pDevice);
 		if (FAILED(m_pMiniGolem[iCnt]->Setup_GameObject()))
 			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CGolem::Phatton()
+{
+	if (m_iPattonCnt >= 5)
+	{
+		_uint iRand = rand() % 100;
+		if (iRand < 20)	m_eCurState = ATTACK1;
+		else if (iRand < 40)	m_eCurState = ATTACK2;
+		else if (iRand < 60)	m_eCurState = ATTACK3;
+		else if (iRand < 80)	m_eCurState = ATTACK4;
+		else if (iRand < 100)	m_eCurState = ATTACK6;
+	}
+
+	if (m_iPattonCnt < 5)
+	{
+		switch (m_iPattonCnt)
+		{
+			case 0:
+			{
+				m_iPattonCnt += 1;
+				m_eCurState = ATTACK1;
+				break;
+			}
+			case 1:
+			{
+				m_iPattonCnt += 1;
+				m_eCurState = ATTACK2;
+				break;
+			}
+			case 2:
+			{
+				m_iPattonCnt += 1;
+				m_eCurState = ATTACK3;
+				break;
+			}
+			case 3:
+			{
+				m_iPattonCnt += 1;
+				m_eCurState = ATTACK4;
+				break;
+			}
+			case 4:
+			{
+				m_iPattonCnt += 1;
+				m_eCurState = ATTACK6;
+				break;
+			}
+		}
 	}
 
 	return S_OK;

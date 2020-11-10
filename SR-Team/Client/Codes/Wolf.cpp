@@ -308,7 +308,7 @@ _int CWolf::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
-	
+
 	if (!m_bActive)
 		return GAMEOBJECT::NOEVENT;
 
@@ -350,6 +350,7 @@ HRESULT CWolf::Update_AI()
 		// 추적 가능한 거리보다 멀리 있으면 가만히 있는다.
 		//--------------------------------------------------
 		_float fDistance = D3DXVec3Length(&m_vMoveDirection);
+
 		if (fDistance > m_fFollowDistance)
 		{
 			m_eCurState = IDLE;
@@ -417,7 +418,7 @@ HRESULT CWolf::Update_Move(_float _fDeltaTime)
 	//--------------------------------------------------
 	// 이동
 	//--------------------------------------------------
-	_vec3 vAddPos = m_vMoveDirection * _fDeltaTime;
+	_vec3 vAddPos = m_vMoveDirection * (_fDeltaTime * 2.f);
 	m_pTransformCom[WOLF_BASE]->Set_Position(m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition + vAddPos);
 
 	return S_OK;
@@ -638,19 +639,27 @@ HRESULT CWolf::Update_Anim_Attack1(_float _fDeltaTime)
 	// 다음 애니메이션으로 바꿔줌
 	//--------------------------------------------------
 	m_fAnimTimer += _fDeltaTime;
-	if (m_fAnimTimer >= 0.6f)
+	m_fBloodCreateTime += _fDeltaTime;
+
+	if (m_fAnimTimer >= 0.4f)
 	{
 		m_fAnimTimer = 0.f;
 		++m_iAnimStep;
 		Anim_Reset_Attack();
 
-		if (2 == m_iAnimStep)
+		if (m_fBloodCreateTime >= 0.2f && 5 != m_iAnimStep)
+		{
+			Make_Blood();
+			m_fBloodCreateTime = 0.f;
+		}
+
+		if (5 == m_iAnimStep)
 		{
 			Spawn_Impact();
 			m_eCurState = IDLE;
-			Spawn_Impact();
 			return S_OK;
 		}
+
 	}
 
 
@@ -671,6 +680,8 @@ HRESULT CWolf::Update_Anim_Attack1(_float _fDeltaTime)
 		m_pTransformCom[WOLF_EAR1]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
 		m_pTransformCom[WOLF_EAR2]->Turn(CTransform::AXIS_Z, -_fDeltaTime);
 	}
+
+
 
 	return S_OK;
 }
@@ -720,7 +731,7 @@ HRESULT CWolf::Spawn_Impact()
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
-	
+
 	INSTANTIMPACT tImpact;
 	tImpact.pAttacker = this;
 	tImpact.pStatusComp = m_pStatusCom;
@@ -731,6 +742,21 @@ HRESULT CWolf::Spawn_Impact()
 		return E_FAIL;
 
 	m_bCanAttack = false;
+
+	return S_OK;
+}
+
+HRESULT CWolf::Make_Blood()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact;
+	tImpact.vPosition = m_pTransformCom[WOLF_HEAD]->Get_Desc().matWorld.m[3];
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Blood", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))/*여기 StartPos*/
+		return E_FAIL;
 
 	return S_OK;
 }

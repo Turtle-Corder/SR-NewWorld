@@ -52,36 +52,9 @@ _int CWolf_Impact::Update_GameObject(_float _fDeltaTime)
 
 _int CWolf_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 {
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return 0;
 
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
-		return 0;
 
 	return GAMEOBJECT::NOEVENT;
-}
-
-HRESULT CWolf_Impact::Render_NoneAlpha()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-	if (nullptr == pCamera)
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->SetTexture(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
-		return E_FAIL;
-
-	return S_OK;
 }
 
 HRESULT CWolf_Impact::Add_Component()
@@ -100,13 +73,7 @@ HRESULT CWolf_Impact::Add_Component()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom))) //积己 肮荐
-		return E_FAIL;
-
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
-		return E_FAIL;
-
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Wolf_Face", L"Com_Texture", (CComponent**)&m_pTextureCom))) ////积己 肮荐
 		return E_FAIL;
 
 	CSphereCollider::COLLIDER_DESC tColDesc;
@@ -166,7 +133,7 @@ HRESULT CWolf_Impact::Take_Damage(const CComponent * _pDamageComp)
 	if (!_pDamageComp)
 		return E_FAIL;
 
-	//m_bDead = true;
+	m_bDead = true;
 
 	return S_OK;
 }
@@ -174,8 +141,6 @@ HRESULT CWolf_Impact::Take_Damage(const CComponent * _pDamageComp)
 void CWolf_Impact::Free()
 {
 	Safe_Release(m_pTransformCom);
-	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);

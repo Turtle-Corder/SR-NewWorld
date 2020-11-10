@@ -357,7 +357,7 @@ HRESULT CYeti::Moving(float _fDeltaTime)
 		_vec3 vPos = m_pTransformCom[YETI_BASE]->Get_Desc().vPosition;
 		_vec3 vDir = pPlayerTransform->Get_Desc().vPosition - vPos;
 		D3DXVec3Normalize(&vDir, &vDir);
-		vPos += vDir * _fDeltaTime;
+		vPos += vDir * (_fDeltaTime * 2.f);
 		m_eCurState = CYeti::MOVE;
 		m_pTransformCom[YETI_BASE]->Set_Position(vPos);
 		return S_OK;

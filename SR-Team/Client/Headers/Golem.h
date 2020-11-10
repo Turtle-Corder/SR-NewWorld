@@ -23,17 +23,12 @@ class CGolem final : public CGameObject
 		GOLEM_RIGHT_LEG,
 		GOLEM_END
 	};
-	enum STATE 
+	enum STATE
 	{
-<<<<<<< HEAD
-		IDLE , MOVE , ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, ATTACK6, //ATTACK5, 
-=======
-		IDLE , MOVE , 
-		ATTACK1 , ATTACK2 , ATTACK3 , ATTACK4, ATTACK6,//ATTACK5, 
->>>>>>> 97638b2b4b9316ae9c2fa1aacfd7e5d747aa24f3
+		IDLE, MOVE,
+		ATTACK1, ATTACK2, ATTACK3, ATTACK4, ATTACK6,//ATTACK5, 
 		STATE_DEAD
 	};
-	enum AXIS {X , Y , Z};
 private:
 	explicit CGolem(LPDIRECT3DDEVICE9 _pDevice);
 	explicit CGolem(const CGolem& _rOther);
@@ -69,7 +64,7 @@ private:
 	HRESULT Anim_Reset_Attack();
 
 	HRESULT Update_Anim_Move(_float _fDeltaTime);
-	HRESULT Update_Anim_Attack_Hand(_float _fDeltaTime , AXIS _eAxis);
+	HRESULT Update_Anim_Attack_Hand(_float _fDeltaTime);
 	HRESULT Update_Anim_Attack1(_float _fDeltaTime);		// ³»·ÁÂï±â
 	HRESULT Update_Anim_Attack2(_float _fDeltaTime);		// ÆøÅº
 	HRESULT Update_Anim_Attack3(_float _fDeltaTime);		// ¸ó½ºÅÍ »ý¼º
@@ -84,11 +79,13 @@ private:
 	HRESULT Spawn_Bomb();
 	HRESULT Spawn_MonSub();
 
+	HRESULT Make_Pieces();
+
 	HRESULT Create_MiniGolem();
-//	HRESULT Spawn_Fire();
+	//	HRESULT Spawn_Fire();
 
 
-
+	HRESULT Phatton();
 private:
 	CVIBuffer*			m_pVIBufferCom[GOLEM_END] = {};
 	CTransform*			m_pTransformCom[GOLEM_END] = {};
@@ -151,7 +148,10 @@ private:
 	_bool			m_bDead = false;
 
 	CMiniGolem*		m_pMiniGolem[5] = { nullptr, };
-	AXIS			m_eAxis; 
+
+	_uint			m_iPattonCnt = 0;
+	_float			m_fMoveSpeed = 2.f;
+	_bool			m_bMiniGolem_SetPosition = false;
 };
 
 END

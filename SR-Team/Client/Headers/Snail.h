@@ -38,7 +38,7 @@ private:
 	HRESULT Attack(_float _fDeltaTime);
 	HRESULT Setting_Part();
 	HRESULT Spawn_InstantImpact(const wstring& LayerTag);
-
+	HRESULT Make_DashPaticle();
 public:
 	static CSnail* Create(LPDIRECT3DDEVICE9 _pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
@@ -65,6 +65,7 @@ private:
 	_bool			m_bInstanceCreate = false;
 	_bool			m_bTakeCheckOnece = false;
 	_float			m_fCopareLength = 4.f;
+	_float			m_fDashPaticle_CreateTime = 0.f;
 };
 
 END

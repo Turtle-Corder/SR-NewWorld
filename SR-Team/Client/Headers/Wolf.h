@@ -97,7 +97,7 @@ private:
 
 	// 공격체
 	HRESULT Spawn_Impact();
-
+	HRESULT Make_Blood();
 
 	virtual void Set_Active() override;
 
@@ -121,17 +121,17 @@ private:
 
 	_vec3		m_vMoveDirection = {};		// 이동할 or 쳐다 볼 방향
 	_float		m_fFollowDistance = 10.f;	// 추적 가능한 거리
-	_float		m_fFollowLimitNear = 0.2f;
-	_float		m_fAttackDistance = 3.f;	// 공격 가능한 거리
+	_float		m_fFollowLimitNear = 1.5f;
+	_float		m_fAttackDistance = 1.5f;	// 공격 가능한 거리
 
 
-	//--------------------------------------------------
-	// 공격
-	//--------------------------------------------------
+											//--------------------------------------------------
+											// 공격
+											//--------------------------------------------------
 	_bool		m_bCanAttack = true;		// 공격 가능 or 불가능
-	_float		m_fAttackDelay = 5.f;		// 공격 가능한 딜레이
+	_float		m_fAttackDelay = 3.5f;		// 공격 가능한 딜레이
 	_float		m_fAttackTimer = 0.f;		// 공격 쿨타임 시간 재는용
-
+	_float		m_fBloodCreateTime = 0.f;
 	INSTANTIMPACT	m_tImpact = {};
 
 
@@ -143,9 +143,9 @@ private:
 	_float		m_fHurtTimer = 0.f;			// 피격 쿨타임 시간 재는용
 
 
-	//--------------------------------------------------
-	// 애니메이션
-	//--------------------------------------------------
+											//--------------------------------------------------
+											// 애니메이션
+											//--------------------------------------------------
 	_int		m_iAnimStep = 0;
 	_float		m_fAnimTimer = 0.f;
 };

@@ -25,7 +25,7 @@ class CStump final : public CGameObject
 		STUMP_LEG4,
 		STUMP_END
 	};
-	enum STATE { IDLE, MOVE, ATTACK , ATTACK1 };
+	enum STATE { IDLE, MOVE, ATTACK, ATTACK1 };
 
 private:
 	explicit CStump(LPDIRECT3DDEVICE9 _pDevice);
@@ -61,7 +61,7 @@ private:
 
 
 
-	\
+
 	HRESULT Update_Animation(_float _fDeltaTime);
 	HRESULT Update_Animation_Move(_float _fDeltaTime);
 	HRESULT Update_Animation_Attack(_float _fDeltaTime);
@@ -70,7 +70,7 @@ private:
 	HRESULT Anim_Reset_Attack();
 	HRESULT Spawn_Acorn(const wstring& LayerTag, _uint _iCount);
 	HRESULT Spawn_StumpImpact(const wstring& LayerTag);
-
+	HRESULT Make_Rubble();
 	void Update_AttackDelay(_float _fDeltaTime);
 	void Update_HurtDelay(_float _fDeltaTime);
 
@@ -96,9 +96,9 @@ private:
 	_float		m_fAttackDistance = 4.f;	// 공격 가능한 거리
 
 
-	//--------------------------------------------------
-	// 공격
-	//--------------------------------------------------
+											//--------------------------------------------------
+											// 공격
+											//--------------------------------------------------
 	_bool		m_bCanAttack = true;		// 공격 가능 or 불가능
 	_float		m_fAttackDelay = 10.f;		// 공격 가능한 딜레이
 	_float		m_fAttackTimer = 0.f;		// 공격 쿨타임 시간 재는용
@@ -115,9 +115,9 @@ private:
 	_float		m_fHurtTimer = 0.f;			// 피격 쿨타임 시간 재는용
 
 
-	//--------------------------------------------------
-	// 애니메이션
-	//--------------------------------------------------
+											//--------------------------------------------------
+											// 애니메이션
+											//--------------------------------------------------
 	_int		m_iAnimationStep = 0;
 	_float		m_fAnimationTimer = 0.f;
 	_float		m_fAnimationSpeed = 1.9f;
