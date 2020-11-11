@@ -44,6 +44,8 @@
 #include "Bomb_Residue.h"
 #include "Blood.h"
 #include "Dash_Piece.h"
+#include "Golem_Dash.h"
+#include "Golem_Piece.h"
 #pragma endregion
 
 USING(Client)
@@ -564,6 +566,11 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Golem_Dash
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Golem_Dash", CGolem_Dash::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region Component_Texture_GolemBody
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_BossBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/BossBody%d.dds"))))
 		return E_FAIL;
@@ -586,6 +593,11 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 
 #pragma region GameObject_Bomb_Residue
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Bomb_Residue", CBomb_Residue::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Bomb_Residue
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_Bomb_Residue", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Bomb_Residue/Bomb_Residue%d.dds", 4))))
 		return E_FAIL;
 #pragma endregion
 
@@ -624,7 +636,15 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Component_Texture_Golem_Dash
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_Golem_Dash", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Dash%d.dds"))))
+		return E_FAIL;
+#pragma endregion
 
+#pragma region GameObject_Golem_Piece
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Golem_Piece", CGolem_Piece::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region GameObject_CubeTerrain
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_CubeTerrain", CCubeTerrain::Create(m_pDevice))))

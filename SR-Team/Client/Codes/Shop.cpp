@@ -17,7 +17,7 @@ CShop::CShop(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFon
 		m_pTextureCom[i] = nullptr;
 	}
 
-	for (_uint i = 0; i < 16; ++i)
+	for (_uint i = 0; i < 18; ++i)
 	{
 		m_pItemTransformCom[i] = nullptr;
 		m_pItemTextureCom[i] = nullptr;
@@ -51,7 +51,7 @@ HRESULT CShop::Setup_GameObject_Prototype()
 
 HRESULT CShop::Setup_GameObject(void * pArg)
 {
-	m_vShopItem.reserve(10);
+	m_vShopItem.reserve(18);
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
@@ -74,7 +74,7 @@ HRESULT CShop::Setup_GameObject(void * pArg)
 			m_vItemTexturePos[j][i].y = (j * 213.f) + 156.f;
 			m_vItemTexturePos[j][i].z = 0.f;
 
-			if (iIndex < 16)
+			if (iIndex < 18)
 			{
 				m_pItemTransformCom[iIndex]->Set_Position(m_vItemTexturePos[j][i]);
 			}
@@ -89,7 +89,7 @@ HRESULT CShop::Setup_GameObject(void * pArg)
 		for (_uint i = 0; i < 4; ++i)
 		{
 			iIndex = j * 4 + i;
-			if (iIndex >= 16)
+			if (iIndex >= 18)
 				return S_OK;
 			m_tItemTextureRt[j][i].left = (LONG)(m_vItemTexturePos[j][i].x - 20.f);
 			m_tItemTextureRt[j][i].right = (LONG)(m_vItemTexturePos[j][i].x + 20.f);
@@ -124,7 +124,7 @@ int CShop::Update_GameObject(float DeltaTime)
 		{
 			m_pTransformCom[i]->Update_Transform();
 		}
-		for (_uint i = 0; i < 15; ++i)
+		for (_uint i = 0; i < 18; ++i)
 		{
 			m_pItemTransformCom[i]->Update_Transform();
 		}
@@ -313,7 +313,7 @@ HRESULT CShop::Add_Component_ShopItem()
 	if (pOrigin == nullptr)
 		return E_FAIL;
 
-	for (_uint i = 0; i < 16; ++i)
+	for (_uint i = 0; i < 18; ++i)
 	{
 		// Transform-----------------------------------------------------------------
 		TCHAR szItemTransform[MAX_STR] = L"";
@@ -423,6 +423,18 @@ HRESULT CShop::Add_Component_ShopItem()
 				L"%s", L"flower");
 			wsprintf(szItemTextureName, L"Component_Texture_FlowerQuest_Flower");
 		}
+		else if (i == 16)
+		{
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"ForgottenNecklace");
+			wsprintf(szItemTextureName, L"Component_Texture_Item_ForgottenNecklace");
+		}
+		else if (i == 17)
+		{
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"LethalCape");
+			wsprintf(szItemTextureName, L"Component_Texture_Item_LethalCape");
+		}
 		pOrigin->Get_ItemInfo(pItem->szItemTag, *pItem);
 		//m_pItemTextureCom[i] = pOrigin->Get_ItemInfo_Texture(pItem->szItemTag);
 		m_vShopItem.emplace_back(pItem);
@@ -451,7 +463,7 @@ HRESULT CShop::Render_ShopItem()
 		for (_uint i = 0; i < 4; ++i)
 		{
 			iIndex = j * 4 + i;
-			if (iIndex >= 16)
+			if (iIndex >= 18)
 				return S_OK;
 
 			// 아이템 이미지--------------------------------------------------------------------------------------
@@ -562,7 +574,7 @@ void CShop::Free()
 	}
 	
 
-	for (_uint i = 0; i < 16; ++i)
+	for (_uint i = 0; i < 18; ++i)
 	{
 		Safe_Release(m_pItemTransformCom[i]);
 		Safe_Release(m_pItemTextureCom[i]);

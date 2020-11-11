@@ -158,6 +158,27 @@ HRESULT CGolem_Impact::Add_Component()
 	m_matGolemRot._31 = GolemWorld._31;
 	m_matGolemRot._33 = GolemWorld._33;
 
+
+	INSTANTIMPACT tImpact = {};
+
+	if (m_tInstant.fOption != 0.f)
+	{
+		for (_uint j = 0; j < 32; j++)
+		{
+				_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
+
+				tImpact.vPosition = m_pTransformCom->Get_Desc().vPosition;
+				tImpact.vDirection = RandomPostionSelect;
+				tImpact.vOption = RandomPostionSelect + m_pTransformCom->Get_Desc().vPosition;
+
+				if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Bomb_Residue", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
+				{
+					PRINT_LOG(L"Failed To Spawn MeteorPiece", LOG::DEBUG);
+					return false;
+				}
+		}
+	}
+
 	return S_OK;
 }
 

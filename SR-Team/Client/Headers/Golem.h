@@ -44,6 +44,7 @@ public:
 	virtual void Free() override;
 	static  CGolem* Create(LPDIRECT3DDEVICE9 _pDevice);
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
+	HRESULT Make_DashPaticle();
 private:
 	HRESULT Add_Component();
 	HRESULT Add_Component_VIBuffer();
@@ -75,11 +76,10 @@ private:
 	void Update_AttackDelay(_float _fDeltaTime);
 	void Update_HurtDelay(_float _fDeltaTime);
 
-	HRESULT Spawn_GolemImpact();
+	HRESULT Spawn_GolemImpact(_uint iOption = 0);
 	HRESULT Spawn_Bomb();
 	HRESULT Spawn_MonSub();
 
-	HRESULT Make_Pieces();
 
 	HRESULT Create_MiniGolem();
 	//	HRESULT Spawn_Fire();
@@ -153,6 +153,7 @@ private:
 	_float			m_fMoveSpeed = 2.f;
 	_bool			m_bMiniGolem_SetPosition = false;
 	_bool			m_OneCheck = false;
+	_float			m_fDashPaticle_CreateTime = 0.f;
 };
 
 END

@@ -278,7 +278,7 @@ HRESULT CMonSub::Move(_float _fDeltaTime)
 		}
 		else if (m_bMoveOn)
 		{
-			vMonsterPos += vDir * _fDeltaTime;
+			vMonsterPos += vDir * (_fDeltaTime * 2.5f);
 			m_pTransformCom[MONSUB_BASE]->Set_Position(vMonsterPos);
 		}
 	}

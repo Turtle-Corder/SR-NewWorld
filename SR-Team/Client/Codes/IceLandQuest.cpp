@@ -146,11 +146,11 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 		break;
 
 	case ICEQUEST_ON_THE_QUEST:
-		if (10 == m_iMonsetDeadCnt)
+		if (5 == m_iMonsetDeadCnt)
 			m_bRenderClear = true;
 		if (m_bStartQuest)
 		{
-			if (10 == m_iMonsetDeadCnt)
+			if (5 == m_iMonsetDeadCnt)
 			{
 				m_bClear = true;
 				m_eSituation = ICEQUEST_REWARD;
