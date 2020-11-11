@@ -13,6 +13,7 @@ CItemSlotManager::CItemSlotManager()
 	m_pBluePotion = (CItemSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerItem", 1);
 	m_pRedElixir = (CItemSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerItem", 2);
 	m_pBlueElixir = (CItemSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerItem", 3);
+	m_pQuestPotion = (CItemSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerItem", 4);
 }
 
 CItemSlot * CItemSlotManager::Get_PlayerItem(ePotion_ID ePotionID)
@@ -27,6 +28,8 @@ CItemSlot * CItemSlotManager::Get_PlayerItem(ePotion_ID ePotionID)
 		return m_pBluePotion;
 	case BLUE_ELIXIR:
 		return m_pBlueElixir;
+	case QUEST_POTION:
+		return m_pQuestPotion;
 	default:
 		break;
 	}

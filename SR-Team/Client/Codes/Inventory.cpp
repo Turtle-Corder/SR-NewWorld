@@ -670,7 +670,8 @@ HRESULT CInventory::Check_EquipItem()
 			if (pManagement->Key_Pressing(VK_RBUTTON))
 			{
 				iIndex = i * 6 + j;
-				if (m_bIsItemHere[iIndex] && PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
+				if (m_bIsItemHere[iIndex] && PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()) && 
+					m_pInvenList[iIndex]->eSort != RANDOM_POTION && m_pInvenList[iIndex]->eSort != RANDOM_EQUIP)
 				{
 					_int k = 0;
 					// 아이템이 있는 칸들만 선택 할 수 있음
@@ -686,10 +687,14 @@ HRESULT CInventory::Check_EquipItem()
 			}
 			else if (pManagement->Key_Pressing(VK_LBUTTON) && m_bIsItemHere[iIndex])
 			{
-				if (m_pInvenList[iIndex]->eSort == RANDOM_POTION || m_pInvenList[iIndex]->eSort == RANDOM_EQUIP)
+				iIndex = i * 6 + j;
+				if (PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
 				{
-					if (FAILED(Open_RandomBox(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag)))
-						return E_FAIL;
+					if (m_pInvenList[iIndex]->eSort == RANDOM_POTION || m_pInvenList[iIndex]->eSort == RANDOM_EQUIP)
+					{
+						if (FAILED(Open_RandomBox(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag)))
+							return E_FAIL;
+					}
 				}
 			}
 		}

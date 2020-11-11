@@ -36,6 +36,7 @@ private:
 	CItemSlot*			m_pBluePotion = nullptr;
 	CItemSlot*			m_pRedElixir = nullptr;
 	CItemSlot*			m_pBlueElixir = nullptr;
+	CItemSlot*			m_pQuestPotion = nullptr;
 };
 
 END

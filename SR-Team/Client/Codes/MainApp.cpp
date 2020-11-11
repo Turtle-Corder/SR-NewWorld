@@ -60,6 +60,7 @@
 #include "ItemSlot_BluePotion.h"
 #include "ItemSlot_RedElixir.h"
 #include "ItemSlot_BlueElixir.h"
+#include "ItemSlot_QuestPotion.h"
 
 #include "ItemInventory.h"
 #include "Mouse.h"
@@ -351,6 +352,9 @@ HRESULT CMainApp::Setup_HK()
 		return E_FAIL;
 
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemSlot_BlueElixir", CItemSlot_BlueElixir::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemSlot_QuestPotion", CItemSlot_QuestPotion::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
 #pragma endregion
