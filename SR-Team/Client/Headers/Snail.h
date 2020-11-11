@@ -75,11 +75,11 @@ private:
 
 	_bool			m_bCanHurt = false;
 	_float			m_fHurtTimer = 0.f;
-	_float			m_fHurtDealy = 0.1f;
+	_float			m_fHurtDealy = 0.2f;
 
 	_bool			m_bFlinch = false;
 	_float			m_fFlinchTimer = 0.f;
-	_float			m_fFlinchDealy = 0.1f;
+	_float			m_fFlinchDealy = 0.2f;
 };
 
 END
