@@ -398,10 +398,9 @@ HRESULT CInventory::Render_UI()
 	{
 		if (FAILED(Render_ClearWnd()))
 			return E_FAIL;
+		if (pManagement->Key_Pressing(VK_RETURN))
+			m_bRenderClearWnd = false;
 	}
-
-	if (m_bRenderClearWnd && pManagement->Key_Pressing(VK_RETURN))
-		m_bRenderClearWnd = false;
 
 	if (m_bRender_GetRandomBoxItem)
 	{
@@ -668,10 +667,9 @@ HRESULT CInventory::Check_EquipItem()
 	{
 		for (_uint j = 0; j < 6; j++)
 		{
-			iIndex = i * 6 + j;
 			if (pManagement->Key_Pressing(VK_RBUTTON))
 			{
-		
+				iIndex = i * 6 + j;
 				if (m_bIsItemHere[iIndex] && PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
 				{
 					_int k = 0;

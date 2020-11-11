@@ -37,6 +37,10 @@ _int CSnail_Impact::Update_GameObject(_float _fDeltaTime)
 	if (m_bDead)
 		return GAMEOBJECT::DEAD;
 
+	m_fDeadTime += _fDeltaTime;
+	if (m_fDeadTime >= 1.f)
+		m_bDead = true;
+
 	m_pTransformCom->Update_Transform();
 
 	if (FAILED(m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition)))
@@ -47,40 +51,7 @@ _int CSnail_Impact::Update_GameObject(_float _fDeltaTime)
 
 _int CSnail_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 {
-	m_fDeadTime += _fDeltaTime;
-	if (m_fDeadTime >= 1.f)
-		m_bDead = true;
-
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return GAMEOBJECT::WARN;
-
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
-		return GAMEOBJECT::WARN;
-
 	return GAMEOBJECT::NOEVENT;
-}
-
-HRESULT CSnail_Impact::Render_NoneAlpha()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-	if (nullptr == pCamera)
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->SetTexture(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
-		return E_FAIL;
-
-	return S_OK;
 }
 
 HRESULT CSnail_Impact::Add_Component()
@@ -105,14 +76,6 @@ HRESULT CSnail_Impact::Add_Component()
 	CSphereCollider::COLLIDER_DESC tColDesc;
 	tColDesc.vPosition = tTransformDesc.vPosition;
 	tColDesc.fRadius = 0.7f;
-
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom))) //积己 肮荐
-		return E_FAIL;
-
-
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_SnailHead", L"Com_Texture", (CComponent**)&m_pTextureCom))) ////积己 肮荐
-		return E_FAIL;
-
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
 		return E_FAIL;
@@ -174,8 +137,6 @@ HRESULT CSnail_Impact::Take_Damage(const CComponent * _pDamageComp)
 void CSnail_Impact::Free()
 {
 	Safe_Release(m_pTransformCom);
-	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
