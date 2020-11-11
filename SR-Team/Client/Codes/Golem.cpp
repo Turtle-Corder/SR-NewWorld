@@ -464,7 +464,7 @@ HRESULT CGolem::Update_State()
 			break;
 
 		case CGolem::ATTACK4:
-			m_fAttackDelay = 1.9f;		// 분신 소환
+			m_fAttackDelay = 2.8f;		// 분신 소환
 			break;
 
 		case CGolem::ATTACK6:
@@ -874,7 +874,7 @@ HRESULT CGolem::Spawn_GolemImpact(_uint iOption)
 	tImpact.pStatusComp = m_pStatusCom;
 	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
 	tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
-	tImpact.fOption = iOption;
+	tImpact.fOption = (_float)iOption;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
@@ -937,42 +937,6 @@ HRESULT CGolem::Spawn_MonSub()
 	return S_OK;
 }
 
-<<<<<<< HEAD
-=======
-HRESULT CGolem::Make_Pieces()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	INSTANTIMPACT tImpact = {};
-
-	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
-
-
-	for (_uint i = 0; i < 25; i++)
-	{
-		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
-		_vec3 vGolemLook = _vec3(tImpact.vDirection.x, 0.f, tImpact.vDirection.z);
-		D3DXVec3Normalize(&vGolemLook, &vGolemLook);
-		_vec3 vPosition = { tImpact.vPosition.x , 0.f, tImpact.vPosition.z };
-		vPosition -= vGolemLook * 3.f;
-
-		tImpact.vPosition = vPosition;
-		tImpact.vDirection = RandomPostionSelect;
-		tImpact.vOption = RandomPostionSelect + m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
-
-		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MeteorPiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
-		{
-			PRINT_LOG(L"Failed To Spawn MeteorPieces", LOG::DEBUG);
-			return false;
-		}
-	}
-
-	return S_OK;
-}
-
->>>>>>> a4afe8ce81573c299a816dc408cc9957234e0e9c
 HRESULT CGolem::Create_MiniGolem()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -1088,7 +1052,7 @@ HRESULT CGolem::Make_DashPaticle()
 	
 	for (_int iCnt = 0; iCnt < 6; ++iCnt)
 	{
-		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + _vec3(iCnt - 2 , 0.f , 0.f);
+		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + _vec3((_float)(iCnt - 2) , 0.f , 0.f);
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Dash", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))/*여기 StartPos*/
 			return E_FAIL;
