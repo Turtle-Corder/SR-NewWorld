@@ -28,7 +28,7 @@ HRESULT CBomb_Residue::Setup_GameObject(void * _pArg)
 
 	m_iRandSpeed = rand() % 4 + 1;
 	m_vMoveDir = m_tInstant.vDirection;
-
+	m_iTexture_Number = rand() % 4;
 	return S_OK;
 }
 
@@ -116,9 +116,9 @@ HRESULT CBomb_Residue::Render_NoneAlpha()
 	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->SetTexture(2)))
+	if (FAILED(m_pTextureCom->SetTexture(m_iTexture_Number)))
 		return E_FAIL;
-
+	
 	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
 		return E_FAIL;
 
@@ -147,7 +147,7 @@ HRESULT CBomb_Residue::Add_Component()
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Bomb", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Bomb_Residue", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	// For.Transform

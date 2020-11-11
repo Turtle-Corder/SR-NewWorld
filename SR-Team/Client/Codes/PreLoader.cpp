@@ -596,6 +596,11 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Component_Texture_Bomb_Residue
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_Bomb_Residue", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Bomb_Residue/Bomb_Residue%d.dds", 4))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region Component_Texture_Bomb
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_Bomb", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Bomb/Bomb%d.dds", 3))))
 		return E_FAIL;

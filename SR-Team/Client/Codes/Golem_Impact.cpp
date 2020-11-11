@@ -163,7 +163,7 @@ HRESULT CGolem_Impact::Add_Component()
 
 	if (m_tInstant.fOption != 0.f)
 	{
-		for (_uint j = 0; j < 40; j++)
+		for (_uint j = 0; j < 12; j++)
 		{
 				_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
 
