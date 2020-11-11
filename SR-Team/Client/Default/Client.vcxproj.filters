@@ -787,6 +787,7 @@
       <Filter>02.GameObject\07.UI\99.Title</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Stump_Particle.h">
+      <Filter>02.GameObject\05.Monster\05.Stump\Stump_Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1145,6 +1146,7 @@
       <Filter>02.GameObject\07.UI\99.Title</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Stump_Particle.cpp">
+      <Filter>02.GameObject\05.Monster\05.Stump\Stump_Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
