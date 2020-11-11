@@ -362,16 +362,16 @@ HRESULT CMainQuest::Check_GolemCore_Count()
 		}
 		else if (i == BLUE)
 		{
-			if (1 == pInven->Get_ItemCount(L"GolemCore_Puple"))
+			if (1 == pInven->Get_ItemCount(L"GolemCore_Blue"))
 				m_bGetGolemCore[i] = true;
-			else if (0 == pInven->Get_ItemCount(L"GolemCore_Puple"))
+			else if (0 == pInven->Get_ItemCount(L"GolemCore_Blue"))
 				m_bGetGolemCore[i] = false;
 		}
 		else if (i == PUPLE)
 		{
-			if (1 == pInven->Get_ItemCount(L"GolemCore_Blue"))
+			if (1 == pInven->Get_ItemCount(L"GolemCore_Puple"))
 				m_bGetGolemCore[i] = true;
-			else if (0 == pInven->Get_ItemCount(L"GolemCore_Blue"))
+			else if (0 == pInven->Get_ItemCount(L"GolemCore_Puple"))
 				m_bGetGolemCore[i] = false;
 		}
 
