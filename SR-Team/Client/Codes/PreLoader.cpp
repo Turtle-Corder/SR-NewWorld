@@ -439,6 +439,10 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 
 #pragma region Yeti
 
+#pragma region GameObject_Skybox
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region GameObject_Crack
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Crack", CCrack::Create(m_pDevice))))
@@ -560,6 +564,11 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 		return E_FAIL;
 
 
+
+#pragma region GameObject_Skybox
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region GameObject_Crack
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Crack", CCrack::Create(m_pDevice))))

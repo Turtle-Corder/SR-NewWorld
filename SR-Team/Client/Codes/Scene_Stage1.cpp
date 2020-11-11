@@ -192,13 +192,20 @@ HRESULT CScene_Stage1::Setup_Layer_AllObject()
 
 HRESULT CScene_Stage1::Setup_Layer_Skybox(const wstring & LayerTag)
 {
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
 
 
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Skybox", SCENE_STAGE1, LayerTag)))
-		return E_FAIL;
+	
+		CManagement* pManagement = CManagement::Get_Instance();
+		if (nullptr == pManagement)
+			return E_FAIL;
+		int TextureID = 5;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Skybox", SCENE_STAGE1, LayerTag, &TextureID)))
+			return E_FAIL;
+
+
+	
+
 
 	return S_OK;
 }
