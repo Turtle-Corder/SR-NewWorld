@@ -282,7 +282,7 @@ HRESULT CBomb::Dead_Bomb(_float _fDeltaTime)
 {
 	m_fBombTime += _fDeltaTime;
 
-	if (m_fBombTime >= 0.6f)
+	if (m_fBombTime >= 0.4f)
 	{
 		m_fBombTime = 0.f;
 		++m_iAnimationStep;
@@ -331,13 +331,14 @@ HRESULT CBomb::Make_Bomb_Residue()
 
 	INSTANTIMPACT tImpact;
 
-	for (_uint i = 0; i < 25; i++)
+	for (_uint i = 0; i < 12; i++)
 	{
-		_vec3 RandomPostion = { (_float)(rand() % 30 - 15), 0.f ,(_float)(rand() % 30 - 15) };
+		_vec3 RandomPostion = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
 
 		tImpact.vPosition = m_pTransformCom->Get_Desc().vPosition;
-		_vec3 vDirection = RandomPostion + m_pTransformCom->Get_Desc().vPosition;
-		D3DXVec3Normalize(&tImpact.vDirection, &vDirection);
+		tImpact.vDirection = RandomPostion;
+		tImpact.vOption = RandomPostion + m_pTransformCom->Get_Desc().vPosition;
+	
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Bomb_Residue", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
 			return E_FAIL;
