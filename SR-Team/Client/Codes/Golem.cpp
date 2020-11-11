@@ -955,6 +955,7 @@ HRESULT CGolem::Make_Pieces()
 		}
 	}
 
+	return S_OK;
 }
 
 HRESULT CGolem::Create_MiniGolem()

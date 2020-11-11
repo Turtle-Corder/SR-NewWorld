@@ -338,5 +338,11 @@ enum eRandomBoxChatWnd_ID
 	RANDOMBOX_GET
 };
 
+enum eSceneEventID
+{
+	EVENT_RESET,
+	EVENT_CLEAR,
+	EVNET_TRAVEL,
+};
 
 #endif

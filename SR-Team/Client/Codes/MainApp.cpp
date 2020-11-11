@@ -468,7 +468,12 @@ HRESULT CMainApp::Setup_HK()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Component_Texture_Decal
+#pragma region GameObject_Trigger
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Trigger", CEventTrigger::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Trigger
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Trigger", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/trigger%d.dds"))))
 		return E_FAIL;
 #pragma endregion

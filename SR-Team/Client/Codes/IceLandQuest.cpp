@@ -128,6 +128,8 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 			m_eSituation = ICEQUEST_FINISH;
 			m_bStartQuest = false;
 		}
+
+		pManagement->Set_SceneEvent(eSceneEventID::EVENT_CLEAR);
 		break;
 
 	case ICEQUEST_NO_CLEAR:

@@ -18,6 +18,7 @@ public:
 	virtual HRESULT Setup_Scene() override;
 	virtual _int Update_Scene(_float _fDeltaTime) override;
 	virtual _int LateUpdate_Scene(_float _fDeltaTime) override;
+	virtual HRESULT Set_SceneEvent(_int _iEventNo) override;
 
 public:
 	static CScene_Stage0* Create(LPDIRECT3DDEVICE9 _pDevice);
@@ -34,6 +35,8 @@ private:
 	HRESULT Setup_Layer_FlowerQuest(const wstring& LayerTag);
 	HRESULT Setup_Layer_NPC(const wstring& LayerTag);
 
+	HRESULT Setup_Layer_ActiveObject(const wstring& LayerTag);
+
 	HRESULT Travel_NextLayers();
 	
 	HRESULT Respawn_Palyer();
@@ -44,6 +47,7 @@ private:
 	eSCENE_ID		m_ePreLoadSceneID = SCENE_END;
 
 	_bool			m_bInit = false;
+	_bool			m_bTravel = false;
 };
 
 END
