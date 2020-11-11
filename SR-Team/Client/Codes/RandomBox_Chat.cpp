@@ -305,6 +305,8 @@ HRESULT CRandomBox_Chat::Render_RandomBoxInfo()
 		m_pSprite->Draw(
 			(LPDIRECT3DTEXTURE9)m_pTextureInfo[iIndex]->GetTexture(0),
 			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+		m_bChat = true;
 	}
 
 	return S_OK;
@@ -335,6 +337,8 @@ HRESULT CRandomBox_Chat::Render_ClearWnd()
 
 		if (pManagement->Key_Pressing(VK_RETURN))
 			m_bRenderClearWnd = false;
+
+		m_bChat = false;
 	}
 
 	return S_OK;

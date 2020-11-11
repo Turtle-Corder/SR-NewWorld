@@ -21,6 +21,9 @@ public:
 	virtual ~CRandomBox_Chat() = default;
 
 public:
+	_bool Get_Chat() { return m_bChat; }
+
+public:
 	void Set_StartChat(_bool bStart) { m_bStartChat = bStart; }
 
 public:

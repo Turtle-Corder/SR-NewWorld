@@ -22,6 +22,7 @@
 #include "NpcWnd.h"
 #include "Shop_ChatWnd.h"
 #include "DummyTerrain.h"
+#include "RandomBox_Chat.h"
 #include "..\Headers\Player.h"
 
 USING(Client)
@@ -914,7 +915,7 @@ HRESULT CPlayer::Raycast_OnMonster(_bool * _pFound, CGameObject** _ppObject)
 //----------------------------------------------------------------------------------------------------
 _int CPlayer::Update_UICheck()
 {
-	_bool bFlowerQuest = false, bNpcWnd = false, bMainQuest = false, bIceLandQuest = false, bShopChat = false;
+	_bool bFlowerQuest = false, bNpcWnd = false, bMainQuest = false, bIceLandQuest = false, bShopChat = false, bRandomBoxChat = false;
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -974,10 +975,15 @@ _int CPlayer::Update_UICheck()
 		if (pShopChat == nullptr)
 			return GAMEOBJECT::WARN;
 		bShopChat = pShopChat->Get_Chart();
+
+		CRandomBox_Chat* pRandomBoxChat = (CRandomBox_Chat*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_FlowerQuest", 2);
+		if (pRandomBoxChat == nullptr)
+			return GAMEOBJECT::WARN;
+		bRandomBoxChat = pRandomBoxChat->Get_Chat();
 	}
 
 	if (pInven->Get_Render() || pShop->Get_Render() || pEquip->Get_Render() || pSkill->Get_Render() ||
-		bFlowerQuest || bNpcWnd || bMainQuest || bIceLandQuest || bShopChat)
+		bFlowerQuest || bNpcWnd || bMainQuest || bIceLandQuest || bShopChat || bRandomBoxChat)
 		bShowUI = true;
 	else
 		bShowUI = false;
