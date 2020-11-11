@@ -69,6 +69,7 @@ _int CScene_Stage3::Update_Scene(_float _fDeltaTime)
 			pCubeTerrain->Set_Active();
 		}
 
+		m_bTravel = false;
 		m_bInit = true;
 	}
 

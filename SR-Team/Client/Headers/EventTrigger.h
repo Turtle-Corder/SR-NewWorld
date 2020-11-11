@@ -20,7 +20,7 @@ private:
 	virtual HRESULT Setup_GameObject(void * pArg) override;
 	virtual int Update_GameObject(float DeltaTime) override;
 	virtual int LateUpdate_GameObject(float DeltaTime) override;
-	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Render_BlendAlpha() override;
 
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 

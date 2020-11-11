@@ -106,8 +106,7 @@ public:
 	//--------------------------------------------------
 	HRESULT Change_CurrentScene(_uint _iSceneID, CScene* pCurrentScene);
 	_int Get_CurrentSceneID();
-	CScene* Get_CurrentScene();
-
+	HRESULT Set_SceneEvent(_int _iEventNo);
 
 	//--------------------------------------------------
 	// 오브젝트

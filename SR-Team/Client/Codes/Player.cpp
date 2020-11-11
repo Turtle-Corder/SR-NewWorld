@@ -22,6 +22,7 @@
 #include "NpcWnd.h"
 #include "Shop_ChatWnd.h"
 #include "DummyTerrain.h"
+#include "RandomBox_Chat.h"
 #include "..\Headers\Player.h"
 
 USING(Client)
@@ -238,19 +239,20 @@ HRESULT CPlayer::Render_UI()
 
 HRESULT CPlayer::Take_Damage(const CComponent* _pDamageComp)
 {
+	if (!m_bCanHurt)
+		return S_OK;
+
 	if (!_pDamageComp)
 		return S_OK;
 
 	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
 
-
 	CManagement* pManagement = CManagement::Get_Instance();
-
 	CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 	pMainCamera->Set_Camera_Wigging(0.7f, 70.f, 1.5f, CMainCamera::WIG_TYPE::DAMPED);
 
-	//if (0 >= m_pStatusCom->Get_Status().iHp)
-	//	PRINT_LOG(L"¾Æ¾æ", LOG::CLIENT);
+	if (!m_bFlinch)
+		m_bFlinch = true;
 
 	return S_OK;
 }
@@ -419,7 +421,7 @@ HRESULT CPlayer::Add_Component_Transform()
 	//--------------------------------------------------
 	// HEAD
 	//--------------------------------------------------
-	tTransformDesc[PART_HEAD].vPosition = { 5.f, 5.f, 5.f };
+	tTransformDesc[PART_HEAD].vPosition = { 8.f, 5.f, 8.f };
 	tTransformDesc[PART_HEAD].vScale = { 1.f, 1.f, 1.f };
 	tTransformDesc[PART_HEAD].fSpeedPerSecond = 5.f;
 	tTransformDesc[PART_HEAD].fRotatePerSecond = fRPS_Rad;
@@ -816,7 +818,7 @@ HRESULT CPlayer::Update_Look(_float _fDeltaTime)
 	D3DXVec3Cross(&vLeft, &vLook, &_vec3(0.f, 1.f, 0.f));
 
 	_float fLimit = D3DXVec3Dot(&vLeft, &vPlayerToTarget);
-	if (fabsf(fLimit) < 0.3f)
+	if (fabsf(fLimit) < 0.26f)
 		return S_OK;
 
 	if (fLimit > 0)
@@ -913,7 +915,7 @@ HRESULT CPlayer::Raycast_OnMonster(_bool * _pFound, CGameObject** _ppObject)
 //----------------------------------------------------------------------------------------------------
 _int CPlayer::Update_UICheck()
 {
-	_bool bFlowerQuest = false, bNpcWnd = false, bMainQuest = false, bIceLandQuest = false, bShopChat = false;
+	_bool bFlowerQuest = false, bNpcWnd = false, bMainQuest = false, bIceLandQuest = false, bShopChat = false, bRandomBoxChat = false;
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -973,10 +975,15 @@ _int CPlayer::Update_UICheck()
 		if (pShopChat == nullptr)
 			return GAMEOBJECT::WARN;
 		bShopChat = pShopChat->Get_Chart();
+
+		CRandomBox_Chat* pRandomBoxChat = (CRandomBox_Chat*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_FlowerQuest", 2);
+		if (pRandomBoxChat == nullptr)
+			return GAMEOBJECT::WARN;
+		bRandomBoxChat = pRandomBoxChat->Get_Chat();
 	}
 
 	if (pInven->Get_Render() || pShop->Get_Render() || pEquip->Get_Render() || pSkill->Get_Render() ||
-		bFlowerQuest || bNpcWnd || bMainQuest || bIceLandQuest || bShopChat)
+		bFlowerQuest || bNpcWnd || bMainQuest || bIceLandQuest || bShopChat || bRandomBoxChat)
 		bShowUI = true;
 	else
 		bShowUI = false;
@@ -1078,7 +1085,15 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 	//--------------------------------------------------
 	else if (pManagement->Key_Down(VK_RBUTTON))
 	{
-		// TODO : any..
+		_bool bFound = false;
+		if (FAILED(Raycast_OnTerrain(&bFound, &m_vTargetPos)))
+		{
+			PRINT_LOG(L"Failed To Raycast!", LOG::CLIENT);
+			return GAMEOBJECT::WARN;
+		}
+
+		if (bFound)
+			Update_Look(_fDeltaTime);
 	}
 
 
@@ -1107,7 +1122,7 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 	//--------------------------------------------------
 	// G : Interaction
 	//--------------------------------------------------
-	else if (pManagement->Key_Pressing('G'))
+	else if (pManagement->Key_Down('G'))
 	{
 		m_bInteraction = true;
 	}
@@ -1115,6 +1130,7 @@ _int CPlayer::Update_Input_Action(_float _fDeltaTime)
 	else if (pManagement->Key_Up('G'))
 	{
 		m_bInteraction = false;
+		pManagement->Set_SceneEvent(eSceneEventID::EVENT_RESET);
 	}
 
 	else if (pManagement->Key_Down('H'))

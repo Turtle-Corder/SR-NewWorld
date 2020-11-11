@@ -46,6 +46,9 @@ HRESULT CScene_Room::Setup_Scene()
 	if (FAILED(Setup_Layer_Player(L"Layer_Player")))
 		return E_FAIL;
 
+	if (FAILED(Setup_Layer_ActiveObject(L"Layer_Active")))
+		return E_FAIL;
+
 	//--------------------------------------------------
 	// UI
 	//--------------------------------------------------
@@ -102,10 +105,12 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 			pCubeTerrain->Set_Active();
 		}
 
+		m_pTravelTrigger->Set_Active();
 		m_bInit = true;
 	}
 
-	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
+	if((pManagement->Key_Down(VK_F1) || m_bTravel) && m_pPreLoader->IsFinished())
+//	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
 	{
 		CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_Player");
 		if (nullptr == pPlayer)
@@ -144,7 +149,36 @@ _int CScene_Room::Update_Scene(_float _fDeltaTime)
 
 _int CScene_Room::LateUpdate_Scene(_float _fDeltaTime)
 {
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return -1;
+
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_ROOM, L"Layer_Player", L"Layer_Active", L"Com_Collider", L"Com_DmgInfo")))
+		return -1;
+
 	return GAMEOBJECT::NOEVENT;
+}
+
+HRESULT CScene_Room::Set_SceneEvent(_int _iEventNo)
+{
+	switch ((eSceneEventID)_iEventNo)
+	{
+	case eSceneEventID::EVENT_RESET:
+		m_bTravel = false;
+		break;
+
+	case eSceneEventID::EVENT_CLEAR:
+		break;
+
+	case eSceneEventID::EVNET_TRAVEL:
+		m_bTravel = true;
+		break;
+
+	default:
+		break;
+	}
+
+	return S_OK;
 }
 
 CScene_Room * CScene_Room::Create(LPDIRECT3DDEVICE9 _pDevice)
@@ -359,6 +393,23 @@ HRESULT CScene_Room::SetUp_Layer_MainQuest(const wstring & LayerTag)
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MainQuest", SCENE_ROOM, LayerTag)))
 		return E_FAIL;
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_NpcWnd", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Room::Setup_Layer_ActiveObject(const wstring& LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	EVENT_INFO tEventInfo;
+	tEventInfo.iEventNo = eSceneEventID::EVNET_TRAVEL;
+	tEventInfo.vSpawnPos = { 26.f, 2.5f, 2.5f };
+	tEventInfo.iFloatOption = 0;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(&m_pTravelTrigger, SCENE_STATIC, L"GameObject_Trigger", SCENE_ROOM, LayerTag, &tEventInfo)))
 		return E_FAIL;
 
 	return S_OK;

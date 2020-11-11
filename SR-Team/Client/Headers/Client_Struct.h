@@ -94,6 +94,7 @@ typedef struct tagEventInfo
 {
 	_vec3 vSpawnPos;
 	_int iEventNo;
+	_int iFloatOption;
 } EVENT_INFO;
 
 //----------------------------

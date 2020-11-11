@@ -174,8 +174,10 @@ HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 		if (nullptr == pManagement)
 			return E_FAIL;
 
-		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_DropItem", &tBoxInfo)))
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_Active", &tBoxInfo)))
 			return E_FAIL;
+
+		pManagement->Set_SceneEvent(eSceneEventID::EVENT_CLEAR);
 
 		m_bDead = true;
 	}

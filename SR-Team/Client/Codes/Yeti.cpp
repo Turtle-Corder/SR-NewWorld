@@ -150,30 +150,30 @@ HRESULT CYeti::Add_Component()
 	// For.Com_Texture
 	for (int iCnt = YETI_BASE; iCnt < YETI_END; ++iCnt)
 	{
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_VIBuffer%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_VIBuffer%d", iCnt);
 
 		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", szName, (CComponent**)&m_pVIBufferCom[iCnt]))) //생성 갯수
 			return E_FAIL;
 
 		//경우마다 그거에 맞게 복사해서 최종적으로 문자열 들어가게만들기
 		if(iCnt == YETI_BASE)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiBody");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiBody");
 		else if (iCnt == YETI_CENTER)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiBody");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiBody");
 		else if (iCnt == YETI_BODY)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiBody");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiBody");
 		else if (iCnt == YETI_HEAD)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiHead");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiHead");
 		else if (iCnt == YETI_LEFT)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_RIGHT)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_LEFTLEG)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_RIGHTLEG)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiPart");
 
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_Texture%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_Texture%d", iCnt);
 
 		if (FAILED(CGameObject::Add_Component(SCENE_ICELAND, szPartName, szName, (CComponent**)&m_pTextureCom[iCnt]))) ////생성 갯수
 			return E_FAIL;
@@ -235,7 +235,7 @@ HRESULT CYeti::Add_Component()
 		}
 
 
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_Transform%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_Transform%d", iCnt);
 
 		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", szName, (CComponent**)&m_pTransformCom[iCnt], &tTransformDesc[iCnt]))) ////생성 갯수
 			return E_FAIL;

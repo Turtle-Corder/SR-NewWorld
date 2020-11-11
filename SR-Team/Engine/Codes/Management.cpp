@@ -414,12 +414,12 @@ _int CManagement::Get_CurrentSceneID()
 	return m_pScene_Manager->Get_CurrentSceneID();
 }
 
-CScene * CManagement::Get_CurrentScene()
+HRESULT CManagement::Set_SceneEvent(_int _iEventNo)
 {
-	if(nullptr == m_pScene_Manager)
-		return nullptr;
+	if (nullptr == m_pScene_Manager)
+		return E_FAIL;
 
-	return m_pScene_Manager->GetCurrentScene();
+	return m_pScene_Manager->Set_SceneEvent(_iEventNo);
 }
 
 CGameObject * CManagement::Get_GameObject(_int _iSceneID, const wstring & _strLayerTag, _uint _iIndex)

@@ -937,6 +937,42 @@ HRESULT CGolem::Spawn_MonSub()
 	return S_OK;
 }
 
+<<<<<<< HEAD
+=======
+HRESULT CGolem::Make_Pieces()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact = {};
+
+	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
+
+
+	for (_uint i = 0; i < 25; i++)
+	{
+		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
+		_vec3 vGolemLook = _vec3(tImpact.vDirection.x, 0.f, tImpact.vDirection.z);
+		D3DXVec3Normalize(&vGolemLook, &vGolemLook);
+		_vec3 vPosition = { tImpact.vPosition.x , 0.f, tImpact.vPosition.z };
+		vPosition -= vGolemLook * 3.f;
+
+		tImpact.vPosition = vPosition;
+		tImpact.vDirection = RandomPostionSelect;
+		tImpact.vOption = RandomPostionSelect + m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MeteorPiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
+		{
+			PRINT_LOG(L"Failed To Spawn MeteorPieces", LOG::DEBUG);
+			return false;
+		}
+	}
+
+	return S_OK;
+}
+
+>>>>>>> a4afe8ce81573c299a816dc408cc9957234e0e9c
 HRESULT CGolem::Create_MiniGolem()
 {
 	CManagement* pManagement = CManagement::Get_Instance();

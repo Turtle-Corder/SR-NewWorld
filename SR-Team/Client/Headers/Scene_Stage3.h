@@ -51,6 +51,7 @@ private:
 	CPreLoader* m_pPreLoader = nullptr;
 
 	_bool		m_bInit = false;
+	_bool		m_bTravel = false;
 };
 
 END

@@ -108,16 +108,16 @@ HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
 	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
 	if (0 >= m_pStatusCom->Get_Status().iHp)
 	{
-		// 처치한 몬스터 수 증가
-		CManagement* pManagement = CManagement::Get_Instance();
-		if (nullptr == pManagement)
-			return E_FAIL;
-		CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_IceLandQuest", 0);
-		if (pIceLandQuest == nullptr)
-			return E_FAIL;
+		// 처치한 몬스터 수 증가 -> 예티만 카운팅하자
+		//CManagement* pManagement = CManagement::Get_Instance();
+		//if (nullptr == pManagement)
+		//	return E_FAIL;
+		//CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_IceLandQuest", 0);
+		//if (pIceLandQuest == nullptr)
+		//	return E_FAIL;
 
-		if (pIceLandQuest->Get_StartDeadCnt())
-			pIceLandQuest->Dead_Monster();
+		//if (pIceLandQuest->Get_StartDeadCnt())
+		//	pIceLandQuest->Dead_Monster();
 
 		m_bDead = true;
 	}
@@ -200,6 +200,7 @@ HRESULT CWolf::Add_Component_Transform()
 	CTransform::TRANSFORM_DESC tTransformDesc[WOLF_END];
 	tTransformDesc[WOLF_BASE].vPosition = {};
 	tTransformDesc[WOLF_BASE].vScale = { 1.f , 1.f , 1.f };
+	tTransformDesc[WOLF_BASE].vRotate = { 0.f, D3DXToRadian(180.f), 0.f };
 
 	tTransformDesc[WOLF_BODY].vPosition = { 0.f , 0.9f, -0.6f };
 	tTransformDesc[WOLF_BODY].vScale = { 0.7f , 0.9f , 1.5f };

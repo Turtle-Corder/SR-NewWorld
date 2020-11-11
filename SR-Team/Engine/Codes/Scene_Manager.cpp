@@ -18,6 +18,14 @@ CScene * CScene_Manager::GetCurrentScene()
 	return m_pCurrentScene;
 }
 
+HRESULT CScene_Manager::Set_SceneEvent(_int _iEventNo)
+{
+	if (nullptr == m_pCurrentScene)
+		return E_FAIL;
+
+	return m_pCurrentScene->Set_SceneEvent(_iEventNo);
+}
+
 HRESULT CScene_Manager::Change_CurrentScene(_int _iSceneID, CScene * pCurrentScene)
 {
 	if (nullptr == pCurrentScene)
