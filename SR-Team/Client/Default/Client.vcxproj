@@ -182,6 +182,7 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
     <ClInclude Include="..\Headers\ItemSlot_BluePotion.h" />
     <ClInclude Include="..\Headers\Bomb.h" />
+    <ClInclude Include="..\Headers\ItemSlot_QuestPotion.h" />
     <ClInclude Include="..\Headers\MainQuest.h" />
     <ClInclude Include="..\Headers\MainQuest_NPC.h" />
     <ClInclude Include="..\Headers\MeteorPiece.h" />
@@ -306,6 +307,7 @@
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BluePotion.cpp" />
     <ClCompile Include="..\Codes\Bomb.cpp" />
+    <ClCompile Include="..\Codes\ItemSlot_QuestPotion.cpp" />
     <ClCompile Include="..\Codes\MainQuest.cpp" />
     <ClCompile Include="..\Codes\MainQuest_NPC.cpp" />
     <ClCompile Include="..\Codes\MeteorPiece.cpp" />

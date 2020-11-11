@@ -430,6 +430,7 @@ HRESULT CDataManager::Add_Component_Item()
 		{
 			pItem->iPrice = 100;
 			pItem->eSort = eITEM_SORT::POTION;
+			pItem->ePotionID = QUEST_POTION;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
 				L"%s", L"RewardPotion");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),

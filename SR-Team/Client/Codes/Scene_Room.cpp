@@ -381,6 +381,9 @@ HRESULT CScene_Room::Setup_Layer_PlayerItem(const wstring & LayerTag)
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ItemSlot_BlueElixir", SCENE_ROOM, LayerTag)))
 		return E_FAIL;
 
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_ItemSlot_QuestPotion", SCENE_ROOM, LayerTag)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
