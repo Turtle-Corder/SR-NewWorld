@@ -260,10 +260,12 @@
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\Stump.h" />
     <ClInclude Include="..\Headers\Stump_Impact.h" />
+    <ClInclude Include="..\Headers\Stump_Particle.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
     <ClInclude Include="..\Headers\TerrainBundle.h" />
     <ClInclude Include="..\Headers\ThunderBox.h" />
     <ClInclude Include="..\Headers\Thunder.h" />
+    <ClInclude Include="..\Headers\Title.h" />
     <ClInclude Include="..\Headers\Tree.h" />
     <ClInclude Include="..\Headers\VIBuffer_Flower.h" />
     <ClInclude Include="..\Headers\VIBuffer_Pyramid.h" />
@@ -379,10 +381,12 @@
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\Stump.cpp" />
     <ClCompile Include="..\Codes\Stump_Impact.cpp" />
+    <ClCompile Include="..\Codes\Stump_Particle.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainBundle.cpp" />
     <ClCompile Include="..\Codes\ThunderBox.cpp" />
     <ClCompile Include="..\Codes\Thunder.cpp" />
+    <ClCompile Include="..\Codes\Title.cpp" />
     <ClCompile Include="..\Codes\Tree.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_Flower.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_Pyramid.cpp" />

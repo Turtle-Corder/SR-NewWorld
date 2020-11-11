@@ -76,6 +76,7 @@
 #include "DamageFloater.h"
 #include "RandomBox_Chat.h"
 #include "EventTrigger.h"
+#include "Title.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -662,6 +663,16 @@ HRESULT CMainApp::Setup_YJ()
 
 #pragma region GameObject_Wand
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Wand", CWand::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Title
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Title", CTitle::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Title
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Title", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE, L"../Resources/2DResource/Title%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
