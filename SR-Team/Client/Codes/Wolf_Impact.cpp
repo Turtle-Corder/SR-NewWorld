@@ -52,8 +52,6 @@ _int CWolf_Impact::Update_GameObject(_float _fDeltaTime)
 
 _int CWolf_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 {
-
-
 	return GAMEOBJECT::NOEVENT;
 }
 

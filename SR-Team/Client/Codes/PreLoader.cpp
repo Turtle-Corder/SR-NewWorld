@@ -46,6 +46,7 @@
 #include "Dash_Piece.h"
 #include "Golem_Dash.h"
 #include "Golem_Piece.h"
+#include "Stump_Particle.h"
 #pragma endregion
 
 USING(Client)
@@ -366,6 +367,11 @@ HRESULT CPreLoader::Load_Resources_Forest()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Stump_Particle
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Stump_Particle", CStump_Particle::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region GameObject_Stump_Impact
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_FOREST, L"GameObject_Stump_Impact", CStump_Impact::Create(m_pDevice))))
 		return E_FAIL;
@@ -393,6 +399,11 @@ HRESULT CPreLoader::Load_Resources_Forest()
 
 #pragma region Component_Texture_AcornExplosion
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_AcornExplosion", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Stone%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Stump_Particle
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Stump_Particle", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Bomb_Residue/Bomb_Residue%d.dds", 4))))
 		return E_FAIL;
 #pragma endregion
 

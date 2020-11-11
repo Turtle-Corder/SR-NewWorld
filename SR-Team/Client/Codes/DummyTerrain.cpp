@@ -49,14 +49,16 @@ _int CDummyTerrain::LateUpdate_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
 
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
-		return GAMEOBJECT::WARN;
+	//if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
+	//	return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
 }
 
 HRESULT CDummyTerrain::Render_NoneAlpha()
 {
+	return S_OK;
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;

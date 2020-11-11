@@ -2,6 +2,7 @@
 #include "PreLoader.h"
 #include "Scene_Room.h"
 #include "CubeTerrain.h"
+#include "Sound_Manager.h"
 #include "..\Headers\Scene_Logo.h"
 
 USING(Client)
@@ -21,6 +22,15 @@ HRESULT CScene_Logo::Setup_Scene()
 		PRINT_LOG(L"Failed To PreLoader Create in CScene_Logo", LOG::CLIENT);
 		return E_FAIL;
 	}
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_Title", SCENE_LOGO, L"Layer_Background")))
+		return E_FAIL;
+
+	CSoundManager::Get_Instance()->PlayBGM(L"title.wav");
 
 	return S_OK;
 }
