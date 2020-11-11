@@ -264,6 +264,7 @@
     <ClInclude Include="..\Headers\TerrainBundle.h" />
     <ClInclude Include="..\Headers\ThunderBox.h" />
     <ClInclude Include="..\Headers\Thunder.h" />
+    <ClInclude Include="..\Headers\Title.h" />
     <ClInclude Include="..\Headers\Tree.h" />
     <ClInclude Include="..\Headers\VIBuffer_Flower.h" />
     <ClInclude Include="..\Headers\VIBuffer_Pyramid.h" />
@@ -383,6 +384,7 @@
     <ClCompile Include="..\Codes\TerrainBundle.cpp" />
     <ClCompile Include="..\Codes\ThunderBox.cpp" />
     <ClCompile Include="..\Codes\Thunder.cpp" />
+    <ClCompile Include="..\Codes\Title.cpp" />
     <ClCompile Include="..\Codes\Tree.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_Flower.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_Pyramid.cpp" />

@@ -409,6 +409,9 @@
     <Filter Include="02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\04.Piece">
       <UniqueIdentifier>{61abab10-2afb-4016-8f36-998670a9799f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.UI\99.Title">
+      <UniqueIdentifier>{c89ecbaa-db6d-4287-aa48-edc7e05e6d50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -777,6 +780,9 @@
     <ClInclude Include="..\Headers\Golem_Piece.h">
       <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\04.Piece</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Title.h">
+      <Filter>02.GameObject\07.UI\99.Title</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1129,6 +1135,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Golem_Piece.cpp">
       <Filter>02.GameObject\05.Monster\03.Semi_Boss%28Golem%29\04.Piece</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Title.cpp">
+      <Filter>02.GameObject\07.UI\99.Title</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
