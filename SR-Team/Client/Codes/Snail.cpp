@@ -578,7 +578,10 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 	if (!m_bCanHurt)
 		return S_OK;
 
-	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+	_float fElementalRate = 1.f;
+
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Att();
+	// todo : 위 부분 다 변경하기, 이펙트 사운드 적용하기
 
 	m_pStatusCom->Set_HP(iAtk);
 	if (0 >= m_pStatusCom->Get_Status().iHp)
