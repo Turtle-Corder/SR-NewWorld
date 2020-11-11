@@ -74,8 +74,18 @@ int CSnail::LateUpdate_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return 0;
 
+	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
+
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return 0;
+	}
+
 
 	return GAMEOBJECT::NOEVENT;
 
@@ -97,6 +107,34 @@ HRESULT CSnail::Render_NoneAlpha()
 			return E_FAIL;
 
 		if (FAILED(m_pTextureCom[iAll]->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CSnail::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_int iAll = 0; iAll < SNAIL_END; ++iAll)
+	{
+		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
 			return E_FAIL;
 
 		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
@@ -165,7 +203,7 @@ HRESULT CSnail::Add_Component()
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
 	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
+	tStat.iHp = 1000000;			tStat.iMp = 100;
 	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
@@ -187,6 +225,9 @@ HRESULT CSnail::Add_Component()
 	tDmgInfo.eType = eELEMENTAL_TYPE::NONE;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -456,6 +497,32 @@ HRESULT CSnail::Make_DashPaticle()
 	return S_OK;
 }
 
+void CSnail::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
+		}
+	}
+}
+
+void CSnail::Update_HurtDelay(_float _fDeltaTime)
+{
+	if (!m_bCanHurt)
+	{
+		m_fHurtTimer += _fDeltaTime;
+		if (m_fHurtTimer >= m_fHurtDealy)
+		{
+			m_fHurtTimer = 0.f;
+			m_bCanHurt = true;
+		}
+	}
+}
+
 CSnail* CSnail::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
 	if (nullptr == _pDevice)
@@ -494,6 +561,7 @@ void CSnail::Free()
 		Safe_Release(m_pTextureCom[iAll]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -503,23 +571,38 @@ void CSnail::Free()
 
 HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 {
-	m_bDead = true;
+	//m_bDead = true;
+	//((CDamageInfo*)_pDamageComp)->Get_Desc().pOwner;
 
-	//if (!_pDamageComp)
-	//	return S_OK;
-	////((CDamageInfo*)_pDamageComp)->Get_Desc().pOwner;
-	//if (!m_bTakeCheckOnece)
-	//{
-	//	m_bTakeCheckOnece = true;
-	//	m_eCurState = CSnail::IDLE;
-	//}
+	if (!_pDamageComp)
+		return S_OK;
 
-	//m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	if (!m_bCanHurt)
+		return S_OK;
 
-	//if (0 >= m_pStatusCom->Get_Status().iHp)
-	//{
-	//	m_bDead = true;
-	//}
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+
+	m_pStatusCom->Set_HP(iAtk);
+	if (0 >= m_pStatusCom->Get_Status().iHp)
+		m_bDead = true;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition + (vAddPos * 2.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	m_bCanHurt = false;
+	m_bFlinch = true;
 	return S_OK;
 }
 

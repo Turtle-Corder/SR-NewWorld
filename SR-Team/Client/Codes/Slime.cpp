@@ -42,7 +42,6 @@ HRESULT CSlime::Setup_GameObject(void * pArg)
 
 _int CSlime::Update_GameObject(_float _fDeltaTime)
 {
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
@@ -98,6 +97,9 @@ _int CSlime::LateUpdate_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return 0;
 
+	Update_FlinchDelay(_fDeltaTime);
+	Update_HurtDelay(_fDeltaTime);
+
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
 
@@ -120,8 +122,16 @@ HRESULT CSlime::Render_BlendAlpha()
 	if (FAILED(m_pVIBufferCom[SLIME_JELLY]->Set_Transform(&m_pTransformCom[SLIME_JELLY]->Get_Desc().matWorld, pCamera)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->SetTexture(SLIME_JELLY)))
-		return E_FAIL;
+	if (m_bFlinch)
+	{
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(m_pTextureCom->SetTexture(SLIME_JELLY)))
+			return E_FAIL;
+	}
 
 	if (FAILED(m_pVIBufferCom[SLIME_JELLY]->Render_VIBuffer()))
 		return E_FAIL;
@@ -153,15 +163,35 @@ HRESULT CSlime::Render_NoneAlpha()
 
 HRESULT CSlime::Take_Damage(const CComponent * _pDamageComp)
 {
+	if (!m_bCanHurt)
+		return S_OK;
+
 	if (!_pDamageComp)
 		return S_OK;
 
-	//m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
 
-	//if (0 >= m_pStatusCom->Get_Status().iHp)
-	//{
+	m_pStatusCom->Set_HP(iAtk);
+	if (0 >= m_pStatusCom->Get_Status().iHp)
 		m_bDead = true;
-	//}
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[SLIME_JELLY]->Get_Desc().vPosition + (vAddPos * 2.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	m_bCanHurt = false;
+	m_bFlinch = true;
 
 	return S_OK;
 }
@@ -169,9 +199,6 @@ HRESULT CSlime::Take_Damage(const CComponent * _pDamageComp)
 HRESULT CSlime::Add_Component()
 {
 	m_iCurCount = m_tSlimeInfo.iCurCount;
-
-
-
 
 	CTransform::TRANSFORM_DESC tTransformDesc[SLIME_END];
 
@@ -202,7 +229,7 @@ HRESULT CSlime::Add_Component()
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
 	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
+	tStat.iHp = 100000;			tStat.iMp = 100;
 	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
@@ -239,6 +266,9 @@ HRESULT CSlime::Add_Component()
 		return E_FAIL;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tCollDesc)))
+		return E_FAIL;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -459,6 +489,7 @@ void CSlime::Free()
 	}
 
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -569,6 +600,32 @@ HRESULT CSlime::Move(_float _fDeltaTime)
 	}
 
 	return S_OK;
+}
+
+void CSlime::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
+		}
+	}
+}
+
+void CSlime::Update_HurtDelay(_float _fDeltaTime)
+{
+	if (!m_bCanHurt)
+	{
+		m_fHurtTimer += _fDeltaTime;
+		if (m_fHurtTimer >= m_fHurtDealy)
+		{
+			m_fHurtTimer = 0.f;
+			m_bCanHurt = true;
+		}
+	}
 }
 
 HRESULT CSlime::Update_State()

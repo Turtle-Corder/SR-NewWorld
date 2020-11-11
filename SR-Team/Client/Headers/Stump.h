@@ -40,6 +40,7 @@ public:
 
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Render_BlendAlpha() override;
 
 	virtual void Free() override;
 	static  CStump* Create(LPDIRECT3DDEVICE9 _pDevice);
@@ -73,6 +74,7 @@ private:
 	HRESULT Make_Rubble();
 	void Update_AttackDelay(_float _fDeltaTime);
 	void Update_HurtDelay(_float _fDeltaTime);
+	void Update_FlinchDelay(_float _fDeltaTime);
 
 private:
 	CVIBuffer*			m_pVIBufferCom[STUMP_END] = {};
@@ -96,9 +98,9 @@ private:
 	_float		m_fAttackDistance = 4.f;	// 공격 가능한 거리
 
 
-											//--------------------------------------------------
-											// 공격
-											//--------------------------------------------------
+	//--------------------------------------------------
+	// 공격
+	//--------------------------------------------------
 	_bool		m_bCanAttack = true;		// 공격 가능 or 불가능
 	_float		m_fAttackDelay = 10.f;		// 공격 가능한 딜레이
 	_float		m_fAttackTimer = 0.f;		// 공격 쿨타임 시간 재는용
@@ -107,17 +109,22 @@ private:
 	_bool		m_bSpawnImpact = false;
 
 	_float		m_fDistance = 0.f;
+
 	//--------------------------------------------------
 	// 피격
 	//--------------------------------------------------
 	_bool		m_bCanHurt = true;			// 피격 가능 or 불가능
-	_float		m_fHurtDelay = 3.f;			// 피격 가능한 딜레이
+	_float		m_fHurtDelay = 0.1f;		// 피격 가능한 딜레이
 	_float		m_fHurtTimer = 0.f;			// 피격 쿨타임 시간 재는용
 
+	CTexture*	m_pFlinchTexCom = nullptr;
+	_bool		m_bFlinch = false;
+	_float		m_fFlinchTimer = 0.f;
+	_float		m_fFlinchDealy = 0.1f;
 
-											//--------------------------------------------------
-											// 애니메이션
-											//--------------------------------------------------
+	//--------------------------------------------------
+	// 애니메이션
+	//--------------------------------------------------
 	_int		m_iAnimationStep = 0;
 	_float		m_fAnimationTimer = 0.f;
 	_float		m_fAnimationSpeed = 1.9f;

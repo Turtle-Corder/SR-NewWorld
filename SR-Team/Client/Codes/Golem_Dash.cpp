@@ -26,6 +26,8 @@ HRESULT CGolem_Dash::Setup_GameObject(void * _pArg)
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
+	m_iTexture_Number = rand() % 4;
+
 	return S_OK;
 }
 
@@ -112,7 +114,7 @@ HRESULT CGolem_Dash::Render_NoneAlpha()
 	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->SetTexture(0)))
+	if (FAILED(m_pTextureCom->SetTexture(m_iTexture_Number)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
@@ -144,7 +146,7 @@ HRESULT CGolem_Dash::Add_Component()
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Golem_Dash", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Bomb_Residue", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	// For.Transform
