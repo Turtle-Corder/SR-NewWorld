@@ -36,6 +36,8 @@ HRESULT CScene_Stage3::Setup_Scene()
 		return E_FAIL;
 
 	if(FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
+		return E_FAIL;
+
 
 	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
 	if (nullptr == m_pPreLoader)
