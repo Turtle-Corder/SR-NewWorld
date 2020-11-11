@@ -260,6 +260,7 @@
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\Stump.h" />
     <ClInclude Include="..\Headers\Stump_Impact.h" />
+    <ClInclude Include="..\Headers\Stump_Particle.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
     <ClInclude Include="..\Headers\TerrainBundle.h" />
     <ClInclude Include="..\Headers\ThunderBox.h" />
@@ -379,6 +380,7 @@
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\Stump.cpp" />
     <ClCompile Include="..\Codes\Stump_Impact.cpp" />
+    <ClCompile Include="..\Codes\Stump_Particle.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainBundle.cpp" />
     <ClCompile Include="..\Codes\ThunderBox.cpp" />

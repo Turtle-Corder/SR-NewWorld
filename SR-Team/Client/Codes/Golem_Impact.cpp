@@ -51,36 +51,7 @@ _int CGolem_Impact::Update_GameObject(_float _fDeltaTime)
 
 _int CGolem_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 {
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return GAMEOBJECT::WARN;
-
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
-		return GAMEOBJECT::WARN;
-
 	return GAMEOBJECT::NOEVENT;
-}
-
-HRESULT CGolem_Impact::Render_NoneAlpha()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-	if (nullptr == pCamera)
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->SetTexture(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
-		return E_FAIL;
-
-	return S_OK;
 }
 
 HRESULT CGolem_Impact::Add_Component()
@@ -97,14 +68,6 @@ HRESULT CGolem_Impact::Add_Component()
 	tTransformDesc.vScale = { 3.f , 3.f , 3.f };
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
-		return E_FAIL;
-
-
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom))) //积己 肮荐
-		return E_FAIL;
-
-
-	if (FAILED(CGameObject::Add_Component(SCENE_VOLCANIC, L"Component_Texture_Wolf_Face", L"Com_Texture", (CComponent**)&m_pTextureCom))) ////积己 肮荐
 		return E_FAIL;
 
 	CSphereCollider::COLLIDER_DESC tColDesc;
@@ -196,8 +159,6 @@ CGameObject * CGolem_Impact::Clone_GameObject(void * _pArg)
 
 void CGolem_Impact::Free()
 {
-	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);

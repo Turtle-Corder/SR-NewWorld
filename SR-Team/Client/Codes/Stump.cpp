@@ -693,6 +693,18 @@ HRESULT CStump::Update_Animation_Attack2(_float _fDeltaTime)
 		}
 	}
 
+	if (m_iAnimationStep >= 1 && m_iAnimationStep <= 5)
+	{
+		m_fParticle_CreateTime += _fDeltaTime;
+
+		if (m_fParticle_CreateTime >= 0.03f)
+		{
+			Make_Stump_Particle();
+			m_fParticle_CreateTime = 0.f;
+		}
+	}
+
+
 	if (m_iAnimationStep <= 1)
 	{
 		//m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X , -_fDeltaTime);
@@ -776,6 +788,23 @@ HRESULT CStump::Make_Rubble()
 
 	return S_OK;
 }
+
+HRESULT CStump::Make_Stump_Particle()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	_matrix vMymat = m_pTransformCom[STUMP_BASE]->Get_Desc().matWorld;
+
+	for (_uint iCnt = 0; iCnt < 2; ++iCnt)
+	{
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump_Particle", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &vMymat)))
+			return E_FAIL;
+	}
+	return S_OK;
+}
+
 
 void CStump::Update_AttackDelay(_float _fDeltaTime)
 {

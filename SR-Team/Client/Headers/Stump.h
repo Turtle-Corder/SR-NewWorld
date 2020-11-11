@@ -71,6 +71,7 @@ private:
 	HRESULT Spawn_Acorn(const wstring& LayerTag, _uint _iCount);
 	HRESULT Spawn_StumpImpact(const wstring& LayerTag);
 	HRESULT Make_Rubble();
+	HRESULT Make_Stump_Particle();
 	void Update_AttackDelay(_float _fDeltaTime);
 	void Update_HurtDelay(_float _fDeltaTime);
 
@@ -121,6 +122,8 @@ private:
 	_int		m_iAnimationStep = 0;
 	_float		m_fAnimationTimer = 0.f;
 	_float		m_fAnimationSpeed = 1.9f;
+	_float		m_fParticle_CreateTime = 0.f;
+	_bool		m_bParticle_Create = false;
 };
 
 END
