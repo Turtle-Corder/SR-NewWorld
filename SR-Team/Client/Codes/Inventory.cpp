@@ -251,6 +251,11 @@ HRESULT CInventory::Setup_GameObject(void * pArg)
 			m_vItemPos[i][j].y = (i * 60.f) + (vWndPos.y - 170.f);
 			m_vItemPos[i][j].z = 0.f;
 			m_pTransformItem[iIndex]->Set_Position(m_vItemPos[i][j]);
+
+			//m_tItemCollRt[i][j].left = (LONG)(m_vItemPos[i][j].x - 20.f);
+			//m_tItemCollRt[i][j].right = (LONG)(m_vItemPos[i][j].x + 20.f);
+			//m_tItemCollRt[i][j].top = (LONG)(m_vItemPos[i][j].y - 20.f);
+			//m_tItemCollRt[i][j].bottom = (LONG)(m_vItemPos[i][j].y + 20.f);
 		}
 	}
 
@@ -299,12 +304,12 @@ _int CInventory::Update_GameObject(float DeltaTime)
 				return GAMEOBJECT::WARN;
 		}
 
-		// 인벤 창 이동
-		if (!m_bSelect_SellItem && m_bMoveInvenWnd)
-		{
-			if (FAILED(Move_InventoryWnd()))
-				return GAMEOBJECT::WARN;
-		}
+		//// 인벤 창 이동
+		//if (!m_bSelect_SellItem && m_bMoveInvenWnd)
+		//{
+		//	if (FAILED(Move_InventoryWnd()))
+		//		return GAMEOBJECT::WARN;
+		//}
 	}
 
 	if (FAILED(Check_ItemCount()))
@@ -535,7 +540,10 @@ HRESULT CInventory::Select_SellItem()
 						else
 							PRINT_LOG(L"현재 장착하고 있는 아이템은 판매 못함", LOG::DEBUG);
 					}
-
+					else if (!m_bIsItemHere[iIndex])
+					{
+						continue;
+					}
 				}
 			}
 		}
@@ -647,7 +655,7 @@ HRESULT CInventory::Check_EquipItem()
 			{
 				iIndex = i * 6 + j;
 		
-				if (PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
+				if (m_bIsItemHere[iIndex] && PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
 				{
 					_int k = 0;
 					// 아이템이 있는 칸들만 선택 할 수 있음
@@ -658,16 +666,19 @@ HRESULT CInventory::Check_EquipItem()
 						pEquip->Equip_Item(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag);
 						return S_OK;
 					}
-
+					else if (!m_bIsItemHere[iIndex])
+						continue;
 				}
 			}
-			else if (pManagement->Key_Pressing(VK_LBUTTON))
+			else if (pManagement->Key_Pressing(VK_LBUTTON) && m_bIsItemHere[iIndex])
 			{
 				if (m_pInvenList[iIndex]->eSort == RANDOM_POTION || m_pInvenList[iIndex]->eSort == RANDOM_EQUIP)
 				{
 					if (FAILED(Open_RandomBox(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag)))
 						return E_FAIL;
 				}
+				else if (!m_bIsItemHere[iIndex])
+					continue;
 			}
 		}
 	}
@@ -750,6 +761,8 @@ HRESULT CInventory::Move_To_QuickSlot()
 					}
 
 				}
+				else if (!m_bIsItemHere[iIndex])
+					continue;
 			}
 		}
 	}
