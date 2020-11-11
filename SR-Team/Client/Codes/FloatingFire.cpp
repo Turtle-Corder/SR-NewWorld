@@ -167,7 +167,7 @@ void CFloatingFire::Change_Position(_float _fDeltaTime)
 
 	// falldown
 	_vec3 vAddPos = _vec3(sin(m_fAngle), m_fYPosChanger/9.8f, cos(m_fAngle)) * (m_fCircleRange/m_tImpact.vOption.x);
-	m_pTransformComp->Set_Position(vPlayerPos + vAddPos * 0.7f);
+	m_pTransformComp->Set_Position(vPlayerPos + vAddPos * m_fCircleRange * 0.7f);
 
 }
 
