@@ -452,11 +452,11 @@ HRESULT CGolem::Update_State()
 			break;
 
 		case CGolem::ATTACK1:
-			m_fAttackDelay = 2.f;		// ³»·ÁÂï±â
+			m_fAttackDelay = 1.5f;		// ³»·ÁÂï±â
 			break;
 
 		case CGolem::ATTACK2:
-			m_fAttackDelay = 2.f;		// ÆøÅº
+			m_fAttackDelay = 1.5f;		// ÆøÅº
 			break;
 
 		case CGolem::ATTACK3:
@@ -597,8 +597,7 @@ HRESULT CGolem::Update_Anim_Attack1(_float _fDeltaTime)
 
 		if (5 == m_iAnimationStep)
 		{
-			Spawn_GolemImpact();
-			Make_Pieces();
+			Spawn_GolemImpact(1); // 0 != ¸é ÆÄÆ¼Å¬ »ý¼º 0Àº ¹Ì»ý¼º
 		}
 		else if(m_iAnimationStep == 6)
 			m_eCurState = CGolem::IDLE;
@@ -780,6 +779,14 @@ HRESULT CGolem::Update_Anim_Attack6(_float _fDeltaTime)
 	}
 	else if (m_iAnimationStep <= 4)
 	{
+		m_fDashPaticle_CreateTime += _fDeltaTime;
+
+		if (m_fDashPaticle_CreateTime >= 0.2f)
+		{
+			Make_DashPaticle();
+			m_fDashPaticle_CreateTime = 0.f;
+		}
+
 		_vec3 vMyPosition = { m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition.x , 0.f , m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition.z };
 		vMyPosition -= m_vDirection * (_fDeltaTime * 5.f);
 		m_pTransformCom[GOLEM_BASE]->Set_Position(vMyPosition);
@@ -856,7 +863,7 @@ void CGolem::Update_HurtDelay(_float _fDeltaTime)
 	}
 }
 
-HRESULT CGolem::Spawn_GolemImpact()
+HRESULT CGolem::Spawn_GolemImpact(_uint iOption)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -867,6 +874,7 @@ HRESULT CGolem::Spawn_GolemImpact()
 	tImpact.pStatusComp = m_pStatusCom;
 	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
 	tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
+	tImpact.fOption = iOption;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
@@ -881,13 +889,17 @@ HRESULT CGolem::Spawn_Bomb()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+	if (nullptr == pPlayerTransform)
+		return E_FAIL;
+
 	INSTANTIMPACT tImpact;
 	tImpact.pAttacker = this;
 	tImpact.pStatusComp = m_pStatusCom;
 
-	for (_uint iCnt = 0; iCnt < 12; ++iCnt)
+	for (_uint iCnt = 0; iCnt < 30; ++iCnt)
 	{
-		_float fX = (_float)(rand() % 6 + 1); _float fZ = (_float)(rand() % 6 + 1);
+		_float fX = (_float)(rand() % 10); _float fZ = (_float)(rand() % 10);
 
 		_uint iRandX = rand() % 2;
 		_uint iRandZ = rand() % 2;
@@ -897,7 +909,7 @@ HRESULT CGolem::Spawn_Bomb()
 		if (iRandZ == 0)
 			fZ *= -1.f;
 
-		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + _vec3(fX, 0.f, fZ);
+		tImpact.vPosition = /*m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition*/ pPlayerTransform->Get_Desc().vPosition + _vec3(fX, 0.f, fZ);
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Bomb", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
 			return E_FAIL;
@@ -923,38 +935,6 @@ HRESULT CGolem::Spawn_MonSub()
 
 	m_bCanAttack = false;
 	return S_OK;
-}
-
-HRESULT CGolem::Make_Pieces()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	INSTANTIMPACT tImpact = {};
-
-	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
-
-
-	for (_uint i = 0; i < 25; i++)
-	{
-		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
-		_vec3 vGolemLook = _vec3(tImpact.vDirection.x, 0.f, tImpact.vDirection.z);
-		D3DXVec3Normalize(&vGolemLook, &vGolemLook);
-		_vec3 vPosition = { tImpact.vPosition.x , 0.f, tImpact.vPosition.z };
-		vPosition -= vGolemLook * 3.f;
-
-		tImpact.vPosition = vPosition;
-		tImpact.vDirection = RandomPostionSelect;
-		tImpact.vOption = RandomPostionSelect + m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
-
-		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MeteorPiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
-		{
-			PRINT_LOG(L"Failed To Spawn MeteorPieces", LOG::DEBUG);
-			return false;
-		}
-	}
-
 }
 
 HRESULT CGolem::Create_MiniGolem()
@@ -1057,5 +1037,25 @@ HRESULT CGolem::Take_Damage(const CComponent* _pDamageComp)
 		m_bDead = true;
 	}
 
+	return S_OK;
+}
+
+HRESULT CGolem::Make_DashPaticle()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact = {};
+
+	_float fX = 0.f;
+	
+	for (_int iCnt = 0; iCnt < 6; ++iCnt)
+	{
+		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + _vec3(iCnt - 2 , 0.f , 0.f);
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Dash", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))/*¿©±â StartPos*/
+			return E_FAIL;
+	}
 	return S_OK;
 }
