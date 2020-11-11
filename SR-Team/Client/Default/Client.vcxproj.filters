@@ -415,6 +415,9 @@
     <Filter Include="02.GameObject\05.Monster\05.Stump\Stump_Particle">
       <UniqueIdentifier>{017ce3bd-55f3-48a1-ab6d-e122827c3f4d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\14. PlayerItem\04. QuestPotion">
+      <UniqueIdentifier>{2710686d-ebd3-4597-b001-7a2066466e01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -789,6 +792,9 @@
     <ClInclude Include="..\Headers\Stump_Particle.h">
       <Filter>02.GameObject\05.Monster\05.Stump\Stump_Particle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\ItemSlot_QuestPotion.h">
+      <Filter>02.GameObject\14. PlayerItem\04. QuestPotion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1147,6 +1153,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stump_Particle.cpp">
       <Filter>02.GameObject\05.Monster\05.Stump\Stump_Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemSlot_QuestPotion.cpp">
+      <Filter>02.GameObject\14. PlayerItem\04. QuestPotion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

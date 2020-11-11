@@ -22,6 +22,19 @@ CSlime::CSlime(const CSlime & _rOther)
 
 HRESULT CSlime::Setup_GameObject_Prototype()
 {
+	//--------------------------------------------------
+	/*
+	기본슬라임 녹색 0번
+	녹색 투명한 1번
+
+	화이트 얼굴 2번
+	화이트 투명 3번
+
+	레드 얼굴 4번
+	레드 투명 5번
+	*/
+	//--------------------------------------------------
+
 	return S_OK;
 }
 
@@ -37,6 +50,7 @@ HRESULT CSlime::Setup_GameObject(void * pArg)
 
 	Set_Active();
 
+	m_iTextureNumber = m_tSlimeInfo.iTextureNumber;
 	return S_OK;
 }
 
@@ -129,7 +143,7 @@ HRESULT CSlime::Render_BlendAlpha()
 	}
 	else
 	{
-		if (FAILED(m_pTextureCom->SetTexture(SLIME_JELLY)))
+		if (FAILED(m_pTextureCom->SetTexture(m_iTextureNumber + 1)))
 			return E_FAIL;
 	}
 
@@ -152,7 +166,7 @@ HRESULT CSlime::Render_NoneAlpha()
 	if (FAILED(m_pVIBufferCom[SLIME_BODY]->Set_Transform(&m_pTransformCom[SLIME_BODY]->Get_Desc().matWorld, pCamera)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->SetTexture(SLIME_BODY)))
+	if (FAILED(m_pTextureCom->SetTexture(m_iTextureNumber)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom[SLIME_BODY]->Render_VIBuffer()))

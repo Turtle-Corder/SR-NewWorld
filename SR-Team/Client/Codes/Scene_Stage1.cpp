@@ -268,24 +268,27 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 
 	//----------------------------------------------------------------------------------------------------
 
-	//SLIMEINFO tSlimInfo;
-	//ZeroMemory(&tSlimInfo, sizeof(SLIMEINFO));
+	SLIMEINFO tSlimInfo;
+	ZeroMemory(&tSlimInfo, sizeof(SLIMEINFO));
 
-	//tSlimInfo.iCurCount = 1;
-	//tSlimInfo.vPos = { 12.48f, 0.f, 33.08f };
+	tSlimInfo.iCurCount = 1;
+	tSlimInfo.iTextureNumber = 0;
+	tSlimInfo.vPos = { 12.48f, 0.f, 33.08f };
 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
-	//	return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+		return E_FAIL;
 
-	////tSlimInfo.vPos = { 66.04f, 0.f, 25.04f };
+	tSlimInfo.vPos = { 66.04f, 0.f, 25.04f };
+	tSlimInfo.iTextureNumber = 2;
 
-	////if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
-	////	return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+		return E_FAIL;
 
-	//tSlimInfo.vPos = { 55.04f, 0.f, 25.24f };
+	tSlimInfo.iTextureNumber = 4;
+	tSlimInfo.vPos = { 55.04f, 0.f, 25.24f };
 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
-	//	return E_FAIL;
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+		return E_FAIL;
 
 	////tSlimInfo.vPos = { 55.6f, 0.f, 18.88f };
 

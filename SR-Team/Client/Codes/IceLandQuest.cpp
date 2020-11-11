@@ -123,7 +123,7 @@ _int CIceLandQuest::Update_GameObject(_float _fDeltaTime)
 			m_bGetReward = true;
 			pInven->Get_RewardItem(L"GolemCore_Blue");
 		}
-		if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
+		else if (pManagement->Key_Down(VK_SPACE) || pManagement->Key_Down(VK_LBUTTON))
 		{
 			m_eSituation = ICEQUEST_FINISH;
 			m_bStartQuest = false;
@@ -232,9 +232,7 @@ HRESULT CIceLandQuest::Render_HelpWnd()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	if (m_bRenderClear)
-		iIndex = ICEQUEST_CLEAR;
-	else if (m_eSituation == ICEQUEST_ON_THE_QUEST)
+	if (m_eSituation == ICEQUEST_ON_THE_QUEST)
 		iIndex = ICEQUEST_NOCLEAR;
 
 	if (iIndex != -1)
@@ -255,11 +253,9 @@ HRESULT CIceLandQuest::Render_HelpWnd()
 		// 처치한 몬스터 수 출력
 		StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"%d", m_iMonsetDeadCnt);
 
-		D3DXMatrixScaling(&matScale, 2.3f, 2.3f, 0.f);
+		D3DXMatrixScaling(&matScale, 2.f, 2.f, 0.f);
 		if (iIndex == ICEQUEST_NOCLEAR)
-			D3DXMatrixTranslation(&matTrans, 1730.f, 232.f, 0.f);
-		else
-			D3DXMatrixTranslation(&matTrans, 1719.f, 196.f, 0.f);
+			D3DXMatrixTranslation(&matTrans, 1720.f, 232.f, 0.f);
 		matWorld = matScale * matTrans;
 
 		m_pSprite->SetTransform(&matWorld);

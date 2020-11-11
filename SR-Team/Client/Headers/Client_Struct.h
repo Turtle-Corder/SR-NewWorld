@@ -74,6 +74,7 @@ typedef struct tagSlime
 {
 	_vec3	vPos = {};
 	_uint	iCurCount = 0;
+	_uint	iTextureNumber = 0;
 }SLIMEINFO;
 
 typedef struct tagDropBoxInitInfo

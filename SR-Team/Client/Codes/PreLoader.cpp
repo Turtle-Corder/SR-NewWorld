@@ -336,7 +336,7 @@ HRESULT CPreLoader::Load_Resources_Forest()
 #pragma endregion
 
 #pragma region Component_Texture_Translucent_Cube
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/TranslucentCube%d.dds", 2))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Test/TranslucentCube%d.dds", 6))))
 	{
 	}
 #pragma endregion
