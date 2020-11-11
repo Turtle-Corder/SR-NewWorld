@@ -214,15 +214,15 @@ HRESULT CRandomBox_Npc::Add_Component_Texture()
 
 	WCHAR szTextureName[PART_END][MAX_PATH] =
 	{
-		L"Component_Texture_Stage2NPC_Head",
+		L"Component_Texture_Component_Texture_RandomBoxNPC_Head",
 
-		L"Component_Texture_Stage2NPC_Body",
+		L"Component_Texture_Component_Texture_RandomBoxNPC_Body",
 
-		L"Component_Texture_Stage2NPC_Hand",
-		L"Component_Texture_Stage2NPC_Hand",
+		L"Component_Texture_Component_Texture_RandomBoxNPC_Hand",
+		L"Component_Texture_Component_Texture_RandomBoxNPC_Hand",
 
-		L"Component_Texture_Stage2NPC_Foot",
-		L"Component_Texture_Stage2NPC_Foot"
+		L"Component_Texture_Component_Texture_RandomBoxNPC_Foot",
+		L"Component_Texture_Component_Texture_RandomBoxNPC_Foot"
 	};
 
 	//--------------------------------------------------
@@ -233,7 +233,7 @@ HRESULT CRandomBox_Npc::Add_Component_Texture()
 		WCHAR szTexture[MIN_STR] = L"";
 		StringCchPrintf(szTexture, _countof(szTexture), L"Com_Texture%d", iCnt);
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szTextureName[iCnt], szTexture, (CComponent**)&m_pTextureCom[iCnt])))
+		if (FAILED(CGameObject::Add_Component(SCENE_TOWN, szTextureName[iCnt], szTexture, (CComponent**)&m_pTextureCom[iCnt])))
 			return E_FAIL;
 	}
 

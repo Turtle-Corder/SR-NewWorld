@@ -223,15 +223,15 @@ HRESULT CStage3_NPC::Add_Component_Texture()
 
 	WCHAR szTextureName[PART_END][MAX_PATH] =
 	{
-		L"Component_Texture_MainQuestNPCHead",
+		L"Component_Texture_VolcanicNPC_Head",
 
-		L"Component_Texture_MainQuestNPCBody",
+		L"Component_Texture_VolcanicNPC_Body",
 
-		L"Component_Texture_MainQuestNPCHand",
-		L"Component_Texture_MainQuestNPCHand",
+		L"Component_Texture_VolcanicNPC_Hand",
+		L"Component_Texture_VolcanicNPC_Hand",
 
-		L"Component_Texture_MainQuestNPCFoot",
-		L"Component_Texture_MainQuestNPCFoot"
+		L"Component_Texture_VolcanicNPC_Foot",
+		L"Component_Texture_VolcanicNPC_Foot"
 	};
 
 	//--------------------------------------------------
@@ -242,7 +242,7 @@ HRESULT CStage3_NPC::Add_Component_Texture()
 		WCHAR szTexture[MIN_STR] = L"";
 		StringCchPrintf(szTexture, _countof(szTexture), L"Com_Texture%d", iCnt);
 
-		if (FAILED(CGameObject::Add_Component(SCENE_STAGE0, szTextureName[iCnt], szTexture, (CComponent**)&m_pTextureCom[iCnt])))
+		if (FAILED(CGameObject::Add_Component(SCENE_VOLCANIC, szTextureName[iCnt], szTexture, (CComponent**)&m_pTextureCom[iCnt])))
 			return E_FAIL;
 	}
 

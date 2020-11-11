@@ -251,6 +251,22 @@ HRESULT CPreLoader::Load_Resources_Town()
 		return E_FAIL;
 #pragma endregion
 
+	// RandomBox_NPC
+#pragma region Component_Texture_RandomBoxNPC
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Component_Texture_RandomBoxNPC_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/randomNPC_head%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Component_Texture_RandomBoxNPC_Body", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/randomNPC_body%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Component_Texture_RandomBoxNPC_Hand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/randomNPC_hand%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_TOWN, L"Component_Texture_Component_Texture_RandomBoxNPC_Foot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/randomNPC_foot%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
 // 0¹ø ¸¶À»
 
 	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 0)))
@@ -425,6 +441,22 @@ HRESULT CPreLoader::Load_Resources_Forest()
 		return E_FAIL;
 #pragma endregion
 
+	// npc
+#pragma Component_Texture_ForestNPC
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_ForestNPC_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/Stage1NPC_head%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_ForestNPC_Body", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/Stage1NPC_body%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_ForestNPC_Hand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/Stage1NPC_hand%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_ForestNPC_Foot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/Stage1NPC_foot%d.dds"))))
+		return E_FAIL;
+#pragma endregion
+
 	if (FAILED(Setup_Stage_CubeTerrain(_T("Layer_CubeTerrain"), 1)))
 		return E_FAIL;
 
@@ -439,6 +471,10 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 
 #pragma region Yeti
 
+#pragma region GameObject_Skybox
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region GameObject_Crack
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Crack", CCrack::Create(m_pDevice))))
@@ -561,6 +597,11 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 
 
 
+#pragma region GameObject_Skybox
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region GameObject_Crack
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Crack", CCrack::Create(m_pDevice))))
 		return E_FAIL;
@@ -664,6 +705,21 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 
 #pragma region GameObject_Stage3NPC
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_STAGE3, L"GameObject_Stage3NPC", CStage3_NPC::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_VolcanicNPC
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_VolcanicNPC_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/stage3NPC_head%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_VolcanicNPC_Body", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/stage3NPC_body%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_VolcanicNPC_Hand", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/stage3NPC_hand%d.dds"))))
+		return E_FAIL;
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_VOLCANIC, L"Component_Texture_VolcanicNPC_Foot", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
+		L"../Resources/3D/Layer_NPC/stage3NPC_foot%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 

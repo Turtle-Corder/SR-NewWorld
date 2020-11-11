@@ -32,6 +32,9 @@ HRESULT CScene_Stage2::Setup_Scene()
 	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
 		return E_FAIL;
 
+	if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
+		return E_FAIL;
+
 	if (FAILED(SetUp_Layer_IceLandQuest(L"Layer_IceLandQuest")))
 		return E_FAIL;
 
@@ -186,6 +189,17 @@ HRESULT CScene_Stage2::Setup_Layer_AllObject()
 
 HRESULT CScene_Stage2::Setup_Layer_Skybox(const wstring & LayerTag)
 {
+
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+	int TextureID = 3;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE2, L"GameObject_Skybox", SCENE_STAGE2, LayerTag, &TextureID)))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
