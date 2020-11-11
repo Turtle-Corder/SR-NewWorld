@@ -89,11 +89,17 @@ int CYeti::LateUpdate_GameObject(float _fDeltaTime)
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
 
-	if (FAILED(Update_HurtDelay(_fDeltaTime)))
-		return GAMEOBJECT::WARN;
+	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return GAMEOBJECT::WARN;
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -123,19 +129,65 @@ HRESULT CYeti::Render_NoneAlpha()
 	return S_OK;
 }
 
-HRESULT CYeti::Take_Damage(const CComponent* _pDamageComp)
+HRESULT CYeti::Render_BlendAlpha()
 {
-	if (!m_bCanHurt && !_pDamageComp)
+	if (!m_bFlinch)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
-	
-	if (m_pStatusCom->Get_Status().iHp <= 0)
-	{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
 
-		m_bDead = true;
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_uint iCnt = YETI_BODY; iCnt < YETI_END; ++iCnt)
+	{
+		if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+			return E_FAIL;
 	}
 
+	return S_OK;
+}
+
+HRESULT CYeti::Take_Damage(const CComponent* _pDamageComp)
+{
+	if (!_pDamageComp)
+		return S_OK;
+
+	if (!m_bCanHurt)
+		return S_OK;
+
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+	
+	m_pStatusCom->Set_HP(iAtk);	
+	if (m_pStatusCom->Get_Status().iHp <= 0)
+		m_bDead = true;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[YETI_BASE]->Get_Desc().vPosition + (vAddPos * 2.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	m_bCanHurt = false;
+	m_bFlinch = true;
 
 	return S_OK;
 }
@@ -270,6 +322,8 @@ HRESULT CYeti::Add_Component()
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;
 
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -513,6 +567,7 @@ void CYeti::Free()
 		Safe_Release(m_pTextureCom[iAll]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -603,7 +658,20 @@ void CYeti::Set_Active()
 	m_eCurState = IDLE;
 }
 
-HRESULT CYeti::Update_HurtDelay(_float _fDeltaTime)
+void CYeti::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
+		}
+	}
+}
+
+void CYeti::Update_HurtDelay(_float _fDeltaTime)
 {
 	if (!m_bCanHurt)
 	{
@@ -614,6 +682,4 @@ HRESULT CYeti::Update_HurtDelay(_float _fDeltaTime)
 			m_bCanHurt = true;
 		}
 	}
-
-	return S_OK;
 }

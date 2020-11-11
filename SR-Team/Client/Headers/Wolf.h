@@ -48,6 +48,7 @@ public:
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 
 	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Render_BlendAlpha() override;
 
 	virtual void Free() override;
 	static  CWolf* Create(LPDIRECT3DDEVICE9 _pDevice);
@@ -85,6 +86,7 @@ private:
 
 	HRESULT Update_AtkDelay(_float _fDeltaTime);
 	HRESULT Update_HurtDelay(_float _fDeltaTime);
+	HRESULT Update_FlinchDelay(_float _fDeltaTime);
 
 
 	// 애니메이션
@@ -125,9 +127,9 @@ private:
 	_float		m_fAttackDistance = 1.5f;	// 공격 가능한 거리
 
 
-											//--------------------------------------------------
-											// 공격
-											//--------------------------------------------------
+	//--------------------------------------------------
+	// 공격
+	//--------------------------------------------------
 	_bool		m_bCanAttack = true;		// 공격 가능 or 불가능
 	_float		m_fAttackDelay = 3.5f;		// 공격 가능한 딜레이
 	_float		m_fAttackTimer = 0.f;		// 공격 쿨타임 시간 재는용
@@ -139,13 +141,17 @@ private:
 	// 피격
 	//--------------------------------------------------
 	_bool		m_bCanHurt = true;			// 피격 가능 or 불가능
-	_float		m_fHurtDelay = 5.f;			// 피격 가능한 딜레이
+	_float		m_fHurtDelay = 0.1f;		// 피격 가능한 딜레이
 	_float		m_fHurtTimer = 0.f;			// 피격 쿨타임 시간 재는용
 
+	CTexture*	m_pFlinchTexCom = nullptr;
+	_bool		m_bFlinch = false;
+	_float		m_fFlinchTimer = 0.f;
+	_float		m_fFlinchDealy = 0.1f;
 
-											//--------------------------------------------------
-											// 애니메이션
-											//--------------------------------------------------
+	//--------------------------------------------------
+	// 애니메이션
+	//--------------------------------------------------
 	_int		m_iAnimStep = 0;
 	_float		m_fAnimTimer = 0.f;
 };

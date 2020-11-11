@@ -57,8 +57,17 @@ _int CWolf::LateUpdate_GameObject(_float _fDeltaTime)
 	if (FAILED(Update_HurtDelay(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
+	if (FAILED(Update_FlinchDelay(_fDeltaTime)))
+		return GAMEOBJECT::WARN;
+
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return 0;
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -88,6 +97,34 @@ HRESULT CWolf::Render_NoneAlpha()
 	return S_OK;
 }
 
+HRESULT CWolf::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_uint iCnt = WOLF_BODY; iCnt < WOLF_END; ++iCnt)
+	{
+		if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 CGameObject * CWolf::Clone_GameObject(void * _pArg)
 {
 	CWolf* pInstance = new CWolf(*this);
@@ -102,27 +139,34 @@ CGameObject * CWolf::Clone_GameObject(void * _pArg)
 
 HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
 {
-	if (!m_bCanHurt && !_pDamageComp)
+	if (!_pDamageComp)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	if (!m_bCanHurt)
+		return S_OK;
+
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+	m_pStatusCom->Set_HP(iAtk);
 	if (0 >= m_pStatusCom->Get_Status().iHp)
-	{
-		// 처치한 몬스터 수 증가 -> 예티만 카운팅하자
-		//CManagement* pManagement = CManagement::Get_Instance();
-		//if (nullptr == pManagement)
-		//	return E_FAIL;
-		//CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_IceLandQuest", 0);
-		//if (pIceLandQuest == nullptr)
-		//	return E_FAIL;
-
-		//if (pIceLandQuest->Get_StartDeadCnt())
-		//	pIceLandQuest->Dead_Monster();
-
 		m_bDead = true;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition + (vAddPos * 2.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
 	}
 
-	m_bCanHurt = true;
+	m_bCanHurt = false;
+	m_bFlinch = true;
 	return S_OK;
 }
 
@@ -135,6 +179,7 @@ void CWolf::Free()
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 
@@ -278,6 +323,9 @@ HRESULT CWolf::Add_Component_Texture()
 			return E_FAIL;
 	}
 
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -293,6 +341,7 @@ HRESULT CWolf::Add_Component_Extends()
 
 	CStatus::STAT tStat;
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
+	tStat.iHp = tStat.iMaxHp = 100000;
 	// TODO : Stat 셋팅
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -530,6 +579,21 @@ HRESULT CWolf::Update_HurtDelay(_float _fDeltaTime)
 		{
 			m_fHurtTimer = 0.f;
 			m_bCanHurt = true;
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CWolf::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
 		}
 	}
 
