@@ -136,6 +136,8 @@ HRESULT CDropItem::Take_Damage(const CComponent * _pDamageComp)
 				pInven->Get_RewardItem(L"Diamond");
 			else if (m_tBoxInfo.iItemNo == 1)
 				pInven->Get_RewardItem(L"GolemCore_Green");
+			else if(m_tBoxInfo.iItemNo == 2)
+				pInven->Get_RewardItem(L"GolemCore_Red");
 		}
 		else
 		{
@@ -163,6 +165,9 @@ HRESULT CDropItem::Add_Component()
 			StringCchPrintf(szName, _countof(szName), L"Component_Texture_DropDiamond");
 		else if (1 == m_tBoxInfo.iItemNo)
 			StringCchPrintf(szName, _countof(szName), L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green");
+		else if(2 == m_tBoxInfo.iItemNo)
+			StringCchPrintf(szName, _countof(szName), L"Component_Texture_MainQuest_HelpWnd_GolemCore_Red");
+
 	}
 
 

@@ -571,9 +571,6 @@ void CSnail::Free()
 
 HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 {
-	//m_bDead = true;
-	//((CDamageInfo*)_pDamageComp)->Get_Desc().pOwner;
-
 	if (!_pDamageComp)
 		return S_OK;
 
