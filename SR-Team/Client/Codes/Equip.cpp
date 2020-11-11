@@ -118,7 +118,7 @@ HRESULT CEquip::Setup_GameObject(void * _pArg)
 	{
 		_vec3 vPos = {};
 		vPos.x = m_vPos.x - 430.f;
-		vPos.y = (i * 55.f) + (m_vPos.y - 120.f);
+		vPos.y = (i * 60.f) + (m_vPos.y - 130.f);
 		vPos.z = 0.f;
 		m_pTransformItem[i]->Set_Position(vPos);
 	}
@@ -128,7 +128,7 @@ HRESULT CEquip::Setup_GameObject(void * _pArg)
 	{
 		_vec3 vPos = {};
 		vPos.x = m_vPos.x - 138.f;
-		vPos.y = (j * 55.f) + (m_vPos.y - 120.f);
+		vPos.y = (j * 60.f) + (m_vPos.y - 130.f);
 		vPos.z = 0.f;
 		m_pTransformItem[i]->Set_Position(vPos);
 	}
@@ -436,7 +436,7 @@ HRESULT CEquip::UnEquip_Item()
 	{
 		if (m_bEquip[i])
 		{
-			if (pManagement->Key_Down(VK_LBUTTON))
+			if (pManagement->Key_Pressing(VK_LBUTTON))
 			{
 				if (PtInRect(&m_tEquipItemCollRt[i], pMouse->Get_Point()))
 				{

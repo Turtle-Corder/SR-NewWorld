@@ -68,8 +68,8 @@ private:
 
 	// 아이템
 private:
-	CTexture*				m_pTextureCom[28];
-	CStatus*				m_pStatCom[28];
+	CTexture*				m_pTextureCom[30];
+	CStatus*				m_pStatCom[30];
 	vector<INVEN_ITEM*>		m_vItemList;
 
 	// 스킬 아이콘

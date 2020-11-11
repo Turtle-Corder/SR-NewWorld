@@ -981,7 +981,7 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Belt, Gloves, Wing
+#pragma region Belt, Gloves, Wing, ring
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_Item_AbsoluteBelt", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_Item/absolute_belt%d.png"))))
@@ -997,6 +997,16 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_Item_SorcererGloves", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_Item/high_sorcerer_gloves%d.png"))))
+		return E_FAIL;
+
+	// 새로 추가
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_Item_ForgottenNecklace", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_Item/forgotten_necklace%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_Item_LethalCape", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_Item/lethal_cape%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1219,6 +1229,11 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Blue%d.png"))))
+		return E_FAIL;
+
+	// 보스 클리어
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_BossClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/boss_clear%d.png"))))
 		return E_FAIL;
 #pragma endregion
 

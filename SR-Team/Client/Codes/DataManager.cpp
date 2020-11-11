@@ -10,7 +10,7 @@ USING(Client)
 CDataManager::CDataManager(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
-	for (_uint i = 0; i < 28; ++i)
+	for (_uint i = 0; i < 30; ++i)
 	{
 		m_pTextureCom[i] = nullptr;
 		m_pStatCom[i] = nullptr;
@@ -153,7 +153,7 @@ HRESULT CDataManager::Add_Component()
 
 HRESULT CDataManager::Add_Component_Item()
 {
-	for (_uint i = 0; i < 28; ++i)
+	for (_uint i = 0; i < 30; ++i)
 	{
 		// 3. Texture--------------------------------------------------------------
 		TCHAR szTexture[MAX_PATH] = L"";
@@ -242,6 +242,12 @@ HRESULT CDataManager::Add_Component_Item()
 		else if (i == 27)
 			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
 				L"Component_Texture_ItemBox_Equip");
+		else if (i == 28)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_Item_ForgottenNecklace");
+		else if (i == 29)
+			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+				L"Component_Texture_Item_LethalCape");
 
 		StringCchPrintf(szTexture, sizeof(TCHAR) * MAX_PATH,
 			L"Com_Texture%d", i);
@@ -511,6 +517,24 @@ HRESULT CDataManager::Add_Component_Item()
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
 				L"¿Â∫Ò ªÛ¿⁄");
 		}
+		if (i == 28)
+		{
+			pItem->iPrice = 160;
+			pItem->eSort = eITEM_SORT::NECKLACE1;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"ForgottenNecklace");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"¿ÿ«Ù¡¯ ∏Ò∞…¿Ã");
+		}
+		if (i == 29)
+		{
+			pItem->iPrice = 300;
+			pItem->eSort = eITEM_SORT::CLOAK;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"LethalCape");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"øµøı¿« ∏¡≈‰");
+		}
 		m_vItemList.emplace_back(pItem);
 
 
@@ -624,6 +648,15 @@ HRESULT CDataManager::Add_Component_Item()
 		}
 		else if (i == 27)
 		{
+		}
+
+		else if (i == 28)
+		{
+			tStat.iCriticalRate = 30;
+		}
+		else if (i == 29)
+		{
+			tStat.iMaxAtt = 100;
 		}
 
 		TCHAR szStat[MAX_PATH] = L"";
@@ -789,7 +822,7 @@ CGameObject * CDataManager::Clone_GameObject(void * pArg)
 
 void CDataManager::Free()
 {
-	for (_uint i = 0; i < 28; ++i)
+	for (_uint i = 0; i < 30; ++i)
 	{
 		Safe_Release(m_pTextureCom[i]);
 		Safe_Release(m_pStatCom[i]);
