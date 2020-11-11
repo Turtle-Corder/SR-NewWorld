@@ -271,7 +271,12 @@ void CPlayer::Buff_On(ACTIVE_BUFF _eType)
 		break;
 
 	case Client::CPlayer::BUFF_ATTACK:
-		m_pStatusCom->Set_AttRate(2.f);
+		if (1 == m_pStatusCom->Get_Status().iCurFireStack)
+			m_pStatusCom->Set_AttRate(1.2f);
+		else if (2 == m_pStatusCom->Get_Status().iCurFireStack)
+			m_pStatusCom->Set_AttRate(1.5f);
+		else if (3 == m_pStatusCom->Get_Status().iCurFireStack)
+			m_pStatusCom->Set_AttRate(2.f);
 		break;
 
 	case Client::CPlayer::BUFF_SHIELD:

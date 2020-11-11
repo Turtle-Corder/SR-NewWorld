@@ -43,7 +43,7 @@ _int CStatus::Get_Att()
 {
 	_int iSimulateAtt = 0;
 	_int iAttBound = m_tStat.iMaxAtt - m_tStat.iMinAtt;
-	iSimulateAtt = rand() % iAttBound + m_tStat.iMinAtt;
+	iSimulateAtt = (rand() % iAttBound + m_tStat.iMinAtt) * m_tStat.fAttRate;
 
 	_int iSimulateCriticalChance = rand() % 100;
 	if (iSimulateCriticalChance < m_tStat.iCriticalChance)
@@ -94,10 +94,10 @@ void CStatus::Clear_IceStack()
 void CStatus::Set_EquipStat(const CStatus::STAT & tStat)
 {
 	m_tStat.iMinAtt = tStat.iMinAtt + 10;
-	m_tStat.iMaxAtt = tStat.iMaxAtt + 50;
-	m_tStat.iDef = tStat.iDef + 50;
-	m_tStat.iCriticalRate = tStat.iCriticalRate + 20;
-	m_tStat.iCriticalChance = tStat.iCriticalChance + 10;
+	m_tStat.iMaxAtt = tStat.iMaxAtt + 20;
+	m_tStat.iDef = tStat.iDef + 20;
+	m_tStat.iCriticalRate = tStat.iCriticalRate + 1;
+	m_tStat.iCriticalChance = tStat.iCriticalChance + 5;
 }
 
 HRESULT CStatus::Setup_Component_Prototype()

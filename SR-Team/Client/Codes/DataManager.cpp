@@ -540,34 +540,41 @@ HRESULT CDataManager::Add_Component_Item()
 
 		// Stat-----------------------------------------------------------------------
 		CStatus::STAT	tStat;
-		if (i == 0)
+		ZeroMemory(&tStat, sizeof(CStatus::STAT));
+		if (i == 0)							// 분노의 지팡이
 		{
-			tStat.iCriticalRate = 20;
-			tStat.iMaxAtt = 150;
+			tStat.iCriticalChance = 10;
+			tStat.iCriticalRate = 3;
+			
+			tStat.iMinAtt = 20;
+			tStat.iMaxAtt = 30;
+		}
+		else if (i == 1)					// 천사의 지팡이
+		{
+			tStat.iCriticalRate = 5;
+			tStat.iCriticalRate = 2;
+
 			tStat.iMinAtt = 10;
+			tStat.iMaxAtt = 20;
 		}
-		else if (i == 1)
+		else if (i == 2)					// 강한 지팡이
 		{
-			tStat.iCriticalRate = 20;
-			tStat.iMaxAtt = 160;
-			tStat.iMinAtt = 50;
+			tStat.iCriticalRate = 2;
+			tStat.iCriticalRate = 1;
+
+			tStat.iMinAtt = 5;
+			tStat.iMaxAtt = 10;
 		}
-		else if (i == 2)
+		else if (i == 3)					// 양복
 		{
-			tStat.iCriticalRate = 30;
-			tStat.iMaxAtt = 120;
-			tStat.iMinAtt = 70;
+			tStat.iDef = 30;
 		}
-		else if (i == 3)
-		{
-			tStat.iDef = 500;
-		}
-		else if (i == 4)
-			tStat.iDef = 300;
-		else if (i == 5)
-			tStat.iDef = 200;
-		else if (i == 6)
-			tStat.iDef = 100;
+		else if (i == 4)					// 초급 법복
+			tStat.iDef = 20;
+		else if (i == 5)					// 학자 신발
+			tStat.iDef = 10;
+		else if (i == 6)					// 신비 신발		
+			tStat.iDef = 5;
 		else if (i == 7)
 			tStat.iHp = 50;
 		else if (i == 8)
@@ -580,22 +587,24 @@ HRESULT CDataManager::Add_Component_Item()
 			tStat.iHp = 100;
 		else if (i == 12)
 			tStat.iMp = 100;
-		else if (i == 13)
+		else if (i == 13)					// 순수 벨트
 		{
-			tStat.iCriticalChance = 20;
+			tStat.iMinAtt = 5;
+			tStat.iMaxAtt = 5;
 		}
-		else if (i == 14)
+		else if (i == 14)					// 아쿠아 장갑
 		{
-			tStat.iCriticalRate = 30;
+			tStat.iCriticalChance = 5;
 		}
-		else if (i == 15)
+		else if (i == 15)					// 발록 날개
 		{
-			tStat.iMaxAtt = 100;
-			tStat.iCriticalRate = 50;
+			tStat.iCriticalChance = 3;
+			tStat.iMinAtt = 5;
+			tStat.iMaxAtt = 5;
 		}
-		else if (i == 16)
+		else if (i == 16)					// 마법사 장갑
 		{
-			tStat.iCriticalChance = 20;
+			tStat.iCriticalChance = 3;
 		}
 		else if (i == 17)
 		{
@@ -634,11 +643,10 @@ HRESULT CDataManager::Add_Component_Item()
 		else if (i == 24)
 		{
 		}
-		else if (i == 25)
+		else if (i == 25)				// 마법 스태프
 		{
-			tStat.iMaxAtt = 500;
-			tStat.iMinAtt = 50;
-			tStat.iCriticalRate = 60;
+			tStat.iMinAtt = 3;
+			tStat.iMaxAtt = 5;
 		}
 		else if (i == 26)
 		{
@@ -647,13 +655,15 @@ HRESULT CDataManager::Add_Component_Item()
 		{
 		}
 
-		else if (i == 28)
+		else if (i == 28)				// 잊혀진 목걸이
 		{
-			tStat.iCriticalRate = 30;
+			tStat.iCriticalChance = 1;
 		}
-		else if (i == 29)
+		else if (i == 29)				// 영웅 망토
 		{
-			tStat.iMaxAtt = 100;
+			tStat.iCriticalChance = 5;
+			tStat.iMinAtt = 10;
+			tStat.iMaxAtt = 10;
 		}
 
 		TCHAR szStat[MAX_PATH] = L"";
