@@ -39,18 +39,18 @@ void CStatus::Set_MP(_int _iMP)
 	m_tStat.iMp -= _iMP;
 }
 
-_int CStatus::Get_Att()
-{
-	_int iSimulateAtt = 0;
-	_int iAttBound = m_tStat.iMaxAtt - m_tStat.iMinAtt;
-	iSimulateAtt = (_int)((rand() % iAttBound + m_tStat.iMinAtt) * (m_tStat.fAttRate + 1);
-
-	_int iSimulateCriticalChance = rand() % 100;
-	if (iSimulateCriticalChance < m_tStat.iCriticalChance)
-		iSimulateAtt *= m_tStat.iCriticalRate;
-
-	return iSimulateAtt;
-}
+//_int CStatus::Get_Att()
+//{
+//	_int iSimulateAtt = 0;
+//	_int iAttBound = m_tStat.iMaxAtt - m_tStat.iMinAtt;
+//	iSimulateAtt = (_int)((rand() % iAttBound + m_tStat.iMinAtt) * (m_tStat.fAttRate + 1));
+//
+//	_int iSimulateCriticalChance = rand() % 100;
+//	if (iSimulateCriticalChance < m_tStat.iCriticalChance)
+//		iSimulateAtt *= m_tStat.iCriticalRate;
+//
+//	return iSimulateAtt;
+//}
 
 _int CStatus::Get_Def()
 {

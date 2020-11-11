@@ -7,6 +7,7 @@
 USING(Engine)
 BEGIN(Client)
 
+class CDamageInfo;
 class CWolf final : public CGameObject
 {
 	enum WOLF_PART
@@ -113,6 +114,7 @@ private:
 	CTexture*			m_pTextureCom[WOLF_END] = {};
 	CSphereCollider*	m_pColliderCom = nullptr;
 	CStatus*			m_pStatusCom = nullptr;
+	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
 
 	//--------------------------------------------------

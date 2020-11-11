@@ -165,7 +165,7 @@ HRESULT CYeti::Take_Damage(const CComponent* _pDamageComp)
 	if (!m_bCanHurt)
 		return S_OK;
 
-	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iDamage;
 	
 	m_pStatusCom->Set_HP(iAtk);	
 	if (m_pStatusCom->Get_Status().iHp <= 0)

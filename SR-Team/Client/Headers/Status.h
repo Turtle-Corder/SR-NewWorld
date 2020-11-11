@@ -54,7 +54,7 @@ public:
 	void Change_Hp(_int iHp) { m_tStat.iHp = iHp; if (m_tStat.iHp >= 100) m_tStat.iHp = 100; }
 	void Change_Mp(_int iMp) { m_tStat.iMp = iMp;  if (m_tStat.iMp >= 100) m_tStat.iMp = 100;}
 
-	_int Get_Att();
+//	_int Get_Att();
 	_int Get_Def();
 	
 	void Set_AttRate(_float _fAttRate);

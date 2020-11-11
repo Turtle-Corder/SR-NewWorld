@@ -28,6 +28,7 @@ private:
 
 public:
 	const DAMAGE_DESC& Get_Desc() const;
+	_int Get_Att();
 
 public:
 	virtual HRESULT Setup_Component_Prototype() override;
