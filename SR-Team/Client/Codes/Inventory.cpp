@@ -181,6 +181,11 @@ HRESULT CInventory::Delete_Item(const wstring & strItemName)
 		++m_iNewInsertOrder;
 	}
 
+	for (_uint i = 0; i < m_pInvenList.size(); i++)
+	{
+		m_bIsItemHere[i] = true;
+	}
+
 	return S_OK;
 }
 
@@ -651,9 +656,9 @@ HRESULT CInventory::Check_EquipItem()
 	{
 		for (_uint j = 0; j < 6; j++)
 		{
+			iIndex = i * 6 + j;
 			if (pManagement->Key_Pressing(VK_RBUTTON))
 			{
-				iIndex = i * 6 + j;
 		
 				if (m_bIsItemHere[iIndex] && PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
 				{
@@ -666,8 +671,6 @@ HRESULT CInventory::Check_EquipItem()
 						pEquip->Equip_Item(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag);
 						return S_OK;
 					}
-					else if (!m_bIsItemHere[iIndex])
-						continue;
 				}
 			}
 			else if (pManagement->Key_Pressing(VK_LBUTTON) && m_bIsItemHere[iIndex])
@@ -677,8 +680,6 @@ HRESULT CInventory::Check_EquipItem()
 					if (FAILED(Open_RandomBox(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag)))
 						return E_FAIL;
 				}
-				else if (!m_bIsItemHere[iIndex])
-					continue;
 			}
 		}
 	}
@@ -721,8 +722,9 @@ HRESULT CInventory::Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag)
 		else if (strGetcha == L"Component_Texture_Item_BalrogWings")
 			strGetcha = L"BalrogWings";
 
-		Get_RewardItem(strGetcha);
 		Delete_Item(strNameTag);
+		Get_RewardItem(strGetcha);
+		
 		
 	}
 	return S_OK;
