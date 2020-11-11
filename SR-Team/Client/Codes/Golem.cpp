@@ -460,7 +460,7 @@ HRESULT CGolem::Update_State()
 			break;
 
 		case CGolem::ATTACK3:
-			m_fAttackDelay = 1.3f;		// 몬스터 생성
+			m_fAttackDelay = 1.f;		// 몬스터 생성
 			break;
 
 		case CGolem::ATTACK4:

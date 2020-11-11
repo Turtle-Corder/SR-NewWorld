@@ -131,8 +131,8 @@ HRESULT CBomb_Residue::Add_Component()
 
 	//시작할위치
 	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x , m_tInstant.vPosition.y , m_tInstant.vPosition.z) };
-	tTransformDesc.fSpeedPerSecond = 10.f;
-	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
+	tTransformDesc.fSpeedPerSecond = 1.f;
+	tTransformDesc.fRotatePerSecond = D3DXToRadian(120.f);
 
 	_uint iRand = (rand() % 4 + 1) + 2;
 	_float fScail = iRand / 10.f;
