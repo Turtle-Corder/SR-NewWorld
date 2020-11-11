@@ -40,6 +40,7 @@ private:
 	INSTANTIMPACT		m_tInstant = {};
 	_float				m_fDeadTime = 0.f;
 	_float				m_fTimeFlow = 0.f;
+	_uint				m_iTexture_Number = 0;
 };
 
 END
