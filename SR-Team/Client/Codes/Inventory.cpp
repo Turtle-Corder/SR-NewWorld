@@ -18,6 +18,9 @@ CInventory::CInventory(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DX
 		m_pTransformCom[i] = nullptr;
 		m_pTextureCom[i] = nullptr;
 	}
+
+	for (_uint i = 0; i < RANDOMBOX_ITEM_END; ++i)
+		m_pTextureRandom[i] = nullptr;
 }
 
 CInventory::CInventory(const CInventory & _rOther)
@@ -395,10 +398,17 @@ HRESULT CInventory::Render_UI()
 	{
 		if (FAILED(Render_ClearWnd()))
 			return E_FAIL;
+		if (pManagement->Key_Pressing(VK_RETURN))
+			m_bRenderClearWnd = false;
 	}
 
-	if (m_bRenderClearWnd && pManagement->Key_Pressing(VK_RETURN))
-		m_bRenderClearWnd = false;
+	if (m_bRender_GetRandomBoxItem)
+	{
+		if (FAILED(Render_GetRandomBoxItem()))
+			return E_FAIL;
+		if (pManagement->Key_Pressing(VK_RETURN))
+			m_bRender_GetRandomBoxItem = false;
+	}
 
 	return S_OK;
 }
@@ -541,6 +551,7 @@ HRESULT CInventory::Select_SellItem()
 							m_bSelectedSell[iIndex] = true;
 							++m_iDeleteCnt;
 							m_iSellGold += (m_pInvenList[iIndex]->iPrice * m_pInvenList[iIndex]->iCnt);
+							CSoundManager::Get_Instance()->PlayUI(L"OpenWnd.wav");
 						}
 						else
 							PRINT_LOG(L"현재 장착하고 있는 아이템은 판매 못함", LOG::DEBUG);
@@ -656,10 +667,9 @@ HRESULT CInventory::Check_EquipItem()
 	{
 		for (_uint j = 0; j < 6; j++)
 		{
-			iIndex = i * 6 + j;
 			if (pManagement->Key_Pressing(VK_RBUTTON))
 			{
-		
+				iIndex = i * 6 + j;
 				if (m_bIsItemHere[iIndex] && PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
 				{
 					_int k = 0;
@@ -669,6 +679,7 @@ HRESULT CInventory::Check_EquipItem()
 						// 장비창에게 아이템 정보를 넘겨준다
 						//pEquip->Equip_Item(*m_pInvenList[iIndex]);
 						pEquip->Equip_Item(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag);
+						CSoundManager::Get_Instance()->PlayUI(L"Equip_Item.wav");
 						return S_OK;
 					}
 				}
@@ -705,27 +716,52 @@ HRESULT CInventory::Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag)
 	if (pManagement != nullptr)
 	{
 		if (strGetcha == L"Component_Texture_Item_RedPotion")
+		{
+			m_eRandomBoxID = POTION_RANDOM_REDPOTION;
 			strGetcha = L"RedPotion";
+		}
 		else if (strGetcha == L"Component_Texture_Item_BluePotion")
+		{
+			m_eRandomBoxID = POTION_RANDOM_BLUEPOTION;
 			strGetcha = L"BluePotion";
+		}
 		else if (strGetcha == L"Component_Texture_Item_RedElixir")
+		{
+			m_eRandomBoxID = POTION_RANDOM_REDELIXER;
 			strGetcha = L"RedElixir";
+		}
 		else if (strGetcha == L"Component_Texture_Item_BlueElixir")
+		{
+			m_eRandomBoxID = POTION_RANDOM_BLUEELIXER;
 			strGetcha = L"BlueElixir";
+		}
 
-		if (strGetcha == L"Component_Texture_Item_MagicalStaff")
-			strGetcha = L"MagicalStaff";
+		if (strGetcha == L"Component_Texture_Item_WarriorStaff")
+		{
+			m_eRandomBoxID = EQUIP_RANDOM_STAFF;
+			strGetcha = L"Warrior_Staff";
+		}
 		else if (strGetcha == L"Component_Texture_Item_AquaGloves")
+		{
+			m_eRandomBoxID = EQUIP_RANDOM_GLOVES;
 			strGetcha = L"AquaGloves";
+		}
 		else if (strGetcha == L"Component_Texture_Item_PupleDress")
+		{
+			m_eRandomBoxID = EQUIP_RANDOM_DRESS;
 			strGetcha = L"PupleDress";
+		}
 		else if (strGetcha == L"Component_Texture_Item_BalrogWings")
+		{
+			m_eRandomBoxID = EQUIP_RANDOM_WING;
 			strGetcha = L"BalrogWings";
+		}
 
 		Delete_Item(strNameTag);
 		Get_RewardItem(strGetcha);
 		
-		
+		// 랜덤박스 연출
+		m_bRender_GetRandomBoxItem = true;
 	}
 	return S_OK;
 }
@@ -946,6 +982,23 @@ HRESULT CInventory::Render_ClearWnd()
 	return S_OK;
 }
 
+HRESULT CInventory::Render_GetRandomBoxItem()
+{
+	_matrix matWorld, matTrans;
+	const D3DXIMAGE_INFO* pTexInfo = m_pTextureRandom[m_eRandomBoxID]->Get_TexInfo(0);
+	_vec3 vCenter = { pTexInfo->Width * 0.5f, pTexInfo->Height * 0.5f, 0.f };
+
+	D3DXMatrixTranslation(&matTrans, WINCX * 0.5f, WINCY * 0.5f, 0.f);
+	matWorld = matTrans;
+
+	m_pSprite->SetTransform(&matWorld);
+	m_pSprite->Draw(
+		(LPDIRECT3DTEXTURE9)m_pTextureRandom[m_eRandomBoxID]->GetTexture(0),
+		nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	return S_OK;
+}
+
 HRESULT CInventory::Move_InventoryWnd()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -1034,6 +1087,29 @@ HRESULT CInventory::Add_Component()
 		L"Com_TextureClear", (CComponent**)&m_pTextureClear)))
 		return E_FAIL;
 
+	TCHAR szTextureTag[][MAX_STR] =
+	{
+		L"Component_Texture_GetStaff",
+		L"Component_Texture_GetGloves",
+		L"Component_Texture_GetDress",
+		L"Component_Texture_GetWing",
+
+		L"Component_Texture_GetRedPotion",
+		L"Component_Texture_GetBluePotion",
+		L"Component_Texture_GetRedElixer",
+		L"Component_Texture_GetBlueElixer"
+	};
+	TCHAR szTexture2[MIN_STR] = L"Com_TextureGetRandomItem%d";
+	TCHAR szCombine2[MIN_STR] = L"";
+
+	for (_uint i = 0; i < RANDOMBOX_ITEM_END; i++)
+	{
+		StringCchPrintf(szCombine2, _countof(szCombine2), szTexture2, i);
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, szTextureTag[i],
+			szCombine2, (CComponent**)&m_pTextureRandom[i])))
+			return E_FAIL;
+	}
+
 	for (_uint i = 0; i < INVEN_END; ++i)
 	{
 		// 2. Transform
@@ -1069,6 +1145,7 @@ HRESULT CInventory::Add_Component()
 	//	L"Component_ItemManagement", L"Com_ItemMgr", 
 	//	(CComponent**)&m_pItemMgrCom)))
 	//	return E_FAIL;
+
 
 	return S_OK;
 }
@@ -1171,6 +1248,9 @@ void CInventory::Free()
 	//m_pInvenList.swap(m_pInvenList);
 
 	Safe_Release(m_pTextureClear);
+
+	for (_uint i = 0; i < RANDOMBOX_ITEM_END; i++)
+		Safe_Release(m_pTextureRandom[i]);
 
 	CUIObject::Free();
 }

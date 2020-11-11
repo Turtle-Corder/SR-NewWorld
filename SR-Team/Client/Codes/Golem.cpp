@@ -82,18 +82,22 @@ _int CGolem::Update_GameObject(_float _fDeltaTime)
 
 _int CGolem::LateUpdate_GameObject(_float _fDeltaTime)
 {
-	if (!m_bActive)
-		return GAMEOBJECT::NOEVENT;
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return 0;
 
 	Update_AttackDelay(_fDeltaTime);
 	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return 0;
+	}
 
 	for (_uint iCnt = 0; iCnt < 5; ++iCnt)
 	{
@@ -135,6 +139,34 @@ HRESULT CGolem::Render_NoneAlpha()
 	return S_OK;
 }
 
+HRESULT CGolem::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_int iAll = 0; iAll < GOLEM_END; ++iAll)
+	{
+		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 CGameObject * CGolem::Clone_GameObject(void * _pArg)
 {
 	CGolem* pInstance = new CGolem(*this);
@@ -157,6 +189,7 @@ void CGolem::Free()
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -286,6 +319,9 @@ HRESULT CGolem::Add_Component_Texture()
 			return E_FAIL;
 	}
 
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
+		return E_FAIL;
+	
 	return S_OK;
 }
 
@@ -863,6 +899,19 @@ void CGolem::Update_HurtDelay(_float _fDeltaTime)
 	}
 }
 
+void CGolem::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
+		}
+	}
+}
+
 HRESULT CGolem::Spawn_GolemImpact(_uint iOption)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -1027,16 +1076,46 @@ HRESULT CGolem::Phatton()
 
 HRESULT CGolem::Take_Damage(const CComponent* _pDamageComp)
 {
-	if (!m_bCanHurt && !_pDamageComp)
+	if (!_pDamageComp)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	if (!m_bCanHurt)
+		return S_OK;
 
-	if (m_pStatusCom->Get_Status().iHp <= 0)
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	m_pStatusCom->Set_HP(iAtk);
+	if (0 >= m_pStatusCom->Get_Status().iHp)
 	{
+		DROPBOX_INFO tBoxInfo;
+		tBoxInfo.vPos = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
+		tBoxInfo.iItemNo = 2;
+		tBoxInfo.bGone = false;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_Active", &tBoxInfo)))
+			return E_FAIL;
+
+		pManagement->Set_SceneEvent(eSceneEventID::EVENT_CLEAR);
 		m_bDead = true;
 	}
 
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (vAddPos * 3.f) + _vec3(0.f, 3.f, 0.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	m_bCanHurt = false;
+	m_bFlinch = true;
 	return S_OK;
 }
 

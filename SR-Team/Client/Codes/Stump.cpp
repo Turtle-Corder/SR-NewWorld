@@ -75,9 +75,16 @@ _int CStump::LateUpdate_GameObject(_float _fDeltaTime)
 
 	Update_AttackDelay(_fDeltaTime);
 	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return 0;
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -119,6 +126,34 @@ HRESULT CStump::Render_NoneAlpha()
 	return S_OK;
 }
 
+HRESULT CStump::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_int iAll = STUMP_BODY; iAll < STUMP_END; ++iAll)
+	{
+		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 void CStump::Free()
 {
 	for (_uint iCnt = 0; iCnt < STUMP_END; ++iCnt)
@@ -128,6 +163,7 @@ void CStump::Free()
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -158,30 +194,52 @@ void CStump::Set_Active()
 
 HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 {
-	if (!m_bCanHurt && !_pDamageComp)
+	if (!_pDamageComp)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	if (!m_bCanHurt)
+		return S_OK;
 
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	m_pStatusCom->Set_HP(iAtk);
 	if (m_pStatusCom->Get_Status().iHp <= 0)
 	{
+		//--------------------------------------------------
+		// 드랍아이템 & 씬 이벤트 갱신
+		//--------------------------------------------------
 		DROPBOX_INFO tBoxInfo;
 		tBoxInfo.vPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
 		tBoxInfo.iItemNo = 1;
 		tBoxInfo.bGone = false;
 
-		CManagement* pManagement = CManagement::Get_Instance();
-		if (nullptr == pManagement)
-			return E_FAIL;
-
 		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_Active", &tBoxInfo)))
 			return E_FAIL;
 
 		pManagement->Set_SceneEvent(eSceneEventID::EVENT_CLEAR);
-
 		m_bDead = true;
 	}
 
+	//--------------------------------------------------
+	// 플로팅
+	//--------------------------------------------------
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition + (vAddPos * 3.f) + _vec3(0.f, 3.f, 0.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	m_bCanHurt = false;
+	m_bFlinch = true;
 	return S_OK;
 }
 
@@ -329,6 +387,9 @@ HRESULT CStump::Add_Component()
 	tDmgInfo.eType = eELEMENTAL_TYPE::NONE;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -828,6 +889,19 @@ void CStump::Update_HurtDelay(_float _fDeltaTime)
 		{
 			m_fHurtTimer = 0.f;
 			m_bCanHurt = true;
+		}
+	}
+}
+
+void CStump::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
 		}
 	}
 }

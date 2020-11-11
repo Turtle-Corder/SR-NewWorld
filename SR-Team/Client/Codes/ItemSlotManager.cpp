@@ -9,10 +9,10 @@ CItemSlotManager::CItemSlotManager()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 
-	m_pRedPotion = (CItemSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerItem", 0);
-	m_pBluePotion = (CItemSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerItem", 1);
-	m_pRedElixir = (CItemSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerItem", 2);
-	m_pBlueElixir = (CItemSlot*)pManagement->Get_GameObject(SCENE_ROOM, L"Layer_PlayerItem", 3);
+	m_pRedPotion = (CItemSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerItem", 0);
+	m_pBluePotion = (CItemSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerItem", 1);
+	m_pRedElixir = (CItemSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerItem", 2);
+	m_pBlueElixir = (CItemSlot*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_PlayerItem", 3);
 }
 
 CItemSlot * CItemSlotManager::Get_PlayerItem(ePotion_ID ePotionID)

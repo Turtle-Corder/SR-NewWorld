@@ -159,97 +159,97 @@ HRESULT CDataManager::Add_Component_Item()
 		TCHAR szTexture[MAX_PATH] = L"";
 		TCHAR szTextureName[MAX_PATH] = L"";
 		if (i == 0)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_MagicalRageStaff");
 		else if (i == 1)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_AngleWingStaff");
 		else if (i == 2)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_WarriorStaff");
 		else if (i == 3)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_BlackDress");
 		else if (i == 4)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_PupleDress");
 		else if (i == 5)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_ScholarShoes");
 		else if (i == 6)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_ArcaneShoes");
 		else if (i == 7)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_RedPotion");
 		else if (i == 8)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_OrangePotion");
 		else if (i == 9)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_WhitePotion");
 		else if (i == 10)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_BluePotion");
 		else if (i == 11)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_RedElixir");
 		else if (i == 12)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_BlueElixir");
 		else if (i == 13)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_AbsoluteBelt");
 		else if (i == 14)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_AquaGloves");
 		else if (i == 15)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_BalrogWings");
 		else if (i == 16)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_SorcererGloves");
 		else if (i == 17)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_FlowerQuest_Flower");
 		else if (i == 18)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_FlowerQuest_RewardPotion");
 		else if (i == 19)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Red");
 		else if (i == 20)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green");
 		else if (i == 21)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Puple");
 		else if (i == 22)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue");
 		else if (i == 23)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_DropDiamond");
 		else if (i == 24)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_DropRuby");
 		else if (i == 25)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_MagicalStaff");
 		else if (i == 26)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_ItemBox_Potion");
 		else if (i == 27)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_ItemBox_Equip");
 		else if (i == 28)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_ForgottenNecklace");
 		else if (i == 29)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_LethalCape");
 
-		StringCchPrintf(szTexture, sizeof(TCHAR) * MAX_PATH,
+		StringCchPrintf(szTexture, _countof(szTexture),
 			L"Com_Texture%d", i);
 
 		if (FAILED(CGameObject::Add_Component(
@@ -542,22 +542,19 @@ HRESULT CDataManager::Add_Component_Item()
 		CStatus::STAT	tStat;
 		if (i == 0)
 		{
-			tStat.iCriticalRate = 100;
-			tStat.iCriticalChance = 30;
+			tStat.iCriticalRate = 20;
 			tStat.iMaxAtt = 150;
 			tStat.iMinAtt = 10;
 		}
 		else if (i == 1)
 		{
-			tStat.iCriticalRate = 150;
-			tStat.iCriticalChance = 20;
+			tStat.iCriticalRate = 20;
 			tStat.iMaxAtt = 160;
 			tStat.iMinAtt = 50;
 		}
 		else if (i == 2)
 		{
-			tStat.iCriticalRate = 200;
-			tStat.iCriticalChance = 80;
+			tStat.iCriticalRate = 30;
 			tStat.iMaxAtt = 120;
 			tStat.iMinAtt = 70;
 		}
