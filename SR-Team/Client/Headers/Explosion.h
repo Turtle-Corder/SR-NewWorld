@@ -21,12 +21,16 @@ public:
 private:
 	HRESULT Add_Component();
 	void Update_DeadDelay(_float _fDeltaTime);
+	void Update_EffectDelay(_float _fDeltaTime);
 	void Update_Scale(_float _fDeltaTime);
+	HRESULT Make_Pieces();
+
 
 public:
 	static CExplosion* Create(LPDIRECT3DDEVICE9 _pDevice);
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual void Free() override;
+	
 
 private:
 	CVIBuffer*	m_pVIBufferCom = nullptr;
@@ -44,6 +48,9 @@ private:
 
 	_float			m_fScaleTimer = 0.f;
 	_float			m_fScaleSpeed = 1.f;
+
+	_float			m_fEffectDelay = 0.2f;
+	_float			m_fEffectTimer = 0.f;
 };
 
 END

@@ -45,6 +45,7 @@
 #include "ThunderBox.h"
 #include "IceBlastPiece.h"
 #include "IceDust.h"
+#include "FloatingFire.h"
 
 #include "SkillSlot_Meteor.h"
 #include "SkillSlot_IceSpear.h"
@@ -1348,6 +1349,17 @@ HRESULT CMainApp::Setup_DS()
 #pragma region Component_Texture_Skybox
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds", 3))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_FloatingFire
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_FloatingFire", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL,
+		L"../Resources/3D/Layer_Effect/GameObject_FloatingFire/RedTexture%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_FloatingFire
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_FloatingFire", CFloatingFire::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 
