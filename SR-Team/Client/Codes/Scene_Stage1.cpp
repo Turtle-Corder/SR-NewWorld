@@ -246,17 +246,24 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	_vec3 vPos = { 12.48f, 0.f, 33.08f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
+	SLIMEINFO tSlimInfo;
+	ZeroMemory(&tSlimInfo, sizeof(SLIMEINFO));
+	tSlimInfo.iTextureNumber = 0;
+	tSlimInfo.vPos = { 12.48f, 0.f, 33.08f };
+
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
 
-	//vPos = { 32.f, 0.f, 40.96f }; 
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
-	//	return E_FAIL;
+	tSlimInfo.iTextureNumber = 1;
+	tSlimInfo.vPos = { 32.f, 0.f, 40.96f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+		return E_FAIL;
 
-	//vPos = { 18.4f, 0.f, 38.2f };
-	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
-	//	return E_FAIL;
+	tSlimInfo.iTextureNumber = 2;
+	tSlimInfo.vPos = { 18.4f, 0.f, 38.2f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+		return E_FAIL;
 
 	//vPos = { 13.44f, 0.f, 28.64f };
 	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
@@ -267,9 +274,6 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 	//	return E_FAIL;
 
 	//----------------------------------------------------------------------------------------------------
-
-	SLIMEINFO tSlimInfo;
-	ZeroMemory(&tSlimInfo, sizeof(SLIMEINFO));
 
 	tSlimInfo.iCurCount = 1;
 	tSlimInfo.iTextureNumber = 0;
