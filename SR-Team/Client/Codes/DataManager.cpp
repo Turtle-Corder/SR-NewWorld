@@ -542,22 +542,19 @@ HRESULT CDataManager::Add_Component_Item()
 		CStatus::STAT	tStat;
 		if (i == 0)
 		{
-			tStat.iCriticalRate = 100;
-			tStat.iCriticalChance = 30;
+			tStat.iCriticalRate = 20;
 			tStat.iMaxAtt = 150;
 			tStat.iMinAtt = 10;
 		}
 		else if (i == 1)
 		{
-			tStat.iCriticalRate = 150;
-			tStat.iCriticalChance = 20;
+			tStat.iCriticalRate = 20;
 			tStat.iMaxAtt = 160;
 			tStat.iMinAtt = 50;
 		}
 		else if (i == 2)
 		{
-			tStat.iCriticalRate = 200;
-			tStat.iCriticalChance = 80;
+			tStat.iCriticalRate = 30;
 			tStat.iMaxAtt = 120;
 			tStat.iMinAtt = 70;
 		}

@@ -440,6 +440,7 @@ HRESULT CEquip::UnEquip_Item()
 			{
 				if (PtInRect(&m_tEquipItemCollRt[i], pMouse->Get_Point()))
 				{
+					CSoundManager::Get_Instance()->PlayUI(L"Equip_Item.wav");
 					m_bEquip[i] = false;
 				}
 			}

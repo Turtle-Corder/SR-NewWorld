@@ -346,4 +346,24 @@ enum eSceneEventID
 	EVNET_TRAVEL,
 };
 
+
+//--------------------------------------------------
+// 장비 랜덤 박스
+//--------------------------------------------------
+
+enum eRandomBoxID
+{
+	EQUIP_RANDOM_STAFF,
+	EQUIP_RANDOM_GLOVES,
+	EQUIP_RANDOM_DRESS,
+	EQUIP_RANDOM_WING,
+
+	POTION_RANDOM_REDPOTION,
+	POTION_RANDOM_BLUEPOTION,
+	POTION_RANDOM_REDELIXER,
+	POTION_RANDOM_BLUEELIXER,
+
+	RANDOMBOX_ITEM_END
+};
+
 #endif
