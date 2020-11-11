@@ -363,10 +363,10 @@ HRESULT CStump::Add_Component()
 	}
 
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
+	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 2;
 	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	tStat.iHp = 100000;
+	tStat.iMinAtt = 30;			tStat.iMaxAtt = 30;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;

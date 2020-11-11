@@ -341,8 +341,10 @@ HRESULT CWolf::Add_Component_Extends()
 
 	CStatus::STAT tStat;
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
-	tStat.iHp = tStat.iMaxHp = 100000;
-	// TODO : Stat ¼ÂÆÃ
+	tStat.iCriticalRate = 0;	tStat.iCriticalChance = 30;
+	tStat.iDef = 10;
+	tStat.iHp = 10000;
+	tStat.iMinAtt = 20;			tStat.iMaxAtt = 30;
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
 

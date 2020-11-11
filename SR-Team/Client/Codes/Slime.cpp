@@ -241,10 +241,11 @@ HRESULT CSlime::Add_Component()
 		return E_FAIL;
 
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
-	tStat.iDef = 50;
-	tStat.iHp = 100000;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	ZeroMemory(&tStat, sizeof(CStatus::STAT));
+	tStat.iCriticalChance = 5;	tStat.iCriticalRate = 0;
+	tStat.iDef = 10;
+	tStat.iHp = 10000 / m_iCurCount;
+	tStat.iMinAtt = 15;			tStat.iMaxAtt = 20;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;

@@ -201,10 +201,11 @@ HRESULT CSnail::Add_Component()
 	// 나중에 몬스터 데이터 불러올때 지정함
 	//----------------------------------------
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
-	tStat.iDef = 50;
-	tStat.iHp = 1000000;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	ZeroMemory(&tStat, sizeof(CStatus::STAT));
+	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
+	tStat.iDef = 0;
+	tStat.iHp = 3000;			tStat.iMp = 0;
+	tStat.iMinAtt = 10;			tStat.iMaxAtt = 10;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;

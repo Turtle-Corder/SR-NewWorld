@@ -295,10 +295,11 @@ HRESULT CYeti::Add_Component()
 	}
 
 	CStatus::STAT tStat;
-	tStat.iCriticalRate = 20;	tStat.iCriticalChance = 10;
-	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	ZeroMemory(&tStat, sizeof(CStatus::STAT));
+	tStat.iCriticalRate = 1;	tStat.iCriticalChance = 15;
+	tStat.iDef = 30;
+	tStat.iHp = 20000;
+	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
