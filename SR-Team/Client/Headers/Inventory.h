@@ -123,6 +123,7 @@ private:
 	// ------------------------------------------------------------------
 	HRESULT Render_Item();
 	HRESULT Render_ClearWnd();
+	HRESULT Render_GetRandomBoxItem();
 
 
 // 움직임 관련 함수
@@ -222,6 +223,12 @@ private:
 	// 구매 완료 이미지
 	CTexture*		m_pTextureClear = nullptr;
 	_bool			m_bRenderClearWnd = false;
+
+private:
+	// 랜덤박스 아이템 획득 이미지
+	CTexture*		m_pTextureRandom[RANDOMBOX_ITEM_END] = { nullptr, };
+	eRandomBoxID	m_eRandomBoxID = RANDOMBOX_ITEM_END;
+	_bool			m_bRender_GetRandomBoxItem = false;
 };
 
 END
