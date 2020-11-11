@@ -252,24 +252,24 @@ HRESULT CScene_Stage2::Setup_Layer_Monster(const wstring & LayerTag)
 	//----------------------------------------------------------------------------------------------------
 
 	vSpawnPos = { 62.f, 0.f, 37.f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
 	vSpawnPos = { 66.f, 0.f, 37.f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
 
 	vSpawnPos = { 60.f, 0.f, 45.f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
 	vSpawnPos = { 64.f, 0.f, 45.f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
 	vSpawnPos = { 68.f, 0.f, 45.f };
-	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
 
