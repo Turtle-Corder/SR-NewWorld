@@ -302,13 +302,13 @@ HRESULT CPreLoader::Load_Resources_Forest()
 #pragma endregion
 
 #pragma region Component_Texture_SnailBody
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Snail/SnailBody%d.dds" , 3))))
 	{
 	}
 #pragma endregion
 
 #pragma region Component_Texture_SnailHead
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Snail/SnailHead%d.dds" , 3))))
 	{
 	}
 
@@ -336,7 +336,7 @@ HRESULT CPreLoader::Load_Resources_Forest()
 #pragma endregion
 
 #pragma region Component_Texture_Translucent_Cube
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Test/TranslucentCube%d.dds", 6))))
+	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Translucent/TranslucentCube%d.dds", 6))))
 	{
 	}
 #pragma endregion

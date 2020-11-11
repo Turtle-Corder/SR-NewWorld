@@ -234,6 +234,8 @@ HRESULT CIceLandQuest::Render_HelpWnd()
 
 	if (m_eSituation == ICEQUEST_ON_THE_QUEST)
 		iIndex = ICEQUEST_NOCLEAR;
+	if (m_bRenderClear)
+		iIndex = ICEQUEST_CLEAR;
 
 	if (iIndex != -1)
 	{
@@ -250,17 +252,20 @@ HRESULT CIceLandQuest::Render_HelpWnd()
 			(LPDIRECT3DTEXTURE9)m_pTextureHelp[iIndex]->GetTexture(0),
 			nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-		// 처치한 몬스터 수 출력
-		StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"%d", m_iMonsetDeadCnt);
+		if (!m_bRenderClear)
+		{
+			// 처치한 몬스터 수 출력
+			StringCchPrintf(szBuff, sizeof(TCHAR) * MAX_PATH, L"%d", m_iMonsetDeadCnt);
 
-		D3DXMatrixScaling(&matScale, 2.f, 2.f, 0.f);
-		if (iIndex == ICEQUEST_NOCLEAR)
-			D3DXMatrixTranslation(&matTrans, 1720.f, 232.f, 0.f);
-		matWorld = matScale * matTrans;
+			D3DXMatrixScaling(&matScale, 2.f, 2.f, 0.f);
+			if (iIndex == ICEQUEST_NOCLEAR)
+				D3DXMatrixTranslation(&matTrans, 1720.f, 232.f, 0.f);
+			matWorld = matScale * matTrans;
 
-		m_pSprite->SetTransform(&matWorld);
-		m_pFont->DrawTextW(m_pSprite, szBuff, lstrlen(szBuff),
-			nullptr, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			m_pSprite->SetTransform(&matWorld);
+			m_pFont->DrawTextW(m_pSprite, szBuff, lstrlen(szBuff),
+				nullptr, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+		}
 
 	}
 

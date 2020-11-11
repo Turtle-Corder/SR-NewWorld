@@ -28,13 +28,13 @@ HRESULT CSnail::Setup_GameObject_Prototype()
 HRESULT CSnail::Setup_GameObject(void* pArg)
 {
 	if (pArg)
-		m_vStartPos = *(_vec3*)pArg;
+		m_tSlimeInfo = *(SLIMEINFO*)pArg;
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
 	Set_Active();
-
+	m_iTextureNumber = m_tSlimeInfo.iTextureNumber;
 	return S_OK;
 }
 
@@ -106,7 +106,7 @@ HRESULT CSnail::Render_NoneAlpha()
 		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
 			return E_FAIL;
 
-		if (FAILED(m_pTextureCom[iAll]->SetTexture(0)))
+		if (FAILED(m_pTextureCom[iAll]->SetTexture(m_iTextureNumber)))
 			return E_FAIL;
 
 		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
@@ -184,7 +184,7 @@ HRESULT CSnail::Add_Component()
 		}
 		else if (iAll == SNAIL_BODY)
 		{
-			tTransformDesc[SNAIL_BODY].vPosition = { m_vStartPos.x , 0.f, m_vStartPos.z };
+			tTransformDesc[SNAIL_BODY].vPosition = { m_tSlimeInfo.vPos.x , 0.f, m_tSlimeInfo.vPos.z };
 			tTransformDesc[SNAIL_BODY].fSpeedPerSecond = 10.f;
 			tTransformDesc[SNAIL_BODY].fRotatePerSecond = D3DXToRadian(90.f);
 			tTransformDesc[SNAIL_HEAD].vScale = { 1.f , 1.f , 1.f };
