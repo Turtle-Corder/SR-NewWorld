@@ -381,6 +381,17 @@ HRESULT CMainQuest::Check_GolemCore_Count()
 			m_bClear = false;
 	}
 
+	for (_uint i = 0; i < GOLEM_SORT_END; ++i)
+	{
+		if (m_bGetGolemCore[i])
+			m_bClear = true;
+		else
+		{
+			m_bClear = false;
+			break;
+		}
+	}
+
 	return S_OK;
 }
 
