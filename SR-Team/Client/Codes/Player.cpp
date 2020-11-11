@@ -249,6 +249,8 @@ HRESULT CPlayer::Take_Damage(const CComponent* _pDamageComp)
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+
+	if((_float)m_pStatusCom->Get_Status().iHp / (_float)m_pStatusCom->Get_Status().iMaxHp < 0.2)
 	pMainCamera->Set_Camera_Wigging(0.7f, 70.f, 1.5f, CMainCamera::WIG_TYPE::DAMPED);
 
 	if (!m_bFlinch)
