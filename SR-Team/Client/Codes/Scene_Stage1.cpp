@@ -263,12 +263,12 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 		return E_FAIL;
 
 	tSlimInfo.iTextureNumber = 1;
-	tSlimInfo.vPos = { 32.f, 0.f, 40.96f };
+	tSlimInfo.vPos = { 5.f, 0.f, 5.f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
 
 	tSlimInfo.iTextureNumber = 2;
-	tSlimInfo.vPos = { 18.4f, 0.f, 38.2f };
+	tSlimInfo.vPos = { 8.48f, 0.f, 20.08f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
 
@@ -284,7 +284,7 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 
 	tSlimInfo.iCurCount = 1;
 	tSlimInfo.iTextureNumber = 0;
-	tSlimInfo.vPos = { 12.48f, 0.f, 33.08f };
+	tSlimInfo.vPos = { 10.48f, 0.f, 35.08f };
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
