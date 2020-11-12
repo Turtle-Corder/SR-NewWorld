@@ -351,11 +351,6 @@ HRESULT CPreLoader::Load_Resources_Forest()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Component_Texture_Translucent_Cube
-	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Translucent/TranslucentCube%d.dds", 6))))
-	{
-	}
-#pragma endregion
 
 #pragma region Component_Texture_Crack
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_Crack", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL, L"../Resources/crack%d.png"))))
@@ -475,6 +470,21 @@ HRESULT CPreLoader::Load_Resources_Iceland()
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
+
+
+#pragma region GameObject_Slime
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Slime", CSlime::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Slime_Impact
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Slime_Impact", CSlime_Impact::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+
+
+
 
 #pragma region GameObject_Crack
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_ICELAND, L"GameObject_Crack", CCrack::Create(m_pDevice))))
@@ -596,6 +606,18 @@ HRESULT CPreLoader::Load_Resources_Volcanic()
 		return E_FAIL;
 
 
+
+
+
+#pragma region GameObject_Slime
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Slime", CSlime::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_Slime_Impact
+	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Slime_Impact", CSlime_Impact::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region GameObject_Skybox
 	if (FAILED(pManagement->Add_GameObject_Prototype(SCENE_VOLCANIC, L"GameObject_Skybox", CSkybox::Create(m_pDevice))))

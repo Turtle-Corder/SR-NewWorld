@@ -232,6 +232,8 @@ HRESULT CSlime::Add_Component()
 {
 	m_iCurCount = m_tSlimeInfo.iCurCount;
 
+	CManagement* pManagement = CManagement::Get_Instance();
+
 	CTransform::TRANSFORM_DESC tTransformDesc[SLIME_END];
 
 	tTransformDesc[SLIME_BODY].vPosition = { 0.f , 0.f , 0.01f };
@@ -282,7 +284,7 @@ HRESULT CSlime::Add_Component()
 	//--------------------------------------------------
 	// Texture Component
 	//--------------------------------------------------
-	if (FAILED(CGameObject::Add_Component(SCENE_STAGE1, L"Component_Texture_Slime", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Slime", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	m_ePreState = CSlime::IDLE;
@@ -477,7 +479,7 @@ HRESULT CSlime::Divide_Cube(const wstring & LayerTag)
 
 	_vec3 vMyPos = m_pTransformCom[SLIME_JELLY]->Get_Desc().vPosition;
 	SLIMEINFO tInfo;
-	tInfo.vPos = vMyPos + _vec3{ (_float)m_iCurCount *(rand()%4), 0.f , (_float)m_iCurCount *(rand()%4) };
+	tInfo.vPos = vMyPos + _vec3{ (_float)m_iCurCount *(rand()%100) * 0.01f, 0.f , (_float)m_iCurCount *(rand() % 100) * 0.01f };
 	tInfo.iCurCount = m_iCurCount;
 	tInfo.iTextureNumber = m_iTextureNumber;
 
