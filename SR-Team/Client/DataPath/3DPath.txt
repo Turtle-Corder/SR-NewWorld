@@ -1,2 +1,1 @@
-..\Resources\3D\Layer_Monster\GameObject_Slime\DDS\Slime%d.dds|3D|Layer_Monster|GameObject_Slime|DDS|1
 ..\Resources\3D\Layer_Terrain\GameObject_TerrainBox\DDS\Tile%d.dds|3D|Layer_Terrain|GameObject_TerrainBox|DDS|27

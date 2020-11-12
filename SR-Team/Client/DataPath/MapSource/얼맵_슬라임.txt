@@ -1,0 +1,2 @@
+GameObject_IceSlime||1|41.48|52.52|
+GameObject_IceSlime||1|40.6|58.44|

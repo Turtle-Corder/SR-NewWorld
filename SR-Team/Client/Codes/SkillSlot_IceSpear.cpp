@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "..\Headers\SkillSlot_IceSpear.h"
-
+#include "Sound_Manager.h"
 USING(Client)
 
 CSkillSlot_IceSpear::CSkillSlot_IceSpear(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont)
@@ -127,6 +127,8 @@ _bool CSkillSlot_IceSpear::Actual_UseSkill(void * _pArg)
 			}
 
 	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"aura_ice_dmg.ogg");
 
 	--m_iCanUseCnt;
 	return true;

@@ -295,6 +295,27 @@ HRESULT CScene_Stage2::Setup_Layer_Monster(const wstring & LayerTag)
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
+	//GameObject_IceSlime || 1 | 41.48 | 52.52 |
+	//GameObject_IceSlime || 1 | 40.6 | 58.44 |
+
+	SLIMEINFO tSlimInfo;
+	ZeroMemory(&tSlimInfo, sizeof(SLIMEINFO));
+	tSlimInfo.iCurCount = 1;
+
+	tSlimInfo.vPos = { 41.48f, 0.f, 52.52f };
+	tSlimInfo.iTextureNumber = 2;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Slime", SCENE_ICELAND, LayerTag, &tSlimInfo)))
+		return E_FAIL;
+
+	tSlimInfo.iTextureNumber = 2;
+	tSlimInfo.vPos = { 40.6f, 0.f, 58.44f };
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Slime", SCENE_ICELAND, LayerTag, &tSlimInfo)))
+		return E_FAIL;
+
+
+
 	return S_OK;
 }
 

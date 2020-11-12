@@ -491,6 +491,13 @@ HRESULT CMainApp::Setup_YJ()
 {
 #pragma region Staic
 
+
+#pragma region Component_Texture_Translucent_Cube
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Slime", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Translucent/TranslucentCube%d.dds", 6))))
+		return E_FAIL;
+#pragma endregion
+
+
 #pragma region GameObject_EnergyBolt
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_EnergyBolt", CEnergyBolt::Create(m_pDevice))))
 		return E_FAIL;

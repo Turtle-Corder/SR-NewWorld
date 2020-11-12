@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\AcornExplosion.h"
+#include "DamageInfo.h"
 
 USING(Client)
 
@@ -46,6 +47,8 @@ int CAcornExplosion::Update_GameObject(float _fDeltaTime)
 
 	if (FAILED(m_pTransformCom->Update_Transform()))
 		return 0;
+
+	m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition);
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -122,6 +125,46 @@ HRESULT CAcornExplosion::Add_Component()
 
 	m_pTransformCom->Update_Transform();
 	m_vDir = m_pTransformCom->Get_Look();
+
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = tTransformDesc.vPosition;
+	tColDesc.fRadius = 0.4f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
+
+	CStatus::STAT tStat;
+	tStat.iCriticalChance = 1;	tStat.iCriticalRate = 1;
+	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
+		return E_FAIL;
+
+	CDamageInfo::DAMAGE_DESC tDmgInfo;
+	tDmgInfo.pOwner = m_tInstant.pAttacker;
+
+	if (m_tInstant.pStatusComp)
+	{
+		CStatus* pOnwerStatusComp = (CStatus*)m_tInstant.pStatusComp;
+		tDmgInfo.iMinAtt = pOnwerStatusComp->Get_Status().iMinAtt + m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iMaxAtt = pOnwerStatusComp->Get_Status().iMaxAtt + m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = pOnwerStatusComp->Get_Status().iCriticalChance + m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = pOnwerStatusComp->Get_Status().iCriticalRate + m_pStatusCom->Get_Status().iCriticalRate;
+	}
+	else
+	{
+		tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
+	}
+
+	tDmgInfo.eType = NONE;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -189,12 +232,14 @@ void CAcornExplosion::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pStatusCom);
+	Safe_Release(m_pDmgInfoCom);
 
 	CGameObject::Free();
 }
 
 HRESULT CAcornExplosion::Take_Damage(const CComponent * _pDamageComp)
 {
-
 	return S_OK;
 }
