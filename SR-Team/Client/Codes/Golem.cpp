@@ -636,6 +636,7 @@ HRESULT CGolem::Update_Anim_Attack1(_float _fDeltaTime)
 		if (5 == m_iAnimationStep)
 		{
 			Spawn_GolemImpact(1); // 0 != 면 파티클 생성 0은 미생성
+			CSoundManager::Get_Instance()->PlayEffect(L"CrackSound.mp3");
 		}
 		else if(m_iAnimationStep == 6)
 			m_eCurState = CGolem::IDLE;
@@ -931,6 +932,7 @@ HRESULT CGolem::Spawn_GolemImpact(_uint iOption)
 		return E_FAIL;
 
 	m_bCanAttack = false;
+
 	return S_OK;
 }
 
