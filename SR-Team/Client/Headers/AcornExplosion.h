@@ -6,6 +6,8 @@
 USING(Engine)
 BEGIN(Client)
 
+class CDamageInfo;
+
 class CAcornExplosion final : public CGameObject
 {
 private:
@@ -28,17 +30,20 @@ public:
 	virtual void Free() override;
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 private:
-	CVIBuffer*	m_pVIBufferCom = nullptr;
-	CTransform*	m_pTransformCom = nullptr;
-	CTexture*	m_pTextureCom = nullptr;
+	CVIBuffer*			m_pVIBufferCom = nullptr;
+	CTransform*			m_pTransformCom = nullptr;
+	CTexture*			m_pTextureCom = nullptr;
+	CSphereCollider*	m_pColliderCom = nullptr;
+	CStatus*			m_pStatusCom = nullptr;
+	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
-	_bool			m_bDead = false;
-	_vec3			m_vStartPos = {};
-	_uint			m_iCurrFrame = 0;
-	_uint			m_iMaxCnt = 0;
-	_float			m_fDeadTime = 0.f;
-	_vec3			m_vDir = {};
-	INSTANTIMPACT	m_tInstant = {};
+	_bool				m_bDead = false;
+	_vec3				m_vStartPos = {};
+	_uint				m_iCurrFrame = 0;
+	_uint				m_iMaxCnt = 0;
+	_float				m_fDeadTime = 0.f;
+	_vec3				m_vDir = {};
+	INSTANTIMPACT		m_tInstant = {};
 };
 
 END

@@ -99,7 +99,7 @@ HRESULT CEnergyBolt::Add_Component()
 
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 0; tStat.iCriticalRate = 0;
-	tStat.iMinAtt = 10; tStat.iMaxAtt = 10;
+	tStat.iMinAtt = 5; tStat.iMaxAtt = 10;
 
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))

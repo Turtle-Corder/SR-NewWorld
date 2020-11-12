@@ -27,8 +27,8 @@ HRESULT CBomb_Residue::Setup_GameObject(void * _pArg)
 		return E_FAIL;
 
 	m_iRandSpeed = rand() % 4 + 1;
-	m_fJumpPower = (_float)(rand() % 3 + 2);
-
+	m_vMoveDir = m_tInstant.vDirection;
+	m_iTexture_Number = rand() % 4;
 	return S_OK;
 }
 
@@ -53,7 +53,7 @@ _int CBomb_Residue::LateUpdate_GameObject(_float _fDeltaTime)
 		return GAMEOBJECT::ERR;
 
 	m_fDeadTime += _fDeltaTime;
-	if (m_fDeadTime >= 2.f)
+	if (m_fDeadTime >= 3.f)
 		m_bDead = true;
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
@@ -116,9 +116,9 @@ HRESULT CBomb_Residue::Render_NoneAlpha()
 	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->SetTexture(2)))
+	if (FAILED(m_pTextureCom->SetTexture(m_iTexture_Number)))
 		return E_FAIL;
-
+	
 	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
 		return E_FAIL;
 
@@ -131,8 +131,8 @@ HRESULT CBomb_Residue::Add_Component()
 
 	//시작할위치
 	tTransformDesc.vPosition = { _vec3(m_tInstant.vPosition.x , m_tInstant.vPosition.y , m_tInstant.vPosition.z) };
-	tTransformDesc.fSpeedPerSecond = 10.f;
-	tTransformDesc.fRotatePerSecond = D3DXToRadian(90.f);
+	tTransformDesc.fSpeedPerSecond = 1.f;
+	tTransformDesc.fRotatePerSecond = D3DXToRadian(120.f);
 
 	_uint iRand = (rand() % 4 + 1) + 2;
 	_float fScail = iRand / 10.f;
@@ -147,7 +147,7 @@ HRESULT CBomb_Residue::Add_Component()
 		return E_FAIL;
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Bomb", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Bomb_Residue", L"Com_Texture", (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	// For.Transform
@@ -160,7 +160,7 @@ HRESULT CBomb_Residue::Add_Component()
 
 HRESULT CBomb_Residue::Particle_Move(_float _fDeltaTime)
 {
-	_vec3 vMypos = m_pTransformCom->Get_Desc().vPosition;
+	/*_vec3 vMypos = m_pTransformCom->Get_Desc().vPosition;
 
 	vMypos.y += m_fJumpPower * m_fJumpTime - 9.8f * m_fJumpTime * m_fJumpTime * 0.5f;
 
@@ -174,6 +174,24 @@ HRESULT CBomb_Residue::Particle_Move(_float _fDeltaTime)
 	vMypos += m_tInstant.vDirection * (_fDeltaTime * m_iRandSpeed);
 
 	m_pTransformCom->Set_Position(vMypos);
+	*/
+	
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	_vec3 vAddPos = m_vMoveDir * m_pTransformCom->Get_Desc().fSpeedPerSecond * _fDeltaTime;
+	m_vMoveDir.y -= _fDeltaTime * 9.8f;
+	m_pTransformCom->Set_Position(m_pTransformCom->Get_Desc().vPosition + vAddPos);
+
+	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_X, _fDeltaTime * 0.5f);
+	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Y, _fDeltaTime *  0.5f);
+	m_pTransformCom->Turn(CTransform::AXIS_XYZ::AXIS_Z, _fDeltaTime *  0.5f);
+
+
+	_float Length = D3DXVec3Length(&(m_pTransformCom->Get_Desc().vPosition - m_tInstant.vOption));
+	if (Length < 0.5f)
+		m_bDead = true;
 
 	return S_OK;
 }

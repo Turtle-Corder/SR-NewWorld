@@ -61,6 +61,9 @@ HRESULT CScene_Stage0::Setup_Scene()
 	if (SCENE_LAB == m_ePreLoadSceneID)
 		return S_OK;
 
+	if (FAILED(Setup_Layer_ActiveObject(L"Layer_Active")))
+		return E_FAIL;
+
 	m_pPreLoader = CPreLoader::Create(m_pDevice, m_ePreLoadSceneID);
 	if (nullptr == m_pPreLoader)
 	{
@@ -78,6 +81,9 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return -1;
 
+	//--------------------------------------------------
+	// Init
+	//--------------------------------------------------
 	if (!m_bInit)
 	{
 		CSoundManager::Get_Instance()->StopSound(CSoundManager::BGM);
@@ -95,15 +101,21 @@ _int CScene_Stage0::Update_Scene(_float _fDeltaTime)
 			pCubeTerrain->Set_Active();
 		}
 
+		m_bTravel = false;
 		m_bInit = true;
 	}
 
+
+	//--------------------------------------------------
+	// 씬 전환 조건
+	//--------------------------------------------------
 	if (!m_pPreLoader && pManagement->Key_Down(VK_ESCAPE))
 	{
 		return 999;
 	}
 
-	else if (pManagement->Key_Down(VK_F1) && m_pPreLoader && m_pPreLoader->IsFinished())
+//	else if (m_bTravel && m_pPreLoader && m_pPreLoader->IsFinished())
+	else if ((pManagement->Key_Down(VK_F1) || m_bTravel) && m_pPreLoader && m_pPreLoader->IsFinished())
 	{
 		if (FAILED(Travel_NextLayers()))
 		{
@@ -157,8 +169,8 @@ _int CScene_Stage0::LateUpdate_Scene(_float _fDeltaTime)
 		return GAMEOBJECT::ERR;
 
 	// Src가 공격자 Dst가 피격자
-	//if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_MonsterAtk", L"Layer_Player", L"Com_Collider", L"Com_DmgInfo")))
-	//	return -1;
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_TOWN, L"Layer_Player", L"Layer_Active", L"Com_Collider", L"Com_DmgInfo")))
+		return -1;
 
 	//if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_STAGE0, L"Layer_PlayerAtk" , L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
 	//	return -1;
@@ -172,6 +184,28 @@ _int CScene_Stage0::LateUpdate_Scene(_float _fDeltaTime)
 	//pManagement->CollisionBox_Detection_Layers(Src , Dst) Src -> Dst를 공격
 	//pManagement->CollisionBox_Detection_Layers_Both() // 서로공격
 	return 0;
+}
+
+HRESULT CScene_Stage0::Set_SceneEvent(_int _iEventNo)
+{
+	switch ((eSceneEventID)_iEventNo)
+	{
+	case eSceneEventID::EVENT_RESET:
+		m_bTravel = false;
+		break;
+
+	case eSceneEventID::EVENT_CLEAR:
+		break;
+
+	case eSceneEventID::EVNET_TRAVEL:
+		m_bTravel = true;
+		break;
+
+	default:
+		break;
+	}
+
+	return S_OK;
 }
 
 CScene_Stage0 * CScene_Stage0::Create(LPDIRECT3DDEVICE9 _pDevice)
@@ -335,6 +369,48 @@ HRESULT CScene_Stage0::Setup_Layer_NPC(const wstring & LayerTag)
 	return S_OK;
 }
 
+HRESULT CScene_Stage0::Setup_Layer_ActiveObject(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	EVENT_INFO tEventInfo;
+	tEventInfo.iEventNo = eSceneEventID::EVNET_TRAVEL;
+	tEventInfo.iFloatOption = 1;
+
+	switch (m_ePreLoadSceneID)
+	{
+	case SCENE_FOREST:
+		//tEventInfo.vSpawnPos = { 64.f, 0.f, 57.f };
+		tEventInfo.vSpawnPos = { 56.f, 0.f, 50.f };
+		break;
+
+	case SCENE_ICELAND:
+		tEventInfo.vSpawnPos = { 72.f, 2.5f, 50.f };
+		break;
+
+	case SCENE_VOLCANIC:
+		tEventInfo.vSpawnPos = { 50.f, 0.f, 56.f };
+		break;
+
+	case SCENE_LAB:
+		tEventInfo.vSpawnPos = { 64.f, 2.5f, 50.f };
+		break;
+
+	default:
+		break;
+	}
+
+	CGameObject* pTrigger = nullptr;
+	if (FAILED(pManagement->Add_GameObject_InLayer(&pTrigger, SCENE_STATIC, L"GameObject_Trigger", SCENE_TOWN, LayerTag, &tEventInfo)))
+		return E_FAIL;
+
+	pTrigger->Set_Active();
+
+	return S_OK;
+}
+
 HRESULT CScene_Stage0::Travel_NextLayers()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -393,11 +469,27 @@ HRESULT CScene_Stage0::Respawn_Palyer()
 	CTransform* pTransformBody = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform1");
 	if (nullptr == pTransformHead || nullptr == pTransformBody)	return E_FAIL;
 
-	_vec3 vSpawnPos = { 3.f, pTransformHead->Get_Desc().vPosition.y, 3.f };
-	pTransformHead->Set_Position(vSpawnPos);
+	_vec3 vSpawnPos = {}; 
+	
+	// 필드 -> 마을 복귀
+	if ((_int)m_ePreLoadSceneID >= SCENE_ICELAND)
+	{
+		vSpawnPos = { 64.f, pTransformHead->Get_Desc().vPosition.y, 57.f };
+		pTransformHead->Set_Position(vSpawnPos);
 
-	vSpawnPos = { 3.f, pTransformBody->Get_Desc().vPosition.y, 3.f };
-	pTransformBody->Set_Position(vSpawnPos);
+		vSpawnPos = { 64.f, pTransformBody->Get_Desc().vPosition.y, 57.f };
+		pTransformBody->Set_Position(vSpawnPos);
+	}
+	
+	// 처음 방 -> 마을
+	else
+	{
+		vSpawnPos = { 38.f, pTransformHead->Get_Desc().vPosition.y, 3.f };
+		pTransformHead->Set_Position(vSpawnPos);
+
+		vSpawnPos = { 38.f, pTransformBody->Get_Desc().vPosition.y, 3.f };
+		pTransformBody->Set_Position(vSpawnPos);
+	}
 
 	return S_OK;
 }

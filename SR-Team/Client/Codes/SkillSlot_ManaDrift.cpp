@@ -24,7 +24,7 @@ HRESULT CSkillSlot_ManaDrift::Setup_GameObject_Prototype()
 HRESULT CSkillSlot_ManaDrift::Setup_GameObject(void * _pArg)
 {
 	m_iCanUseCnt = m_iMaxUseCnt = 1;
-	m_fEachDelay = 30.f;
+	m_fEachDelay = 20.f;
 
 	m_iConsumeMP = 10;
 

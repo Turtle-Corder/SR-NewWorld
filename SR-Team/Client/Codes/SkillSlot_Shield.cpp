@@ -23,7 +23,7 @@ HRESULT CSkillSlot_Shield::Setup_GameObject_Prototype()
 HRESULT CSkillSlot_Shield::Setup_GameObject(void * _pArg)
 {
 	m_iCanUseCnt = m_iMaxUseCnt = 1;
-	m_fEachDelay = 10.f;
+	m_fEachDelay = 30.f;
 
 	m_iConsumeMP = 10;
 

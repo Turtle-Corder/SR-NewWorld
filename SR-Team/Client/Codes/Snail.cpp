@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\Snail.h"
+#include "Sound_Manager.h"
 #include "DamageInfo.h"
 
 USING(Client)
@@ -28,13 +29,13 @@ HRESULT CSnail::Setup_GameObject_Prototype()
 HRESULT CSnail::Setup_GameObject(void* pArg)
 {
 	if (pArg)
-		m_vStartPos = *(_vec3*)pArg;
+		m_tSlimeInfo = *(SLIMEINFO*)pArg;
 
 	if (FAILED(Add_Component()))
 		return E_FAIL;
 
 	Set_Active();
-
+	m_iTextureNumber = m_tSlimeInfo.iTextureNumber;
 	return S_OK;
 }
 
@@ -74,8 +75,18 @@ int CSnail::LateUpdate_GameObject(_float _fDeltaTime)
 	if (nullptr == pManagement)
 		return 0;
 
+	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
+
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return 0;
+	}
+
 
 	return GAMEOBJECT::NOEVENT;
 
@@ -96,7 +107,35 @@ HRESULT CSnail::Render_NoneAlpha()
 		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
 			return E_FAIL;
 
-		if (FAILED(m_pTextureCom[iAll]->SetTexture(0)))
+		if (FAILED(m_pTextureCom[iAll]->SetTexture(m_iTextureNumber)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CSnail::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_int iAll = 0; iAll < SNAIL_END; ++iAll)
+	{
+		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
 			return E_FAIL;
 
 		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
@@ -146,7 +185,7 @@ HRESULT CSnail::Add_Component()
 		}
 		else if (iAll == SNAIL_BODY)
 		{
-			tTransformDesc[SNAIL_BODY].vPosition = { m_vStartPos.x , 0.f, m_vStartPos.z };
+			tTransformDesc[SNAIL_BODY].vPosition = { m_tSlimeInfo.vPos.x , 0.f, m_tSlimeInfo.vPos.z };
 			tTransformDesc[SNAIL_BODY].fSpeedPerSecond = 10.f;
 			tTransformDesc[SNAIL_BODY].fRotatePerSecond = D3DXToRadian(90.f);
 			tTransformDesc[SNAIL_HEAD].vScale = { 1.f , 1.f , 1.f };
@@ -163,10 +202,12 @@ HRESULT CSnail::Add_Component()
 	// 나중에 몬스터 데이터 불러올때 지정함
 	//----------------------------------------
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
-	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	ZeroMemory(&tStat, sizeof(CStatus::STAT));
+	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
+	tStat.iDef = 0;				
+	tStat.iHp = 100;			tStat.iMp = 0;
+	tStat.iMinAtt = 10;			tStat.iMaxAtt = 10;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -187,6 +228,9 @@ HRESULT CSnail::Add_Component()
 	tDmgInfo.eType = eELEMENTAL_TYPE::NONE;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -456,6 +500,32 @@ HRESULT CSnail::Make_DashPaticle()
 	return S_OK;
 }
 
+void CSnail::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
+		}
+	}
+}
+
+void CSnail::Update_HurtDelay(_float _fDeltaTime)
+{
+	if (!m_bCanHurt)
+	{
+		m_fHurtTimer += _fDeltaTime;
+		if (m_fHurtTimer >= m_fHurtDealy)
+		{
+			m_fHurtTimer = 0.f;
+			m_bCanHurt = true;
+		}
+	}
+}
+
 CSnail* CSnail::Create(LPDIRECT3DDEVICE9 _pDevice)
 {
 	if (nullptr == _pDevice)
@@ -494,6 +564,7 @@ void CSnail::Free()
 		Safe_Release(m_pTextureCom[iAll]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -503,23 +574,52 @@ void CSnail::Free()
 
 HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 {
-	m_bDead = true;
+	if (!_pDamageComp)
+		return S_OK;
 
-	//if (!_pDamageComp)
-	//	return S_OK;
-	////((CDamageInfo*)_pDamageComp)->Get_Desc().pOwner;
-	//if (!m_bTakeCheckOnece)
-	//{
-	//	m_bTakeCheckOnece = true;
-	//	m_eCurState = CSnail::IDLE;
-	//}
+	if (!m_bCanHurt)
+		return S_OK;
 
-	//m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	_float fElementalRate = 1.f;
 
-	//if (0 >= m_pStatusCom->Get_Status().iHp)
-	//{
-	//	m_bDead = true;
-	//}
+	// 불 -> 땅
+	if (eELEMENTAL_TYPE::FIRE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType && 0 == m_tSlimeInfo.iTextureNumber)
+		fElementalRate = 2.f;
+
+	// 물 -> 불
+	else if (eELEMENTAL_TYPE::ICE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType && 2 == m_tSlimeInfo.iTextureNumber)
+		fElementalRate = 2.f;
+
+	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
+	iAtk -= m_pStatusCom->Get_Def();
+	if (iAtk < 0)
+		iAtk = 1;
+
+	m_pStatusCom->Set_HP(iAtk);
+	if (0 >= m_pStatusCom->Get_Status().iHp)
+	{
+		CSoundManager::Get_Instance()->PlayMonster(L"snail_dead.wav");
+		m_bDead = true;
+	}
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[SNAIL_BODY]->Get_Desc().vPosition + (vAddPos * 2.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
+	m_bCanHurt = false;
+	m_bFlinch = true;
 	return S_OK;
 }
 

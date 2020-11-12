@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DamageInfo.h"
 #include "..\Headers\Wolf.h"
+#include "Sound_Manager.h"
 #include "IceLandQuest.h"
 USING(Client)
 
@@ -57,8 +58,17 @@ _int CWolf::LateUpdate_GameObject(_float _fDeltaTime)
 	if (FAILED(Update_HurtDelay(_fDeltaTime)))
 		return GAMEOBJECT::WARN;
 
+	if (FAILED(Update_FlinchDelay(_fDeltaTime)))
+		return GAMEOBJECT::WARN;
+
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return 0;
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -88,6 +98,34 @@ HRESULT CWolf::Render_NoneAlpha()
 	return S_OK;
 }
 
+HRESULT CWolf::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_uint iCnt = WOLF_BODY; iCnt < WOLF_END; ++iCnt)
+	{
+		if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 CGameObject * CWolf::Clone_GameObject(void * _pArg)
 {
 	CWolf* pInstance = new CWolf(*this);
@@ -102,27 +140,38 @@ CGameObject * CWolf::Clone_GameObject(void * _pArg)
 
 HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
 {
-	if (!m_bCanHurt && !_pDamageComp)
+	if (!_pDamageComp)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	if (!m_bCanHurt)
+		return S_OK;
+
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Att();
+	m_pStatusCom->Set_HP(iAtk);
 	if (0 >= m_pStatusCom->Get_Status().iHp)
 	{
-		// 처치한 몬스터 수 증가
-		CManagement* pManagement = CManagement::Get_Instance();
-		if (nullptr == pManagement)
-			return E_FAIL;
-		CIceLandQuest* pIceLandQuest = (CIceLandQuest*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_IceLandQuest", 0);
-		if (pIceLandQuest == nullptr)
-			return E_FAIL;
-
-		if (pIceLandQuest->Get_StartDeadCnt())
-			pIceLandQuest->Dead_Monster();
-
+		CSoundManager::Get_Instance()->PlayMonster(L"wolf_Dead.wav");
 		m_bDead = true;
 	}
 
-	m_bCanHurt = true;
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[WOLF_BASE]->Get_Desc().vPosition + (vAddPos * 2.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
+	m_bCanHurt = false;
+	m_bFlinch = true;
 	return S_OK;
 }
 
@@ -135,6 +184,8 @@ void CWolf::Free()
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
 
+	Safe_Release(m_pDmgInfoCom);
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 
@@ -200,6 +251,7 @@ HRESULT CWolf::Add_Component_Transform()
 	CTransform::TRANSFORM_DESC tTransformDesc[WOLF_END];
 	tTransformDesc[WOLF_BASE].vPosition = {};
 	tTransformDesc[WOLF_BASE].vScale = { 1.f , 1.f , 1.f };
+	tTransformDesc[WOLF_BASE].vRotate = { 0.f, D3DXToRadian(180.f), 0.f };
 
 	tTransformDesc[WOLF_BODY].vPosition = { 0.f , 0.9f, -0.6f };
 	tTransformDesc[WOLF_BODY].vScale = { 0.7f , 0.9f , 1.5f };
@@ -277,6 +329,9 @@ HRESULT CWolf::Add_Component_Texture()
 			return E_FAIL;
 	}
 
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -292,8 +347,25 @@ HRESULT CWolf::Add_Component_Extends()
 
 	CStatus::STAT tStat;
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
-	// TODO : Stat 셋팅
+	tStat.iCriticalRate = 0;	tStat.iCriticalChance = 30;
+	tStat.iDef = 10;
+	tStat.iHp = 100;
+	tStat.iMinAtt = 20;			tStat.iMaxAtt = 30;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
+
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
+		return E_FAIL;
+
+
+	CDamageInfo::DAMAGE_DESC tDmgInfo;
+	tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMinAtt;
+	tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+	tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
+	tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
+	tDmgInfo.pOwner = this;
+	tDmgInfo.eType = eELEMENTAL_TYPE::NONE;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;
 
 	return S_OK;
@@ -529,6 +601,21 @@ HRESULT CWolf::Update_HurtDelay(_float _fDeltaTime)
 		{
 			m_fHurtTimer = 0.f;
 			m_bCanHurt = true;
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CWolf::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
 		}
 	}
 

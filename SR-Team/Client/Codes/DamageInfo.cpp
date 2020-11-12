@@ -18,6 +18,20 @@ const CDamageInfo::DAMAGE_DESC & CDamageInfo::Get_Desc() const
 	return m_tDamageDesc;
 }
 
+_int CDamageInfo::Get_Att()
+{
+	_int iSimulateAtt = 0;
+	_int iAttBound = m_tDamageDesc.iMaxAtt - m_tDamageDesc.iMinAtt;
+	if (0 == iAttBound)	iSimulateAtt = iAttBound;
+	else				iSimulateAtt = (_int)(rand() % iAttBound + m_tDamageDesc.iMinAtt);
+
+	_int iSimulateCriticalChance = rand() % 100;
+	if (iSimulateCriticalChance < m_tDamageDesc.iCriticalChance)
+		iSimulateAtt *= m_tDamageDesc.iCriticalRate;
+
+	return iSimulateAtt;
+}
+
 HRESULT CDamageInfo::Setup_Component_Prototype()
 {
 	return S_OK;

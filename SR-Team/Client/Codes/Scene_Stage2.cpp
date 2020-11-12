@@ -26,7 +26,13 @@ HRESULT CScene_Stage2::Setup_Scene()
 	if (FAILED(Setup_Layer_Projectile()))
 		return E_FAIL;
 
+	if (FAILED(Setup_Layer_ActiveObject(L"Layer_Active")))
+		return E_FAIL;
+
 	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
+		return E_FAIL;
+
+	if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Layer_IceLandQuest(L"Layer_IceLandQuest")))
@@ -69,10 +75,11 @@ _int CScene_Stage2::Update_Scene(_float _fDeltaTime)
 			pCubeTerrain->Set_Active();
 		}
 
+		m_bTravel = false;
 		m_bInit = true;
 	}
 
-	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
+	if ((pManagement->Key_Down(VK_F1) || (m_bClear && m_bTravel)) && m_pPreLoader->IsFinished())
 	{
 		CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(SCENE_ICELAND, L"Layer_Player");
 		if (nullptr == pPlayer)
@@ -102,6 +109,7 @@ _int CScene_Stage2::Update_Scene(_float _fDeltaTime)
 
 		return 1;
 	}
+
 	//--------------------------------------------------
 	// TODO : 스테이지 클리어 조건
 	//--------------------------------------------------
@@ -122,7 +130,34 @@ _int CScene_Stage2::LateUpdate_Scene(_float _fDeltaTime)
 	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_ICELAND, L"Layer_PlayerAtk", L"Layer_Monster", L"Com_Collider", L"Com_DmgInfo")))
 		return -1;
 
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers(SCENE_ICELAND, L"Layer_Player", L"Layer_Active", L"Com_Collider", L"Com_DmgInfo")))
+		return -1;
+
 	return GAMEOBJECT::NOEVENT;
+}
+
+HRESULT CScene_Stage2::Set_SceneEvent(_int _iEventNo)
+{
+	switch ((eSceneEventID)_iEventNo)
+	{
+	case eSceneEventID::EVENT_RESET:
+		m_bTravel = false;
+		break;
+
+	case eSceneEventID::EVENT_CLEAR:
+		m_pTravelTrigger->Set_Active();
+		m_bClear = true;
+		break;
+
+	case eSceneEventID::EVNET_TRAVEL:
+		m_bTravel = true;
+		break;
+
+	default:
+		break;
+	}
+
+	return S_OK;
 }
 
 CScene_Stage2 * CScene_Stage2::Create(LPDIRECT3DDEVICE9 _pDevice)
@@ -154,6 +189,17 @@ HRESULT CScene_Stage2::Setup_Layer_AllObject()
 
 HRESULT CScene_Stage2::Setup_Layer_Skybox(const wstring & LayerTag)
 {
+
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+	int TextureID = 3;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE2, L"GameObject_Skybox", SCENE_STAGE2, LayerTag, &TextureID)))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -181,19 +227,72 @@ HRESULT CScene_Stage2::Setup_Layer_Environment(const wstring & LayerTag)
 
 HRESULT CScene_Stage2::Setup_Layer_Monster(const wstring & LayerTag)
 {
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	_vec3 vSpawnPos = { 7.68f, 0.f, 36.88f };
+	_vec3 vSpawnPos = { 20.f, 0.f, 30.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
 
+	vSpawnPos = { 26.f, 0.f, 26.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	vSpawnPos = { 27.f, 0.f, 31.f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
-	vSpawnPos = { /*12.48f, 0.f, 33.08f*/7.68f, 0.f, 44.88f };
+	//----------------------------------------------------------------------------------------------------
 
+	vSpawnPos = { 42.f, 0.f, 22.f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	vSpawnPos = { 44.f, 0.f, 22.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	//----------------------------------------------------------------------------------------------------
+
+	vSpawnPos = { 65.f, 0.f, 23.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	vSpawnPos = { 65.f, 0.f, 26.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	//----------------------------------------------------------------------------------------------------
+
+	vSpawnPos = { 62.f, 0.f, 37.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	vSpawnPos = { 66.f, 0.f, 37.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+
+	vSpawnPos = { 60.f, 0.f, 45.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	vSpawnPos = { 64.f, 0.f, 45.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	vSpawnPos = { 68.f, 0.f, 45.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Wolf", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+
+	vSpawnPos = { 62.f, 0.f, 51.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
+		return E_FAIL;
+
+	vSpawnPos = { 66.f, 0.f, 51.f };
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Yeti", SCENE_ICELAND, LayerTag, &vSpawnPos)))
 		return E_FAIL;
 
 	return S_OK;
@@ -223,6 +322,23 @@ HRESULT CScene_Stage2::Setup_Layer_Projectile()
 		return E_FAIL;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_ICELAND, L"GameObject_Snow", SCENE_ICELAND, L"Layer_MonsterAtk", &tImpact)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Stage2::Setup_Layer_ActiveObject(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	EVENT_INFO tEventInfo;
+	tEventInfo.iEventNo = eSceneEventID::EVNET_TRAVEL;
+	tEventInfo.vSpawnPos = { 3.f, 0.f, 3.f };
+	tEventInfo.iFloatOption = 1;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(&m_pTravelTrigger, SCENE_STATIC, L"GameObject_Trigger", SCENE_ICELAND, LayerTag, &tEventInfo)))
 		return E_FAIL;
 
 	return S_OK;

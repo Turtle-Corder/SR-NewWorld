@@ -140,8 +140,10 @@ HRESULT CIceSpear::Add_Component()
 	tCollDesc.fRadius = 0.5f;
 
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 0; tStat.iCriticalRate = 0;
+	tStat.iCriticalChance = 10; tStat.iCriticalRate = 1;
 	tStat.iMinAtt = 10; tStat.iMaxAtt = 10;
+	tStat.fAttRate = 1.f;
+
 
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_Pyramid", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))

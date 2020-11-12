@@ -2,6 +2,7 @@
 #include "MainCamera.h"
 #include "DamageInfo.h"
 #include "Player.h"
+#include "Scene.h"
 #include "..\Headers\EventTrigger.h"
 
 
@@ -37,6 +38,12 @@ HRESULT CEventTrigger::Setup_GameObject(void * _pArg)
 
 int CEventTrigger::Update_GameObject(float DeltaTime)
 {
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
+	if(m_tInfo.iFloatOption)
+		Floating(DeltaTime);
+
 	if (FAILED(m_pTransformCom->Update_Transform()))
 		return GAMEOBJECT::WARN;
 
@@ -48,18 +55,24 @@ int CEventTrigger::Update_GameObject(float DeltaTime)
 
 int CEventTrigger::LateUpdate_GameObject(float DeltaTime)
 {
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return 0;
 
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
+	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
 		return 0;
 
 	return 0;
 }
 
-HRESULT CEventTrigger::Render_NoneAlpha()
+HRESULT CEventTrigger::Render_BlendAlpha()
 {
+	if (!m_bActive)
+		return GAMEOBJECT::NOEVENT;
+
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return E_FAIL;
@@ -88,13 +101,13 @@ HRESULT CEventTrigger::Take_Damage(const CComponent * _pDamageComp)
 		return E_FAIL;
 
 	CPlayer* pPlayer = (CPlayer*)pDamageInfo->Get_Desc().pOwner;
-	if (pPlayer || pPlayer->IsInteraction())
+	if (pPlayer && pPlayer->IsInteraction())
 	{
 		CManagement* pManagement = CManagement::Get_Instance();
 		if (nullptr == pManagement)
 			return E_FAIL;
 
-//		pManagement->Get_
+		pManagement->Set_SceneEvent(eSceneEventID::EVNET_TRAVEL);
 	}
 
 
@@ -106,6 +119,7 @@ HRESULT CEventTrigger::Add_Component()
 	CTransform::TRANSFORM_DESC tTransformDesc;
 	ZeroMemory(&tTransformDesc, sizeof(CTransform::TRANSFORM_DESC));
 	tTransformDesc.vPosition = m_tInfo.vSpawnPos;
+	tTransformDesc.vScale = { 4.f, 4.f, 4.f };
 
 
 	//VIBuffer
@@ -128,7 +142,7 @@ HRESULT CEventTrigger::Add_Component()
 	//--------------------------------------------------
 	CSphereCollider::COLLIDER_DESC tColDesc;
 	tColDesc.vPosition = tTransformDesc.vPosition;
-	tColDesc.fRadius = 1.f;
+	tColDesc.fRadius = 1.7f;
 
 	//Collider
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))

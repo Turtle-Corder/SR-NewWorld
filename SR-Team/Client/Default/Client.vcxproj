@@ -171,6 +171,8 @@
     <ClInclude Include="..\Headers\FireCrystal.h" />
     <ClInclude Include="..\Headers\FloatingFire.h" />
     <ClInclude Include="..\Headers\FlowerQuest.h" />
+    <ClInclude Include="..\Headers\Golem_Dash.h" />
+    <ClInclude Include="..\Headers\Golem_Piece.h" />
     <ClInclude Include="..\Headers\IceBlast.h" />
     <ClInclude Include="..\Headers\IceBlastPiece.h" />
     <ClInclude Include="..\Headers\IceCrystal.h" />
@@ -180,6 +182,7 @@
     <ClInclude Include="..\Headers\ItemSlot_BlueElixir.h" />
     <ClInclude Include="..\Headers\ItemSlot_BluePotion.h" />
     <ClInclude Include="..\Headers\Bomb.h" />
+    <ClInclude Include="..\Headers\ItemSlot_QuestPotion.h" />
     <ClInclude Include="..\Headers\MainQuest.h" />
     <ClInclude Include="..\Headers\MainQuest_NPC.h" />
     <ClInclude Include="..\Headers\MeteorPiece.h" />
@@ -258,10 +261,12 @@
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\Stump.h" />
     <ClInclude Include="..\Headers\Stump_Impact.h" />
+    <ClInclude Include="..\Headers\Stump_Particle.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
     <ClInclude Include="..\Headers\TerrainBundle.h" />
     <ClInclude Include="..\Headers\ThunderBox.h" />
     <ClInclude Include="..\Headers\Thunder.h" />
+    <ClInclude Include="..\Headers\Title.h" />
     <ClInclude Include="..\Headers\Tree.h" />
     <ClInclude Include="..\Headers\VIBuffer_Flower.h" />
     <ClInclude Include="..\Headers\VIBuffer_Pyramid.h" />
@@ -291,6 +296,8 @@
     <ClCompile Include="..\Codes\FireCrystal.cpp" />
     <ClCompile Include="..\Codes\FloatingFire.cpp" />
     <ClCompile Include="..\Codes\FlowerQuest.cpp" />
+    <ClCompile Include="..\Codes\Golem_Dash.cpp" />
+    <ClCompile Include="..\Codes\Golem_Piece.cpp" />
     <ClCompile Include="..\Codes\IceBlast.cpp" />
     <ClCompile Include="..\Codes\IceBlastPiece.cpp" />
     <ClCompile Include="..\Codes\IceCrystal.cpp" />
@@ -300,6 +307,7 @@
     <ClCompile Include="..\Codes\ItemSlot_BlueElixir.cpp" />
     <ClCompile Include="..\Codes\ItemSlot_BluePotion.cpp" />
     <ClCompile Include="..\Codes\Bomb.cpp" />
+    <ClCompile Include="..\Codes\ItemSlot_QuestPotion.cpp" />
     <ClCompile Include="..\Codes\MainQuest.cpp" />
     <ClCompile Include="..\Codes\MainQuest_NPC.cpp" />
     <ClCompile Include="..\Codes\MeteorPiece.cpp" />
@@ -375,10 +383,12 @@
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\Stump.cpp" />
     <ClCompile Include="..\Codes\Stump_Impact.cpp" />
+    <ClCompile Include="..\Codes\Stump_Particle.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\TerrainBundle.cpp" />
     <ClCompile Include="..\Codes\ThunderBox.cpp" />
     <ClCompile Include="..\Codes\Thunder.cpp" />
+    <ClCompile Include="..\Codes\Title.cpp" />
     <ClCompile Include="..\Codes\Tree.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_Flower.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_Pyramid.cpp" />

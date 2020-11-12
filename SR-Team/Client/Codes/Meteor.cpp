@@ -114,7 +114,9 @@ HRESULT CMeteor::Add_Component()
 	tCollDesc.fRadius = 0.5f;
 
 	CStatus::STAT tStat;
-	tStat.iMinAtt = 10; tStat.iMaxAtt = 10;
+	tStat.iCriticalChance = 20; tStat.iCriticalRate = 2;
+	tStat.iMinAtt = 20; tStat.iMaxAtt = 20;
+	tStat.fAttRate = 1.f;
 
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))

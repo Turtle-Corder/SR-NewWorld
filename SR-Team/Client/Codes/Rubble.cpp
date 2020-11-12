@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\Rubble.h"
+#include "DamageInfo.h"
 
 USING(Client)
 
@@ -41,6 +42,7 @@ _int CRubble::Update_GameObject(_float _fDeltaTime)
 
 	m_pTransformCom->Update_Transform();
 
+	m_pColliderCom->Update_Collider(m_pTransformCom->Get_Desc().vPosition);
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -93,6 +95,9 @@ void CRubble::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pStatusCom);
+	Safe_Release(m_pDmgInfoCom);
 
 	CGameObject::Free();
 }
@@ -148,6 +153,45 @@ HRESULT CRubble::Add_Component()
 
 	// For.Transform
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
+		return E_FAIL;
+
+	CSphereCollider::COLLIDER_DESC tColDesc;
+	tColDesc.vPosition = tTransformDesc.vPosition;
+	tColDesc.fRadius = 0.5f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Collider_Sphere", L"Com_Collider", (CComponent**)&m_pColliderCom, &tColDesc)))
+		return E_FAIL;
+
+	CStatus::STAT tStat;
+	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
+	tStat.iMinAtt = 0;			tStat.iMaxAtt = 0;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
+		return E_FAIL;
+
+	CDamageInfo::DAMAGE_DESC tDmgInfo;
+	tDmgInfo.pOwner = m_tInstant.pAttacker;
+
+	if (m_tInstant.pStatusComp)
+	{
+		CStatus* pOnwerStatusComp = (CStatus*)m_tInstant.pStatusComp;
+		tDmgInfo.iMinAtt = pOnwerStatusComp->Get_Status().iMinAtt + m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iMaxAtt = pOnwerStatusComp->Get_Status().iMaxAtt + m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = pOnwerStatusComp->Get_Status().iCriticalChance + m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = pOnwerStatusComp->Get_Status().iCriticalRate + m_pStatusCom->Get_Status().iCriticalRate;
+	}
+	else
+	{
+		tDmgInfo.iMinAtt = m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iMaxAtt = m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iCriticalChance = m_pStatusCom->Get_Status().iCriticalChance;
+		tDmgInfo.iCriticalRate = m_pStatusCom->Get_Status().iCriticalRate;
+	}
+
+	tDmgInfo.eType = NONE;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;
 
 

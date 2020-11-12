@@ -18,6 +18,7 @@ public:
 	virtual HRESULT Setup_Scene() override;
 	virtual _int Update_Scene(_float _fDeltaTime) override;
 	virtual _int LateUpdate_Scene(_float _fDeltaTime) override;
+	virtual HRESULT Set_SceneEvent(_int _iEventNo) override;
 
 public:
 	static CScene_Stage3* Create(LPDIRECT3DDEVICE9 _pDevice);
@@ -39,6 +40,7 @@ public:
 	HRESULT Setup_Layer_Monster_Attack(const wstring& LayerTag);
 
 	HRESULT Setup_Layer_Projectile();
+	HRESULT Setup_Layer_ActiveObject(const wstring& LayerTag);
 
 	HRESULT Setup_Layer_NPC(const wstring& LayerTag);
 
@@ -48,9 +50,13 @@ public:
 
 
 private:
-	CPreLoader* m_pPreLoader = nullptr;
+	CPreLoader*		m_pPreLoader = nullptr;
 
-	_bool		m_bInit = false;
+	CGameObject*	m_pTravelTrigger = nullptr;
+	_bool			m_bInit = false;
+
+	_bool			m_bClear = false;
+	_bool			m_bTravel = false;
 };
 
 END

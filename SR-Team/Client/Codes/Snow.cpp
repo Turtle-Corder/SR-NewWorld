@@ -127,8 +127,10 @@ HRESULT CSnow::Add_Component()
 
 	// TODO : m_pStatusComp ¼ÂÆÃ
 	CStatus::STAT tStat;
+	ZeroMemory(&tStat, sizeof(CStatus::STAT));
 	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 10;
+	tStat.iMinAtt = 0;			tStat.iMaxAtt = 0;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusComp, &tStat)))
 		return E_FAIL;

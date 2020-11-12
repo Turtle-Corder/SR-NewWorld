@@ -43,6 +43,8 @@ private:
 	_uint				m_iRandSpeed = 0;
 	_float				m_fJumpPower = 0.f;
 	_float				m_fJumpTime = 0.f;
+	_vec3				m_vMoveDir = {};
+	_uint				m_iTexture_Number = 0;
 };
 
 END

@@ -50,6 +50,10 @@ private:
 	HRESULT Attack(_float _fDeltaTime);
 	HRESULT Update_State();
 	HRESULT Move(_float _fDeltaTime);
+
+	void Update_FlinchDelay(_float _fDeltaTime);
+	void Update_HurtDelay(_float _fDeltaTime);
+
 public:
 	static CSlime* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone_GameObject(void * _pArg) override;
@@ -68,13 +72,12 @@ private:
 	CStatus*			m_pStatusCom = nullptr;
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
 	
-	//	CStatus*	m_pStatCom = nullptr;
 
 	_bool		m_bDead = false;
 	_bool		m_bJump = false;
 	_float		m_fJumpPower = 5.f;
 	_float		m_fJumpTime = 0.f;
-	_int		m_iMaxCount = 4;
+	_int		m_iMaxCount = 2;
 	_int		m_iCurCount = 1;
 	_vec3		m_vStartPos = {};
 	STATE		m_ePreState;
@@ -83,6 +86,16 @@ private:
 	_float		m_fStartTime = 0.f;
 	_bool		m_bAttackJump = false;
 	SLIMEINFO   m_tSlimeInfo = {};
+
+	CTexture*		m_pFlinchTexCom = nullptr;
+	_bool			m_bCanHurt = false;
+	_float			m_fHurtTimer = 0.f;
+	_float			m_fHurtDealy = 0.1f;
+
+	_bool			m_bFlinch = false;
+	_float			m_fFlinchTimer = 0.f;
+	_float			m_fFlinchDealy = 0.1f;
+	_uint			m_iTextureNumber = 0;
 };
 
 END

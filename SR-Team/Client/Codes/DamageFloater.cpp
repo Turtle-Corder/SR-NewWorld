@@ -80,7 +80,7 @@ _int CDamageFloat::LateUpdate_GameObject(_float _fDeltaTime)
 
 	Update_DeadDelay(_fDeltaTime);
 
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_ONLYALPHA, this)))
+	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_EFFECT, this)))
 		return GAMEOBJECT::WARN;
 
 	return GAMEOBJECT::NOEVENT;
@@ -88,7 +88,7 @@ _int CDamageFloat::LateUpdate_GameObject(_float _fDeltaTime)
 
 
 
-HRESULT CDamageFloat::Render_OnlyAlpha()
+HRESULT CDamageFloat::Render_Effect()
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)

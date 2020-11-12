@@ -309,7 +309,7 @@ private:
 
 	_bool			m_bFlinch = false;
 	_float			m_fFlinchTimer = 0.f;
-	_float			m_fFlinchDealy = 0.1f;
+	_float			m_fFlinchDealy = 0.2f;
 
 	_bool			m_bDecalOn = false;
 	_bool			m_bDecalDir = false;

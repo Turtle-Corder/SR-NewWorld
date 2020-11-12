@@ -29,12 +29,15 @@ HRESULT CScene_Stage3::Setup_Scene()
 	if (FAILED(Setup_Layer_NPC(L"Layer_NPC")))
 		return E_FAIL;
 
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
+	if (FAILED(Setup_Layer_ActiveObject(L"Layer_Active")))
 		return E_FAIL;
 
 	if (FAILED(Setup_Layer_Projectile()))
 		return E_FAIL;
+
+	if(FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
+		return E_FAIL;
+
 
 	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
 	if (nullptr == m_pPreLoader)
@@ -69,10 +72,11 @@ _int CScene_Stage3::Update_Scene(_float _fDeltaTime)
 			pCubeTerrain->Set_Active();
 		}
 
+		m_bTravel = false;
 		m_bInit = true;
 	}
 
-	if (pManagement->Key_Down(VK_F1) && m_pPreLoader->IsFinished())
+	if ((pManagement->Key_Down(VK_F1) || (m_bClear && m_bTravel)) && m_pPreLoader->IsFinished())
 	{
 		CPlayer* pPlayer = (CPlayer*)pManagement->Get_GameObject(SCENE_VOLCANIC, L"Layer_Player");
 		if (nullptr == pPlayer)
@@ -118,7 +122,34 @@ _int CScene_Stage3::LateUpdate_Scene(_float _fDeltaTime)
 	if (FAILED(pManagement->CollisionSphere_Detection_Layers_Both(SCENE_VOLCANIC, L"Layer_PlayerAtk", L"Layer_Golem", L"Com_Collider", L"Com_DmgInfo")))
 		return -1;
 
+	if (FAILED(pManagement->CollisionSphere_Detection_Layers(SCENE_VOLCANIC, L"Layer_Player", L"Layer_Active", L"Com_Collider", L"Com_DmgInfo")))
+		return -1;
+
 	return GAMEOBJECT::NOEVENT;
+}
+
+HRESULT CScene_Stage3::Set_SceneEvent(_int _iEventNo)
+{
+	switch ((eSceneEventID)_iEventNo)
+	{
+	case eSceneEventID::EVENT_RESET:
+		m_bTravel = false;
+		break;
+
+	case eSceneEventID::EVENT_CLEAR:
+		m_pTravelTrigger->Set_Active();
+		m_bClear = true;
+		break;
+
+	case eSceneEventID::EVNET_TRAVEL:
+		m_bTravel = true;
+		break;
+
+	default:
+		break;
+	}
+
+	return S_OK;
 }
 
 CScene_Stage3 * CScene_Stage3::Create(LPDIRECT3DDEVICE9 _pDevice)
@@ -150,6 +181,15 @@ HRESULT CScene_Stage3::Setup_Layer_AllObject()
 
 HRESULT CScene_Stage3::Setup_Layer_Skybox(const wstring & LayerTag)
 {
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+	int TextureID = 4;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE3, L"GameObject_Skybox", SCENE_STAGE3, LayerTag, &TextureID)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -218,6 +258,23 @@ HRESULT CScene_Stage3::Setup_Layer_Projectile()
 		return E_FAIL;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_VOLCANIC, L"GameObject_Golem_Impact", SCENE_VOLCANIC, L"Layer_MonsterAtk", &tImpact)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CScene_Stage3::Setup_Layer_ActiveObject(const wstring & LayerTag)
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	EVENT_INFO tEventInfo;
+	tEventInfo.iEventNo = eSceneEventID::EVNET_TRAVEL;
+	tEventInfo.vSpawnPos = { 3.f, 0.f, 3.f };
+	tEventInfo.iFloatOption = 1;
+
+	if (FAILED(pManagement->Add_GameObject_InLayer(&m_pTravelTrigger, SCENE_STATIC, L"GameObject_Trigger", SCENE_VOLCANIC, LayerTag, &tEventInfo)))
 		return E_FAIL;
 
 	return S_OK;

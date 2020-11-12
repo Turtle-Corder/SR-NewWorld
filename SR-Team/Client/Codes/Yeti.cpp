@@ -2,6 +2,7 @@
 #include "Status.h"
 #include "DamageInfo.h"
 #include "IceLandQuest.h"
+#include "Sound_Manager.h"
 #include "..\Headers\Yeti.h"
 
 USING(Client)
@@ -89,11 +90,17 @@ int CYeti::LateUpdate_GameObject(float _fDeltaTime)
 	if (nullptr == pManagement)
 		return GAMEOBJECT::ERR;
 
-	if (FAILED(Update_HurtDelay(_fDeltaTime)))
-		return GAMEOBJECT::WARN;
+	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return GAMEOBJECT::WARN;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return GAMEOBJECT::WARN;
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -123,19 +130,71 @@ HRESULT CYeti::Render_NoneAlpha()
 	return S_OK;
 }
 
-HRESULT CYeti::Take_Damage(const CComponent* _pDamageComp)
+HRESULT CYeti::Render_BlendAlpha()
 {
-	if (!m_bCanHurt && !_pDamageComp)
+	if (!m_bFlinch)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_uint iCnt = YETI_BODY; iCnt < YETI_END; ++iCnt)
+	{
+		if (FAILED(m_pVIBufferCom[iCnt]->Set_Transform(&m_pTransformCom[iCnt]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iCnt]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CYeti::Take_Damage(const CComponent* _pDamageComp)
+{
+	if (!_pDamageComp)
+		return S_OK;
+
+	if (!m_bCanHurt)
+		return S_OK;
+
+	_int iAtk = (_int)((CDamageInfo*)_pDamageComp)->Get_Att();
+	if (iAtk < 0)
+		iAtk = 1;
 	
+	m_pStatusCom->Set_HP(iAtk);	
 	if (m_pStatusCom->Get_Status().iHp <= 0)
 	{
-
+		CSoundManager::Get_Instance()->PlayMonster(L"Yeti_Dead.wav");
 		m_bDead = true;
 	}
 
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[YETI_BASE]->Get_Desc().vPosition + (vAddPos * 2.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
+	m_bCanHurt = false;
+	m_bFlinch = true;
 
 	return S_OK;
 }
@@ -150,30 +209,30 @@ HRESULT CYeti::Add_Component()
 	// For.Com_Texture
 	for (int iCnt = YETI_BASE; iCnt < YETI_END; ++iCnt)
 	{
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_VIBuffer%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_VIBuffer%d", iCnt);
 
 		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", szName, (CComponent**)&m_pVIBufferCom[iCnt]))) //생성 갯수
 			return E_FAIL;
 
 		//경우마다 그거에 맞게 복사해서 최종적으로 문자열 들어가게만들기
 		if(iCnt == YETI_BASE)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiBody");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiBody");
 		else if (iCnt == YETI_CENTER)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiBody");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiBody");
 		else if (iCnt == YETI_BODY)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiBody");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiBody");
 		else if (iCnt == YETI_HEAD)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiHead");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiHead");
 		else if (iCnt == YETI_LEFT)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_RIGHT)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_LEFTLEG)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiPart");
 		else if (iCnt == YETI_RIGHTLEG)
-			StringCchPrintf(szPartName, sizeof(TCHAR) * MAX_PATH, L"Component_Texture_YetiPart");
+			StringCchPrintf(szPartName, _countof(szPartName), L"Component_Texture_YetiPart");
 
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_Texture%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_Texture%d", iCnt);
 
 		if (FAILED(CGameObject::Add_Component(SCENE_ICELAND, szPartName, szName, (CComponent**)&m_pTextureCom[iCnt]))) ////생성 갯수
 			return E_FAIL;
@@ -235,7 +294,7 @@ HRESULT CYeti::Add_Component()
 		}
 
 
-		StringCchPrintf(szName, sizeof(TCHAR) * MAX_PATH, L"Com_Transform%d", iCnt);
+		StringCchPrintf(szName, _countof(szName), L"Com_Transform%d", iCnt);
 
 		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", szName, (CComponent**)&m_pTransformCom[iCnt], &tTransformDesc[iCnt]))) ////생성 갯수
 			return E_FAIL;
@@ -243,10 +302,12 @@ HRESULT CYeti::Add_Component()
 	}
 
 	CStatus::STAT tStat;
-	tStat.iCriticalRate = 20;	tStat.iCriticalChance = 10;
-	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	ZeroMemory(&tStat, sizeof(CStatus::STAT));
+	tStat.iCriticalRate = 1;	tStat.iCriticalChance = 15;
+	tStat.iDef = 30;
+	tStat.iHp = 200;
+	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -270,6 +331,8 @@ HRESULT CYeti::Add_Component()
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
 		return E_FAIL;
 
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -513,6 +576,7 @@ void CYeti::Free()
 		Safe_Release(m_pTextureCom[iAll]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -603,7 +667,20 @@ void CYeti::Set_Active()
 	m_eCurState = IDLE;
 }
 
-HRESULT CYeti::Update_HurtDelay(_float _fDeltaTime)
+void CYeti::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
+		}
+	}
+}
+
+void CYeti::Update_HurtDelay(_float _fDeltaTime)
 {
 	if (!m_bCanHurt)
 	{
@@ -614,6 +691,4 @@ HRESULT CYeti::Update_HurtDelay(_float _fDeltaTime)
 			m_bCanHurt = true;
 		}
 	}
-
-	return S_OK;
 }

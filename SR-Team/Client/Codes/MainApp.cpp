@@ -45,6 +45,7 @@
 #include "ThunderBox.h"
 #include "IceBlastPiece.h"
 #include "IceDust.h"
+#include "FloatingFire.h"
 
 #include "SkillSlot_Meteor.h"
 #include "SkillSlot_IceSpear.h"
@@ -59,6 +60,7 @@
 #include "ItemSlot_BluePotion.h"
 #include "ItemSlot_RedElixir.h"
 #include "ItemSlot_BlueElixir.h"
+#include "ItemSlot_QuestPotion.h"
 
 #include "ItemInventory.h"
 #include "Mouse.h"
@@ -75,6 +77,7 @@
 #include "DamageFloater.h"
 #include "RandomBox_Chat.h"
 #include "EventTrigger.h"
+#include "Title.h"
 #pragma endregion
 
 #pragma region Component_Headers
@@ -351,6 +354,9 @@ HRESULT CMainApp::Setup_HK()
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemSlot_BlueElixir", CItemSlot_BlueElixir::Create(m_pDevice, m_pSprite, m_pFont))))
 		return E_FAIL;
 
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_ItemSlot_QuestPotion", CItemSlot_QuestPotion::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+
 #pragma endregion
 
 
@@ -424,12 +430,12 @@ HRESULT CMainApp::Setup_HK()
 
 	// wand¿ë
 #pragma region Component_Texture_SnailBody
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailBody%d.dds"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_SnailBody", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Snail/SnailBody%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_SnailHead
-	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/SnailHead%d.dds"))))
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_SnailHead", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/Snail/SnailHead%d.dds"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -468,7 +474,12 @@ HRESULT CMainApp::Setup_HK()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Component_Texture_Decal
+#pragma region GameObject_Trigger
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Trigger", CEventTrigger::Create(m_pDevice))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Trigger
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Trigger", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE, L"../Resources/trigger%d.dds"))))
 		return E_FAIL;
 #pragma endregion
@@ -659,6 +670,16 @@ HRESULT CMainApp::Setup_YJ()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region GameObject_Title
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_Title", CTitle::Create(m_pDevice, m_pSprite, m_pFont))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_Title
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Title", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE, L"../Resources/2DResource/Title%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
 	return S_OK;
 }
 
@@ -834,6 +855,34 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Select_SellItem", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_Item/select_sellitem%d.png"))))
 		return E_FAIL;
+
+	// Àåºñ ·£´ý¹Ú½º È¹µæ
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_GetStaff", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Inventory/get_morpagothstaff%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_GetGloves", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Inventory/get_aquagloves%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_GetDress", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Inventory/get_pupledress%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_GetWing", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Inventory/get_balrogwing%d.png"))))
+		return E_FAIL;
+
+	// ¼Òºñ ·£´ý¹Ú½º È¹µæ
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_GetRedPotion", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Inventory/get_redpotion%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_GetBluePotion", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Inventory/get_bluepotion%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_GetRedElixer", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Inventory/get_redelixer%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_GetBlueElixer", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_Inventory/get_blueelixer%d.png"))))
+		return E_FAIL;
 #pragma endregion
 
 
@@ -975,7 +1024,7 @@ HRESULT CMainApp::Setup_EB()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Belt, Gloves, Wing
+#pragma region Belt, Gloves, Wing, ring
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_Item_AbsoluteBelt", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_Item/absolute_belt%d.png"))))
@@ -991,6 +1040,16 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
 		L"Component_Texture_Item_SorcererGloves", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 			L"../Resources/Sprite/Layer_Item/high_sorcerer_gloves%d.png"))))
+		return E_FAIL;
+
+	// »õ·Î Ãß°¡
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_Item_ForgottenNecklace", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_Item/forgotten_necklace%d.png"))))
+		return E_FAIL;
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC,
+		L"Component_Texture_Item_LethalCape", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+			L"../Resources/Sprite/Layer_Item/lethal_cape%d.png"))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1214,6 +1273,11 @@ HRESULT CMainApp::Setup_EB()
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
 		L"../Resources/Sprite/Layer_MainQuest/GolemCore_Blue%d.png"))))
 		return E_FAIL;
+
+	// º¸½º Å¬¸®¾î
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_MainQuest_BossClear", CTexture::Create(m_pDevice, CTexture::TEXTURE_SPRITE,
+		L"../Resources/Sprite/Layer_MainQuest/boss_clear%d.png"))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Component_Texture_NormalNpcWnd
@@ -1347,7 +1411,18 @@ HRESULT CMainApp::Setup_DS()
 
 #pragma region Component_Texture_Skybox
 	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_Skybox", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
-		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds", 3))))
+		L"../Resources/3D/Layer_Skybox/GameObject_Skybox/DDS/Skybox%d.dds", 6))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Component_Texture_FloatingFire
+	if (FAILED(m_pManagement->Add_Component_Prototype(SCENE_STATIC, L"Component_Texture_FloatingFire", CTexture::Create(m_pDevice, CTexture::TEXTURE_NORMAL,
+		L"../Resources/3D/Layer_Effect/GameObject_FloatingFire/RedTexture%d.png"))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region GameObject_FloatingFire
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(SCENE_STATIC, L"GameObject_FloatingFire", CFloatingFire::Create(m_pDevice))))
 		return E_FAIL;
 #pragma endregion
 

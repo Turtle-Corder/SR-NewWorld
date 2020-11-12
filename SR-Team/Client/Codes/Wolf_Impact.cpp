@@ -52,8 +52,6 @@ _int CWolf_Impact::Update_GameObject(_float _fDeltaTime)
 
 _int CWolf_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 {
-
-
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -85,7 +83,9 @@ HRESULT CWolf_Impact::Add_Component()
 
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
-	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
+	tStat.iMinAtt = 0;			tStat.iMaxAtt = 0;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
+
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -133,7 +133,6 @@ HRESULT CWolf_Impact::Take_Damage(const CComponent * _pDamageComp)
 	if (!_pDamageComp)
 		return E_FAIL;
 
-	m_bDead = true;
 
 	return S_OK;
 }

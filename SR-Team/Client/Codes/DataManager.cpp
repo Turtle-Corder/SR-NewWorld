@@ -10,7 +10,7 @@ USING(Client)
 CDataManager::CDataManager(LPDIRECT3DDEVICE9 _pDevice)
 	: CGameObject(_pDevice)
 {
-	for (_uint i = 0; i < 28; ++i)
+	for (_uint i = 0; i < 30; ++i)
 	{
 		m_pTextureCom[i] = nullptr;
 		m_pStatCom[i] = nullptr;
@@ -153,97 +153,103 @@ HRESULT CDataManager::Add_Component()
 
 HRESULT CDataManager::Add_Component_Item()
 {
-	for (_uint i = 0; i < 28; ++i)
+	for (_uint i = 0; i < 30; ++i)
 	{
 		// 3. Texture--------------------------------------------------------------
 		TCHAR szTexture[MAX_PATH] = L"";
 		TCHAR szTextureName[MAX_PATH] = L"";
 		if (i == 0)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_MagicalRageStaff");
 		else if (i == 1)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_AngleWingStaff");
 		else if (i == 2)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_WarriorStaff");
 		else if (i == 3)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_BlackDress");
 		else if (i == 4)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_PupleDress");
 		else if (i == 5)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_ScholarShoes");
 		else if (i == 6)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_ArcaneShoes");
 		else if (i == 7)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_RedPotion");
 		else if (i == 8)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_OrangePotion");
 		else if (i == 9)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_WhitePotion");
 		else if (i == 10)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_BluePotion");
 		else if (i == 11)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_RedElixir");
 		else if (i == 12)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_BlueElixir");
 		else if (i == 13)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_AbsoluteBelt");
 		else if (i == 14)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_AquaGloves");
 		else if (i == 15)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_BalrogWings");
 		else if (i == 16)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_SorcererGloves");
 		else if (i == 17)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_FlowerQuest_Flower");
 		else if (i == 18)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_FlowerQuest_RewardPotion");
 		else if (i == 19)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Red");
 		else if (i == 20)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Green");
 		else if (i == 21)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Puple");
 		else if (i == 22)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_MainQuest_HelpWnd_GolemCore_Blue");
 		else if (i == 23)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_DropDiamond");
 		else if (i == 24)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_DropRuby");
 		else if (i == 25)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_Item_MagicalStaff");
 		else if (i == 26)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_ItemBox_Potion");
 		else if (i == 27)
-			StringCchPrintf(szTextureName, sizeof(TCHAR) * MAX_PATH,
+			StringCchPrintf(szTextureName, _countof(szTextureName),
 				L"Component_Texture_ItemBox_Equip");
+		else if (i == 28)
+			StringCchPrintf(szTextureName, _countof(szTextureName),
+				L"Component_Texture_Item_ForgottenNecklace");
+		else if (i == 29)
+			StringCchPrintf(szTextureName, _countof(szTextureName),
+				L"Component_Texture_Item_LethalCape");
 
-		StringCchPrintf(szTexture, sizeof(TCHAR) * MAX_PATH,
+		StringCchPrintf(szTexture, _countof(szTexture),
 			L"Com_Texture%d", i);
 
 		if (FAILED(CGameObject::Add_Component(
@@ -423,7 +429,8 @@ HRESULT CDataManager::Add_Component_Item()
 		if (i == 18)
 		{
 			pItem->iPrice = 100;
-			pItem->eSort = eITEM_SORT::QUEST1;
+			pItem->eSort = eITEM_SORT::POTION;
+			pItem->ePotionID = QUEST_POTION;
 			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
 				L"%s", L"RewardPotion");
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
@@ -511,42 +518,64 @@ HRESULT CDataManager::Add_Component_Item()
 			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
 				L"장비 상자");
 		}
+		if (i == 28)
+		{
+			pItem->iPrice = 160;
+			pItem->eSort = eITEM_SORT::NECKLACE1;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"ForgottenNecklace");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"잊혀진 목걸이");
+		}
+		if (i == 29)
+		{
+			pItem->iPrice = 300;
+			pItem->eSort = eITEM_SORT::CLOAK;
+			swprintf(pItem->szItemTag, sizeof(pItem->szItemTag) / sizeof(TCHAR),
+				L"%s", L"LethalCape");
+			StringCchPrintf(pItem->szShopTag, _countof(pItem->szShopTag),
+				L"영웅의 망토");
+		}
 		m_vItemList.emplace_back(pItem);
 
 
 		// Stat-----------------------------------------------------------------------
 		CStatus::STAT	tStat;
-		if (i == 0)
+		ZeroMemory(&tStat, sizeof(CStatus::STAT));
+		if (i == 0)							// 분노의 지팡이
 		{
-			tStat.iCriticalRate = 100;
-			tStat.iCriticalChance = 30;
-			tStat.iMaxAtt = 150;
+			tStat.iCriticalChance = 10;
+			tStat.iCriticalRate = 3;
+			
+			tStat.iMinAtt = 20;
+			tStat.iMaxAtt = 30;
+		}
+		else if (i == 1)					// 천사의 지팡이
+		{
+			tStat.iCriticalRate = 5;
+			tStat.iCriticalRate = 2;
+
 			tStat.iMinAtt = 10;
+			tStat.iMaxAtt = 20;
 		}
-		else if (i == 1)
+		else if (i == 2)					// 강한 지팡이
 		{
-			tStat.iCriticalRate = 150;
-			tStat.iCriticalChance = 20;
-			tStat.iMaxAtt = 160;
-			tStat.iMinAtt = 50;
+			tStat.iCriticalRate = 2;
+			tStat.iCriticalRate = 1;
+
+			tStat.iMinAtt = 5;
+			tStat.iMaxAtt = 10;
 		}
-		else if (i == 2)
+		else if (i == 3)					// 양복
 		{
-			tStat.iCriticalRate = 200;
-			tStat.iCriticalChance = 80;
-			tStat.iMaxAtt = 120;
-			tStat.iMinAtt = 70;
+			tStat.iDef = 30;
 		}
-		else if (i == 3)
-		{
-			tStat.iDef = 500;
-		}
-		else if (i == 4)
-			tStat.iDef = 300;
-		else if (i == 5)
-			tStat.iDef = 200;
-		else if (i == 6)
-			tStat.iDef = 100;
+		else if (i == 4)					// 초급 법복
+			tStat.iDef = 20;
+		else if (i == 5)					// 학자 신발
+			tStat.iDef = 10;
+		else if (i == 6)					// 신비 신발		
+			tStat.iDef = 5;
 		else if (i == 7)
 			tStat.iHp = 50;
 		else if (i == 8)
@@ -559,22 +588,24 @@ HRESULT CDataManager::Add_Component_Item()
 			tStat.iHp = 100;
 		else if (i == 12)
 			tStat.iMp = 100;
-		else if (i == 13)
+		else if (i == 13)					// 순수 벨트
 		{
-			tStat.iCriticalChance = 20;
+			tStat.iMinAtt = 5;
+			tStat.iMaxAtt = 5;
 		}
-		else if (i == 14)
+		else if (i == 14)					// 아쿠아 장갑
 		{
-			tStat.iCriticalRate = 30;
+			tStat.iCriticalChance = 5;
 		}
-		else if (i == 15)
+		else if (i == 15)					// 발록 날개
 		{
-			tStat.iMaxAtt = 100;
-			tStat.iCriticalRate = 50;
+			tStat.iCriticalChance = 3;
+			tStat.iMinAtt = 5;
+			tStat.iMaxAtt = 5;
 		}
-		else if (i == 16)
+		else if (i == 16)					// 마법사 장갑
 		{
-			tStat.iCriticalChance = 20;
+			tStat.iCriticalChance = 3;
 		}
 		else if (i == 17)
 		{
@@ -613,17 +644,27 @@ HRESULT CDataManager::Add_Component_Item()
 		else if (i == 24)
 		{
 		}
-		else if (i == 25)
+		else if (i == 25)				// 마법 스태프
 		{
-			tStat.iMaxAtt = 500;
-			tStat.iMinAtt = 50;
-			tStat.iCriticalRate = 60;
+			tStat.iMinAtt = 3;
+			tStat.iMaxAtt = 5;
 		}
 		else if (i == 26)
 		{
 		}
 		else if (i == 27)
 		{
+		}
+
+		else if (i == 28)				// 잊혀진 목걸이
+		{
+			tStat.iCriticalChance = 1;
+		}
+		else if (i == 29)				// 영웅 망토
+		{
+			tStat.iCriticalChance = 5;
+			tStat.iMinAtt = 10;
+			tStat.iMaxAtt = 10;
 		}
 
 		TCHAR szStat[MAX_PATH] = L"";
@@ -789,7 +830,7 @@ CGameObject * CDataManager::Clone_GameObject(void * pArg)
 
 void CDataManager::Free()
 {
-	for (_uint i = 0; i < 28; ++i)
+	for (_uint i = 0; i < 30; ++i)
 	{
 		Safe_Release(m_pTextureCom[i]);
 		Safe_Release(m_pStatCom[i]);

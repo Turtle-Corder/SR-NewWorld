@@ -69,6 +69,9 @@ int CExplosion::Update_GameObject(_float _fDeltaTime)
 
 	m_pTextureCom->Update_Frame(_fDeltaTime, &m_iCurrFrame);
 
+
+	
+
 	return GAMEOBJECT::NOEVENT;
 }
 
@@ -80,6 +83,7 @@ int CExplosion::LateUpdate_GameObject(_float _fDeltaTime)
 
 	Update_DeadDelay(_fDeltaTime);
 	Update_Scale(_fDeltaTime);
+	Update_EffectDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
 		return  GAMEOBJECT::WARN;
@@ -183,6 +187,17 @@ void CExplosion::Update_DeadDelay(_float _fDeltaTime)
 		m_bDead = true;
 }
 
+void CExplosion::Update_EffectDelay(_float _fDeltaTime)
+{
+	m_fEffectTimer += _fDeltaTime;
+
+	if (m_fEffectTimer >= m_fEffectDelay)
+	{
+		m_fEffectTimer = 0.f;
+		Make_Pieces();
+	}
+}
+
 void CExplosion::Update_Scale(_float _fDeltaTime)
 {
 	if (m_fScaleMax == m_pTransformCom->Get_Desc().vScale.x)
@@ -236,4 +251,47 @@ void CExplosion::Free()
 	Safe_Release(m_pTextureCom);
 
 	CGameObject::Free();
+}
+
+
+
+HRESULT CExplosion::Make_Pieces()
+{
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return false;
+
+	//Option에 도착을 미리 지정해서 들고오자.
+	//Direction은 이동방향
+	//Pos는 시작위치.
+
+
+	INSTANTIMPACT pImpact;
+
+
+
+
+
+
+	//--------------------------------------------------
+	// TODO : 실제 메테오조각 소환
+	//--------------------------------------------------
+
+		pImpact.pAttacker = m_tImpact.pAttacker;
+		pImpact.pStatusComp = nullptr;
+		pImpact.vPosition = m_pTransformCom->Get_Desc().vPosition;
+		pImpact.vPosition.y = 2;
+		pImpact.vDirection = { 0.f, 0.f, 0.f };
+		pImpact.vOption.x = m_tImpact.vOption.x;
+
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_FloatingFire", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &pImpact)))
+		{
+			PRINT_LOG(L"Failed To Spawn FireFloatings", LOG::DEBUG);
+			return false;
+		}
+	
+
+	return true;
 }

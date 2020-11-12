@@ -26,6 +26,7 @@ public:
 	virtual int Update_GameObject(_float _fDeltaTime) override;
 	virtual int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Render_BlendAlpha() override;
 
 private:
 	HRESULT Add_Component();
@@ -39,6 +40,10 @@ private:
 	HRESULT Setting_Part();
 	HRESULT Spawn_InstantImpact(const wstring& LayerTag);
 	HRESULT Make_DashPaticle();
+
+	void Update_FlinchDelay(_float _fDeltaTime);
+	void Update_HurtDelay(_float _fDeltaTime);
+
 public:
 	static CSnail* Create(LPDIRECT3DDEVICE9 _pDevice);
 	virtual CGameObject * Clone_GameObject(void * pArg) override;
@@ -51,6 +56,7 @@ private:
 	CVIBuffer*			m_pVIBufferCom[SNAIL_END] = {};
 	CTransform*			m_pTransformCom[SNAIL_END] = {};
 	CTexture*			m_pTextureCom[SNAIL_END] = {};
+	CTexture*			m_pFlinchTexCom = nullptr;
 	CSphereCollider*	m_pColliderCom = nullptr;
 	CStatus*			m_pStatusCom = nullptr;
 	CDamageInfo*		m_pDmgInfoCom = nullptr;
@@ -66,6 +72,16 @@ private:
 	_bool			m_bTakeCheckOnece = false;
 	_float			m_fCopareLength = 4.f;
 	_float			m_fDashPaticle_CreateTime = 0.f;
+
+	_bool			m_bCanHurt = false;
+	_float			m_fHurtTimer = 0.f;
+	_float			m_fHurtDealy = 0.2f;
+
+	_bool			m_bFlinch = false;
+	_float			m_fFlinchTimer = 0.f;
+	_float			m_fFlinchDealy = 0.2f;
+	SLIMEINFO		m_tSlimeInfo = {};
+	_uint			m_iTextureNumber = 0;
 };
 
 END

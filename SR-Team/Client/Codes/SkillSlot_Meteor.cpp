@@ -23,9 +23,9 @@ HRESULT CSkillSlot_Meteor::Setup_GameObject_Prototype()
 HRESULT CSkillSlot_Meteor::Setup_GameObject(void * _pArg)
 {
 	m_iCanUseCnt = m_iMaxUseCnt = 1;
-	m_fEachDelay = 10.f;
+	m_fEachDelay = 3.f;
 
-	m_iConsumeMP = 10;
+	m_iConsumeMP = 8;
 
 	return S_OK;
 }

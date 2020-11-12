@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Stump.h"
 #include "DamageInfo.h"
+#include "Sound_Manager.h"
 #include "MainCamera.h"
 USING(Client)
 
@@ -75,9 +76,16 @@ _int CStump::LateUpdate_GameObject(_float _fDeltaTime)
 
 	Update_AttackDelay(_fDeltaTime);
 	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return 0;
+	}
 
 	return GAMEOBJECT::NOEVENT;
 }
@@ -119,6 +127,34 @@ HRESULT CStump::Render_NoneAlpha()
 	return S_OK;
 }
 
+HRESULT CStump::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_int iAll = STUMP_BODY; iAll < STUMP_END; ++iAll)
+	{
+		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 void CStump::Free()
 {
 	for (_uint iCnt = 0; iCnt < STUMP_END; ++iCnt)
@@ -128,6 +164,7 @@ void CStump::Free()
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -158,28 +195,64 @@ void CStump::Set_Active()
 
 HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 {
-	if (!m_bCanHurt && !_pDamageComp)
+	if (!_pDamageComp)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	if (!m_bCanHurt)
+		return S_OK;
 
+	_float fElementalRate = 1.f;
+
+	// 불 -> 땅
+	if (eELEMENTAL_TYPE::FIRE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType)
+		fElementalRate = 2.f;
+
+	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
+	iAtk -= m_pStatusCom->Get_Def();
+	if (iAtk < 0)
+		iAtk = 1;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	m_pStatusCom->Set_HP(iAtk);
 	if (m_pStatusCom->Get_Status().iHp <= 0)
 	{
+		//--------------------------------------------------
+		// 드랍아이템 & 씬 이벤트 갱신
+		//--------------------------------------------------
 		DROPBOX_INFO tBoxInfo;
 		tBoxInfo.vPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition;
 		tBoxInfo.iItemNo = 1;
 		tBoxInfo.bGone = false;
 
-		CManagement* pManagement = CManagement::Get_Instance();
-		if (nullptr == pManagement)
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_Active", &tBoxInfo)))
 			return E_FAIL;
 
-		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_DropItem", &tBoxInfo)))
-			return E_FAIL;
+		pManagement->Set_SceneEvent(eSceneEventID::EVENT_CLEAR);
 
+		CSoundManager::Get_Instance()->PlayEffect(L"stump_dead.mp3");
 		m_bDead = true;
 	}
 
+	//--------------------------------------------------
+	// 플로팅
+	//--------------------------------------------------
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[STUMP_BASE]->Get_Desc().vPosition + (vAddPos * 3.f) + _vec3(0.f, 3.f, 0.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
+	m_bCanHurt = false;
+	m_bFlinch = true;
 	return S_OK;
 }
 
@@ -303,10 +376,11 @@ HRESULT CStump::Add_Component()
 	}
 
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
+	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 2;
 	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	tStat.iHp = 700;
+	tStat.iMinAtt = 30;			tStat.iMaxAtt = 30;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -327,6 +401,9 @@ HRESULT CStump::Add_Component()
 	tDmgInfo.eType = eELEMENTAL_TYPE::NONE;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_DamageInfo", L"Com_DmgInfo", (CComponent**)&m_pDmgInfoCom, &tDmgInfo)))
+		return E_FAIL;
+
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -691,6 +768,18 @@ HRESULT CStump::Update_Animation_Attack2(_float _fDeltaTime)
 		}
 	}
 
+	if (m_iAnimationStep >= 1 && m_iAnimationStep <= 5)
+	{
+		m_fParticle_CreateTime += _fDeltaTime;
+
+		if (m_fParticle_CreateTime >= 0.03f)
+		{
+			Make_Stump_Particle();
+			m_fParticle_CreateTime = 0.f;
+		}
+	}
+
+
 	if (m_iAnimationStep <= 1)
 	{
 		//m_pTransformCom[STUMP_LSHD]->Turn(CTransform::AXIS_X , -_fDeltaTime);
@@ -762,6 +851,9 @@ HRESULT CStump::Make_Rubble()
 		return E_FAIL;
 
 	INSTANTIMPACT tImpact;
+	tImpact.pAttacker = this;
+	tImpact.pStatusComp = m_pStatusCom;
+
 	for (_uint i = 0; i < 15; i++)
 	{
 		_vec3 RandomPostion = { (_float)(rand() % 30 - 15), 0.f ,(_float)(rand() % 30 - 15) };
@@ -774,6 +866,23 @@ HRESULT CStump::Make_Rubble()
 
 	return S_OK;
 }
+
+HRESULT CStump::Make_Stump_Particle()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	_matrix vMymat = m_pTransformCom[STUMP_BASE]->Get_Desc().matWorld;
+
+	for (_uint iCnt = 0; iCnt < 2; ++iCnt)
+	{
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump_Particle", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &vMymat)))
+			return E_FAIL;
+	}
+	return S_OK;
+}
+
 
 void CStump::Update_AttackDelay(_float _fDeltaTime)
 {
@@ -797,6 +906,19 @@ void CStump::Update_HurtDelay(_float _fDeltaTime)
 		{
 			m_fHurtTimer = 0.f;
 			m_bCanHurt = true;
+		}
+	}
+}
+
+void CStump::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
 		}
 	}
 }

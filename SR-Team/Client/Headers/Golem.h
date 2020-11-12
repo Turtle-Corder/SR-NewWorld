@@ -39,11 +39,14 @@ public:
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
 	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Render_BlendAlpha() override;
+
 public:
 	virtual CGameObject * Clone_GameObject(void * _pArg) override;
 	virtual void Free() override;
 	static  CGolem* Create(LPDIRECT3DDEVICE9 _pDevice);
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
+	HRESULT Make_DashPaticle();
 private:
 	HRESULT Add_Component();
 	HRESULT Add_Component_VIBuffer();
@@ -74,12 +77,12 @@ private:
 
 	void Update_AttackDelay(_float _fDeltaTime);
 	void Update_HurtDelay(_float _fDeltaTime);
+	void Update_FlinchDelay(_float _fDeltaTime);
 
-	HRESULT Spawn_GolemImpact();
+	HRESULT Spawn_GolemImpact(_uint iOption = 0);
 	HRESULT Spawn_Bomb();
 	HRESULT Spawn_MonSub();
 
-	HRESULT Make_Pieces();
 
 	HRESULT Create_MiniGolem();
 	//	HRESULT Spawn_Fire();
@@ -129,8 +132,12 @@ private:
 	//------------------------------------------------------------
 	_bool			m_bCanHurt = true;
 	_float			m_fHurtDelay = 0.f;
-	_float			m_fHurtTimer = 0.f;
+	_float			m_fHurtTimer = 0.1f;
 
+	CTexture*		m_pFlinchTexCom = nullptr;
+	_bool			m_bFlinch = false;
+	_float			m_fFlinchTimer = 0.f;
+	_float			m_fFlinchDealy = 0.1f;
 
 
 	//------------------------------------------------------------
@@ -153,6 +160,7 @@ private:
 	_float			m_fMoveSpeed = 2.f;
 	_bool			m_bMiniGolem_SetPosition = false;
 	_bool			m_OneCheck = false;
+	_float			m_fDashPaticle_CreateTime = 0.f;
 };
 
 END

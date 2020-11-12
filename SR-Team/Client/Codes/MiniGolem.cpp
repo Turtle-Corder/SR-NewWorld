@@ -204,10 +204,8 @@ HRESULT CMiniGolem::Add_Component_Texture()
 HRESULT CMiniGolem::Add_Component_Extends()
 {
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 10;
-	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 1;
+	tStat.iMinAtt = 10;			tStat.iMaxAtt = 20;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;

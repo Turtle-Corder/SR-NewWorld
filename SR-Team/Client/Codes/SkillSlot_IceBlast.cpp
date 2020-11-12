@@ -24,7 +24,7 @@ HRESULT CSkillSlot_IceBlast::Setup_GameObject(void * _pArg)
 	m_iCanUseCnt = m_iMaxUseCnt = 1;
 	m_fEachDelay = 5.f;
 
-	m_iConsumeMP = 10;
+	m_iConsumeMP = 20;
 
 	return S_OK;
 }

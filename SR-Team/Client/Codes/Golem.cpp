@@ -2,6 +2,7 @@
 #include "MiniGolem.h"
 #include "DamageInfo.h"
 #include "MainCamera.h"
+#include "Sound_Manager.h"
 #include "..\Headers\Golem.h"
 
 USING(Client)
@@ -82,18 +83,22 @@ _int CGolem::Update_GameObject(_float _fDeltaTime)
 
 _int CGolem::LateUpdate_GameObject(_float _fDeltaTime)
 {
-	if (!m_bActive)
-		return GAMEOBJECT::NOEVENT;
-
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
 		return 0;
 
 	Update_AttackDelay(_fDeltaTime);
 	Update_HurtDelay(_fDeltaTime);
+	Update_FlinchDelay(_fDeltaTime);
 
 	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
 		return 0;
+
+	if (m_bFlinch)
+	{
+		if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_BLNEDALPHA, this)))
+			return 0;
+	}
 
 	for (_uint iCnt = 0; iCnt < 5; ++iCnt)
 	{
@@ -135,6 +140,34 @@ HRESULT CGolem::Render_NoneAlpha()
 	return S_OK;
 }
 
+HRESULT CGolem::Render_BlendAlpha()
+{
+	if (!m_bFlinch)
+		return S_OK;
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	for (_int iAll = 0; iAll < GOLEM_END; ++iAll)
+	{
+		if (FAILED(m_pVIBufferCom[iAll]->Set_Transform(&m_pTransformCom[iAll]->Get_Desc().matWorld, pCamera)))
+			return E_FAIL;
+
+		if (FAILED(m_pFlinchTexCom->SetTexture(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom[iAll]->Render_VIBuffer()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 CGameObject * CGolem::Clone_GameObject(void * _pArg)
 {
 	CGolem* pInstance = new CGolem(*this);
@@ -157,6 +190,7 @@ void CGolem::Free()
 		Safe_Release(m_pTextureCom[iCnt]);
 	}
 
+	Safe_Release(m_pFlinchTexCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
 	Safe_Release(m_pDmgInfoCom);
@@ -286,16 +320,20 @@ HRESULT CGolem::Add_Component_Texture()
 			return E_FAIL;
 	}
 
+	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Textrue_Flinch", L"Com_TexFlinch", (CComponent**)&m_pFlinchTexCom)))
+		return E_FAIL;
+	
 	return S_OK;
 }
 
 HRESULT CGolem::Add_Component_Extends()
 {
 	CStatus::STAT tStat;
-	tStat.iCriticalRate = 20;	tStat.iCriticalChance = 10;
-	tStat.iDef = 50;
-	tStat.iHp = 100;			tStat.iMp = 100;
-	tStat.iMinAtt = 10;			tStat.iMaxAtt = 50;
+	tStat.iCriticalRate = 2;	tStat.iCriticalChance = 20;
+	tStat.iDef = 100;
+	tStat.iHp = 1800;
+	tStat.iMinAtt = 25;			tStat.iMaxAtt = 40;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -452,19 +490,19 @@ HRESULT CGolem::Update_State()
 			break;
 
 		case CGolem::ATTACK1:
-			m_fAttackDelay = 2.f;		// 내려찍기
+			m_fAttackDelay = 1.5f;		// 내려찍기
 			break;
 
 		case CGolem::ATTACK2:
-			m_fAttackDelay = 2.f;		// 폭탄
+			m_fAttackDelay = 1.5f;		// 폭탄
 			break;
 
 		case CGolem::ATTACK3:
-			m_fAttackDelay = 1.3f;		// 몬스터 생성
+			m_fAttackDelay = 1.f;		// 몬스터 생성
 			break;
 
 		case CGolem::ATTACK4:
-			m_fAttackDelay = 1.9f;		// 분신 소환
+			m_fAttackDelay = 2.8f;		// 분신 소환
 			break;
 
 		case CGolem::ATTACK6:
@@ -597,8 +635,7 @@ HRESULT CGolem::Update_Anim_Attack1(_float _fDeltaTime)
 
 		if (5 == m_iAnimationStep)
 		{
-			Spawn_GolemImpact();
-			Make_Pieces();
+			Spawn_GolemImpact(1); // 0 != 면 파티클 생성 0은 미생성
 		}
 		else if(m_iAnimationStep == 6)
 			m_eCurState = CGolem::IDLE;
@@ -780,6 +817,14 @@ HRESULT CGolem::Update_Anim_Attack6(_float _fDeltaTime)
 	}
 	else if (m_iAnimationStep <= 4)
 	{
+		m_fDashPaticle_CreateTime += _fDeltaTime;
+
+		if (m_fDashPaticle_CreateTime >= 0.2f)
+		{
+			Make_DashPaticle();
+			m_fDashPaticle_CreateTime = 0.f;
+		}
+
 		_vec3 vMyPosition = { m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition.x , 0.f , m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition.z };
 		vMyPosition -= m_vDirection * (_fDeltaTime * 5.f);
 		m_pTransformCom[GOLEM_BASE]->Set_Position(vMyPosition);
@@ -856,7 +901,20 @@ void CGolem::Update_HurtDelay(_float _fDeltaTime)
 	}
 }
 
-HRESULT CGolem::Spawn_GolemImpact()
+void CGolem::Update_FlinchDelay(_float _fDeltaTime)
+{
+	if (m_bFlinch)
+	{
+		m_fFlinchTimer += _fDeltaTime;
+		if (m_fFlinchTimer >= m_fFlinchDealy)
+		{
+			m_fFlinchTimer = 0.f;
+			m_bFlinch = false;
+		}
+	}
+}
+
+HRESULT CGolem::Spawn_GolemImpact(_uint iOption)
 {
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -867,6 +925,7 @@ HRESULT CGolem::Spawn_GolemImpact()
 	tImpact.pStatusComp = m_pStatusCom;
 	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
 	tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (tImpact.vDirection * -1.f);
+	tImpact.fOption = (_float)iOption;
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Impact", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
 		return E_FAIL;
@@ -881,13 +940,17 @@ HRESULT CGolem::Spawn_Bomb()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
+	CTransform* pPlayerTransform = (CTransform*)pManagement->Get_Component(pManagement->Get_CurrentSceneID(), L"Layer_Player", L"Com_Transform0");
+	if (nullptr == pPlayerTransform)
+		return E_FAIL;
+
 	INSTANTIMPACT tImpact;
 	tImpact.pAttacker = this;
 	tImpact.pStatusComp = m_pStatusCom;
 
-	for (_uint iCnt = 0; iCnt < 12; ++iCnt)
+	for (_uint iCnt = 0; iCnt < 30; ++iCnt)
 	{
-		_float fX = (_float)(rand() % 6 + 1); _float fZ = (_float)(rand() % 6 + 1);
+		_float fX = (_float)(rand() % 10); _float fZ = (_float)(rand() % 10);
 
 		_uint iRandX = rand() % 2;
 		_uint iRandZ = rand() % 2;
@@ -897,7 +960,7 @@ HRESULT CGolem::Spawn_Bomb()
 		if (iRandZ == 0)
 			fZ *= -1.f;
 
-		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + _vec3(fX, 0.f, fZ);
+		tImpact.vPosition = /*m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition*/ pPlayerTransform->Get_Desc().vPosition + _vec3(fX, 0.f, fZ);
 
 		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Bomb", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &tImpact)))
 			return E_FAIL;
@@ -923,38 +986,6 @@ HRESULT CGolem::Spawn_MonSub()
 
 	m_bCanAttack = false;
 	return S_OK;
-}
-
-HRESULT CGolem::Make_Pieces()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	INSTANTIMPACT tImpact = {};
-
-	D3DXVec3Normalize(&tImpact.vDirection, &m_pTransformCom[GOLEM_BASE]->Get_Look());
-
-
-	for (_uint i = 0; i < 25; i++)
-	{
-		_vec3 RandomPostionSelect = { (_float)(rand() % 30 - 15), 18.f + (_float)(rand() % 4 - 2) ,(_float)(rand() % 30 - 15) };
-		_vec3 vGolemLook = _vec3(tImpact.vDirection.x, 0.f, tImpact.vDirection.z);
-		D3DXVec3Normalize(&vGolemLook, &vGolemLook);
-		_vec3 vPosition = { tImpact.vPosition.x , 0.f, tImpact.vPosition.z };
-		vPosition -= vGolemLook * 3.f;
-
-		tImpact.vPosition = vPosition;
-		tImpact.vDirection = RandomPostionSelect;
-		tImpact.vOption = RandomPostionSelect + m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
-
-		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_MeteorPiece", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))
-		{
-			PRINT_LOG(L"Failed To Spawn MeteorPieces", LOG::DEBUG);
-			return false;
-		}
-	}
-
 }
 
 HRESULT CGolem::Create_MiniGolem()
@@ -1047,15 +1078,78 @@ HRESULT CGolem::Phatton()
 
 HRESULT CGolem::Take_Damage(const CComponent* _pDamageComp)
 {
-	if (!m_bCanHurt && !_pDamageComp)
+	if (!_pDamageComp)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt);
+	if (!m_bCanHurt)
+		return S_OK;
 
-	if (m_pStatusCom->Get_Status().iHp <= 0)
+	_float fElementalRate = 1.f;
+
+	// 물 -> 불
+	if (eELEMENTAL_TYPE::ICE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType)
+		fElementalRate = 2.f;
+
+	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
+	iAtk -= m_pStatusCom->Get_Def();
+	if (iAtk < 0)
+		iAtk = 1;
+
+
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	m_pStatusCom->Set_HP(iAtk);
+	if (0 >= m_pStatusCom->Get_Status().iHp)
 	{
+		DROPBOX_INFO tBoxInfo;
+		tBoxInfo.vPos = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition;
+		tBoxInfo.iItemNo = 2;
+		tBoxInfo.bGone = false;
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DropItem", pManagement->Get_CurrentSceneID(), L"Layer_Active", &tBoxInfo)))
+			return E_FAIL;
+
+		pManagement->Set_SceneEvent(eSceneEventID::EVENT_CLEAR);
+
+		CSoundManager::Get_Instance()->PlayMonster(L"Golem_dead.wav");
 		m_bDead = true;
 	}
 
+	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
+	if (nullptr != pCamera)
+	{
+		_vec3 vAddPos = {};
+		memcpy_s(&vAddPos, sizeof(_vec3), &pCamera->Get_ViewMatrix()->m[0][0], sizeof(_vec3));
+		FLOATING_INFO tInfo;
+		tInfo.iDamage = iAtk;
+		tInfo.vSpawnPos = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + (vAddPos * 3.f) + _vec3(0.f, 3.f, 0.f);
+		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
+	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
+	m_bCanHurt = false;
+	m_bFlinch = true;
+	return S_OK;
+}
+
+HRESULT CGolem::Make_DashPaticle()
+{
+	CManagement* pManagement = CManagement::Get_Instance();
+	if (nullptr == pManagement)
+		return E_FAIL;
+
+	INSTANTIMPACT tImpact = {};
+
+	_float fX = 0.f;
+	
+	for (_int iCnt = 0; iCnt < 6; ++iCnt)
+	{
+		tImpact.vPosition = m_pTransformCom[GOLEM_BASE]->Get_Desc().vPosition + _vec3((_float)(iCnt - 2) , 0.f , 0.f);
+
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Golem_Dash", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tImpact)))/*여기 StartPos*/
+			return E_FAIL;
+	}
 	return S_OK;
 }

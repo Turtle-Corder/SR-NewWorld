@@ -37,6 +37,8 @@ public:
 	virtual int Update_GameObject(float _fDeltaTime) override;
 	virtual int LateUpdate_GameObject(float _fDeltaTime) override;
 	virtual HRESULT Render_NoneAlpha() override;
+	virtual HRESULT Render_BlendAlpha() override;
+
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp) override;
 private:
 	HRESULT Add_Component();
@@ -47,6 +49,10 @@ private:
 	HRESULT Attack(float _fDeltaTime);
 	HRESULT Update_State();
 	HRESULT MoveMotion(_float _fDeltaTime);
+
+	void Update_FlinchDelay(_float _fDeltaTime);
+	void Update_HurtDelay(_float _fDeltaTime);
+
 public:
 	static CYeti* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone_GameObject(void * pArg) override;
@@ -56,7 +62,7 @@ public:
 
 	virtual void Set_Active() override;
 
-	HRESULT Update_HurtDelay(_float _fDeltaTime);
+
 
 private:
 	CVIBuffer*			m_pVIBufferCom[YETI_END];
@@ -68,7 +74,7 @@ private:
 	
 
 	_bool		m_bCanHurt = true;			// 피격 가능 or 불가능
-	_float		m_fHurtDelay = 5.f;			// 피격 가능한 딜레이
+	_float		m_fHurtDelay = 0.1f;		// 피격 가능한 딜레이
 	_float		m_fHurtTimer = 0.f;
 
 	_bool		m_bJump = false;
@@ -88,6 +94,12 @@ private:
 	STATE		m_eCurState;
 	_float		m_fMoveTime = 0.f;
 	CHANGE		m_eMove = CHANGE_LEFT;
+
+	CTexture*		m_pFlinchTexCom = nullptr;
+
+	_bool			m_bFlinch = false;
+	_float			m_fFlinchTimer = 0.f;
+	_float			m_fFlinchDealy = 0.1f;
 };
 
 END

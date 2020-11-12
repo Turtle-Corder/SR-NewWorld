@@ -53,36 +53,7 @@ _int CStump_Impact::Update_GameObject(_float _fDeltaTime)
 
 _int CStump_Impact::LateUpdate_GameObject(_float _fDeltaTime)
 {
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return GAMEOBJECT::WARN;
-
-	if (FAILED(pManagement->Add_RendererList(CRenderer::RENDER_NONEALPHA, this)))
-		return GAMEOBJECT::WARN;
-
 	return GAMEOBJECT::NOEVENT;
-}
-
-HRESULT CStump_Impact::Render_NoneAlpha()
-{
-	CManagement* pManagement = CManagement::Get_Instance();
-	if (nullptr == pManagement)
-		return E_FAIL;
-
-	CCamera* pCamera = (CCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
-	if (nullptr == pCamera)
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Set_Transform(&m_pTransformCom->Get_Desc().matWorld, pCamera)))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->SetTexture(0)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render_VIBuffer()))
-		return E_FAIL;
-
-	return S_OK;
 }
 
 HRESULT CStump_Impact::Add_Component()
@@ -101,15 +72,6 @@ HRESULT CStump_Impact::Add_Component()
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-
-	if (FAILED(CGameObject::Add_Component(pManagement->Get_CurrentSceneID(), L"Component_Texture_Stump_Head", L"Com_Texture", (CComponent**)&m_pTextureCom))) ////积己 肮荐
-		return E_FAIL;
-
-
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom))) //积己 肮荐
-		return E_FAIL;
-
-
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Transform", L"Com_Transform", (CComponent**)&m_pTransformCom, &tTransformDesc)))
 		return E_FAIL;
 
@@ -123,7 +85,9 @@ HRESULT CStump_Impact::Add_Component()
 
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
-	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
+	tStat.iMinAtt = 0;			tStat.iMaxAtt = 0;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
+
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -171,15 +135,11 @@ HRESULT CStump_Impact::Take_Damage(const CComponent * _pDamageComp)
 	if (!_pDamageComp)
 		return E_FAIL;
 
-	//m_bDead = true;
-
 	return S_OK;
 }
 
 void CStump_Impact::Free()
 {
-	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStatusCom);
