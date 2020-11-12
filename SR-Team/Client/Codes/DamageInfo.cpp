@@ -22,7 +22,7 @@ _int CDamageInfo::Get_Att()
 {
 	_int iSimulateAtt = 0;
 	_int iAttBound = m_tDamageDesc.iMaxAtt - m_tDamageDesc.iMinAtt;
-	if (0 == iAttBound)	iSimulateAtt = iAttBound;
+	if (0 == iAttBound)	iSimulateAtt = m_tDamageDesc.iMaxAtt;
 	else				iSimulateAtt = (_int)(rand() % iAttBound + m_tDamageDesc.iMinAtt);
 
 	_int iSimulateCriticalChance = rand() % 100;

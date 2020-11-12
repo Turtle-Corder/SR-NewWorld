@@ -134,8 +134,8 @@ HRESULT CAcornExplosion::Add_Component()
 		return E_FAIL;
 
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
-	tStat.iMinAtt = 0;			tStat.iMaxAtt = 0;
+	tStat.iCriticalChance = 1;	tStat.iCriticalRate = 1;
+	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
