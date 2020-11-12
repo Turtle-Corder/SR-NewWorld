@@ -553,8 +553,8 @@ HRESULT CInventory::Select_SellItem()
 							m_iSellGold += (m_pInvenList[iIndex]->iPrice * m_pInvenList[iIndex]->iCnt);
 							CSoundManager::Get_Instance()->PlayUI(L"OpenWnd.wav");
 						}
-						else
-							PRINT_LOG(L"현재 장착하고 있는 아이템은 판매 못함", LOG::DEBUG);
+						//else
+							//PRINT_LOG(L"현재 장착하고 있는 아이템은 판매 못함", LOG::DEBUG);
 					}
 					else if (!m_bIsItemHere[iIndex])
 					{

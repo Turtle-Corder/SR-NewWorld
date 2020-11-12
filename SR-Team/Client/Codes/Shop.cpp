@@ -200,6 +200,7 @@ HRESULT CShop::Check_BuyItem()
 			{
 				if (pManagement->Key_Down(VK_LBUTTON))
 				{
+
 					Buy_Item(j, i);
 				}
 			}
