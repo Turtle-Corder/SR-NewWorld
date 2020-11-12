@@ -220,7 +220,7 @@ HRESULT CInventory::Get_RewardItem(const wstring & strItemName)
 	m_pInvenList.emplace_back(pInvenItem);
 
 	m_bIsItemHere[m_iInsertOrder] = true;
-	++m_pInvenList[m_iInsertOrder]->iCnt;
+	m_pInvenList[m_iInsertOrder]->iCnt += 1;
 	++m_iInsertOrder;
 
 
@@ -631,12 +631,12 @@ HRESULT CInventory::Check_AutoSortButton()
 			++m_iNewInsertOrder;
 		}
 
-		for (_int i = 0; i < iDeleteCnt + 1; ++i)
+		for (_int i = 0; i < m_pInvenList.size()/*iDeleteCnt + 1*/; ++i)
 		{
 			m_bIsItemHere[i] = true;
 		}
 
-		for (_int i = iDeleteCnt + 1; i < 36; ++i)
+		for (_int i = m_pInvenList.size() /*iDeleteCnt + 1*/; i < 36; ++i)
 		{
 			m_bIsItemHere[i] = false;
 		}
@@ -665,9 +665,13 @@ HRESULT CInventory::Check_EquipItem()
 	{
 		for (_uint j = 0; j < 6; j++)
 		{
+
 			if (pManagement->Key_Pressing(VK_RBUTTON))
 			{
 				iIndex = i * 6 + j;
+				if (iIndex >= m_pInvenList.size())
+					return S_OK;
+
 				if (m_bIsItemHere[iIndex] && PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()) && 
 					m_pInvenList[iIndex]->eSort != RANDOM_POTION && m_pInvenList[iIndex]->eSort != RANDOM_EQUIP)
 				{
@@ -686,11 +690,16 @@ HRESULT CInventory::Check_EquipItem()
 			else if (pManagement->Key_Pressing(VK_LBUTTON) && m_bIsItemHere[iIndex])
 			{
 				iIndex = i * 6 + j;
+				if (iIndex >= m_pInvenList.size())
+				{
+					iIndex -= 1;
+				}
+
 				if (PtInRect(&m_tItemCollRt[i][j], pMouse->Get_Point()))
 				{
 					if (m_pInvenList[iIndex]->eSort == RANDOM_POTION || m_pInvenList[iIndex]->eSort == RANDOM_EQUIP)
 					{
-						if (FAILED(Open_RandomBox(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag)))
+						if (FAILED(Open_RandomBox(m_pInvenList[iIndex]->eSort, m_pInvenList[iIndex]->szItemTag, iIndex)))
 							return E_FAIL;
 					}
 				}
@@ -700,7 +709,7 @@ HRESULT CInventory::Check_EquipItem()
 	return S_OK;
 }
 
-HRESULT CInventory::Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag)
+HRESULT CInventory::Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag, _int iIndex)
 {
 	wstring strGetcha;
 	CManagement* pManagement = CManagement::Get_Instance();
@@ -709,6 +718,10 @@ HRESULT CInventory::Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag)
 
 	CInventory* pInven = (CInventory*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Inventory");
 	if (pInven == nullptr)
+		return E_FAIL;
+
+	CDataManager* pItem = (CDataManager*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Item");
+	if (nullptr == pItem)
 		return E_FAIL;
 
 	if (eSort == RANDOM_POTION)
@@ -762,9 +775,22 @@ HRESULT CInventory::Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag)
 
 		Delete_Item(strNameTag);
 		Get_RewardItem(strGetcha);
+
+		//INVEN_ITEM* pNewItem = new INVEN_ITEM;
+		//if (FAILED(pItem->Get_ItemInfo(strGetcha, *pNewItem)))
+		//	return E_FAIL;
+		//if (m_pInvenList[iIndex])
+		//	Safe_Delete(m_pInvenList[iIndex]);
+		//m_pInvenList[iIndex] = pNewItem;
+
+		//if (m_pTextureItem[iIndex])
+		//	Safe_Release(m_pTextureItem[iIndex]);
+		//m_pTextureItem[iIndex] = pItem->Get_ItemInfo_Texture(strGetcha);
 		
 		// 랜덤박스 연출
 		m_bRender_GetRandomBoxItem = true;
+
+		return S_OK;
 	}
 	return S_OK;
 }

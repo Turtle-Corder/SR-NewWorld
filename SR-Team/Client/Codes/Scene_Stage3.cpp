@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "PreLoader.h"
+#include "Scene_Stage4.h"
 #include "Scene_Stage0.h"
 #include "CubeTerrain.h"
 #include "Sound_Manager.h"
@@ -35,11 +36,11 @@ HRESULT CScene_Stage3::Setup_Scene()
 	if (FAILED(Setup_Layer_Projectile()))
 		return E_FAIL;
 
-	if(FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
+	if (FAILED(Setup_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
 
 
-	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_TOWN);
+	m_pPreLoader = CPreLoader::Create(m_pDevice, SCENE_LAB);
 	if (nullptr == m_pPreLoader)
 	{
 		PRINT_LOG(L"Failed To PreLoader Create in CScene_Stage3", LOG::CLIENT);
@@ -92,9 +93,9 @@ _int CScene_Stage3::Update_Scene(_float _fDeltaTime)
 		}
 
 		// 얼음 -> 마을 ICELAND -> TOWN 단방향
-		if (FAILED(pManagement->Change_CurrentScene(SCENE_TOWN, CScene_Stage0::Create(m_pDevice))))
+		if (FAILED(pManagement->Change_CurrentScene(SCENE_LAB, CScene_Stage4::Create(m_pDevice))))
 		{
-			PRINT_LOG(L"Failed To Setup CScene_Room", LOG::CLIENT);
+			PRINT_LOG(L"Failed To Setup SCENE_LAB", LOG::CLIENT);
 			return -1;
 		}
 
@@ -103,6 +104,10 @@ _int CScene_Stage3::Update_Scene(_float _fDeltaTime)
 			PRINT_LOG(L"Failed To ClearScene_Component_All in Volcanic", LOG::CLIENT);
 			return -1;
 		}
+
+
+
+
 
 		return 1;
 	}
@@ -226,7 +231,7 @@ HRESULT CScene_Stage3::Setup_Layer_Golem(const wstring & LayerTag)
 	if (nullptr == pManagement)
 		return E_FAIL;
 
-	_vec3 vSpawnPos = { 30.f, 0.f, 0.f };
+	_vec3 vSpawnPos = { 30.f, 0.f, 30.f };
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_VOLCANIC, L"GameObject_Golem", SCENE_VOLCANIC, LayerTag, &vSpawnPos)))
 		return E_FAIL;
@@ -301,37 +306,37 @@ HRESULT CScene_Stage3::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Mouse")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Camera")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Camera")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Player")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Player")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Item")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Item")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_MainUI")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_MainUI")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Shop")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Shop")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Inventory")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Inventory")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Wand")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_Wand")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_PlayerSkill")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_PlayerSkill")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_PlayerItem")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_PlayerItem")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_MainQuest")))
-		return E_FAIL;
+	//if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_VOLCANIC, L"Layer_MainQuest")))
+	//	return E_FAIL;
 
-	if (FAILED(pManagement->Clear_Except(SCENE_VOLCANIC, SCENE_TOWN)))
+	if (FAILED(pManagement->Clear_Except(SCENE_VOLCANIC, SCENE_LAB)))
 	{
 		PRINT_LOG(L"Failed To Clear_Except", LOG::CLIENT);
 		return E_FAIL;
