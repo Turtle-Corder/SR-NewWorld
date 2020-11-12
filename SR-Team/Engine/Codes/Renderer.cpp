@@ -66,6 +66,9 @@ HRESULT CRenderer::Render_Renderer()
 	if (FAILED(Render_BlendAlpha()))
 		return E_FAIL;
 
+	if (FAILED(Render_Effect()))
+		return E_FAIL;
+
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
@@ -100,7 +103,7 @@ HRESULT CRenderer::Render_NoneAlpha()
 
 	return S_OK;
 }
-
+              
 HRESULT CRenderer::Render_BlendAlpha()
 {
 	m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -138,6 +141,30 @@ HRESULT CRenderer::Render_OnlyAlpha()
 	m_GameObjects[RENDER_ONLYALPHA].clear();
 
 	m_pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Effect()
+{
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+
+	m_pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+
+	m_pDevice->SetRenderState(D3DRS_ALPHAREF, 1);
+	m_pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+	for (auto& pObject : m_GameObjects[RENDER_EFFECT])
+	{
+		pObject->Render_Effect();
+		Safe_Release(pObject);
+	}
+
+	m_GameObjects[RENDER_EFFECT].clear();
+
+	m_pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 	return S_OK;
 }
