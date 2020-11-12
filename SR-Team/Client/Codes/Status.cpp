@@ -95,7 +95,7 @@ void CStatus::Set_EquipStat(const CStatus::STAT & tStat)
 {
 	m_tStat.iMinAtt = tStat.iMinAtt + 10;
 	m_tStat.iMaxAtt = tStat.iMaxAtt + 20;
-	m_tStat.iDef = tStat.iDef + 20;
+	m_tStat.iDef = tStat.iDef + 0;
 	m_tStat.iCriticalRate = tStat.iCriticalRate + 1;
 	m_tStat.iCriticalChance = tStat.iCriticalChance + 5;
 }

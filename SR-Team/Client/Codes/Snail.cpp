@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\Snail.h"
+#include "Sound_Manager.h"
 #include "DamageInfo.h"
 
 USING(Client)
@@ -203,9 +204,10 @@ HRESULT CSnail::Add_Component()
 	CStatus::STAT tStat;
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
 	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
-	tStat.iDef = 0;
-	tStat.iHp = 3000;			tStat.iMp = 0;
+	tStat.iDef = 0;				
+	tStat.iHp = 100;			tStat.iMp = 0;
 	tStat.iMinAtt = 10;			tStat.iMaxAtt = 10;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -580,12 +582,23 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 
 	_float fElementalRate = 1.f;
 
-	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Att();
-	// todo : 위 부분 다 변경하기, 이펙트 사운드 적용하기
+	// 불 -> 땅
+	if (eELEMENTAL_TYPE::FIRE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType && 0 == m_tSlimeInfo.iTextureNumber)
+		fElementalRate = 2.f;
+
+	// 물 -> 불
+	else if (eELEMENTAL_TYPE::ICE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType && 2 == m_tSlimeInfo.iTextureNumber)
+		fElementalRate = 2.f;
+
+	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
+	iAtk -= m_pStatusCom->Get_Def();
 
 	m_pStatusCom->Set_HP(iAtk);
 	if (0 >= m_pStatusCom->Get_Status().iHp)
+	{
+		CSoundManager::Get_Instance()->PlayMonster(L"snail_dead.wav");
 		m_bDead = true;
+	}
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -602,6 +615,7 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
 	}
 
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
 	m_bCanHurt = false;
 	m_bFlinch = true;
 	return S_OK;

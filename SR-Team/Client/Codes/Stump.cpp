@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Stump.h"
 #include "DamageInfo.h"
+#include "Sound_Manager.h"
 #include "MainCamera.h"
 USING(Client)
 
@@ -200,7 +201,14 @@ HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 	if (!m_bCanHurt)
 		return S_OK;
 
-	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+	_float fElementalRate = 1.f;
+
+	// บา -> ถฅ
+	if (eELEMENTAL_TYPE::FIRE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType)
+		fElementalRate = 2.f;
+
+	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
+	iAtk -= m_pStatusCom->Get_Def();
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -221,6 +229,8 @@ HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 			return E_FAIL;
 
 		pManagement->Set_SceneEvent(eSceneEventID::EVENT_CLEAR);
+
+		CSoundManager::Get_Instance()->PlayEffect(L"stump_dead.mp3");
 		m_bDead = true;
 	}
 
@@ -238,6 +248,7 @@ HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
 	}
 
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
 	m_bCanHurt = false;
 	m_bFlinch = true;
 	return S_OK;
@@ -365,8 +376,9 @@ HRESULT CStump::Add_Component()
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 2;
 	tStat.iDef = 50;
-	tStat.iHp = 100000;
+	tStat.iHp = 1000;
 	tStat.iMinAtt = 30;			tStat.iMaxAtt = 30;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;

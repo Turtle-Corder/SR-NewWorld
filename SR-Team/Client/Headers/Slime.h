@@ -77,7 +77,7 @@ private:
 	_bool		m_bJump = false;
 	_float		m_fJumpPower = 5.f;
 	_float		m_fJumpTime = 0.f;
-	_int		m_iMaxCount = 4;
+	_int		m_iMaxCount = 2;
 	_int		m_iCurCount = 1;
 	_vec3		m_vStartPos = {};
 	STATE		m_ePreState;

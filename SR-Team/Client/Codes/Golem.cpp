@@ -2,6 +2,7 @@
 #include "MiniGolem.h"
 #include "DamageInfo.h"
 #include "MainCamera.h"
+#include "Sound_Manager.h"
 #include "..\Headers\Golem.h"
 
 USING(Client)
@@ -330,8 +331,9 @@ HRESULT CGolem::Add_Component_Extends()
 	CStatus::STAT tStat;
 	tStat.iCriticalRate = 2;	tStat.iCriticalChance = 20;
 	tStat.iDef = 100;
-	tStat.iHp = 300000;
+	tStat.iHp = 2000;
 	tStat.iMinAtt = 25;			tStat.iMaxAtt = 40;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
@@ -1082,7 +1084,15 @@ HRESULT CGolem::Take_Damage(const CComponent* _pDamageComp)
 	if (!m_bCanHurt)
 		return S_OK;
 
-	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+	_float fElementalRate = 1.f;
+
+	// ¹° -> ºÒ
+	if (eELEMENTAL_TYPE::ICE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType)
+		fElementalRate = 2.f;
+
+	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
+	iAtk -= m_pStatusCom->Get_Def();
+
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -1100,6 +1110,8 @@ HRESULT CGolem::Take_Damage(const CComponent* _pDamageComp)
 			return E_FAIL;
 
 		pManagement->Set_SceneEvent(eSceneEventID::EVENT_CLEAR);
+
+		CSoundManager::Get_Instance()->PlayMonster(L"Golem_dead.wav");
 		m_bDead = true;
 	}
 
@@ -1114,6 +1126,7 @@ HRESULT CGolem::Take_Damage(const CComponent* _pDamageComp)
 		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
 	}
 
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
 	m_bCanHurt = false;
 	m_bFlinch = true;
 	return S_OK;

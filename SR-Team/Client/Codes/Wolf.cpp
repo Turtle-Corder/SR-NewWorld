@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DamageInfo.h"
 #include "..\Headers\Wolf.h"
+#include "Sound_Manager.h"
 #include "IceLandQuest.h"
 USING(Client)
 
@@ -145,10 +146,13 @@ HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
 	if (!m_bCanHurt)
 		return S_OK;
 
-	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Att();
 	m_pStatusCom->Set_HP(iAtk);
 	if (0 >= m_pStatusCom->Get_Status().iHp)
+	{
+		CSoundManager::Get_Instance()->PlayMonster(L"wolf_Dead.wav");
 		m_bDead = true;
+	}
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -165,6 +169,7 @@ HRESULT CWolf::Take_Damage(const CComponent * _pDamageComp)
 		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
 	}
 
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
 	m_bCanHurt = false;
 	m_bFlinch = true;
 	return S_OK;
@@ -344,8 +349,10 @@ HRESULT CWolf::Add_Component_Extends()
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
 	tStat.iCriticalRate = 0;	tStat.iCriticalChance = 30;
 	tStat.iDef = 10;
-	tStat.iHp = 10000;
+	tStat.iHp = 100;
 	tStat.iMinAtt = 20;			tStat.iMaxAtt = 30;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
+
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;
 

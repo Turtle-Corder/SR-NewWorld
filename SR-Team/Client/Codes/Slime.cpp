@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\Slime.h"
+#include "Sound_Manager.h"
 #include "DamageInfo.h"
 
 USING(Client)
@@ -183,11 +184,25 @@ HRESULT CSlime::Take_Damage(const CComponent * _pDamageComp)
 	if (!_pDamageComp)
 		return S_OK;
 
-	_int iAtk = ((CDamageInfo*)_pDamageComp)->Get_Desc().iMinAtt;
+	_float fElementalRate = 1.f;
+
+	// ºÒ -> ¶¥
+	if (eELEMENTAL_TYPE::FIRE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType && 0 == m_tSlimeInfo.iTextureNumber)
+		fElementalRate = 2.f;
+
+	// ¹° -> ºÒ
+	else if (eELEMENTAL_TYPE::ICE == ((CDamageInfo*)_pDamageComp)->Get_Desc().eType && 4 == m_tSlimeInfo.iTextureNumber)
+		fElementalRate = 2.f;
+
+	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
+	iAtk -= m_pStatusCom->Get_Def();
 
 	m_pStatusCom->Set_HP(iAtk);
 	if (0 >= m_pStatusCom->Get_Status().iHp)
+	{
+		CSoundManager::Get_Instance()->PlayMonster(L"Slime_dead.wav");
 		m_bDead = true;
+	}
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -204,6 +219,7 @@ HRESULT CSlime::Take_Damage(const CComponent * _pDamageComp)
 		pManagement->Add_GameObject_InLayer(SCENE_STATIC, L"GameObject_DamageFloat", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &tInfo);
 	}
 
+	CSoundManager::Get_Instance()->PlayEffect(L"hit.wav");
 	m_bCanHurt = false;
 	m_bFlinch = true;
 
@@ -244,8 +260,9 @@ HRESULT CSlime::Add_Component()
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
 	tStat.iCriticalChance = 5;	tStat.iCriticalRate = 0;
 	tStat.iDef = 10;
-	tStat.iHp = 10000 / m_iCurCount;
+	tStat.iHp = 150 / m_iCurCount;
 	tStat.iMinAtt = 15;			tStat.iMaxAtt = 20;
+	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Status", L"Com_Stat", (CComponent**)&m_pStatusCom, &tStat)))
 		return E_FAIL;

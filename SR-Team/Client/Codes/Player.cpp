@@ -23,6 +23,7 @@
 #include "Shop_ChatWnd.h"
 #include "DummyTerrain.h"
 #include "RandomBox_Chat.h"
+#include "Sound_Manager.h"
 #include "..\Headers\Player.h"
 
 USING(Client)
@@ -245,7 +246,9 @@ HRESULT CPlayer::Take_Damage(const CComponent* _pDamageComp)
 	if (!_pDamageComp)
 		return S_OK;
 
-	m_pStatusCom->Set_HP(((CDamageInfo*)_pDamageComp)->Get_Desc().iDamage);
+	_int iAtk = (_int)((CDamageInfo*)_pDamageComp)->Get_Att();
+	iAtk -= (_int)(m_pStatusCom->Get_Def() * 0.1f);
+	m_pStatusCom->Set_HP(iAtk);
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
@@ -256,6 +259,7 @@ HRESULT CPlayer::Take_Damage(const CComponent* _pDamageComp)
 	if (!m_bFlinch)
 		m_bFlinch = true;
 
+	m_bCanHurt = false;
 	return S_OK;
 }
 

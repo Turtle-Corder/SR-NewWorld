@@ -442,7 +442,7 @@ HRESULT CPreLoader::Load_Resources_Forest()
 #pragma endregion
 
 	// npc
-#pragma Component_Texture_ForestNPC
+#pragma region Component_Texture_ForestNPC
 	if (FAILED(pManagement->Add_Component_Prototype(SCENE_FOREST, L"Component_Texture_ForestNPC_Head", CTexture::Create(m_pDevice, CTexture::TEXTURE_CUBE,
 		L"../Resources/3D/Layer_NPC/Stage1NPC_head%d.dds"))))
 		return E_FAIL;

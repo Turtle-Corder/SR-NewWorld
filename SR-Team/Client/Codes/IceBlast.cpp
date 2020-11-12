@@ -123,7 +123,9 @@ HRESULT CIceBlast::Add_Component()
 	tCollDesc.fRadius = 0.5f;
 
 	CStatus::STAT tStat;
-	tStat.iMinAtt = 10; tStat.iMaxAtt = 10;
+	tStat.iMinAtt = 5; tStat.iMaxAtt = 10;
+	tStat.iCriticalChance = 5; tStat.iCriticalRate = 1;
+	tStat.fAttRate = 1.f;
 
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_CubeTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferComp)))
 		return E_FAIL;
