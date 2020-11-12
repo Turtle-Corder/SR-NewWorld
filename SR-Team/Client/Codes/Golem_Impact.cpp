@@ -189,7 +189,5 @@ HRESULT CGolem_Impact::Take_Damage(const CComponent * _pDamageComp)
 	if (!_pDamageComp)
 		return E_FAIL;
 
-	m_bDead = true;
-
 	return S_OK;
 }

@@ -7,6 +7,8 @@
 USING(Engine)
 BEGIN(Client)
 
+class CDamageInfo;
+
 class CStump_Particle final : public CGameObject
 {
 private:
@@ -32,7 +34,9 @@ private:
 	CVIBuffer*			m_pVIBufferCom = nullptr;
 	CTransform*			m_pTransformCom = nullptr;
 	CTexture*			m_pTextureCom = nullptr;
-
+	CSphereCollider*	m_pColliderCom = nullptr;
+	CStatus*			m_pStatusCom = nullptr;
+	CDamageInfo*		m_pDmgInfoCom = nullptr;
 
 
 	INSTANTIMPACT		m_tInstant = {};

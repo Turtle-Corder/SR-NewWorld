@@ -477,6 +477,8 @@ HRESULT CSlime::Divide_Cube(const wstring & LayerTag)
 	SLIMEINFO tInfo;
 	tInfo.vPos = vMyPos + _vec3{ (_float)m_iCurCount *(rand()%4), 0.f , (_float)m_iCurCount *(rand()%4) };
 	tInfo.iCurCount = m_iCurCount;
+	tInfo.iTextureNumber = m_iTextureNumber;
+
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Slime", pManagement->Get_CurrentSceneID(), LayerTag, &tInfo)))
 		return E_FAIL;
 

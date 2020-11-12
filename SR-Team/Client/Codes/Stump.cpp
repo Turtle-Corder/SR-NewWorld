@@ -849,6 +849,9 @@ HRESULT CStump::Make_Rubble()
 		return E_FAIL;
 
 	INSTANTIMPACT tImpact;
+	tImpact.pAttacker = this;
+	tImpact.pStatusComp = m_pStatusCom;
+
 	for (_uint i = 0; i < 15; i++)
 	{
 		_vec3 RandomPostion = { (_float)(rand() % 30 - 15), 0.f ,(_float)(rand() % 30 - 15) };
@@ -872,7 +875,7 @@ HRESULT CStump::Make_Stump_Particle()
 
 	for (_uint iCnt = 0; iCnt < 2; ++iCnt)
 	{
-		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump_Particle", pManagement->Get_CurrentSceneID(), L"Layer_Effect", &vMymat)))
+		if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Stump_Particle", pManagement->Get_CurrentSceneID(), L"Layer_MonsterAtk", &vMymat)))
 			return E_FAIL;
 	}
 	return S_OK;
