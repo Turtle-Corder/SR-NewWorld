@@ -102,7 +102,7 @@ private:
 	HRESULT Check_EquipItem();
 
 private:
-	HRESULT Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag);
+	HRESULT Open_RandomBox(eITEM_SORT eSort, const wstring& strNameTag, _int iIndex);
 
 // 아이템 퀵슬롯으로 이동
 private:

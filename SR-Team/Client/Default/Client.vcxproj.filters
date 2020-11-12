@@ -795,6 +795,9 @@
     <ClInclude Include="..\Headers\ItemSlot_QuestPotion.h">
       <Filter>02.GameObject\14. PlayerItem\04. QuestPotion</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Scene_Stage4.h">
+      <Filter>01.Scene\05.Scene_Stage4</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1156,6 +1159,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ItemSlot_QuestPotion.cpp">
       <Filter>02.GameObject\14. PlayerItem\04. QuestPotion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene_Stage4.cpp">
+      <Filter>01.Scene\05.Scene_Stage4</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

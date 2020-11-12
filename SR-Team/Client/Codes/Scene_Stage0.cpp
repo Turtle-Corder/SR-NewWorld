@@ -432,10 +432,10 @@ HRESULT CScene_Stage0::Travel_NextLayers()
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_MainUI")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Shop")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Inventory")))
 		return E_FAIL;
 
-	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Inventory")))
+	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Shop")))
 		return E_FAIL;
 
 	if (FAILED(pManagement->ClearScene_Except_RegisterTag(SCENE_TOWN, L"Layer_Wand")))

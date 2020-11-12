@@ -3,6 +3,8 @@
 #include "DamageInfo.h"
 #include "Sound_Manager.h"
 #include "MainCamera.h"
+#include "Sound_Manager.h"
+
 USING(Client)
 
 CStump::CStump(LPDIRECT3DDEVICE9 _pDevice)
@@ -694,6 +696,7 @@ HRESULT CStump::Update_Animation_Attack(_float _fDeltaTime)
 
 				Spawn_StumpImpact(L"Layer_MonsterAtk");
 				Make_Rubble();
+				CSoundManager::Get_Instance()->PlayEffect(L"CrackSound.mp3");
 
 				CManagement* pManagement = CManagement::Get_Instance();
 				if (nullptr == pManagement)

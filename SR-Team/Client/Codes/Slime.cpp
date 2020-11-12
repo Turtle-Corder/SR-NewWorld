@@ -2,7 +2,7 @@
 #include "..\Headers\Slime.h"
 #include "Sound_Manager.h"
 #include "DamageInfo.h"
-
+#include "Sound_Manager.h"
 USING(Client)
 
 CSlime::CSlime(LPDIRECT3DDEVICE9 _pDevice)
@@ -565,6 +565,8 @@ HRESULT CSlime::Spawn_Crack(const wstring & LayerTag)
 
 	if (FAILED(pManagement->Add_GameObject_InLayer(pManagement->Get_CurrentSceneID(), L"GameObject_Crack", pManagement->Get_CurrentSceneID(), LayerTag, &vPos)))
 		return E_FAIL;
+
+	CSoundManager::Get_Instance()->PlayEffect(L"CrackSound.mp3");
 
 	return S_OK;
 }

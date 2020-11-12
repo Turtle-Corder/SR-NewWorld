@@ -32,6 +32,7 @@ public:
 
 private:
 	CTexture* m_pTexture = nullptr;
+	_bool	m_bEnding;
 };
 
 END
