@@ -16,6 +16,7 @@ public:
 		RENDER_NONEALPHA,
 		RENDER_BLNEDALPHA,
 		RENDER_ONLYALPHA,
+		RENDER_EFFECT,
 		RENDER_UI,
 		RENDER_MOUSE,
 		RENDER_END,
@@ -35,6 +36,7 @@ private:
 	HRESULT Render_NoneAlpha();
 	HRESULT Render_BlendAlpha();
 	HRESULT Render_OnlyAlpha();
+	HRESULT Render_Effect();
 	HRESULT Render_UI();
 
 public:

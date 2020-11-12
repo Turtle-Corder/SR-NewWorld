@@ -22,9 +22,9 @@ HRESULT CSkillSlot_IceSpear::Setup_GameObject_Prototype()
 HRESULT CSkillSlot_IceSpear::Setup_GameObject(void * _pArg)
 {
 	m_iCanUseCnt = m_iMaxUseCnt = 1;
-	m_fEachDelay = 10.f;
+	m_fEachDelay = 3.f;
 
-	m_iConsumeMP = 10;
+	m_iConsumeMP = 5;
 
 	return S_OK;
 }

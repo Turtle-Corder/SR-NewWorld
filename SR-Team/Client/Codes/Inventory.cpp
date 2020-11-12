@@ -58,8 +58,6 @@ HRESULT CInventory::Get_ShopItem(const wstring & strItemName)
 	if (nullptr == pItem)
 		return E_FAIL;
 
-	
-
 	for (auto& pItem : m_pInvenList)
 	{
 		// 만약 이미 존재하는 아이템이고
@@ -553,8 +551,8 @@ HRESULT CInventory::Select_SellItem()
 							m_iSellGold += (m_pInvenList[iIndex]->iPrice * m_pInvenList[iIndex]->iCnt);
 							CSoundManager::Get_Instance()->PlayUI(L"OpenWnd.wav");
 						}
-						else
-							PRINT_LOG(L"현재 장착하고 있는 아이템은 판매 못함", LOG::DEBUG);
+						//else
+							//PRINT_LOG(L"현재 장착하고 있는 아이템은 판매 못함", LOG::DEBUG);
 					}
 					else if (!m_bIsItemHere[iIndex])
 					{

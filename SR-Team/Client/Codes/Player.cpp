@@ -248,8 +248,10 @@ HRESULT CPlayer::Take_Damage(const CComponent* _pDamageComp)
 
 	_int iAtk = (_int)((CDamageInfo*)_pDamageComp)->Get_Att();
 	iAtk -= (_int)(m_pStatusCom->Get_Def() * 0.1f);
-	m_pStatusCom->Set_HP(iAtk);
+	if (iAtk < 0)
+		iAtk = 1;
 
+	m_pStatusCom->Set_HP(iAtk);
 	CManagement* pManagement = CManagement::Get_Instance();
 	CMainCamera* pMainCamera = (CMainCamera*)pManagement->Get_GameObject(pManagement->Get_CurrentSceneID(), L"Layer_Camera");
 

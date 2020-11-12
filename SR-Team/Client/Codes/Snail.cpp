@@ -592,6 +592,8 @@ HRESULT CSnail::Take_Damage(const CComponent* _pDamageComp)
 
 	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
 	iAtk -= m_pStatusCom->Get_Def();
+	if (iAtk < 0)
+		iAtk = 1;
 
 	m_pStatusCom->Set_HP(iAtk);
 	if (0 >= m_pStatusCom->Get_Status().iHp)

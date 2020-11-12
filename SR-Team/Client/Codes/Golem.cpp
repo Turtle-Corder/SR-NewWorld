@@ -331,7 +331,7 @@ HRESULT CGolem::Add_Component_Extends()
 	CStatus::STAT tStat;
 	tStat.iCriticalRate = 2;	tStat.iCriticalChance = 20;
 	tStat.iDef = 100;
-	tStat.iHp = 2000;
+	tStat.iHp = 1800;
 	tStat.iMinAtt = 25;			tStat.iMaxAtt = 40;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
@@ -1092,6 +1092,8 @@ HRESULT CGolem::Take_Damage(const CComponent* _pDamageComp)
 
 	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
 	iAtk -= m_pStatusCom->Get_Def();
+	if (iAtk < 0)
+		iAtk = 1;
 
 
 	CManagement* pManagement = CManagement::Get_Instance();

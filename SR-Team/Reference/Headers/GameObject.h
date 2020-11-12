@@ -30,6 +30,7 @@ public:
 	virtual HRESULT Render_NoneAlpha();
 	virtual HRESULT Render_OnlyAlpha();
 	virtual HRESULT Render_BlendAlpha();
+	virtual HRESULT Render_Effect();
 	virtual HRESULT Render_UI();
 
 	virtual HRESULT Take_Damage(const CComponent* _pDamageComp);
