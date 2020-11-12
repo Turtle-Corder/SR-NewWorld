@@ -3,7 +3,7 @@
 #include "Status.h"
 #include "DamageInfo.h"
 #include "MainCamera.h"
-
+#include "Sound_Manager.h"
 USING(Client)
 
 CMeteor::CMeteor(LPDIRECT3DDEVICE9 pDevice)
@@ -41,8 +41,10 @@ HRESULT CMeteor::Setup_GameObject(void* _pArg)
 int CMeteor::Update_GameObject(_float _fDeltaTime)
 {
 	if (m_bDead)
+	{
+		CSoundManager::Get_Instance()->PlayEffect(L"meteor_explosion.wav");
 		return GAMEOBJECT::DEAD;
-	
+	}
 
 	if (FAILED(Movement(_fDeltaTime)))
 		return GAMEOBJECT::WARN;

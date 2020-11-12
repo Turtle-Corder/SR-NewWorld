@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\SkillSlot_ThunderStorm.h"
-
+#include "Sound_Manager.h"
 USING(Client)
 
 CSkillSlot_ThunderStorm::CSkillSlot_ThunderStorm(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont)
@@ -110,6 +110,9 @@ _bool CSkillSlot_ThunderStorm::Actual_UseSkill(void * _pArg)
 		PRINT_LOG(L"Failed To Spawn GameObject_ThunderStormSphere", LOG::DEBUG);
 		return false;
 	}
+
+
+	CSoundManager::Get_Instance()->PlayEffect(L"thunder.ogg");
 
 	--m_iCanUseCnt;
 	return true;
