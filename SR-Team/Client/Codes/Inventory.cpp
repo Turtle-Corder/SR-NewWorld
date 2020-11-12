@@ -58,8 +58,6 @@ HRESULT CInventory::Get_ShopItem(const wstring & strItemName)
 	if (nullptr == pItem)
 		return E_FAIL;
 
-	
-
 	for (auto& pItem : m_pInvenList)
 	{
 		// 만약 이미 존재하는 아이템이고
