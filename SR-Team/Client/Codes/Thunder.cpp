@@ -190,7 +190,7 @@ HRESULT CThunderStorm::Add_Component()
 	//-------------------------------------------------------
 	CSphereCollider::COLLIDER_DESC tColDesc;
 	tColDesc.vPosition = tTransformDesc.vPosition;
-	tColDesc.fRadius = 0.7f;
+	tColDesc.fRadius = 7.f;
 	//-------------------------------------------------------
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_VIBuffer_RectTexture", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
@@ -223,8 +223,8 @@ HRESULT CThunderStorm::Add_Component()
 		tDmgInfo.pOwner = m_tInstant.pAttacker;
 
 		// ex) yeti의 공격력 + 눈덩이 자체의 공격력 -> player의 기본 공격력 + 스태프의 공격력
-		tDmgInfo.iMinAtt = pOwnerStatusComp->Get_Status().iMinAtt + m_pStatusCom->Get_Status().iMinAtt;
-		tDmgInfo.iMaxAtt = pOwnerStatusComp->Get_Status().iMaxAtt + m_pStatusCom->Get_Status().iMaxAtt;
+		tDmgInfo.iMinAtt = pOwnerStatusComp->Get_Status().iMinAtt * pOwnerStatusComp->Get_Status().fAttRate + m_pStatusCom->Get_Status().iMinAtt;
+		tDmgInfo.iMaxAtt = pOwnerStatusComp->Get_Status().iMaxAtt * pOwnerStatusComp->Get_Status().fAttRate + m_pStatusCom->Get_Status().iMaxAtt;
 		tDmgInfo.iCriticalChance = pOwnerStatusComp->Get_Status().iCriticalChance + m_pStatusCom->Get_Status().iCriticalChance;
 		tDmgInfo.iCriticalRate = pOwnerStatusComp->Get_Status().iCriticalRate + m_pStatusCom->Get_Status().iCriticalRate;
 	}

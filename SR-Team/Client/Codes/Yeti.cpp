@@ -305,7 +305,7 @@ HRESULT CYeti::Add_Component()
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
 	tStat.iCriticalRate = 1;	tStat.iCriticalChance = 15;
 	tStat.iDef = 30;
-	tStat.iHp = 200;
+	tStat.iHp = 750;
 	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 

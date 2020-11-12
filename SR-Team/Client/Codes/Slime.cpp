@@ -264,7 +264,7 @@ HRESULT CSlime::Add_Component()
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
 	tStat.iCriticalChance = 5;	tStat.iCriticalRate = 0;
 	tStat.iDef = 10;
-	tStat.iHp = 150 / m_iCurCount;
+	tStat.iHp = 450 / m_iCurCount;
 	tStat.iMinAtt = 15;			tStat.iMaxAtt = 20;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 

@@ -205,7 +205,7 @@ HRESULT CSnail::Add_Component()
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
 	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
 	tStat.iDef = 0;				
-	tStat.iHp = 100;			tStat.iMp = 0;
+	tStat.iHp = 300;			tStat.iMp = 0;
 	tStat.iMinAtt = 10;			tStat.iMaxAtt = 10;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 

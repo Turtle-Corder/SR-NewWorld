@@ -349,7 +349,7 @@ HRESULT CWolf::Add_Component_Extends()
 	ZeroMemory(&tStat, sizeof(CStatus::STAT));
 	tStat.iCriticalRate = 0;	tStat.iCriticalChance = 30;
 	tStat.iDef = 10;
-	tStat.iHp = 100;
+	tStat.iHp = 450;
 	tStat.iMinAtt = 20;			tStat.iMaxAtt = 30;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 

@@ -95,7 +95,7 @@ HRESULT CEnergyBolt::Add_Component()
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
-	tCollDesc.fRadius = 0.18f;
+	tCollDesc.fRadius = 0.3f;
 
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 0; tStat.iCriticalRate = 0;

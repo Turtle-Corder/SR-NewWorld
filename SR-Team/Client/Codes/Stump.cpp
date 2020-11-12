@@ -378,7 +378,7 @@ HRESULT CStump::Add_Component()
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 2;
 	tStat.iDef = 50;
-	tStat.iHp = 700;
+	tStat.iHp = 4000;
 	tStat.iMinAtt = 30;			tStat.iMaxAtt = 30;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 

@@ -113,7 +113,7 @@ HRESULT CMeteor::Add_Component()
 
 	CSphereCollider::COLLIDER_DESC tCollDesc;
 	tCollDesc.vPosition = tTransformDesc.vPosition;
-	tCollDesc.fRadius = 0.5f;
+	tCollDesc.fRadius = 1.0f;
 
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 20; tStat.iCriticalRate = 2;
@@ -146,8 +146,8 @@ HRESULT CMeteor::Add_Component()
 	if (pOwnerStatusComp)
 	{
 		tDmgInfo.pOwner = m_tInstant.pAttacker;
-		tDmgInfo.iMinAtt = pOwnerStatusComp->Get_Status().iMinAtt + m_pStatusComp->Get_Status().iMinAtt;
-		tDmgInfo.iMaxAtt = pOwnerStatusComp->Get_Status().iMaxAtt + m_pStatusComp->Get_Status().iMaxAtt;
+		tDmgInfo.iMinAtt = pOwnerStatusComp->Get_Status().iMinAtt * pOwnerStatusComp->Get_Status().fAttRate + m_pStatusComp->Get_Status().iMinAtt;
+		tDmgInfo.iMaxAtt = pOwnerStatusComp->Get_Status().iMaxAtt * pOwnerStatusComp->Get_Status().fAttRate + m_pStatusComp->Get_Status().iMaxAtt;
 		tDmgInfo.iCriticalChance = pOwnerStatusComp->Get_Status().iCriticalChance + m_pStatusComp->Get_Status().iCriticalChance;
 		tDmgInfo.iCriticalRate = pOwnerStatusComp->Get_Status().iCriticalRate + m_pStatusComp->Get_Status().iCriticalRate;
 	}
