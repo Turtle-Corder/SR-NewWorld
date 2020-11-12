@@ -20,8 +20,13 @@ HRESULT CTitle::Setup_GameObject_Prototype()
 
 HRESULT CTitle::Setup_GameObject(void * _pArg)
 {
+	m_bEnding = true;
+	if (_pArg)
+		m_bEnding = false;
+
 	if (FAILED(Add_Component()))
 		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -54,14 +59,23 @@ HRESULT CTitle::Render_UI()
 	m_pSprite->SetTransform(&matWorld);
 	m_pSprite->Draw((LPDIRECT3DTEXTURE9)m_pTexture->GetTexture(0), nullptr, &vCenter, nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
 
+
 	return S_OK;
 }
 
 HRESULT CTitle::Add_Component()
 {
-	if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Title", L"Com_Texture", (CComponent**)&m_pTexture)))
-		return E_FAIL;
 
+	if (m_bEnding)
+	{
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Title", L"Com_Texture", (CComponent**)&m_pTexture)))
+			return E_FAIL;
+	}
+	else if (!m_bEnding)
+	{
+		if (FAILED(CGameObject::Add_Component(SCENE_STATIC, L"Component_Texture_Ending", L"Com_Texture", (CComponent**)&m_pTexture)))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 
