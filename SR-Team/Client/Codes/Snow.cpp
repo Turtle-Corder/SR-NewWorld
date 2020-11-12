@@ -2,7 +2,7 @@
 #include "Status.h"
 #include "..\Headers\Snow.h"
 #include "DamageInfo.h"
-
+#include "Sound_Manager.h"
 USING(Client)
 
 CSnow::CSnow(LPDIRECT3DDEVICE9 pDevice)
@@ -252,6 +252,8 @@ HRESULT CSnow::Take_Damage(const CComponent * _pDamageComp)
 		return S_OK;
 
 	m_bDead = true;
+
+	CSoundManager::Get_Instance()->PlayEffect(L"AttackHit.mp3");
 
 	return S_OK;
 }

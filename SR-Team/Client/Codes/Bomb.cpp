@@ -2,6 +2,7 @@
 #include "..\Headers\Bomb.h"
 #include "DamageInfo.h"
 #include "MainCamera.h"
+#include "Sound_Manager.h"
 USING(Client)
 
 CBomb::CBomb(LPDIRECT3DDEVICE9 _pDevice)
@@ -292,7 +293,7 @@ HRESULT CBomb::Dead_Bomb(_float _fDeltaTime)
 		if (6 == m_iAnimationStep)
 		{
 			m_bDead = true;
-
+			CSoundManager::Get_Instance()->PlayEffect(L"BombExplosion.mp3");
 			Make_Bomb_Residue();
 			return S_OK;
 		}
