@@ -56,6 +56,11 @@ HRESULT CGameObject::Render_BlendAlpha()
 	return E_NOTIMPL;
 }
 
+HRESULT CGameObject::Render_Effect()
+{
+	return E_NOTIMPL;
+}
+
 HRESULT CGameObject::Render_UI()
 {
 	return E_NOTIMPL;

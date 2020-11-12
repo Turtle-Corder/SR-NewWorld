@@ -19,7 +19,7 @@ public:
 	virtual HRESULT Setup_GameObject(void * _pArg) override;
 	virtual _int Update_GameObject(_float _fDeltaTime) override;
 	virtual _int LateUpdate_GameObject(_float _fDeltaTime) override;
-	virtual HRESULT Render_OnlyAlpha();
+	virtual HRESULT Render_Effect() override;
 private:
 	HRESULT Add_Component();
 

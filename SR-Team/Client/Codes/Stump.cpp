@@ -209,6 +209,8 @@ HRESULT CStump::Take_Damage(const CComponent * _pDamageComp)
 
 	_int iAtk = (_int)(((CDamageInfo*)_pDamageComp)->Get_Att() * fElementalRate);
 	iAtk -= m_pStatusCom->Get_Def();
+	if (iAtk < 0)
+		iAtk = 1;
 
 	CManagement* pManagement = CManagement::Get_Instance();
 	if (nullptr == pManagement)
@@ -376,7 +378,7 @@ HRESULT CStump::Add_Component()
 	CStatus::STAT tStat;
 	tStat.iCriticalChance = 20;	tStat.iCriticalRate = 2;
 	tStat.iDef = 50;
-	tStat.iHp = 1000;
+	tStat.iHp = 700;
 	tStat.iMinAtt = 30;			tStat.iMaxAtt = 30;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 
