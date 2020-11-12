@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "..\Headers\SkillSlot_Explosion.h"
-
+#include "Sound_Manager.h"
 
 USING(Client)
 
@@ -112,6 +112,8 @@ _bool CSkillSlot_Explosion::Actual_UseSkill(void* _pArg)
 		PRINT_LOG(L"Failed To Spawn IceBlast", LOG::DEBUG);
 		return false;
 	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"BuffEffect.wav");
 
 	--m_iCanUseCnt;
 	return true;

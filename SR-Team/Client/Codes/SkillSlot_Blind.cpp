@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\SkillSlot_Blind.h"
-
+#include "Sound_Manager.h"
 USING(Client)
 
 CSkillSlot_Blind::CSkillSlot_Blind(LPDIRECT3DDEVICE9 _pDevice, LPD3DXSPRITE _pSprite, LPD3DXFONT _pFont)
@@ -92,6 +92,8 @@ _bool CSkillSlot_Blind::Actual_UseSkill(void * _pArg)
 		PRINT_LOG(L"Failed To Spawn Blind", LOG::DEBUG);
 		return false;
 	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"Blind.mp3");
 
 	--m_iCanUseCnt;
 	return true;

@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "..\Headers\SkillSlot_ManaDrift.h"
 #include "Equip.h"
-
+#include "Sound_Manager.h"
 
 USING(Client)
 
@@ -108,6 +108,7 @@ _bool CSkillSlot_ManaDrift::Actual_UseSkill(void* _pArg)
 		return false;
 	}
 
+	CSoundManager::Get_Instance()->PlayEffect(L"Buffing.wav");
 
 	--m_iCanUseCnt;
 	return true;

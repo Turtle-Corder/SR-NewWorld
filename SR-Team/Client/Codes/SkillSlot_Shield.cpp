@@ -2,6 +2,7 @@
 #include "Shield.h"
 #include "Player.h"
 #include "..\Headers\SkillSlot_Shield.h"
+#include "Sound_Manager.h"
 
 USING(Client)
 
@@ -102,7 +103,7 @@ _bool CSkillSlot_Shield::Actual_UseSkill(void * _pArg)
 		return false;
 	}
 
-
+	CSoundManager::Get_Instance()->PlayEffect(L"Shield.mp3");
 	--m_iCanUseCnt;
 	return true;
 }
