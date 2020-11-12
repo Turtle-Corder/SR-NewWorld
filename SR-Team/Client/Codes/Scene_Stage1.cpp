@@ -266,6 +266,7 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
 
+
 	tSlimInfo.iTextureNumber = 1;
 	tSlimInfo.vPos = { 53.56f, 0.f, 19.76f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
@@ -275,6 +276,16 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 	tSlimInfo.vPos = { 59.72f, 0.f, 15.88f };
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
+
+	//tSlimInfo.iTextureNumber = 1;
+	//tSlimInfo.vPos = { 32.f, 0.f, 40.96f };
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+	//	return E_FAIL;
+
+	//tSlimInfo.iTextureNumber = 2;
+	//tSlimInfo.vPos = { 18.4f, 0.f, 38.2f };
+	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &tSlimInfo)))
+	//	return E_FAIL;
 
 	//vPos = { 13.44f, 0.f, 28.64f };
 	//if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Snail", SCENE_STAGE1, LayerTag, &vPos)))
@@ -298,19 +309,23 @@ HRESULT CScene_Stage1::Setup_Layer_Monster(const wstring & LayerTag)
 	tSlimInfo.iCurCount = 1;
 	tSlimInfo.iTextureNumber = 0;
 	tSlimInfo.vPos = { 8.88f, 0.f, 39.4f };
-
+	
+	tSlimInfo.iCurCount = 1;
+	tSlimInfo.iTextureNumber = 0;
+	tSlimInfo.vPos = { 12.48f, 0.f, 33.08f };
+	
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
-
+	
 	tSlimInfo.vPos = { 66.04f, 0.f, 25.04f };
 	tSlimInfo.iTextureNumber = 2;
-
+	
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
-
+	
 	tSlimInfo.iTextureNumber = 4;
 	tSlimInfo.vPos = { 55.04f, 0.f, 25.24f };
-
+	
 	if (FAILED(pManagement->Add_GameObject_InLayer(SCENE_STAGE1, L"GameObject_Slime", SCENE_STAGE1, LayerTag, &tSlimInfo)))
 		return E_FAIL;
 

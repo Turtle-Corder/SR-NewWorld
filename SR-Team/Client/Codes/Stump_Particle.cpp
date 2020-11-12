@@ -182,7 +182,7 @@ HRESULT CStump_Particle::Add_Component()
 		return E_FAIL;
 
 	CStatus::STAT tStat;
-	tStat.iCriticalChance = 0;	tStat.iCriticalRate = 0;
+	tStat.iCriticalChance = 1;	tStat.iCriticalRate = 1;
 	tStat.iMinAtt = 20;			tStat.iMaxAtt = 20;
 	tStat.fAttRate = 1.f;		tStat.fDefRate = 1.f;
 

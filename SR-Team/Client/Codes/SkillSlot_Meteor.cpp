@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "MainCamera.h"
+#include "Sound_Manager.h"
 #include "..\Headers\SkillSlot_Meteor.h"
 
 USING(Client)
@@ -126,6 +127,8 @@ _bool CSkillSlot_Meteor::Actual_UseSkill(void* _pArg)
 			return false;
 		}
 	}
+
+	CSoundManager::Get_Instance()->PlayEffect(L"meteor_fall.wav");
 
 	--m_iCanUseCnt;
 	return true;
